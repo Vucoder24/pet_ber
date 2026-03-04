@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomNavLabelInactive" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">@dimen/nav_label_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BottomNavLabelActive" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">@dimen/nav_label_size_active</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="CircleImage" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="Rounded12" parent="">
+        <item name="cornerSize">12dp</item>
+    </style>
+</resources>

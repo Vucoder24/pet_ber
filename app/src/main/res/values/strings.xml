@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">Pet Ber</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_login">Login</string>
+    <string name="txt_forgot_password">Forgot password?</string>
+    <string name="action_navigate_register">Register a new account</string>
+    <string name="blank_email">Email cannot be left blank!</string>
+    <string name="invalid_email">Invalid email address!</string>
+    <string name="pw_empty">The password cannot be empty!</string>
+    <string name="invalid_length_password">The password must be at least 6 characters long!</string>
+    <string name="text_sign_up">Sign up</string>
+    <string name="text_display_name">Display name</string>
+    <string name="text_confirm_password">Confirm password</string>
+    <string name="text_already_have_account">"Already have an account? "</string>
+    <string name="confirm_pw_empty">Confirm password is empty!</string>
+    <string name="invalid_confirm_password">Invalid confirm password!</string>
+    <string name="display_name_empty">Display name is empty!</string>
+    <string name="register_success">Registered successfully!</string>
+    <string name="login_success">Login successful!</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="create">Create</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pet">Pet </string>
+    <string name="ber">ber</string>
+    <string name="pet_stories">Pet Stories</string>
 </resources>
