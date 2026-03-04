@@ -9,7 +9,7 @@
     tools:context=".ui.main_home.MainActivity"
     android:background="@color/bg_activity">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -31,7 +31,10 @@
         app:labelVisibilityMode="labeled"
         app:itemTextAppearanceInactive="@style/BottomNavLabelInactive"
         app:itemTextAppearanceActive="@style/BottomNavLabelActive"
+        app:itemActiveIndicatorStyle="@null"
+        app:itemRippleColor="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        tools:ignore="VisualLintBottomNav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

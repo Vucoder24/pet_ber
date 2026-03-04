@@ -3,11 +3,13 @@
     <style name="BottomNavLabelInactive" parent="TextAppearance.Material3.LabelSmall">
         <item name="android:textSize">@dimen/nav_label_size</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/baloo2</item>
     </style>
 
     <style name="BottomNavLabelActive" parent="TextAppearance.Material3.LabelSmall">
         <item name="android:textSize">@dimen/nav_label_size_active</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/baloo2</item>
     </style>
     <style name="CircleImage" parent="">
         <item name="cornerSize">50%</item>

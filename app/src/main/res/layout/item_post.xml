@@ -39,6 +39,7 @@
                     android:layout_height="wrap_content"
                     android:text="Username"
                     android:textStyle="bold"
+                    android:fontFamily="@font/baloo2"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -47,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:text="2 hours ago"
                     android:textSize="12sp"
+                    android:fontFamily="@font/baloo2"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
         </RelativeLayout>
@@ -69,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
                 android:layout_margin="12dp"
+                android:fontFamily="@font/baloo2"
                 android:background="@drawable/bg_tag_pet"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
@@ -96,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:text="120"
+                android:fontFamily="@font/baloo2"
                 android:layout_marginEnd="16dp"
                 tools:ignore="HardcodedText" />
 
@@ -111,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:text="25"
+                android:fontFamily="@font/baloo2"
                 tools:ignore="HardcodedText" />
 
             <View
@@ -133,6 +138,7 @@
             android:layout_marginTop="8dp"
             android:text="*Bo mới đi spa về thơm phức!* 🐶✨"
             android:textStyle="normal"
+            android:fontFamily="@font/baloo2"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -140,6 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:fontFamily="@font/baloo2"
             android:text="#goldenretriever #dogspa #petcare"
             android:textColor="@color/text_orange"
             android:textStyle="bold"

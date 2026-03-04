@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/text_sign_up"
+            android:fontFamily="@font/baloo2"
             android:textColor="@color/text_color"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -58,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_display_name"
+                android:fontFamily="@font/baloo2"
                 android:inputType="textPersonName"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -79,6 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_email"
+                android:fontFamily="@font/baloo2"
                 android:inputType="textEmailAddress"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -101,6 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_password"
+                android:fontFamily="@font/baloo2"
                 android:inputType="textPassword"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -123,6 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_confirm_password"
+                android:fontFamily="@font/baloo2"
                 android:inputType="textPassword"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -137,6 +142,8 @@
             android:textAllCaps="false"
             android:textSize="20sp"
             app:cornerRadius="30dp"
+            android:fontFamily="@font/baloo2"
+            android:textStyle="bold"
             tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintButtonSize" />
 
         <LinearLayout
@@ -150,6 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_already_have_account"
+                android:textSize="15sp"
                 android:textColor="#000000" />
 
             <TextView
@@ -157,6 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_login"
+                android:textSize="15sp"
                 android:textColor="#000000"
                 android:textStyle="bold" />
         </LinearLayout>

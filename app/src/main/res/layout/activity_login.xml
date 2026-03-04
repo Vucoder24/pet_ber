@@ -56,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_email"
+                android:fontFamily="@font/baloo2"
                 android:inputType="textEmailAddress"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
@@ -79,6 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_password"
+                android:fontFamily="@font/baloo2"
                 android:inputType="textPassword"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -92,7 +94,9 @@
             android:text="@string/text_login"
             android:textAllCaps="false"
             android:textSize="20sp"
+            android:fontFamily="@font/baloo2"
             app:cornerRadius="30dp"
+            android:textStyle="bold"
             tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
         <TextView
@@ -102,7 +106,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:text="@string/txt_forgot_password"
-            android:textSize="16sp"
+            android:fontFamily="@font/baloo2"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <View
@@ -118,7 +123,8 @@
             android:layout_marginBottom="16dp"
             android:text="@string/action_navigate_register"
             android:textColor="#000000"
-            android:textSize="16sp"
+            android:fontFamily="@font/baloo2"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
     </LinearLayout>
