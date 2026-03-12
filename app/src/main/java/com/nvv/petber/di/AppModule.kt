@@ -1,15 +1,19 @@
 package com.nvv.petber.di
 
+import android.content.Context
 import com.nvv.petber.BuildConfig
 import com.nvv.petber.data.repo.remote.AuthRepository
+import com.nvv.petber.data.repo.remote.HomeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.storage.Storage
 import javax.inject.Singleton
 
 @Module
@@ -25,12 +29,26 @@ object AppModule {
         ) {
             install(Auth)
             install(Postgrest)
+            install(Storage)
         }
     }
 
     @Provides
     @Singleton
-    fun provideAuthRepository(supabaseClient: SupabaseClient): AuthRepository {
-        return AuthRepository(supabaseClient)
+    fun provideAuthRepository(supabaseClient: SupabaseClient, context: Context): AuthRepository {
+        return AuthRepository(supabaseClient, context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHomeRepository(supabaseClient: SupabaseClient): HomeRepository {
+        return HomeRepository(supabaseClient)
+    }
+
+    @Provides
+    fun provideContext(
+        @ApplicationContext context: Context
+    ): Context {
+        return context
     }
 }

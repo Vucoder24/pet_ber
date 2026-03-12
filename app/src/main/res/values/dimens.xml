@@ -3,4 +3,5 @@
     <dimen name="nav_label_size">10sp</dimen>
     <dimen name="nav_label_size_active">11sp</dimen>
     <dimen name="nav_icon_size">24dp</dimen>
+    <dimen name="title_tab_size">32sp</dimen>
 </resources>

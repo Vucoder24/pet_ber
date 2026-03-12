@@ -55,10 +55,10 @@
             app:boxStrokeWidthFocused="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtDisplayName"
+                android:id="@+id/edtUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/text_display_name"
+                android:hint="@string/user_name"
                 android:fontFamily="@font/baloo2"
                 android:inputType="textPersonName"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />

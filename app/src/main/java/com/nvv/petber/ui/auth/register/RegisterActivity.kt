@@ -84,15 +84,15 @@ class RegisterActivity : AppCompatActivity() {
     private fun onEvent() {
         binding.apply {
             btnRegister.setOnClickListener {
-                val displayName = edtDisplayName.text.toString()
+                val displayName = edtUserName.text.toString()
                 val email = edtEmail.text.toString()
                 val password = edtPw.text.toString()
                 val confirmPassword = edtConfirmPw.text.toString()
 
-                val displayNameError =
+                val edtUserNameError =
                     ValidationUtils.validateDisplayName(this@RegisterActivity, displayName)
-                if (displayNameError != null) {
-                    edtDisplayName.error = displayNameError
+                if (edtUserNameError != null) {
+                    edtUserName.error = edtUserNameError
                     return@setOnClickListener
                 }
 

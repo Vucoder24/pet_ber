@@ -28,4 +28,11 @@
     <string name="pet">Pet </string>
     <string name="ber">ber</string>
     <string name="pet_stories">Pet Stories</string>
+    <string name="hint_edt_search">Search for users, pets…</string>
+    <string name="follow">Follow</string>
+    <string name="users">Users</string>
+    <string name="pets">Pets</string>
+    <string name="hashtags">Hashtags</string>
+    <string name="user_name">Username</string>
+    <string name="petber_user">Petber User</string>
 </resources>
