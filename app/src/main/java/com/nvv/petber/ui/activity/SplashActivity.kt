@@ -1,4 +1,4 @@
-package com.nvv.petber.ui.splash
+package com.nvv.petber.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.nvv.petber.ui.main_home.MainActivity
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivitySplashBinding
 import com.nvv.petber.ui.auth.login.LoginActivity

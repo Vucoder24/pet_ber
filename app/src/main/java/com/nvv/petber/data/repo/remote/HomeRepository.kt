@@ -27,7 +27,7 @@ class HomeRepository @Inject constructor(
             val stories = db["stories"]
                 .select(
                     columns = Columns.raw(
-                        "id, user_id, image_url, created_at, expires_at, users(id, username, avatar_url)"
+                        "id, user_id, media_url, media_type, created_at, expires_at, users(id, username, avatar_url)"
                     )
                 ) {
 //                    filter {
@@ -65,6 +65,7 @@ class HomeRepository @Inject constructor(
                     id, user_id, pet_id, caption, location,
                     like_count, comment_count, hashtags, created_at,
                     users(id, username, avatar_url),
+                    pets(id, name, breed, owner_id),
                     post_media(id, post_id, media_url, media_type)
                     """.trimIndent()
                     )

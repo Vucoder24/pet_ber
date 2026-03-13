@@ -15,7 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityLoginBinding
 import com.nvv.petber.ui.auth.register.RegisterActivity
-import com.nvv.petber.ui.main_home.MainActivity
+import com.nvv.petber.ui.activity.MainActivity
 import com.nvv.petber.utils.ValidationUtils
 import com.nvv.petber.viewmodel.AuthState
 import com.nvv.petber.viewmodel.AuthViewModel

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp">
+
+    <ImageView
+        android:id="@+id/iv_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop" />
+
+    <!-- dark overlay when selected -->
+    <View
+        android:id="@+id/overlay_check"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone" />
+
+    <!-- index bubble -->
+    <TextView
+        android:id="@+id/txt_index"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_selected_index"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        android:layout_gravity="top|start" />
+
+    <!-- small duration badge -->
+    <TextView
+        android:id="@+id/txt_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:padding="4dp"
+        android:background="@drawable/bg_duration"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:layout_gravity="bottom|end"
+        android:visibility="gone"/>
+</FrameLayout>

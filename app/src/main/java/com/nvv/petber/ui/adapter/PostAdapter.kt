@@ -1,5 +1,6 @@
 package com.nvv.petber.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,7 @@ class PostAdapter(
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ivUserAvatar: ImageView = itemView.findViewById(R.id.imgUser)
         private val tvUsername: TextView = itemView.findViewById(R.id.tvUserName)
+        private val petName: TextView = itemView.findViewById(R.id.pet_name)
         private val hashtags: TextView = itemView.findViewById(R.id.hashtags)
         private val ivPostImage: ImageView = itemView.findViewById(R.id.ivPostImage)
         private val ibLike: ImageView = itemView.findViewById(R.id.btn_like)
@@ -48,8 +50,10 @@ class PostAdapter(
         private val tvCommentCount: TextView = itemView.findViewById(R.id.tvCmtCount)
         private val tvTimeAgo: TextView = itemView.findViewById(R.id.tvTimeAgo)
 
+        @SuppressLint("SetTextI18n")
         fun bind(post: Post) {
             tvUsername.text = post.users?.username
+            petName.text = "${post.pets?.name} (${post.pets?.breed})"
             tvLikeCount.text = post.likeCount.toString()
             if (post.hashtags.isNullOrEmpty()) {
                 hashtags.visibility = View.GONE
@@ -70,7 +74,7 @@ class PostAdapter(
 
             // Like state
             ibLike.setImageResource(
-                if (post.isLiked) R.drawable.ic_like else R.drawable.ic_liked
+                if (post.isLiked) R.drawable.ic_liked else R.drawable.ic_like
             )
 
             // Listeners

@@ -1,7 +1,6 @@
 package com.nvv.petber.data.model
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -30,10 +29,10 @@ data class Post(
 
     val hashtags: String? = null,
 
-    @Ignore
     val users: User? = null,
 
-    @Ignore
+    val pets: Pet? = null,
+
     @SerialName("post_media")
     val postMedia: List<PostMedia>? = null,
 
@@ -42,6 +41,6 @@ data class Post(
 
     @SerialName("updated_at")
     val updatedAt: String? = null,
-    @Ignore
+
     var isLiked: Boolean = false
 )

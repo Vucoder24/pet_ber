@@ -1,6 +1,7 @@
 package com.nvv.petber.utils
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
@@ -15,6 +16,22 @@ fun ImageView.loadImage(
 ) {
     val request = Glide.with(context)
         .load(url)
+        .placeholder(placeholder)
+        .error(placeholder)
+
+    if (centerCrop) request.centerCrop()
+
+    request.into(this)
+}
+
+@SuppressLint("CheckResult")
+fun ImageView.loadImageUri(
+    uri: Uri?,
+    @DrawableRes placeholder: Int = R.color.colorImagePlaceholder,
+    centerCrop: Boolean = true
+) {
+    val request = Glide.with(context)
+        .load(uri)
         .placeholder(placeholder)
         .error(placeholder)
 

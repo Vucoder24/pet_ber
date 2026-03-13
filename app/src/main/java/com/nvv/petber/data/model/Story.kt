@@ -9,13 +9,17 @@ import kotlinx.serialization.Serializable
 @Entity(tableName = "stories")
 data class Story(
     @PrimaryKey
-    val id: String,
+    val id: String? = null,
 
     @SerialName("user_id")
     val userId: String,
 
-    @SerialName("image_url")
-    val imageUrl: String,
+    @SerialName("media_url")
+    val mediaUrl: String,
+
+    @SerialName("media_type")
+    val mediaType: String,
+
     val users: User? = null,
 
     @SerialName("created_at")

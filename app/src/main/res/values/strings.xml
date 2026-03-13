@@ -35,4 +35,29 @@
     <string name="hashtags">Hashtags</string>
     <string name="user_name">Username</string>
     <string name="petber_user">Petber User</string>
+    <string name="images_videos">Images/Videos</string>
+    <string name="sub_title_story">Share your pet\'s 24-hour moments</string>
+    <string name="story">Story</string>
+    <string name="create_a_new_story">Create a new Story</string>
+    <string name="create_content">Create content</string>
+    <string name="dep_item_create_post">Post photos or videos of your pets</string>
+    <string name="preview_story">Preview Story</string>
+    <string name="post_story">Post Story</string>
+    <string name="choose_media">Choose media</string>
+    <string name="choose_multiple">Choose multiple</string>
+    <string name="next">Next</string>
+    <string name="all">All</string>
+    <string name="image">Image</string>
+    <string name="video">Video</string>
+    <string name="choose">Choose</string>
+    <string name="permission_question">You need to grant permission to select photos/videos.</string>
+    <string name="uploading">Uploading…</string>
+    <string name="dont_exit_app">Please do not exit the application</string>
+    <string name="story_posted">Story posted!</string>
+
+    <string-array name="media_types">
+        <item>@string/all</item>
+        <item>@string/image</item>
+        <item>@string/video</item>
+    </string-array>
 </resources>

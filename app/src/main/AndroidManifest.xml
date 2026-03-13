@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
 
     <application
         android:name=".BaseApplication"
@@ -14,7 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBer">
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.activity.MediaPickerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CreateStoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CreatePostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
@@ -23,7 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.auth.register.RegisterActivity"
             android:exported="false" />
@@ -31,9 +43,8 @@
             android:name=".ui.auth.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.main_home.MainActivity"
-            android:exported="true">
-        </activity>
+            android:name=".ui.activity.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

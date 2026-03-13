@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity"
+    android:orientation="vertical"
+    tools:context=".ui.activity.MediaPickerActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@android:color/transparent"
+        android:contentInsetStartWithNavigation="0dp"
+        app:navigationIcon="@drawable/ic_close"
+        app:navigationIconTint="@color/black">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/choose_media"
+            android:textColor="@color/text_orange"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <LinearLayout
+        android:id="@+id/filter_bar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
+
+        <!-- MEDIA TYPE FILTER -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/dropdown_media_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:entries="@array/media_types"
+                android:focusable="false"
+                android:fontFamily="@font/baloo2"
+                android:inputType="none"
+                android:padding="4dp"
+                android:text="@string/image"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="LabelFor,TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Spacer -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!-- MULTI SELECT BUTTON -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_multi_select"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:backgroundTint="@color/bg_btn"
+            android:fontFamily="@font/baloo2"
+            android:layout_gravity="center_vertical"
+            app:icon="@drawable/ic_multi_select"
+            app:iconSize="16dp"
+            android:paddingBottom="5dp"
+            android:text="@string/choose"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:iconGravity="textStart"
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:max="100"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="4dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="100dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/bg_btn"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/next"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.nvv.petber.ui.main_home
+package com.nvv.petber.ui.activity
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
