@@ -1,11 +1,9 @@
 package com.nvv.petber.ui.activity
 
 import android.Manifest
-import android.app.Activity
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -39,6 +37,7 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
 
     private lateinit var adapter: MediaGridAdapter
     private var allItems = mutableListOf<MediaItem>()
+    private var preselectedItems: List<MediaItem> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +52,16 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
 
         mode = intent?.getStringExtra(EXTRA_MODE) ?: MODE_SINGLE
         maxSelect = intent?.getIntExtra(EXTRA_MAX_SELECT, DEFAULT_MAX) ?: DEFAULT_MAX
+
+        preselectedItems = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableArrayListExtra(
+                EXTRA_PRESELECTED,
+                MediaItem::class.java
+            ) ?: emptyList()
+        } else {
+            intent.getParcelableArrayListExtra(EXTRA_PRESELECTED)
+                ?: emptyList()
+        }
 
         setupUi()
         checkPermissionsAndLoad()
@@ -70,14 +79,18 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         binding.btnDone.setOnClickListener {
-            val selected = adapter.getSelectedUris()
+            val selected = adapter.getSelectedItems()
             if (selected.isEmpty()) {
-                Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.error_select_media),
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             val result = Intent()
-            result.putParcelableArrayListExtra(EXTRA_RESULT_URIS, ArrayList(selected))
-            setResult(Activity.RESULT_OK, result)
+            result.putParcelableArrayListExtra(EXTRA_RESULT_MEDIAS, ArrayList(selected))
+            setResult(RESULT_OK, result)
             finish()
         }
 
@@ -176,9 +189,23 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
         binding.progressBar.visibility = View.VISIBLE
         lifecycleScope.launch {
             val items = queryMediaStore()
+            val preselectedUris = preselectedItems.map { it.uri }.toSet()
+
+            val mapped = items.map { item ->
+                item.copy(isSelected = preselectedUris.contains(item.uri))
+            }
+
             allItems.clear()
-            allItems.addAll(items)
-            adapter.submitList(allItems)
+            allItems.addAll(mapped)
+
+            //  Submit list for DiffUtil
+            adapter.submitList(mapped)
+
+            if (preselectedItems.isNotEmpty()) {
+                adapter.setInitialSelection(preselectedItems)
+            }
+
+            updateDoneButton(adapter.getSelectedUris().size)
             binding.progressBar.visibility = View.GONE
         }
     }
@@ -232,7 +259,7 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
                         MediaItem(
                             uri = uri,
                             isVideo = false,
-                            duration = 0L
+                            duration = 0L,
                         )
                     )
 
@@ -244,7 +271,7 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
                         MediaItem(
                             uri = uri,
                             isVideo = true,
-                            duration = duration
+                            duration = duration,
                         )
                     )
                 }
@@ -270,16 +297,17 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
     }
 
 
-    override fun returnResult(list: ArrayList<Uri>) {
+    override fun returnResult(list: ArrayList<MediaItem>) {
         val result = Intent()
-        result.putParcelableArrayListExtra(EXTRA_RESULT_URIS, list)
-        setResult(Activity.RESULT_OK, result)
+        result.putParcelableArrayListExtra(EXTRA_RESULT_MEDIAS, list)
+        setResult(RESULT_OK, result)
         finish()
     }
 
 
     companion object {
-        const val EXTRA_RESULT_URIS = "extra_result_uris"
+        const val EXTRA_RESULT_MEDIAS = "extra_result_medias"
+        const val EXTRA_PRESELECTED = "extra_preselected"
 
         const val EXTRA_MODE = "extra_mode"
         const val MODE_SINGLE = "mode_single"

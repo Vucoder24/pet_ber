@@ -38,6 +38,7 @@ class HomeViewModel @Inject constructor(
 
 
     init {
+        observeStoriesRealtime()
         loadInitialData()
     }
 
@@ -98,6 +99,15 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun observeStoriesRealtime() {
+        viewModelScope.launch(Dispatchers.IO) {
+            homeRepository.getStoriesFlow()
+                .collect {
+                    loadStories()
+                }
+        }
+    }
+
     fun toggleLike(post: Post) {
         viewModelScope.launch {
             // Optimistic update
@@ -111,7 +121,7 @@ class HomeViewModel @Inject constructor(
             }
             _uiState.value = _uiState.value.copy(posts = updatedPosts)
 
-            homeRepository.toggleLike(post.id, currentUserId, post.isLiked)
+            homeRepository.toggleLike(post.id!!, currentUserId, post.isLiked)
                 .onFailure {
                     // Revert on error
                     val revertedPosts = _uiState.value.posts.map { p ->

@@ -18,9 +18,9 @@
 
     <fragment
         android:id="@+id/navigation_create_post"
-        android:name="com.nvv.petber.ui.fragment.create_post.CreatePostFragment"
+        android:name="com.nvv.petber.ui.fragment.create_content.CreateContentFragment"
         android:label="Create Post"
-        tools:layout="@layout/fragment_create_post" />
+        tools:layout="@layout/fragment_create_content" />
 
     <fragment
         android:id="@+id/navigation_notifications"

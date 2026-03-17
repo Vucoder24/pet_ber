@@ -7,10 +7,13 @@ import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.PostLike
 import com.nvv.petber.data.model.Story
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.annotations.SupabaseExperimental
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.postgrest.rpc
+import io.github.jan.supabase.realtime.selectAsFlow
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
@@ -27,19 +30,18 @@ class HomeRepository @Inject constructor(
             val stories = db["stories"]
                 .select(
                     columns = Columns.raw(
-                        "id, user_id, media_url, media_type, created_at, expires_at, users(id, username, avatar_url)"
+                        "id," +
+                                " user_id, media_url, media_type, created_at, " +
+                                "expires_at, users(id, username, full_name, avatar_url)"
                     )
                 ) {
-//                    filter {
-//                        gte("expires_at", java.time.Instant.now().toString())
-//                    }
                     order("created_at", Order.DESCENDING)
-                    limit(10)
+                    limit(30)
                 }
                 .decodeList<Story>()
 
             Log.d("HomeRepository", "Fetched $stories stories")
-            Result.success( stories)
+            Result.success(stories)
         } catch (e: Exception) {
             Log.e("HomeRepository", "fetchStories error: ${e.message}")
             Result.failure(e)
@@ -79,7 +81,7 @@ class HomeRepository @Inject constructor(
 
             val likedPostIds =
                 if (postIds.isNotEmpty())
-                    fetchLikedPostIds(currentUserId, postIds)
+                    fetchLikedPostIds(currentUserId, postIds as List<String>)
                 else emptySet()
 
             val posts = response.map { p ->
@@ -141,5 +143,13 @@ class HomeRepository @Inject constructor(
             Log.e("HomeRepository", "toggleLike error: ${e.message}")
             Result.failure(e)
         }
+    }
+
+    @OptIn(SupabaseExperimental::class)
+    fun getStoriesFlow(): Flow<List<Story>> {
+        return db.from("stories")
+            .selectAsFlow(
+                primaryKey = Story::id,
+            )
     }
 }

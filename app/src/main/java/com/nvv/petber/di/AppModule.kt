@@ -10,16 +10,20 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.annotations.SupabaseInternal
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.storage.Storage
+import io.ktor.client.plugins.HttpTimeout
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @OptIn(SupabaseInternal::class)
     @Provides
     @Singleton
     fun provideSupabaseClient(): SupabaseClient {
@@ -30,6 +34,14 @@ object AppModule {
             install(Auth)
             install(Postgrest)
             install(Storage)
+            install(Realtime)
+            httpConfig {
+                install(HttpTimeout) {
+                    requestTimeoutMillis = 30_000
+                    connectTimeoutMillis = 30_000
+                    socketTimeoutMillis = 30_000
+                }
+            }
         }
     }
 

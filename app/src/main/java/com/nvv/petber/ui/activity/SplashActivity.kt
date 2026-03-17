@@ -1,5 +1,6 @@
 package com.nvv.petber.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
@@ -13,18 +14,15 @@ import androidx.lifecycle.lifecycleScope
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivitySplashBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
+@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var supabaseClient: SupabaseClient
     lateinit var binding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,10 +48,10 @@ class SplashActivity : AppCompatActivity() {
             // check Session
             val sessionResult = launch {
                 try {
-                    val session = supabaseClient.auth.currentSessionOrNull()
+                    val currentUserId = SharePrefUtils.getCurrentUserId(this@SplashActivity)
                     delayJob.join()
 
-                    if (session != null) {
+                    if (currentUserId.isNotEmpty()) {
                         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                     } else {
                         startActivity(Intent(this@SplashActivity, LoginActivity::class.java))

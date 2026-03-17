@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Entity(tableName = "posts")
 data class Post(
     @PrimaryKey
-    val id: String,
+    val id: String? = null,
 
     @SerialName("user_id")
     val userId: String,

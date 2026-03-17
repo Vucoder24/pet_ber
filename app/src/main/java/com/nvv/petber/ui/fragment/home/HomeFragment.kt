@@ -1,6 +1,7 @@
 package com.nvv.petber.ui.fragment.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.nvv.petber.databinding.FragmentHomeBinding
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.adapter.StoryAdapter
 import com.nvv.petber.ui.adapter.StoryRowAdapter
+import com.nvv.petber.utils.AppEventManager
 import com.nvv.petber.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -43,13 +45,24 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViews(view)
+        initViews()
         setupAdapters()
         setupRecyclerView()
         observeUiState()
+        observeEventBus()
     }
 
-    private fun initViews(view: View) {
+    private fun observeEventBus() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                AppEventManager.refreshStoriesEvent.collect {
+                    viewModel.loadPosts(refresh = true)
+                }
+            }
+        }
+    }
+
+    private fun initViews() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.loadPosts(refresh = true)
         }
@@ -64,7 +77,11 @@ class HomeFragment : Fragment() {
         storyAdapter = StoryAdapter(
             onStoryClick = { story ->
                 // navigate to story viewer
-                Toast.makeText(requireContext(), "Story: ${story.users?.fullName}", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    "Story: ${story.users?.fullName}",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         )
@@ -74,12 +91,19 @@ class HomeFragment : Fragment() {
                 viewModel.toggleLike(post)
             },
             onCommentClick = { post ->
-                Toast.makeText(requireContext(), "Comments", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Comments",
+                    Toast.LENGTH_SHORT
+                ).show()
             },
             onShareClick = { },
             onProfileClick = { post ->
-                // findNavController().navigate(R.id.action_home_to_profile, bundleOf("userId" to post.userId))
-                Toast.makeText(requireContext(), "Profile: ${post.users?.username}", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    "Profile: ${post.users?.username}",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             },
             onLoadMore = { viewModel.loadPosts(refresh = false) }
@@ -104,6 +128,7 @@ class HomeFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     // Stories
+                    Log.d("HomeFragment", "Stories: ${state.stories.size}")
                     storyAdapter.submitList(state.stories)
 
                     // Posts
@@ -122,7 +147,11 @@ class HomeFragment : Fragment() {
 
                     // Error
                     state.error?.let { error ->
-                        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            error,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         viewModel.clearError()
                     }
                 }

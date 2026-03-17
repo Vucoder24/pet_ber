@@ -35,7 +35,7 @@
     <string name="hashtags">Hashtags</string>
     <string name="user_name">Username</string>
     <string name="petber_user">Petber User</string>
-    <string name="images_videos">Images/Videos</string>
+    <string name="images_videos">Images / Videos</string>
     <string name="sub_title_story">Share your pet\'s 24-hour moments</string>
     <string name="story">Story</string>
     <string name="create_a_new_story">Create a new Story</string>
@@ -54,6 +54,17 @@
     <string name="uploading">Uploading…</string>
     <string name="dont_exit_app">Please do not exit the application</string>
     <string name="story_posted">Story posted!</string>
+    <string name="post_details">Post details</string>
+    <string name="post_content">Post content</string>
+    <string name="post">Post</string>
+    <string name="create_a_new_post">Create new post</string>
+    <string name="hint_caption">Enter caption here…</string>
+    <string name="tag_your_pet">Tag your pet</string>
+    <string name="hint_hashtags">#hashtags…</string>
+    <string name="post_now">Post Now</string>
+    <string name="caption_empty">Please enter a caption!</string>
+    <string name="error_select_media">Please select at least one photo/video!</string>
+    <string name="edit_media">Edit media</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

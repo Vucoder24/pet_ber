@@ -72,6 +72,7 @@ class CreateContentViewModel @Inject constructor(
     fun createPost(
         caption: String,
         location: String?,
+        hashtags: String?,
         mediaUris: List<Uri>
     ) {
 
@@ -82,11 +83,11 @@ class CreateContentViewModel @Inject constructor(
 
             try {
 
-                val petId = _selectedPetIds.value?.firstOrNull() ?: ""
+                val petId = _selectedPetIds.value?.firstOrNull()
 
                 createContentRepository.createPost(
                     caption = caption,
-                    hashtags = null,
+                    hashtags = hashtags,
                     location = location,
                     mediaUris = mediaUris,
                     petId = petId

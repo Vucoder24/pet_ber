@@ -31,22 +31,21 @@ class CreateContentRepository @Inject constructor(
 
     fun createPost(
         caption: String,
-        hashtags: List<String>?,
+        hashtags: String?,
         location: String?,
         mediaUris: List<Uri>,
-        petId: String
-    ) = flow<Int> {
+        petId: String?
+    ) = flow {
         val userId = supabaseClient.auth.currentUserOrNull()?.id
             ?: throw IllegalStateException("User is not logged in")
 
 
         val post = Post(
-            id = "",
             userId = userId,
             petId = petId,
             caption = caption,
             location = location,
-            hashtags = hashtags?.joinToString(" ") { it },
+            hashtags = hashtags,
             likeCount = 0,
             commentCount = 0
         )
@@ -68,6 +67,7 @@ class CreateContentRepository @Inject constructor(
             db["hashtags"]
                 .upsert(hJson) {
                     onConflict = "name"
+                    ignoreDuplicates = true
                 }
         }
 

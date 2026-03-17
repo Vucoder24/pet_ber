@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityCreateStoryBinding
 import com.nvv.petber.ui.dialog.UploadProgressDialog
+import com.nvv.petber.utils.AppEventManager
 import com.nvv.petber.utils.loadImageUri
 import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,6 +116,7 @@ class CreateStoryActivity : AppCompatActivity() {
                     getString(R.string.story_posted),
                     Toast.LENGTH_SHORT
                 ).show()
+                AppEventManager.triggerRefreshStories()
                 viewModel.resetStorySuccess()
                 finish()
             }
@@ -126,6 +128,16 @@ class CreateStoryActivity : AppCompatActivity() {
                 viewModel.clearError()
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.videoStoryPreview.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.videoStoryPreview.start()
     }
 
 }

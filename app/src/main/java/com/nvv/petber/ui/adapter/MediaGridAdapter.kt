@@ -3,6 +3,7 @@ package com.nvv.petber.ui.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nvv.petber.databinding.ItemMediaGridBinding
+import kotlinx.parcelize.Parcelize
 import java.util.Locale
 
-data class MediaItem(val uri: Uri, val isVideo: Boolean, val duration: Long)
+@Parcelize
+data class MediaItem(
+    val uri: Uri,
+    val isVideo: Boolean,
+    val duration: Long,
+    val isSelected: Boolean = false
+): Parcelable
 
 class MediaGridAdapter(
     private val ctx: Context,
@@ -67,12 +75,10 @@ class MediaGridAdapter(
                     notifyListUpdated()
                 } else {
                     // single -> return immediately
-                    val result = ArrayList<Uri>()
-                    result.add(item.uri)
+                    val result = ArrayList<MediaItem>()
+                    result.add(item)
                     if (ctx is ActivityWithResult) {
                         ctx.returnResult(result)
-                    } else {
-                        // fallback: do nothing
                     }
                 }
             }
@@ -102,6 +108,15 @@ class MediaGridAdapter(
         // inform observers about change
         onSelectionChanged?.invoke(selected.size)
         // we must refresh visible items to update indices / overlay
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setInitialSelection(preselected: List<MediaItem>) {
+        selected.clear()
+        preselected.forEachIndexed { index, item ->
+            selected[item.uri] = index + 1
+        }
         notifyDataSetChanged()
     }
 
@@ -135,6 +150,10 @@ class MediaGridAdapter(
     }
 
     fun getSelectedUris(): List<Uri> = selected.keys.toList()
+    fun getSelectedItems(): List<MediaItem> {
+        val map = currentList.associateBy { it.uri }
+        return selected.keys.mapNotNull { map[it] }
+    }
 
     fun setMultiSelect(value: Boolean) {
         multiSelect = value
@@ -185,5 +204,5 @@ class MediaGridAdapter(
 
 // tiny interface so adapter can return result to activity in single select mode
 interface ActivityWithResult {
-    fun returnResult(list: ArrayList<Uri>)
+    fun returnResult(list: ArrayList<MediaItem>)
 }

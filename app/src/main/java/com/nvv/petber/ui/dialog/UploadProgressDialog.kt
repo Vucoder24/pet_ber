@@ -13,6 +13,13 @@ class UploadProgressDialog(context: Context) {
     private val dialog = Dialog(context).apply {
         setContentView(binding.root)
         setCancelable(false)
+        window?.apply {
+            setBackgroundDrawableResource(android.R.color.transparent)
+            attributes?.apply {
+                width = android.view.WindowManager.LayoutParams.MATCH_PARENT
+                height = android.view.WindowManager.LayoutParams.MATCH_PARENT
+            }
+        }
     }
 
     fun show() {

@@ -52,7 +52,14 @@ class PostAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bind(post: Post) {
-            tvUsername.text = post.users?.username
+            tvUsername.text =
+                post.users?.fullName ?: itemView.context.getString(R.string.petber_user)
+
+            if (post.pets == null) {
+                petName.visibility = View.GONE
+            } else {
+                petName.visibility = View.VISIBLE
+            }
             petName.text = "${post.pets?.name} (${post.pets?.breed})"
             tvLikeCount.text = post.likeCount.toString()
             if (post.hashtags.isNullOrEmpty()) {
@@ -62,15 +69,16 @@ class PostAdapter(
                 hashtags.visibility = View.VISIBLE
             }
             tvCaption.text = post.caption?.ifEmpty { "" }
-            tvCaption.visibility = if (post.caption?.isNotEmpty() == true) View.VISIBLE else View.GONE
+            tvCaption.visibility =
+                if (post.caption?.isNotEmpty() == true) View.VISIBLE else View.GONE
             tvCommentCount.text = post.commentCount.toString()
             post.createdAt?.let { tvTimeAgo.text = TimeUtils.formatTimeAgo(it) }
 
             // Avatar
             ivUserAvatar.loadAvatar(post.users?.avatarUrl)
 
-            // Post image (first image)
-            ivPostImage.loadImage(post.postMedia?.get(0)?.mediaUrl?.firstOrNull().toString())
+            val firstMediaUrl = post.postMedia?.firstOrNull()?.mediaUrl
+            ivPostImage.loadImage(firstMediaUrl)
 
             // Like state
             ibLike.setImageResource(

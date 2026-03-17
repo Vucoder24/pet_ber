@@ -1,4 +1,4 @@
-package com.nvv.petber.ui.fragment.create_post
+package com.nvv.petber.ui.fragment.create_content
 
 import android.Manifest
 import android.app.Activity
@@ -15,14 +15,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.nvv.petber.R
-import com.nvv.petber.databinding.FragmentCreatePostBinding
+import com.nvv.petber.databinding.FragmentCreateContentBinding
+import com.nvv.petber.ui.activity.CreatePostActivity
 import com.nvv.petber.ui.activity.CreateStoryActivity
 import com.nvv.petber.ui.activity.MediaPickerActivity
+import com.nvv.petber.ui.adapter.MediaItem
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreatePostFragment : Fragment() {
-    private var _binding: FragmentCreatePostBinding? = null
+class CreateContentFragment : Fragment() {
+    private var _binding: FragmentCreateContentBinding? = null
     private val binding get() = _binding!!
 
     private val permissionLauncher =
@@ -47,8 +49,10 @@ class CreatePostFragment : Fragment() {
 
             if (result.resultCode == Activity.RESULT_OK) {
 
-                @Suppress("DEPRECATION") val uris =
-                    result.data?.getParcelableArrayListExtra<Uri>(MediaPickerActivity.EXTRA_RESULT_URIS)
+                @Suppress("DEPRECATION") val medias =
+                    result.data?.getParcelableArrayListExtra<MediaItem>(MediaPickerActivity.
+                    EXTRA_RESULT_MEDIAS)
+                val uris = medias?.map { it.uri }
 
                 if (!uris.isNullOrEmpty()) {
                     openCreateStory(uris.first())
@@ -62,7 +66,7 @@ class CreatePostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+        _binding = FragmentCreateContentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -76,6 +80,15 @@ class CreatePostFragment : Fragment() {
         binding.btnCreateStory2.setOnClickListener {
             checkMediaPermission()
         }
+
+        binding.btnCreatePost.setOnClickListener {
+            startActivity(Intent(requireContext(), CreatePostActivity::class.java))
+        }
+
+        binding.btnAddMedia.setOnClickListener {
+            startActivity(Intent(requireContext(), CreatePostActivity::class.java))
+        }
+
     }
 
     private fun checkMediaPermission() {
