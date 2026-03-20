@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.databinding.FragmentUserSearchBinding
 import com.nvv.petber.ui.adapter.SearchUserResultAdapter
 import com.nvv.petber.viewmodel.SearchViewModel
@@ -38,8 +40,10 @@ class UserSearchFragment : Fragment() {
         binding.rvResults.adapter = adapter
         // observe search results
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.users.collect { list ->
-                adapter.submitList(list)
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.users.collect { list ->
+                    adapter.submitList(list)
+                }
             }
         }
     }

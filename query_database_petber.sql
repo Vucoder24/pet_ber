@@ -1,12 +1,16 @@
 create table users (
 id uuid primary key default uuid_generate_v4(),
 email text unique,
-password_hash text,
 username text,
 full_name text,
 avatar_url text,
 bio text,
 phone text,
+cover_url text,
+gender text,
+hobbies text,
+birthday date,
+address text,
 created_at timestamp default now(),
 updated_at timestamp
 );
@@ -122,7 +126,8 @@ hashtag_id uuid references hashtags(id)
 create table stories (
 id uuid primary key default uuid_generate_v4(),
 user_id uuid references users(id),
-image_url text,
+media_url text,
+media_type text,
 created_at timestamp default now(),
 expires_at timestamp
 );
@@ -160,6 +165,11 @@ execute procedure public.handle_new_user();
 -- Cho phép đọc bảng stories
 ALTER TABLE stories ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public read access" ON stories FOR SELECT USING (true);
+create policy "Users can create their own stories"
+on public.stories
+for insert
+to authenticated
+with check (auth.uid() = user_id);
 
 -- Đảm bảo bảng users cũng cho phép đọc (vì bạn có join users)
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
@@ -205,6 +215,7 @@ ALTER TABLE public.post_likes ENABLE ROW LEVEL SECURITY;
 -- Policies cho bảng Users
 CREATE POLICY "Users are viewable by everyone" ON public.users FOR SELECT USING (true);
 CREATE POLICY "Users can update own profile" ON public.users FOR UPDATE USING (auth.uid() = id);
+
 
 -- -- Policies cho bảng Posts
 -- CREATE POLICY "Posts are viewable by everyone" ON public.posts FOR SELECT USING (true);
@@ -266,3 +277,12 @@ CREATE POLICY "Allow public read" ON post_likes FOR SELECT USING (true);
 CREATE POLICY "Allow public read" ON hashtags FOR SELECT USING (true);
 CREATE POLICY "Allow public read" ON post_hashtags FOR SELECT USING (true);
 CREATE POLICY "Allow public read" ON stories FOR SELECT USING (true);
+
+grant usage on schema public to anon, authenticated;
+grant all on table public.post_likes to anon, authenticated;
+
+CREATE POLICY "Users can insert own stories"
+ON stories
+FOR INSERT
+TO authenticated
+WITH CHECK (auth.uid() = user_id);

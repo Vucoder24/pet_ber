@@ -2,9 +2,7 @@ package com.nvv.petber.data.repo.remote
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.webkit.MimeTypeMap
-import androidx.annotation.RequiresApi
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.Story
@@ -122,7 +120,6 @@ class CreateContentRepository @Inject constructor(
         return supabaseClient.storage[bucket].publicUrl(fileName)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createStory(mediaUri: Uri) = flow<Int> {
         val userId = supabaseClient.auth.currentUserOrNull()?.id
             ?: throw IllegalStateException("User is not logged in")

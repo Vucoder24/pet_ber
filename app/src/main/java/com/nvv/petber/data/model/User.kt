@@ -24,6 +24,16 @@ data class User(
     val bio: String? = null,
 
     val phone: String? = null,
+    @SerialName("cover_url")
+    val coverUrl: String? = null,
+
+    val gender: String? = null,
+
+    val hobbies: String? = null,
+
+    val birthday: String? = null,
+
+    val address: String? = null,
 
     @SerialName("created_at")
     val createdAt: String? = null,

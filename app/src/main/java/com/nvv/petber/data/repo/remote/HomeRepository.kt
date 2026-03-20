@@ -1,8 +1,6 @@
 package com.nvv.petber.data.repo.remote
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.PostLike
 import com.nvv.petber.data.model.Story
@@ -24,7 +22,6 @@ class HomeRepository @Inject constructor(
     private val db = supabaseClient.postgrest
 
     // Fetch active stories (not expired), limited to followed users + self
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun fetchStories(): Result<List<Story>> {
         return try {
             val stories = db["stories"]

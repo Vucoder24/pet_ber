@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.databinding.FragmentHashtagSearchBinding
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.viewmodel.SearchViewModel
@@ -49,8 +51,10 @@ class HashtagSearchFragment : Fragment() {
         binding.rvResults.adapter = adapter
         // observe search results
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.posts.collect { list ->
-                adapter.submitList(list)
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.posts.collect { list ->
+                    adapter.submitList(list)
+                }
             }
         }
     }

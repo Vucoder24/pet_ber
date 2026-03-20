@@ -52,7 +52,9 @@
             app:boxCornerRadiusTopEnd="30dp"
             app:boxCornerRadiusTopStart="30dp"
             app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp">
+            app:boxStrokeColor="@color/bg_btn"
+            app:hintTextColor="@color/bg_btn"
+            app:boxStrokeWidthFocused="2dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtUserName"
@@ -74,6 +76,9 @@
             app:boxCornerRadiusBottomStart="30dp"
             app:boxCornerRadiusTopEnd="30dp"
             app:boxCornerRadiusTopStart="30dp"
+            app:boxStrokeColor="@color/bg_btn"
+            app:hintTextColor="@color/bg_btn"
+            app:boxStrokeWidthFocused="2dp"
             app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -97,6 +102,9 @@
             app:boxCornerRadiusTopEnd="30dp"
             app:boxCornerRadiusTopStart="30dp"
             app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:boxStrokeColor="@color/bg_btn"
+            app:hintTextColor="@color/bg_btn"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -120,6 +128,9 @@
             app:boxCornerRadiusTopEnd="30dp"
             app:boxCornerRadiusTopStart="30dp"
             app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:boxStrokeColor="@color/bg_btn"
+            app:hintTextColor="@color/bg_btn"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -165,7 +176,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_login"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -189,6 +200,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:indeterminateTint="@color/bg_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

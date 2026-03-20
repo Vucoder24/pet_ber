@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.databinding.FragmentPetSearchBinding
 import com.nvv.petber.ui.adapter.SearchPetResultAdapter
 import com.nvv.petber.viewmodel.SearchViewModel
@@ -37,8 +39,10 @@ class PetSearchFragment : Fragment() {
         binding.rvResults.adapter = adapter
         // observe search results
         viewLifecycleOwner.lifecycleScope.launch {
-            sharedViewModel.pets.collect { list ->
-                adapter.submitList(list)
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                sharedViewModel.pets.collect { list ->
+                    adapter.submitList(list)
+                }
             }
         }
     }

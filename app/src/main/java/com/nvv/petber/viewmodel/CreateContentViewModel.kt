@@ -1,9 +1,7 @@
 package com.nvv.petber.viewmodel
 
 import android.net.Uri
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -111,7 +109,6 @@ class CreateContentViewModel @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createStory(mediaUri: Uri) {
 
         _isLoading.value = true
