@@ -44,27 +44,35 @@ class LoginActivity : AppCompatActivity() {
 
     private fun observerState() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.authState.collect { state ->
-                    when(state){
+                    when (state) {
                         is AuthState.Idle -> {
                             showLoading(false)
                         }
+
                         is AuthState.Loading -> {
                             // show loading
                             showLoading(true)
                         }
+
                         is AuthState.Success -> {
                             // navigate to home screen
                             showLoading(false)
-                            Toast.makeText(this@LoginActivity, getString(R.string.login_success), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@LoginActivity,
+                                getString(R.string.login_success),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                             finishAffinity()
                         }
+
                         is AuthState.Error -> {
                             // show error message
                             showLoading(false)
-                            Toast.makeText(this@LoginActivity, state.error, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@LoginActivity, state.error, Toast.LENGTH_SHORT)
+                                .show()
                             authViewModel.resetState()
                         }
                     }
@@ -81,12 +89,14 @@ class LoginActivity : AppCompatActivity() {
                 val emailError = ValidationUtils.validateEmail(this@LoginActivity, email)
                 if (emailError != null) {
                     edtEmail.error = emailError
+                    edtEmail.requestFocus()
                     return@setOnClickListener
                 }
 
                 val passwordError = ValidationUtils.validatePassword(this@LoginActivity, password)
                 if (passwordError != null) {
                     edtPw.error = passwordError
+                    edtPw.requestFocus()
                     return@setOnClickListener
                 }
 

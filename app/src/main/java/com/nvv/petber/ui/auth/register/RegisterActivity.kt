@@ -84,21 +84,23 @@ class RegisterActivity : AppCompatActivity() {
     private fun onEvent() {
         binding.apply {
             btnRegister.setOnClickListener {
-                val displayName = edtUserName.text.toString()
-                val email = edtEmail.text.toString()
-                val password = edtPw.text.toString()
-                val confirmPassword = edtConfirmPw.text.toString()
+                val displayName = edtUserName.text.toString().trim()
+                val email = edtEmail.text.toString().trim()
+                val password = edtPw.text.toString().trim()
+                val confirmPassword = edtConfirmPw.text.toString().trim()
 
                 val edtUserNameError =
-                    ValidationUtils.validateDisplayName(this@RegisterActivity, displayName)
+                    ValidationUtils.validateUserName(this@RegisterActivity, displayName)
                 if (edtUserNameError != null) {
                     edtUserName.error = edtUserNameError
+                    edtUserName.requestFocus()
                     return@setOnClickListener
                 }
 
                 val emailError = ValidationUtils.validateEmail(this@RegisterActivity, email)
                 if (emailError != null) {
                     edtEmail.error = emailError
+                    edtEmail.requestFocus()
                     return@setOnClickListener
                 }
 
@@ -106,6 +108,7 @@ class RegisterActivity : AppCompatActivity() {
                     ValidationUtils.validatePassword(this@RegisterActivity, password)
                 if (passwordError != null) {
                     edtPw.error = passwordError
+                    edtPw.requestFocus()
                     return@setOnClickListener
                 }
 
@@ -116,6 +119,7 @@ class RegisterActivity : AppCompatActivity() {
                 )
                 if (confirmPwError != null) {
                     edtConfirmPw.error = confirmPwError
+                    edtConfirmPw.requestFocus()
                     return@setOnClickListener
                 }
 

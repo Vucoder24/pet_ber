@@ -15,7 +15,7 @@
     <string name="text_already_have_account">"Already have an account? "</string>
     <string name="confirm_pw_empty">Confirm password is empty!</string>
     <string name="invalid_confirm_password">Invalid confirm password!</string>
-    <string name="display_name_empty">Display name is empty!</string>
+    <string name="username_empty">Username is empty!</string>
     <string name="register_success">Registered successfully!</string>
     <string name="login_success">Login successful!</string>
     <string name="home">Home</string>
@@ -27,8 +27,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pet">Pet </string>
     <string name="ber">ber</string>
-    <string name="pet_stories">Pet Stories</string>
-    <string name="hint_edt_search">Search for users, pets…</string>
+    <string name="pet_stories">Pet Stories:</string>
+    <string name="hint_edt_search">Search for users, pets, hashtags…</string>
     <string name="follow">Follow</string>
     <string name="users">Users</string>
     <string name="pets">Pets</string>
@@ -83,6 +83,9 @@
     <string name="posts">\u0020Posts |\u0020</string>
     <string name="followers">\u0020Followers |\u0020</string>
     <string name="following">\u0020Following</string>
+    <string name="username_cannot_contain_spaces">Username cannot contain spaces!</string>
+    <string name="username_invalid_characters">Username must only contain lowercase letters, numbers, underscores (_) and periods (.)!</string>
+    <string name="username_invalid_characters_length">Username must have at least 2 characters!</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

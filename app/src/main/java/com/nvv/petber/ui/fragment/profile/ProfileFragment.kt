@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
                 binding.tvFullName.text = if (!it.fullName.isNullOrEmpty()) it.fullName
                 else requireContext().getString(R.string.petber_user)
 
-                binding.tvUserName.text = it.username
+                binding.tvUserName.text = "@${it.username}"
                 binding.tvBio.text = if (!it.bio.isNullOrEmpty()) it.bio
                 else requireContext().getString(R.string.add_bio)
 

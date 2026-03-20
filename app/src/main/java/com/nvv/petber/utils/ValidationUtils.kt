@@ -31,9 +31,23 @@ object ValidationUtils {
         }
     }
 
-    fun validateDisplayName(context: Context, displayName: String): String? {
+    fun validateUserName(context: Context, username: String): String? {
+        if (username.isBlank()) {
+            return context.getString(R.string.username_empty)
+        }
+
+        val usernameRegex = "^[a-z0-9_.]+$".toRegex()
+
         return when {
-            displayName.isBlank() -> getString(context, R.string.display_name_empty)
+            username.contains(" ") -> {
+                context.getString(R.string.username_cannot_contain_spaces)
+            }
+            !username.contains(usernameRegex) -> {
+                context.getString(R.string.username_invalid_characters)
+            }
+            username.length < 2 -> {
+                context.getString(R.string.username_invalid_characters_length)
+            }
             else -> null
         }
     }

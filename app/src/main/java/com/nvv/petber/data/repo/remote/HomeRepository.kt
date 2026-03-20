@@ -59,7 +59,7 @@ class HomeRepository @Inject constructor(
                     columns = Columns.raw(
                         """
                     *,
-                    users(id, username, avatar_url),
+                    users(id, username, full_name, avatar_url),
                     pets(id, name, breed, owner_id),
                     post_media(id, post_id, media_url, media_type),
                     post_likes(*).filter(user_id.eq.$currentUserId)

@@ -96,8 +96,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/baloo2"
                         android:text="32 bài viết | 216 followers | 800 following"
-                        android:textColor="#666"
                         android:textSize="15sp"
+                        android:textStyle="bold"
                         tools:ignore="HardcodedText" />
 
                     <!-- BUTTONS -->
@@ -158,6 +158,7 @@
                         android:fontFamily="@font/baloo2"
                         android:gravity="center"
                         android:maxLines="2"
+                        android:textStyle=""
                         android:text="Cộng đồng thú cưng và phụ kiện thú cưng"
                         android:textSize="15sp"
                         tools:ignore="HardcodedText" />
