@@ -36,6 +36,9 @@ data class Post(
     @SerialName("post_media")
     val postMedia: List<PostMedia>? = null,
 
+    @SerialName("post_likes")
+    val postLikes: List<PostLike>? = null,
+
     @SerialName("created_at")
     val createdAt: String? = null,
 

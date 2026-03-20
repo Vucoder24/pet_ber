@@ -2,7 +2,6 @@ package com.nvv.petber.data.repo.remote
 
 import android.util.Log
 import com.nvv.petber.data.model.Post
-import com.nvv.petber.data.model.PostLike
 import com.nvv.petber.data.model.Story
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.annotations.SupabaseExperimental
@@ -49,67 +48,35 @@ class HomeRepository @Inject constructor(
     suspend fun fetchPosts(
         currentUserId: String,
         page: Int = 0,
-        pageSize: Int = 10
+        pageSize: Int = 30,
     ): Result<List<Post>> {
-
         return try {
-
             val from = page * pageSize
             val to = from + pageSize - 1
 
-            val response = db["posts"]
+            val posts = db["posts"]
                 .select(
                     columns = Columns.raw(
                         """
-                    id, user_id, pet_id, caption, location,
-                    like_count, comment_count, hashtags, created_at,
+                    *,
                     users(id, username, avatar_url),
                     pets(id, name, breed, owner_id),
-                    post_media(id, post_id, media_url, media_type)
+                    post_media(id, post_id, media_url, media_type),
+                    post_likes(*).filter(user_id.eq.$currentUserId)
                     """.trimIndent()
                     )
                 ) {
                     order("created_at", Order.DESCENDING)
                     range(from.toLong(), to.toLong())
                 }
-                .decodeList<Post>()
-
-            val postIds = response.map { it.id }
-
-            val likedPostIds =
-                if (postIds.isNotEmpty())
-                    fetchLikedPostIds(currentUserId, postIds as List<String>)
-                else emptySet()
-
-            val posts = response.map { p ->
-
-                p.copy(
-                    isLiked = likedPostIds.contains(p.id)
-                )
-
-            }
+                .decodeList<Post>().map {
+                    it.apply { isLiked = !postLikes.isNullOrEmpty() }
+                }
 
             Result.success(posts)
-
         } catch (e: Exception) {
             Log.e("HomeRepository", "fetchPosts error: ${e.message}")
             Result.failure(e)
-        }
-    }
-
-    private suspend fun fetchLikedPostIds(userId: String, postIds: List<String>): Set<String> {
-        return try {
-            val response = db["post_likes"]
-                .select {
-                    filter {
-                        eq("user_id", userId)
-                        isIn("post_id", postIds)
-                    }
-                }
-                .decodeList<PostLike>()
-            response.map { it.postId }.toSet()
-        } catch (_: Exception) {
-            emptySet()
         }
     }
 

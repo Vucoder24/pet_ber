@@ -65,21 +65,24 @@
     <string name="caption_empty">Please enter a caption!</string>
     <string name="error_select_media">Please select at least one photo/video!</string>
     <string name="edit_media">Edit media</string>
-    <string name="my_pet_list">My pet list</string>
-    <string name="article_history">Article history</string>
+    <string name="my_pet_list">My pet list:</string>
+    <string name="article_history">Article history:</string>
     <string name="message">Message</string>
     <string name="add_pet">Add pet</string>
-    <string name="personal_information">Personal information</string>
+    <string name="personal_information">Personal information:</string>
     <string name="address">Address</string>
     <string name="phone_number">Phone number</string>
     <string name="gender">Gender</string>
     <string name="hobbies">Hobbies</string>
     <string name="add_bio">Add bio…</string>
-    <string name="add_gender">Add gender…</string>
+    <string name="add_gender">Add gender</string>
     <string name="add_address">Add address</string>
     <string name="add_phone_number">Add phone number</string>
     <string name="add_birthday">Add birthday</string>
     <string name="add_hobbies">Add hobbies</string>
+    <string name="posts">\u0020Posts |\u0020</string>
+    <string name="followers">\u0020Followers |\u0020</string>
+    <string name="following">\u0020Following</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

@@ -10,6 +10,7 @@ import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.User
 import com.nvv.petber.data.repo.remote.ProfileRepository
+import com.nvv.petber.data.repo.remote.UserStats
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,9 @@ class ProfileViewModel @Inject constructor(
     private val _posts = MutableLiveData<List<Post>>()
     val posts: LiveData<List<Post>> = _posts
 
+    private val _userStats = MutableLiveData<UserStats>()
+    val userStats: LiveData<UserStats> = _userStats
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -46,10 +50,12 @@ class ProfileViewModel @Inject constructor(
                 val user = profileRepo.getUser(userId)
                 val pets = profileRepo.getPets(userId)
                 val posts = profileRepo.getPosts(userId)
+                val userStats = profileRepo.getUserStats(userId)
 
                 _user.postValue(user)
                 _pets.postValue(pets)
                 _posts.postValue(posts)
+                _userStats.postValue(userStats)
             } catch (e: Exception) {
                 Log.e("ProfileViewModel", "Error loading profile", e)
             } finally {

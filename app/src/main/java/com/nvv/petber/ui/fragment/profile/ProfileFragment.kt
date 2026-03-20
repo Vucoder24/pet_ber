@@ -1,5 +1,6 @@
 package com.nvv.petber.ui.fragment.profile
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,6 +39,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        setupListener()
         observerData()
     }
 
@@ -56,7 +58,7 @@ class ProfileFragment : Fragment() {
             onProfileClick = { user ->
 
             },
-            onLoadMore = {  }
+            onLoadMore = { }
         )
         petProfileAdapter = PetProfileAdapter(
             onClick = { pet ->
@@ -71,7 +73,7 @@ class ProfileFragment : Fragment() {
             layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.HORIZONTAL,
-                    false
+                false
             )
         }
         binding.rvPosts.apply {
@@ -80,14 +82,15 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observerData() {
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user?.let {
-                binding.tvFullName.text = if(!it.fullName.isNullOrEmpty()) it.fullName
+                binding.tvFullName.text = if (!it.fullName.isNullOrEmpty()) it.fullName
                 else requireContext().getString(R.string.petber_user)
 
                 binding.tvUserName.text = it.username
-                binding.tvBio.text = if(!it.bio.isNullOrEmpty()) it.bio
+                binding.tvBio.text = if (!it.bio.isNullOrEmpty()) it.bio
                 else requireContext().getString(R.string.add_bio)
 
                 binding.tvAddress.text = if (!it.address.isNullOrEmpty()) it.address
@@ -101,7 +104,7 @@ class ProfileFragment : Fragment() {
 
                 binding.tvBirthday.text =
                     if (!it.birthday.isNullOrEmpty()) DateTimeUtils.formatToDisplay(it.birthday)
-                else requireContext().getString(R.string.add_birthday)
+                    else requireContext().getString(R.string.add_birthday)
 
                 binding.tvHobbies.text = if (!it.hobbies.isNullOrEmpty()) it.hobbies
                 else requireContext().getString(R.string.add_hobbies)
@@ -119,6 +122,34 @@ class ProfileFragment : Fragment() {
         viewModel.posts.observe(viewLifecycleOwner) {
             Log.d("ProfileFragment", "Posts loaded: $it")
             historyPostAdapter.submitList(it)
+        }
+
+        viewModel.userStats.observe(viewLifecycleOwner) {
+            binding.tvStats.text = it.postCount.toString() + requireContext().getString(
+                R.string.posts
+            ) + it.followerCount.toString() + requireContext().getString(
+                R.string.followers
+            ) + it.followingCount.toString() + requireContext().getString(R.string.following)
+        }
+    }
+
+    private fun setupListener() {
+        binding.apply {
+            btnMore.setOnClickListener {
+
+            }
+
+            btnFollow.setOnClickListener {
+
+            }
+
+            btnMessage.setOnClickListener {
+
+            }
+
+            btnEditInformation.setOnClickListener {
+
+            }
         }
     }
 

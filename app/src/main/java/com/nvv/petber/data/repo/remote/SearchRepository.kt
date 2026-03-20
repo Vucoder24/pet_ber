@@ -38,13 +38,18 @@ class SearchRepository @Inject constructor(
         } catch (e: Exception) { emptyList() }
     }
 
-    suspend fun searchPostsByHashtag(query: String): List<Post> {
+    suspend fun searchPostsByHashtag(query: String, currentUserId: String): List<Post> {
         val rawQuery = "%$query%"
         return try {
-            db["posts"].select(Columns.raw("*, users(*), post_media(*)")) {
+            db["posts"].select(
+                Columns.raw("*, users(*), post_media(*), " +
+                    "post_likes(*).filter(user_id.eq.$currentUserId)"
+                )) {
                 if (query.isNotEmpty()) filter { ilike("hashtags", rawQuery) }
                 limit(15)
-            }.decodeList<Post>()
+            }.decodeList<Post>().map {
+                it.apply { isLiked = !postLikes.isNullOrEmpty() }
+            }
         } catch (e: Exception) { emptyList() }
     }
 }

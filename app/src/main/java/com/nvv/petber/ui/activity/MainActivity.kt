@@ -36,6 +36,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigation) { view, insets ->
+            view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, 78)
+            insets
+        }
 
         setupBottomNavigation()
         checkSession()
