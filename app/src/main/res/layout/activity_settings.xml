@@ -8,18 +8,38 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.SettingsActivity">
 
-    <TextView
-        android:id="@+id/tvTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/baloo2"
-        android:text="@string/settings"
-        android:gravity="center"
-        android:textColor="@color/text_orange"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        tools:ignore="TextContrastCheck" />
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_circle_soft"
+            android:contentDescription="Back"
+            android:paddingStart="10dp"
+            android:src="@drawable/ic_arrow_back"
+            tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/settings"
+            android:gravity="center"
+            android:paddingEnd="40dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/text_orange"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:ignore="RtlSymmetry,TextContrastCheck" />
+
+
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="8dp"

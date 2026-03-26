@@ -4,6 +4,7 @@ import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.User
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
@@ -78,6 +79,10 @@ class ProfileRepositoryRemote @Inject constructor(
         } catch (_: Exception) {
             UserStats()
         }
+    }
+
+    suspend fun logout(){
+        return supabase.auth.signOut()
     }
 }
 

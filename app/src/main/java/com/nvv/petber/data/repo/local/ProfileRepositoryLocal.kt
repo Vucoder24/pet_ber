@@ -1,16 +1,19 @@
 package com.nvv.petber.data.repo.local
 
+import android.content.Context
 import android.util.Log
 import com.nvv.petber.data.dao.ProfileDao
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.repo.remote.ProfileRepositoryRemote
+import com.nvv.petber.utils.SharePrefUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ProfileRepositoryLocal @Inject constructor(
     private val profileDao: ProfileDao,
-    private val profileRepositoryRemote: ProfileRepositoryRemote
+    private val profileRepositoryRemote: ProfileRepositoryRemote,
+    private val context: Context
 ) {
     fun getLocalUser(id: String) = profileDao.getUser(id)
     fun getLocalPets(id: String) = profileDao.getPets(id)
@@ -41,4 +44,10 @@ class ProfileRepositoryLocal @Inject constructor(
             profileDao.insertPosts(remotePosts)
         }catch (_: Exception){ }
     }
+
+    suspend fun logout(){
+        profileRepositoryRemote.logout()
+        SharePrefUtils.clear(context)
+    }
+
 }
