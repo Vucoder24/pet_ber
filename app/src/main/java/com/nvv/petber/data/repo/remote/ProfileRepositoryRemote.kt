@@ -9,7 +9,7 @@ import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
 import javax.inject.Inject
 
-class ProfileRepository @Inject constructor(
+class ProfileRepositoryRemote @Inject constructor(
     private val supabase: SupabaseClient
 ) {
 
@@ -52,7 +52,6 @@ class ProfileRepository @Inject constructor(
 
     suspend fun getUserStats(userId: String): UserStats {
         return try {
-            // Sử dụng Count.EXACT để lấy số lượng bản ghi mà không lấy dữ liệu chi tiết
             val postsResponse = supabase.from("posts")
                 .select {
                     filter { eq("user_id", userId) }

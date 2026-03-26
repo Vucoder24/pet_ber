@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.databinding.ItemPetSearchResultBinding
-import com.nvv.petber.utils.loadImage
+import com.nvv.petber.utils.ext.loadImage
 
 class SearchPetResultAdapter(private val onClick: (Pet) -> Unit) :
     ListAdapter<Pet, SearchPetResultAdapter.ViewHolder>(DiffCallback) {

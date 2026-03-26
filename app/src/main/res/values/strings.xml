@@ -86,10 +86,72 @@
     <string name="username_cannot_contain_spaces">Username cannot contain spaces!</string>
     <string name="username_invalid_characters">Username must only contain lowercase letters, numbers, underscores (_) and periods (.)!</string>
     <string name="username_invalid_characters_length">Username must have at least 2 characters!</string>
+    <string name="add_new_story">Add new story</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="add_new_pet">Add new Pet</string>
+    <string name="choose_cover">Choose a cover photo</string>
+    <string name="avatar">Avatar</string>
+    <string name="pet_name">Pet name</string>
+    <string name="breed">Breed</string>
+    <string name="species">Species</string>
+    <string name="birthday">Birthday</string>
+    <string name="health">Health</string>
+    <string name="describe">Describe</string>
+    <string name="healthy">Healthy</string>
+    <string name="add">Add</string>
+    <string name="opening_image_cropper">Opening image cropper…</string>
+    <string name="body_condition">Body Condition</string>
+    <string name="clinical_status">Clinical Status</string>
+    <string name="activity_amp_mental_state"><![CDATA[Activity & mental state]]></string>
+    <string name="preventive_status">Preventive Status</string>
+    <string name="has_been_neutered">Has been neutered?</string>
+    <string name="weight_kg">Weight (kg)</string>
+    <string name="error_empty_pet_name">Please enter pet name!</string>
+    <string name="error_empty_pet_species">Please enter species!</string>
+    <string name="create_pet_success">Create pet success.</string>
+    <string name="view_avatar">View avatar</string>
+    <string name="choose_avatar">Choose avatar</string>
+    <string name="view_cover">View cover</string>
+    <string name="post_saved">Post saved</string>
+    <string name="story_saved">Story saved</string>
+    <string name="language">Language</string>
+    <string name="log_out">Log out</string>
+    <string name="settings">Settings</string>
 
     <string-array name="media_types">
         <item>@string/all</item>
         <item>@string/image</item>
         <item>@string/video</item>
     </string-array>
+
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Unknown</item>
+    </string-array>
+
+    <string-array name="preventive_status_options">
+        <item>Up-to-date</item>
+        <item>In Progress</item>
+        <item>Overdue/At Risk</item>
+    </string-array>
+
+    <string-array name="body_condition_options">
+        <item>Ideal</item>
+        <item>Underweight</item>
+        <item>Overweight/Obese</item>
+    </string-array>
+
+    <string-array name="clinical_status_options">
+        <item>Stable</item>
+        <item>Under Observation</item>
+        <item>Critical/Emergency</item>
+    </string-array>
+
+    <string-array name="activity_mental_options">
+        <item>Active/Alert</item>
+        <item>Normal</item>
+        <item>Lethargic</item>
+    </string-array>
 </resources>
+

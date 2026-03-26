@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -77,25 +78,29 @@ class HomeViewModel @Inject constructor(
             } else {
                 _uiState.value = _uiState.value.copy(isLoadingMore = true)
             }
+            try {
+                homeRepository.fetchPosts(currentUserId, page)
+                    .onSuccess { newPosts ->
+                        val updatedPosts = if (refresh) newPosts else _uiState.value.posts + newPosts
+                        _uiState.value = _uiState.value.copy(
+                            posts = updatedPosts,
+                            isLoadingPosts = false,
+                            isLoadingMore = false,
+                            currentPage = page + 1,
+                            hasMore = newPosts.size == 10
+                        )
+                    }
+                    .onFailure { e ->
+                        _uiState.value = _uiState.value.copy(
+                            isLoadingPosts = false,
+                            isLoadingMore = false,
+                            error = e.message
+                        )
+                    }
+            }catch (_: Exception){
+            }
 
-            homeRepository.fetchPosts(currentUserId, page)
-                .onSuccess { newPosts ->
-                    val updatedPosts = if (refresh) newPosts else _uiState.value.posts + newPosts
-                    _uiState.value = _uiState.value.copy(
-                        posts = updatedPosts,
-                        isLoadingPosts = false,
-                        isLoadingMore = false,
-                        currentPage = page + 1,
-                        hasMore = newPosts.size == 10
-                    )
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoadingPosts = false,
-                        isLoadingMore = false,
-                        error = e.message
-                    )
-                }
+
         }
     }
 

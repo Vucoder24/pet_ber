@@ -39,5 +39,11 @@ data class User(
     val createdAt: String? = null,
 
     @SerialName("updated_at")
-    val updatedAt: String? = null
+    val updatedAt: String? = null,
+
+    val postCount: Long = 0,
+
+    val followerCount: Long = 0,
+
+    val followingCount: Long = 0
 )

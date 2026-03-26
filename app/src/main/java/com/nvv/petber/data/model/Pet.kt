@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Entity(tableName = "pets")
 data class Pet(
     @PrimaryKey
-    val id: String,
+    val id: String = java.util.UUID.randomUUID().toString(),
 
     @SerialName("owner_id")
     val ownerId: String,
@@ -17,20 +17,40 @@ data class Pet(
     @SerialName("avatar_url")
     val avatarUrl: String? = null,
 
+    @SerialName("cover_url")
+    val coverUrl: String? = null,
+
     val name: String,
 
     val breed: String? = null,
 
     val species: String? = null,
 
-    val age: Int? = null,
+    val gender: String? = null,
 
-    val location: String? = null,
+    val weight: Double? = null,
+
+    @SerialName("is_neutered")
+    val isNeutered: Boolean? = false,
+
+    val birthday: String? = null,
 
     val description: String? = null,
 
-    @SerialName("health_status")
-    val healthStatus: String? = null,
+    @SerialName("body_condition")
+    val bodyCondition: String? = null,
+
+    @SerialName("clinical_status")
+    val clinicalStatus: String? = null,
+
+    @SerialName("activity_and_mental_state")
+    val activityAndMentalState: String? = null,
+
+    @SerialName("medical_history_and_treatment")
+    val medicalHistoryAndTreatment: String? = null,
+
+    @SerialName("preventive_status")
+    val preventiveStatus: String? = null,
 
     @SerialName("created_at")
     val createdAt: String? = null,

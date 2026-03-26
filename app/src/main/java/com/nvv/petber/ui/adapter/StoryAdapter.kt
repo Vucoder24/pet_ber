@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Story
-import com.nvv.petber.utils.loadAvatar
+import com.nvv.petber.utils.ext.loadAvatar
 
 class StoryAdapter(
     private val onStoryClick: (Story) -> Unit

@@ -61,7 +61,7 @@ class CreateContentViewModel @Inject constructor(
         if (current.contains(pet.id)) {
             current.remove(pet.id)
         } else {
-            current.add(pet.id)
+            current.add(pet.id!!)
         }
 
         _selectedPetIds.value = current

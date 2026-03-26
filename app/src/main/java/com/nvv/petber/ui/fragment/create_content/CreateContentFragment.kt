@@ -128,12 +128,16 @@ class CreateContentFragment : Fragment() {
 
     private fun openMediaPicker() {
 
-        val intent = Intent(requireContext(), MediaPickerActivity::class.java)
-
-        intent.putExtra(
-            MediaPickerActivity.EXTRA_MODE,
-            MediaPickerActivity.MODE_SINGLE
-        )
+        val intent = Intent(requireContext(), MediaPickerActivity::class.java).apply {
+            putExtra(
+                MediaPickerActivity.EXTRA_MODE,
+                MediaPickerActivity.MODE_SINGLE,
+            )
+            putExtra(
+                MediaPickerActivity.EXTRA_MEDIA_KIND,
+                MediaPickerActivity.MEDIA_KIND_ALL
+            )
+        }
 
         mediaPickerLauncher.launch(intent)
     }

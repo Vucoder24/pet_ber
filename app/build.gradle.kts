@@ -124,4 +124,5 @@ dependencies {
     implementation("androidx.room:room-ktx:2.8.4")
 
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("com.github.yalantis:ucrop:2.2.8")
 }

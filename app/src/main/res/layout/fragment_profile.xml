@@ -7,7 +7,20 @@
     android:background="@color/bg_activity"
     tools:context=".ui.fragment.profile.ProfileFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+        <include layout="@layout/layout_profile_shimmer" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/dataContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -23,10 +36,11 @@
                 android:layout_height="250dp"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                android:src="@drawable/image_dog"
+                android:src="#E0E0E0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ImageContrastCheck" />
 
             <!-- MENU (3 DOT) -->
             <ImageView
@@ -35,13 +49,14 @@
                 android:layout_height="38dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
-                android:padding="8dp"
                 android:background="@drawable/bg_icon_button_dark"
                 android:importantForAccessibility="no"
+                android:padding="8dp"
                 android:src="@drawable/ic_more"
                 app:layout_constraintEnd_toEndOf="@id/imgCover"
                 app:layout_constraintTop_toTopOf="@id/imgCover"
-                app:tint="@android:color/white" />
+                app:tint="@android:color/white"
+                tools:ignore="ImageContrastCheck" />
 
             <!-- PROFILE CARD -->
             <com.google.android.material.card.MaterialCardView
@@ -60,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp">
 
                     <TextView
@@ -71,7 +86,7 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/baloo2"
                         android:maxLines="2"
-                        android:text="Linh Pham"
+                        android:text="Display name"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
@@ -84,7 +99,7 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/baloo2"
                         android:maxLines="2"
-                        android:text="\@linhpham"
+                        android:text="\@username"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
@@ -95,7 +110,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/baloo2"
-                        android:text="32 bài viết | 216 followers | 800 following"
+                        android:text="0 Posts | 0 followers | 0 following"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
@@ -107,20 +122,18 @@
                         android:layout_marginTop="8dp"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="16dp">
+                        >
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnFollow"
+                            android:id="@+id/btnAddStory"
                             android:layout_width="0dp"
                             android:layout_height="48dp"
                             android:layout_weight="1"
                             android:backgroundTint="@color/bg_btn"
                             android:fontFamily="@font/baloo2"
-                            android:paddingVertical="3dp"
-                            android:paddingHorizontal="30dp"
-                            android:text="@string/follow"
-                            app:iconGravity="end"
-                            app:icon="@drawable/ic_follow"
+                            android:text="@string/add_new_story"
+                            app:iconGravity="start"
+                            app:icon="@drawable/ic_add_story"
                             app:iconTint="@color/white"
                             app:iconPadding="0dp"
                             android:textSize="16sp"
@@ -128,20 +141,19 @@
                             tools:ignore="ButtonStyle,TouchTargetSizeCheck,TextContrastCheck,VisualLintButtonSize" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnMessage"
+                            android:id="@+id/btnEditProfile"
                             android:layout_width="0dp"
                             android:layout_height="48dp"
                             android:layout_marginStart="8dp"
                             android:layout_weight="1"
                             android:backgroundTint="@color/gray_light"
                             android:fontFamily="@font/baloo2"
-                            android:paddingVertical="3dp"
-                            android:paddingHorizontal="30dp"
-                            android:text="@string/message"
-                            app:iconGravity="end"
+                            android:text="@string/edit_profile"
+                            app:iconGravity="start"
                             app:iconTint="@color/black"
                             app:iconPadding="0dp"
-                            app:icon="@drawable/ic_messenger"
+                            android:paddingHorizontal="32dp"
+                            app:icon="@drawable/ic_edit"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -159,7 +171,7 @@
                         android:gravity="center"
                         android:maxLines="2"
                         android:textStyle=""
-                        android:text="Cộng đồng thú cưng và phụ kiện thú cưng"
+                        android:text="..."
                         android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
@@ -172,13 +184,14 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:elevation="12dp"
-                android:src="@drawable/image_dog"
+                android:src="@drawable/ic_default_avatar"
                 android:translationY="-45dp"
                 app:civ_border_color="@android:color/white"
                 app:civ_border_width="3dp"
                 app:layout_constraintEnd_toEndOf="@id/profileCard"
                 app:layout_constraintStart_toStartOf="@id/profileCard"
-                app:layout_constraintTop_toTopOf="@id/profileCard" />
+                app:layout_constraintTop_toTopOf="@id/profileCard"
+                tools:ignore="ImageContrastCheck" />
 
             <!-- HIGHLIGHTS TITLE -->
             <TextView
@@ -456,5 +469,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

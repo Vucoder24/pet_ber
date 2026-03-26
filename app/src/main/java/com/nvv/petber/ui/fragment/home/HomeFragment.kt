@@ -19,6 +19,8 @@ import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.adapter.StoryAdapter
 import com.nvv.petber.ui.adapter.StoryRowAdapter
 import com.nvv.petber.utils.AppEventManager
+import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -135,10 +137,14 @@ class HomeFragment : Fragment() {
                     postAdapter.submitList(state.posts)
 
                     // Loading
-                    if (state.isLoadingPosts && state.posts.isEmpty()) {
-                        binding.progressBarHome.visibility = View.VISIBLE
+                    if (state.isLoadingPosts) {
+                        binding.shimmerViewContainer.visible()
+                        binding.shimmerViewContainer.startShimmer()
+                        binding.dataContainer.gone()
                     } else {
-                        binding.progressBarHome.visibility = View.GONE
+                        binding.shimmerViewContainer.stopShimmer()
+                        binding.shimmerViewContainer.gone()
+                        binding.dataContainer.visible()
                     }
 
                     // Swipe refresh

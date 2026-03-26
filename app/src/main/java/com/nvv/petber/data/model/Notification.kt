@@ -25,8 +25,16 @@ data class Notification(
     @SerialName("comment_id")
     val commentId: String? = null,
 
+    @SerialName("parent_comment_id")
+    val parentCommentId: String? = null,
+
+    @SerialName("pet_id")
+    val petId: String? = null,
+
     @SerialName("is_read")
     val isRead: Boolean = false,
+
+    val message: String? = null,
 
     @SerialName("created_at")
     val createdAt: String? = null

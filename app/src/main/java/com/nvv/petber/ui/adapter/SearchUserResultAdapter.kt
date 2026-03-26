@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.User
 import com.nvv.petber.databinding.ItemUserSearchResultBinding
-import com.nvv.petber.utils.loadAvatar
+import com.nvv.petber.utils.ext.loadAvatar
 
 class SearchUserResultAdapter(private val onClick: (User) -> Unit) :
     ListAdapter<User, SearchUserResultAdapter.ViewHolder>(DiffCallback) {

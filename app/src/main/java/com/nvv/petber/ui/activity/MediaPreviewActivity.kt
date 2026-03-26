@@ -37,7 +37,7 @@ class MediaPreviewActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnClose.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             finish()
         }
     }

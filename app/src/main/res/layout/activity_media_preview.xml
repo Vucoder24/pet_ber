@@ -31,17 +31,17 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageButton
-        android:id="@+id/btn_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btn_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_icon_button_dark"
+        android:background="@drawable/bg_circle_soft"
         android:importantForAccessibility="no"
-        android:padding="8dp"
+        android:paddingStart="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_close"
-        tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+        app:srcCompat="@drawable/ic_back"
+        tools:ignore="ImageContrastCheck,RtlSymmetry,TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

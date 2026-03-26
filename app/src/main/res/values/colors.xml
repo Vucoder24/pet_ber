@@ -14,4 +14,10 @@
     <color name="text_tab_color">#757575</color>
     <color name="orange_200">#F6BA98</color>
     <color name="title_color">#9B3C09</color>
+    <color name="pet_text_primary">#4A3628</color>
+    <color name="pet_stroke">#E6D4A8</color>
+    <color name="pet_card">#FFF8EA</color>
+    <color name="pet_accent">#F28C38</color>
+    <color name="pet_text_secondary">#8C6F54</color>
+    <color name="pet_primary">#FF9356</color>
 </resources>

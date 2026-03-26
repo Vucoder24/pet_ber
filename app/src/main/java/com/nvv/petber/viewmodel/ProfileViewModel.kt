@@ -5,12 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
-import com.nvv.petber.data.model.User
-import com.nvv.petber.data.repo.remote.ProfileRepository
-import com.nvv.petber.data.repo.remote.UserStats
+import com.nvv.petber.data.repo.local.ProfileRepositoryLocal
+import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,49 +18,65 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val profileRepo: ProfileRepository,
+    private val profileRepoLocal: ProfileRepositoryLocal,
+    private val homeRepository: HomeRepository,
     context: Context
 ) : ViewModel() {
     private val currentUserId = SharePrefUtils.getCurrentUserId(context)
 
-    private val _user = MutableLiveData<User?>()
-    val user: LiveData<User?> = _user
-
-    private val _pets = MutableLiveData<List<Pet>>()
-    val pets: LiveData<List<Pet>> = _pets
-
-    private val _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> = _posts
-
-    private val _userStats = MutableLiveData<UserStats>()
-    val userStats: LiveData<UserStats> = _userStats
+    val user = profileRepoLocal.getLocalUser(currentUserId).asLiveData()
+    val pets = profileRepoLocal.getLocalPets(currentUserId).asLiveData()
+    val posts = profileRepoLocal.getLocalPosts(currentUserId).asLiveData()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isRefreshing = MutableLiveData<Boolean>()
+    val isRefreshing: LiveData<Boolean> = _isRefreshing
+
     init {
-        loadProfile(currentUserId)
+        refreshProfile()
     }
 
-    fun loadProfile(userId: String) {
+    fun refreshProfile(isRefreshing: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
+            if (isRefreshing) _isRefreshing.postValue(true)
+            else _isLoading.postValue(true)
             try {
-                _isLoading.postValue(true)
-                val user = profileRepo.getUser(userId)
-                val pets = profileRepo.getPets(userId)
-                val posts = profileRepo.getPosts(userId)
-                val userStats = profileRepo.getUserStats(userId)
-
-                _user.postValue(user)
-                _pets.postValue(pets)
-                _posts.postValue(posts)
-                _userStats.postValue(userStats)
+                profileRepoLocal.syncProfile(currentUserId)
             } catch (e: Exception) {
-                Log.e("ProfileViewModel", "Error loading profile", e)
+                Log.e("ProfileVM", "Sync error: ${e.message}")
             } finally {
-                _isLoading.postValue(false)
+                if (isRefreshing) _isRefreshing.postValue(false)
+                else _isLoading.postValue(false)
             }
         }
     }
+
+    fun toggleLike(post: Post) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userId = currentUserId
+
+            val wasLikedBefore = post.isLiked
+            val originalLikeCount = post.likeCount
+
+            val updatedPost = post.copy(
+                isLiked = !post.isLiked,
+                likeCount = if (post.isLiked) post.likeCount - 1 else post.likeCount + 1
+            )
+            profileRepoLocal.updatePost(updatedPost)
+
+            homeRepository.toggleLike(post.id, userId, wasLikedBefore)
+                .onFailure { error ->
+                    Log.e("ProfileVM", "Toggle like failed: ${error.message}")
+                    val revertedPost = post.copy(
+                        isLiked = wasLikedBefore,
+                        likeCount = originalLikeCount
+                    )
+                    profileRepoLocal.updatePost(revertedPost)
+                }
+        }
+    }
+
 }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -16,6 +17,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBer">
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CropImageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CreatePetActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.MediaPreviewActivity"
             android:exported="false" />
@@ -47,6 +57,10 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

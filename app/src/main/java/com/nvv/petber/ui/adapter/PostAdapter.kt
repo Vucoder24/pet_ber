@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.utils.TimeUtils
-import com.nvv.petber.utils.loadAvatar
-import com.nvv.petber.utils.loadImage
+import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.loadAvatar
+import com.nvv.petber.utils.ext.loadImage
+import com.nvv.petber.utils.ext.visible
 
 class PostAdapter(
     private val onLikeClick: (Post) -> Unit,
@@ -56,17 +58,17 @@ class PostAdapter(
                 post.users?.fullName ?: itemView.context.getString(R.string.petber_user)
 
             if (post.pets == null) {
-                petName.visibility = View.GONE
+                petName.gone()
             } else {
-                petName.visibility = View.VISIBLE
+                petName.visible()
             }
             petName.text = "${post.pets?.name} (${post.pets?.breed})"
             tvLikeCount.text = post.likeCount.toString()
             if (post.hashtags.isNullOrEmpty()) {
-                hashtags.visibility = View.GONE
+                hashtags.gone()
             } else {
                 hashtags.text = post.hashtags
-                hashtags.visibility = View.VISIBLE
+                hashtags.visible()
             }
             tvCaption.text = post.caption?.ifEmpty { "" }
             tvCaption.visibility =

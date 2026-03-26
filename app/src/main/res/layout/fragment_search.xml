@@ -15,7 +15,7 @@
         android:fontFamily="@font/baloo2"
         android:text="@string/search"
         android:textColor="@color/text_orange"
-        android:textSize="@dimen/title_tab_size"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

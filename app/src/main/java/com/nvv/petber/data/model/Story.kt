@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Entity(tableName = "stories")
 data class Story(
     @PrimaryKey
-    val id: String? = null,
+    val id: String = java.util.UUID.randomUUID().toString(),
 
     @SerialName("user_id")
     val userId: String,

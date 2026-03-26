@@ -12,7 +12,7 @@ import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityCreateStoryBinding
 import com.nvv.petber.ui.dialog.UploadProgressDialog
 import com.nvv.petber.utils.AppEventManager
-import com.nvv.petber.utils.loadImageUri
+import com.nvv.petber.utils.ext.loadImageUri
 import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
