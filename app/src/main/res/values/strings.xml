@@ -16,7 +16,7 @@
     <string name="confirm_pw_empty">Confirm password is empty!</string>
     <string name="invalid_confirm_password">Invalid confirm password!</string>
     <string name="username_empty">Username is empty!</string>
-    <string name="register_success">Registered successfully!</string>
+    <string name="register_success">Registered successfully, you need to confirm your email before logging in!</string>
     <string name="login_success">Login successful!</string>
     <string name="home">Home</string>
     <string name="search">Search</string>
@@ -117,6 +117,35 @@
     <string name="language">Language</string>
     <string name="log_out">Log out</string>
     <string name="settings">Settings</string>
+    <string name="error_send_otp">Unable to send OTP. Please try again.</string>
+    <string name="otp_incorrect_or_expired">OTP is incorrect or has expired.</string>
+    <string name="error_update_password">Cannot change password.</string>
+    <string name="otp_expired">OTP has expired, please resend a new code.</string>
+    <string name="otp_invalid">OTP invalid.</string>
+    <string name="email_not_confirmed">Email not confirmed</string>
+    <string name="invalid_credentials">Information is incorrect.</string>
+    <string name="error_too_many_requests">You acted too quickly, please try again later.</string>
+    <string name="til_forgot_password">Forgot password</string>
+    <string name="title_input_email">Enter email to receive password reset OTP.</string>
+    <string name="send">Send</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="verify_your_email">Verify your email</string>
+    <string name="hint_enter_otp">Enter OTP</string>
+    <string name="action_continue">Continue</string>
+    <string name="dep_verify_otp">The verification code has been sent to your email</string>
+    <string name="otp_will_expire">OTP code will expire in:</string>
+    <string name="second">second</string>
+    <string name="not_received_yet">Not received yet?</string>
+    <string name="action_resend_otp">Resend verification code</string>
+    <string name="resend_otp">Resend OTP code</string>
+    <string name="resend_otp_second">Resend OTP (%1$d)</string>
+    <string name="til_reset_password">Reset password</string>
+    <string name="password_updated">Password changed successfully.</string>
+    <string name="please_enter_otp">Please enter otp code.</string>
+    <string name="please_enter_full_otp">Please enter full otp code.</string>
+    <string name="message_email_verify_success">Your email has been verified. You can now log in.</string>
+    <string name="action_back_login">Go back to Login</string>
+    <string name="confirmed_successfully">Confirmed successfully!</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

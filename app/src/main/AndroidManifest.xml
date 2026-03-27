@@ -18,6 +18,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBer">
         <activity
+            android:name=".ui.activity.VerifyEmailSuccessActivity"
+            android:exported="true">
+            <intent-filter android:label="filter_verify_email">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="petber"
+                    android:host="verify-email-success" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.forgot_pw.ForgotPwActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.SettingsActivity"
             android:exported="false" />
         <activity

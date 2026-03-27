@@ -16,6 +16,7 @@ import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityLoginBinding
 import com.nvv.petber.ui.auth.register.RegisterActivity
 import com.nvv.petber.ui.activity.MainActivity
+import com.nvv.petber.ui.forgot_pw.ForgotPwActivity
 import com.nvv.petber.utils.ValidationUtils
 import com.nvv.petber.viewmodel.AuthState
 import com.nvv.petber.viewmodel.AuthViewModel
@@ -104,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             btnForgotPw.setOnClickListener {
-                //
+                startActivity(Intent(this@LoginActivity, ForgotPwActivity::class.java))
             }
 
             btnNavigateRegister.setOnClickListener {

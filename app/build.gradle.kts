@@ -125,4 +125,7 @@ dependencies {
 
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.yalantis:ucrop:2.2.8")
+
+    // pin view
+    implementation("io.github.chaosleung:pinview:1.4.4")
 }
