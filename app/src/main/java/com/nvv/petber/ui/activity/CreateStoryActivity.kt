@@ -8,11 +8,15 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityCreateStoryBinding
 import com.nvv.petber.ui.dialog.UploadProgressDialog
 import com.nvv.petber.utils.AppEventManager
+import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadImageUri
+import com.nvv.petber.utils.ext.loadMediaCoverWithExtremeGradient
+import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,8 +57,8 @@ class CreateStoryActivity : AppCompatActivity() {
 
             if (type?.startsWith("video") == true) {
 
-                binding.videoStoryPreview.visibility = android.view.View.VISIBLE
-                binding.ivStoryPreview.visibility = android.view.View.GONE
+                binding.videoStoryPreview.visible()
+                binding.ivStoryPreview.gone()
 
                 binding.videoStoryPreview.setVideoURI(uri)
                 binding.videoStoryPreview.setOnPreparedListener {
@@ -63,12 +67,20 @@ class CreateStoryActivity : AppCompatActivity() {
                 }
 
             } else {
+                // process image
+                binding.ivStoryPreview.visible()
+                binding.videoStoryPreview.gone()
 
-                binding.ivStoryPreview.visibility = android.view.View.VISIBLE
-                binding.videoStoryPreview.visibility = android.view.View.GONE
-
-                binding.ivStoryPreview.loadImageUri(uri)
+                binding.ivStoryPreview.loadImageUri(uri, centerCrop = false)
             }
+
+            binding.ivStoryPreview.loadMediaCoverWithExtremeGradient(
+                uri = uri,
+                isVideo = type?.startsWith("video") == true,
+                backgroundView = binding.storyBackground,
+                scope = lifecycleScope,
+                ctx = this
+            )
         }
     }
 

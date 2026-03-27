@@ -27,6 +27,9 @@ data class Post(
     @SerialName("comment_count")
     val commentCount: Int = 0,
 
+    @SerialName("share_count")
+    val shareCount: Int = 0,
+
     val hashtags: String? = null,
 
     val users: User? = null,

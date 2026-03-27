@@ -46,6 +46,9 @@ class HashtagSearchFragment : Fragment() {
                 // Handle profile click
             },
             onLoadMore = {
+            },
+            onSaveClick = {
+
             }
         )
         binding.rvResults.adapter = adapter

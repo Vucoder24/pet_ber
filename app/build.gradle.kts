@@ -128,4 +128,7 @@ dependencies {
 
     // pin view
     implementation("io.github.chaosleung:pinview:1.4.4")
+    // extract color from image
+    implementation("androidx.palette:palette-ktx:1.0.0")
+    //
 }

@@ -80,9 +80,7 @@
     <string name="add_phone_number">Add phone number</string>
     <string name="add_birthday">Add birthday</string>
     <string name="add_hobbies">Add hobbies</string>
-    <string name="posts">\u0020Posts |\u0020</string>
-    <string name="followers">\u0020Followers |\u0020</string>
-    <string name="following">\u0020Following</string>
+    <string name="user_stats">%1$s Posts  •  %2$s Followers  •  %3$s Following</string>
     <string name="username_cannot_contain_spaces">Username cannot contain spaces!</string>
     <string name="username_invalid_characters">Username must only contain lowercase letters, numbers, underscores (_) and periods (.)!</string>
     <string name="username_invalid_characters_length">Username must have at least 2 characters!</string>
@@ -146,6 +144,13 @@
     <string name="message_email_verify_success">Your email has been verified. You can now log in.</string>
     <string name="action_back_login">Go back to Login</string>
     <string name="confirmed_successfully">Confirmed successfully!</string>
+    <string name="time_just_now">Just now</string>
+    <string name="time_minutes_ago">%1$dm ago</string>
+    <string name="time_hours_ago">%1$dh ago</string>
+    <string name="time_days_ago">%1$dd ago</string>
+    <string name="updating_avatar">Updating avatar…</string>
+    <string name="updating_cover">Updating cover…</string>
+    <string name="update_user_success">Updated user information successfully.</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

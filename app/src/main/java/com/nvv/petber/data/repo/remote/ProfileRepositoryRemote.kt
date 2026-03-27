@@ -1,5 +1,8 @@
 package com.nvv.petber.data.repo.remote
 
+import android.content.Context
+import android.net.Uri
+import android.webkit.MimeTypeMap
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.User
@@ -7,10 +10,15 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
+import io.github.jan.supabase.storage.storage
+import io.github.jan.supabase.storage.upload
+import io.ktor.http.ContentType
+import java.util.UUID
 import javax.inject.Inject
 
 class ProfileRepositoryRemote @Inject constructor(
-    private val supabase: SupabaseClient
+    private val supabase: SupabaseClient,
+    private val context: Context
 ) {
 
     suspend fun getUser(userId: String): User? {
@@ -78,6 +86,52 @@ class ProfileRepositoryRemote @Inject constructor(
         } catch (_: Exception) {
             UserStats()
         }
+    }
+
+    suspend fun updateAvatar(userId: String, uri: Uri): String {
+        val avatarUrl = uploadMedia(uri, userId, "user")
+
+        supabase.from("users").update(
+            {
+                set("avatar_url", avatarUrl)
+            }
+        ) {
+            filter { eq("id", userId) }
+        }
+        return avatarUrl
+    }
+
+    suspend fun updateCover(userId: String, uri: Uri): String {
+        val coverUrl = uploadMedia(uri, userId, "user")
+
+        supabase.from("users").update(
+            {
+                set("cover_url", coverUrl)
+            }
+        ) {
+            filter { eq("id", userId) }
+        }
+        return coverUrl
+    }
+
+    private suspend fun uploadMedia(
+        uri: Uri,
+        userId: String,
+        bucket: String
+    ): String {
+        val mimeType = context.contentResolver.getType(uri) ?: "image/jpeg"
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: "jpg"
+        val fileName = "$userId/${UUID.randomUUID()}.$extension"
+
+        supabase.storage[bucket].upload(
+            path = fileName,
+            uri = uri
+        ) {
+            contentType = ContentType.parse(mimeType)
+            upsert = false
+        }
+
+        return supabase.storage[bucket].publicUrl(fileName)
     }
 }
 

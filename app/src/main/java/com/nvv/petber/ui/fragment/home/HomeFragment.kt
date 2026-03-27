@@ -108,7 +108,10 @@ class HomeFragment : Fragment() {
                 )
                     .show()
             },
-            onLoadMore = { viewModel.loadPosts(refresh = false) }
+            onLoadMore = { viewModel.loadPosts(refresh = false) },
+            onSaveClick = {
+
+            }
         )
     }
 

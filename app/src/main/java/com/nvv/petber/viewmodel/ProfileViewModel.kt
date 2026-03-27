@@ -1,6 +1,7 @@
 package com.nvv.petber.viewmodel
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +14,8 @@ import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +36,9 @@ class ProfileViewModel @Inject constructor(
 
     private val _isRefreshing = MutableLiveData<Boolean>()
     val isRefreshing: LiveData<Boolean> = _isRefreshing
+
+    private val _uiState = MutableStateFlow<UpdateUserState>(UpdateUserState.Idle)
+    val uiState: StateFlow<UpdateUserState> = _uiState
 
     init {
         refreshProfile()
@@ -78,5 +84,42 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun updateAvatar(uri: Uri) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = UpdateUserState.Loading("avatar")
+            try {
+                profileRepoLocal.updateAvatar(currentUserId, uri)
+                _uiState.value = UpdateUserState.Success
+            } catch (e: Exception) {
+                _uiState.value = UpdateUserState.Error(e.message ?: "Unknown error")
+                Log.e("ProfileVM", "Update avatar error: ${e.message}")
+            }
+        }
+    }
+
+    fun updateCover(uri: Uri) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = UpdateUserState.Loading("cover")
+            try {
+                profileRepoLocal.updateCover(currentUserId, uri)
+                _uiState.value = UpdateUserState.Success
+            } catch (e: Exception) {
+                _uiState.value = UpdateUserState.Error(e.message ?: "Unknown error")
+                Log.e("ProfileVM", "Update cover error: ${e.message}")
+            }
+        }
+    }
+
+    fun resetState(){
+        _uiState.value = UpdateUserState.Idle
+    }
+
+}
+
+sealed class UpdateUserState {
+    object Idle : UpdateUserState()
+    data class Loading(val style: String) : UpdateUserState()
+    object Success : UpdateUserState()
+    data class Error(val message: String) : UpdateUserState()
 }
 

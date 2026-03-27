@@ -23,7 +23,7 @@ import com.nvv.petber.data.model.User
     entities = [User::class, Pet::class, Post::class, Story::class, Follow::class,
         Comment::class, Hashtag::class, Notification::class, PetFollow::class,
         PetImage::class, PostHashtag::class, PostLike::class, PostMedia::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(DataConverters::class)

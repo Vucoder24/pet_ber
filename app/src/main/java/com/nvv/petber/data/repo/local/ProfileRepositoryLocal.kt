@@ -1,5 +1,6 @@
 package com.nvv.petber.data.repo.local
 
+import android.net.Uri
 import android.util.Log
 import com.nvv.petber.data.dao.ProfileDao
 import com.nvv.petber.data.model.Post
@@ -40,6 +41,16 @@ class ProfileRepositoryLocal @Inject constructor(
             profileDao.insertPets(remotePets)
             profileDao.insertPosts(remotePosts)
         }catch (_: Exception){ }
+    }
+
+    suspend fun updateAvatar(userId: String, uri: Uri) = withContext(Dispatchers.IO) {
+        profileRepositoryRemote.updateAvatar(userId, uri)
+        syncProfile(userId)
+    }
+
+    suspend fun updateCover(userId: String, uri: Uri) = withContext(Dispatchers.IO) {
+        profileRepositoryRemote.updateCover(userId, uri)
+        syncProfile(userId)
     }
 
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.utils.TimeUtils
+import com.nvv.petber.utils.ext.formatSocialCount
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.loadImage
@@ -21,6 +22,7 @@ class PostAdapter(
     private val onLikeClick: (Post) -> Unit,
     private val onCommentClick: (Post) -> Unit,
     private val onShareClick: (Post) -> Unit,
+    private val onSaveClick: (Post) -> Unit,
     private val onProfileClick: (Post) -> Unit,
     private val onLoadMore: () -> Unit
 ) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback()) {
@@ -47,9 +49,12 @@ class PostAdapter(
         private val ivPostImage: ImageView = itemView.findViewById(R.id.ivPostImage)
         private val ibLike: ImageView = itemView.findViewById(R.id.btn_like)
         private val ibComment: ImageView = itemView.findViewById(R.id.btn_cmt)
+        private val ibShare: ImageView = itemView.findViewById(R.id.btn_share)
+        private val ibSave: ImageView = itemView.findViewById(R.id.btn_bookmark)
         private val tvLikeCount: TextView = itemView.findViewById(R.id.tvLikeCount)
         private val tvCaption: TextView = itemView.findViewById(R.id.caption)
         private val tvCommentCount: TextView = itemView.findViewById(R.id.tvCmtCount)
+        private val tvShareCount: TextView = itemView.findViewById(R.id.tvShareCount)
         private val tvTimeAgo: TextView = itemView.findViewById(R.id.tvTimeAgo)
 
         @SuppressLint("SetTextI18n")
@@ -63,7 +68,8 @@ class PostAdapter(
                 petName.visible()
             }
             petName.text = "${post.pets?.name} (${post.pets?.breed})"
-            tvLikeCount.text = post.likeCount.toString()
+            tvLikeCount.text = post.likeCount.formatSocialCount()
+
             if (post.hashtags.isNullOrEmpty()) {
                 hashtags.gone()
             } else {
@@ -73,8 +79,13 @@ class PostAdapter(
             tvCaption.text = post.caption?.ifEmpty { "" }
             tvCaption.visibility =
                 if (post.caption?.isNotEmpty() == true) View.VISIBLE else View.GONE
-            tvCommentCount.text = post.commentCount.toString()
-            post.createdAt?.let { tvTimeAgo.text = TimeUtils.formatTimeAgo(it) }
+            tvCommentCount.text = post.commentCount.formatSocialCount()
+
+            tvShareCount.text = post.shareCount.formatSocialCount()
+
+            post.createdAt?.let {
+                tvTimeAgo.text = TimeUtils.formatTimeAgo(itemView.context, it)
+            }
 
             // Avatar
             ivUserAvatar.loadAvatar(post.users?.avatarUrl)
@@ -90,7 +101,8 @@ class PostAdapter(
             // Listeners
             ibLike.setOnClickListener { onLikeClick(post) }
             ibComment.setOnClickListener { onCommentClick(post) }
-//            ibShare.setOnClickListener { onShareClick(post) }
+            ibShare.setOnClickListener { onShareClick(post) }
+            ibSave.setOnClickListener { onSaveClick(post) }
             ivUserAvatar.setOnClickListener { onProfileClick(post) }
             tvUsername.setOnClickListener { onProfileClick(post) }
         }
