@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:background="@color/bg_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.SettingsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_circle_soft"
+            android:contentDescription="Back"
+            android:paddingStart="10dp"
+            android:src="@drawable/ic_arrow_back"
+            tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/settings"
+            android:gravity="center"
+            android:paddingEnd="40dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/text_orange"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:ignore="RtlSymmetry,TextContrastCheck" />
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/gray_light"/>
+
+    <LinearLayout
+        android:id="@+id/btnPostSaved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="icon"
+            android:padding="8dp"
+            android:src="@drawable/ic_poster"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/post_saved"
+            android:textColor="@color/text_brown"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_light"/>
+
+    <LinearLayout
+        android:id="@+id/btnStorySaved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="icon"
+            android:padding="8dp"
+            android:src="@drawable/ic_add_story"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/story_saved"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_light"/>
+
+    <LinearLayout
+        android:id="@+id/btnLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="icon"
+            android:padding="8dp"
+            android:src="@drawable/ic_language"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/language"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <View
+    android:layout_width="match_parent"
+    android:layout_height="8dp"
+    android:background="@color/gray_light"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_btn_orange"
+        android:fontFamily="@font/baloo2"
+        android:text="@string/log_out"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+
+</LinearLayout>

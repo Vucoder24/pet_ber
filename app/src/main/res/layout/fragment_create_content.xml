@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity"
+    tools:context=".ui.fragment.create_content.CreateContentFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- ── Header ── -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/create_content"
+            android:textColor="#834E3D"
+            android:gravity="center"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_story"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:strokeColor="@color/orange_200"
+            app:strokeWidth="3dp">
+
+            <LinearLayout
+                android:id="@+id/btn_create_story2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_activity"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <!-- Story pet icon -->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:importantForAccessibility="no"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_story_cat" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/story"
+                    android:textColor="#2D2D2D"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="@string/sub_title_story"
+                    android:textColor="#888888"
+                    android:textSize="16sp"
+                    tools:ignore="TextContrastCheck" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_create_story"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/baloo2"
+                    android:paddingStart="28dp"
+                    android:paddingEnd="28dp"
+                    android:text="@string/create_a_new_story"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/bg_btn"
+                    app:cornerRadius="24dp"
+                    tools:ignore="TextContrastCheck" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btn_create_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_activity"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:strokeColor="@color/orange_200"
+            app:strokeWidth="3dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_activity"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Thumbnail placeholder -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:background="@drawable/bg_media_placeholder">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/iv_media_preview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="TODO"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/image_dog"
+                            android:visibility="visible"
+                            tools:ignore="ContentDescription,HardcodedText" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Add button -->
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btn_add_media"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="12dp"
+                        android:contentDescription="TODO"
+                        app:backgroundTint="@color/bg_btn"
+                        app:elevation="6dp"
+                        app:fabSize="mini"
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        app:tint="@android:color/white"
+                        tools:ignore="ContentDescription,HardcodedText,ClassNameCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/images_videos"
+                    android:textColor="#2D2D2D"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="@string/dep_item_create_post"
+                    android:textColor="#888888"
+                    android:textSize="14sp"
+                    tools:ignore="TextContrastCheck" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</ScrollView>

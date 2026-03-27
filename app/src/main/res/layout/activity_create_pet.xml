@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity"
+    tools:context=".ui.activity.CreatePetActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Top bar -->
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_circle_soft"
+                android:contentDescription="Back"
+                android:paddingStart="10dp"
+                android:src="@drawable/ic_arrow_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/pet_text_primary"
+                tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="52dp"
+                android:fontFamily="@font/baloo2"
+                android:gravity="center"
+                android:text="@string/add_new_pet"
+                android:textColor="@color/pet_text_primary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/btnBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnBack"
+                app:layout_constraintTop_toTopOf="@id/btnBack" />
+
+            <!-- Cover image -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardCover"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="@color/pet_card"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle"
+                app:strokeColor="@color/pet_stroke"
+                app:strokeWidth="1dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#1AFFFFFF"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_add_photo"
+                            app:tint="@color/pet_accent"
+                            tools:ignore="ImageContrastCheck" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:fontFamily="@font/baloo2"
+                            android:text="@string/choose_cover"
+                            android:textColor="@color/pet_text_secondary"
+                            android:textSize="14sp"
+                            tools:ignore="TextContrastCheck" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivCover"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="Cover image"
+                        android:scaleType="centerCrop"
+                        tools:ignore="HardcodedText,ImageContrastCheck" />
+
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Avatar -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAvatar"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:layout_marginTop="-52dp"
+                app:cardBackgroundColor="@color/pet_card"
+                app:cardCornerRadius="42dp"
+                app:cardElevation="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardCover"
+                app:strokeColor="@color/pet_card"
+                app:strokeWidth="2dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_add_photo"
+                        app:tint="@color/bg_btn"
+                        tools:ignore="ImageContrastCheck" />
+
+                    <ImageView
+                        android:id="@+id/ivAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="Avatar"
+                        android:scaleType="centerCrop"
+                        tools:ignore="HardcodedText,ImageContrastCheck" />
+
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Form card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardForm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="@color/pet_card"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardAvatar"
+                app:strokeColor="@color/pet_stroke"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Name -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/pet_name"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusBottomEnd="18dp"
+                        app:boxCornerRadiusBottomStart="18dp"
+                        app:boxCornerRadiusTopEnd="18dp"
+                        app:boxCornerRadiusTopStart="18dp"
+                        app:boxStrokeColor="@color/pet_accent"
+                        app:hintTextColor="@color/bg_btn">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/baloo2"
+                            android:inputType="textPersonName"
+                            android:textColor="@color/pet_text_primary"
+                            android:textColorHint="@color/pet_text_secondary"
+                            tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <!-- birthday + species -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilBirthday"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/birthday"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/pet_accent"
+                            app:endIconDrawable="@drawable/ic_calendar"
+                            app:endIconMode="custom"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtBirthday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:editable="false"
+                                android:focusable="false"
+                                android:clickable="true"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="none"
+                                android:textColor="@color/pet_text_primary"
+                                tools:ignore="Deprecated,TextContrastCheck,VisualLintTextFieldSize" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:baselineAligned="true"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/species"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/pet_accent"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtSpecies"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="textCapWords"
+                                android:textColor="@color/pet_text_primary"
+                                tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+
+                    <!-- Breed -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/breed"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/pet_accent"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtBreed"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="textCapWords"
+                                android:textColor="@color/pet_text_primary"
+                                tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.App.TextInputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/gender"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/bg_btn"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/actGender"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="none"
+                                android:popupBackground="@color/pet_card"
+                                tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Space
+                            android:layout_width="12dp"
+                            android:layout_height="1dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/weight_kg"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/bg_btn"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtWeight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="numberDecimal"
+                                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/swNeutered"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/baloo2"
+                        android:text="@string/has_been_neutered"
+                        android:textColor="@color/pet_text_primary"
+                        android:textSize="16sp"
+                        app:thumbTint="@color/pet_accent"
+                        app:trackDecorationTint="@color/gray_light"
+                        app:trackTint="@color/bg_activity"
+                        tools:ignore="VisualLintButtonSize" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <!-- Health status dropdown -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.App.TextInputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/preventive_status"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/pet_accent"
+                            app:endIconMode="dropdown_menu"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/actPreventiveStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="none"
+                                android:padding="14dp"
+                                android:popupBackground="@color/pet_card"
+                                android:textColor="@color/pet_text_primary"
+                                android:textColorHint="@color/pet_text_secondary"
+                                tools:ignore="LabelFor,VisualLintTextFieldSize,SpeakableTextPresentCheck"
+                                tools:text="">
+
+                            </AutoCompleteTextView>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <!-- Health status dropdown -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.App.TextInputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/body_condition"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/pet_accent"
+                            app:endIconMode="dropdown_menu"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/actBodyCondition"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="none"
+                                android:padding="14dp"
+                                android:popupBackground="@color/pet_card"
+                                android:textColor="@color/pet_text_primary"
+                                android:textColorHint="@color/pet_text_secondary"
+                                tools:ignore="LabelFor,VisualLintTextFieldSize,SpeakableTextPresentCheck"
+                                tools:text="">
+
+                            </AutoCompleteTextView>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <!-- Health status dropdown -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.App.TextInputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/clinical_status"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/pet_accent"
+                            app:endIconMode="dropdown_menu"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/actClinicalStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="none"
+                                android:padding="14dp"
+                                android:popupBackground="@color/pet_card"
+                                android:textColor="@color/pet_text_primary"
+                                android:textColorHint="@color/pet_text_secondary"
+                                tools:ignore="LabelFor,VisualLintTextFieldSize,SpeakableTextPresentCheck"
+                                tools:text="">
+
+                            </AutoCompleteTextView>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <!-- Health status dropdown -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.App.TextInputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/activity_amp_mental_state"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusBottomEnd="18dp"
+                            app:boxCornerRadiusBottomStart="18dp"
+                            app:boxCornerRadiusTopEnd="18dp"
+                            app:boxCornerRadiusTopStart="18dp"
+                            app:boxStrokeColor="@color/pet_accent"
+                            app:endIconMode="dropdown_menu"
+                            app:hintTextColor="@color/bg_btn">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/actActivityLevel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:fontFamily="@font/baloo2"
+                                android:inputType="none"
+                                android:padding="14dp"
+                                android:popupBackground="@color/pet_card"
+                                android:textColor="@color/pet_text_primary"
+                                android:textColorHint="@color/pet_text_secondary"
+                                tools:ignore="LabelFor,VisualLintTextFieldSize,SpeakableTextPresentCheck"
+                                tools:text="">
+
+                            </AutoCompleteTextView>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <!-- Description -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="@string/describe"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusBottomEnd="18dp"
+                        app:boxCornerRadiusBottomStart="18dp"
+                        app:boxCornerRadiusTopEnd="18dp"
+                        app:boxCornerRadiusTopStart="18dp"
+                        app:boxStrokeColor="@color/pet_accent"
+                        app:hintTextColor="@color/bg_btn">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:fontFamily="@font/baloo2"
+                            android:gravity="top"
+                            android:inputType="textMultiLine"
+                            android:textColor="@color/pet_text_primary"
+                            tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCreatePet"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="18dp"
+                        android:fontFamily="@font/baloo2"
+                        android:text="@string/add"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/pet_accent"
+                        app:cornerRadius="18dp"
+                        app:iconPadding="8dp"
+                        app:iconTint="@android:color/white"
+                        tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/layoutLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="@color/pet_accent" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

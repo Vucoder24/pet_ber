@@ -2,4 +2,23 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="bg_input_field">#EFEBE6</color>
+    <color name="bg_btn">#FF9356</color>
+    <color name="bg_activity">#FDF8F0</color>
+    <color name="text_color">#4A2617</color>
+    <color name="text_orange">#bd8c57</color>
+    <color name="text_brown">#150a04</color>
+    <color name="colorImagePlaceholder">#E0E0E0</color>
+    <color name="text_gray">#757575</color>
+    <color name="gray_light">#D3D3D3</color>
+    <color name="text_tab_color">#757575</color>
+    <color name="orange_200">#F6BA98</color>
+    <color name="title_color">#9B3C09</color>
+    <color name="pet_text_primary">#4A3628</color>
+    <color name="pet_stroke">#E6D4A8</color>
+    <color name="pet_card">#FFF8EA</color>
+    <color name="pet_accent">#F28C38</color>
+    <color name="pet_text_secondary">#8C6F54</color>
+    <color name="pet_primary">#FF9356</color>
+    <color name="red_500">#D54945</color>
 </resources>

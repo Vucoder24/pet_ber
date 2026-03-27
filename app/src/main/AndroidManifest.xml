@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
     <application
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,14 +18,69 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBer">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.VerifyEmailSuccessActivity"
             android:exported="true">
+            <intent-filter android:label="filter_verify_email">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="verify-email-success"
+                    android:scheme="petber" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.forgot_pw.ForgotPwActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CropImageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CreatePetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MediaPreviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MediaPickerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CreateStoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CreatePostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.auth.register.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

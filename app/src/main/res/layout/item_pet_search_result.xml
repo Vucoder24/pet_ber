@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivPetAvatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/CircleImage"
+            android:src="@drawable/logo_petber" />
+
+        <TextView
+            android:id="@+id/tvPetName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/baloo2"
+            android:text="Name pet"
+            android:paddingVertical="0dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivPetAvatar"
+            app:layout_constraintTop_toTopOf="@id/ivPetAvatar"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvPetBreed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pet breed"
+            android:textColor="@color/text_orange"
+            android:textSize="14sp"
+            android:fontFamily="@font/baloo2"
+            app:layout_constraintStart_toStartOf="@id/tvPetName"
+            app:layout_constraintTop_toBottomOf="@id/tvPetName"
+            tools:ignore="HardcodedText" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvLocation"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:drawablePadding="4dp"-->
+<!--            android:text="Location"-->
+<!--            android:textSize="12sp"-->
+<!--            android:fontFamily="@font/baloo2"-->
+<!--            app:drawableStartCompat="@drawable/ic_location"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/ivPetAvatar"-->
+<!--            app:layout_constraintStart_toStartOf="@id/tvPetName"-->
+<!--            tools:ignore="HardcodedText" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
