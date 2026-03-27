@@ -18,16 +18,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBer">
         <activity
+            android:name=".ui.activity.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.VerifyEmailSuccessActivity"
             android:exported="true">
             <intent-filter android:label="filter_verify_email">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="petber"
-                    android:host="verify-email-success" />
+                    android:host="verify-email-success"
+                    android:scheme="petber" />
             </intent-filter>
         </activity>
         <activity

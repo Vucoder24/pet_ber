@@ -4,8 +4,11 @@ import android.net.Uri
 import android.util.Log
 import com.nvv.petber.data.dao.ProfileDao
 import com.nvv.petber.data.model.Post
+import com.nvv.petber.data.model.User
 import com.nvv.petber.data.repo.remote.ProfileRepositoryRemote
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -17,40 +20,73 @@ class ProfileRepositoryLocal @Inject constructor(
     fun getLocalPets(id: String) = profileDao.getPets(id)
     fun getLocalPosts(id: String) = profileDao.getPosts(id)
 
-    suspend fun updatePost(post: Post){
+    suspend fun updatePost(post: Post) {
         profileDao.updatePost(post)
     }
 
-    suspend fun syncProfile(userId: String) = withContext(Dispatchers.IO) {
+    suspend fun updateUser(user: User){
+        profileDao.updateUser(user)
+    }
+
+    suspend fun syncUser(userId: String) = withContext(Dispatchers.IO) {
         try {
-            // Fetch all from Remote
             var remoteUser = profileRepositoryRemote.getUser(userId)
-            val remotePets = profileRepositoryRemote.getPets(userId)
-            val remotePosts = profileRepositoryRemote.getPosts(userId)
             val userStats = profileRepositoryRemote.getUserStats(userId)
-            Log.d("Stats", "$userStats")
             remoteUser = remoteUser?.copy(
                 postCount = userStats.postCount,
                 followerCount = userStats.followerCount,
                 followingCount = userStats.followingCount
             )
-            // save to Local
             remoteUser?.let {
                 profileDao.insertUser(it)
             }
-            profileDao.insertPets(remotePets)
-            profileDao.insertPosts(remotePosts)
-        }catch (_: Exception){ }
+        } catch (e: Exception) {
+            Log.e("ProfileRepoLocal", "Sync User Error: ${e.message}")
+        }
     }
 
-    suspend fun updateAvatar(userId: String, uri: Uri) = withContext(Dispatchers.IO) {
-        profileRepositoryRemote.updateAvatar(userId, uri)
-        syncProfile(userId)
+    suspend fun syncPets(userId: String) = withContext(Dispatchers.IO) {
+        try {
+            val remotePets = profileRepositoryRemote.getPets(userId)
+            Log.d("ProfileRepoLocal", "$remotePets")
+            profileDao.syncPetsData(userId, remotePets)
+        } catch (e: Exception) {
+            Log.e("ProfileRepoLocal", "Sync Pets Error: ${e.message}")
+        }
     }
 
-    suspend fun updateCover(userId: String, uri: Uri) = withContext(Dispatchers.IO) {
-        profileRepositoryRemote.updateCover(userId, uri)
-        syncProfile(userId)
+    suspend fun syncPosts(userId: String) = withContext(Dispatchers.IO) {
+        try {
+            val remotePosts = profileRepositoryRemote.getPosts(userId)
+            profileDao.syncPostsData(userId, remotePosts)
+        } catch (e: Exception) {
+            Log.e("ProfileRepoLocal", "Sync Posts Error: ${e.message}")
+        }
+    }
+
+    suspend fun syncProfile(userId: String) = withContext(Dispatchers.IO) {
+        val userDeferred = async { syncUser(userId) }
+        val petsDeferred = async { syncPets(userId) }
+        val postsDeferred = async { syncPosts(userId) }
+
+        awaitAll(userDeferred, petsDeferred, postsDeferred)
+    }
+
+    suspend fun updateAvatar(userId: String, uri: Uri, oldAvatarUrl: String?) =
+        withContext(Dispatchers.IO) {
+            val userData = profileRepositoryRemote.updateAvatar(userId, uri, oldAvatarUrl)
+            updateUser(userData)
+        }
+
+    suspend fun updateCover(userId: String, uri: Uri, oldCoverUrl: String?) =
+        withContext(Dispatchers.IO) {
+            val userData = profileRepositoryRemote.updateCover(userId, uri, oldCoverUrl)
+            updateUser(userData)
+        }
+
+    suspend fun updateProfile(user: User) = withContext(Dispatchers.IO){
+        val userData = profileRepositoryRemote.updateProfile(user)
+        updateUser(userData)
     }
 
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.data.model.Post
+import com.nvv.petber.data.model.User
 import com.nvv.petber.data.repo.local.ProfileRepositoryLocal
 import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.utils.SharePrefUtils
@@ -88,7 +89,8 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = UpdateUserState.Loading("avatar")
             try {
-                profileRepoLocal.updateAvatar(currentUserId, uri)
+                profileRepoLocal.updateAvatar(currentUserId, uri, user.value?.avatarUrl)
+                profileRepoLocal.syncUser(currentUserId)
                 _uiState.value = UpdateUserState.Success
             } catch (e: Exception) {
                 _uiState.value = UpdateUserState.Error(e.message ?: "Unknown error")
@@ -101,7 +103,8 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = UpdateUserState.Loading("cover")
             try {
-                profileRepoLocal.updateCover(currentUserId, uri)
+                profileRepoLocal.updateCover(currentUserId, uri, user.value?.coverUrl)
+                profileRepoLocal.syncUser(currentUserId)
                 _uiState.value = UpdateUserState.Success
             } catch (e: Exception) {
                 _uiState.value = UpdateUserState.Error(e.message ?: "Unknown error")
@@ -112,6 +115,32 @@ class ProfileViewModel @Inject constructor(
 
     fun resetState(){
         _uiState.value = UpdateUserState.Idle
+    }
+
+    fun syncPets() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isRefreshing.postValue(true)
+            try {
+                profileRepoLocal.syncPets(currentUserId)
+            } catch (e: Exception) {
+                Log.e("ProfileVM", "Sync error: ${e.message}")
+            } finally {
+                _isRefreshing.postValue(false)
+            }
+        }
+    }
+
+    fun updateProfile(user: User){
+        viewModelScope.launch(Dispatchers.IO){
+            _uiState.value = UpdateUserState.Loading("information")
+            try {
+                profileRepoLocal.updateProfile(user)
+                _uiState.value = UpdateUserState.Success
+            }catch (e: Exception){
+                _uiState.value = UpdateUserState.Error(e.message ?: "Unknown error")
+                Log.e("ProfileVM", "Update profile error: ${e.message}")
+            }
+        }
     }
 
 }

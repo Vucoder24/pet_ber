@@ -1,11 +1,9 @@
 package com.nvv.petber.ui.fragment.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -20,6 +18,7 @@ import com.nvv.petber.ui.adapter.StoryAdapter
 import com.nvv.petber.ui.adapter.StoryRowAdapter
 import com.nvv.petber.utils.AppEventManager
 import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,7 +65,7 @@ class HomeFragment : Fragment() {
 
     private fun initViews() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.loadPosts(refresh = true)
+            viewModel.loadInitialData()
         }
 
         // set color scheme for swipe refresh layout
@@ -79,12 +78,6 @@ class HomeFragment : Fragment() {
         storyAdapter = StoryAdapter(
             onStoryClick = { story ->
                 // navigate to story viewer
-                Toast.makeText(
-                    requireContext(),
-                    "Story: ${story.users?.fullName}",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
             }
         )
 
@@ -93,20 +86,11 @@ class HomeFragment : Fragment() {
                 viewModel.toggleLike(post)
             },
             onCommentClick = { post ->
-                Toast.makeText(
-                    requireContext(),
-                    "Comments",
-                    Toast.LENGTH_SHORT
-                ).show()
+
             },
             onShareClick = { },
             onProfileClick = { post ->
-                Toast.makeText(
-                    requireContext(),
-                    "Profile: ${post.users?.username}",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+
             },
             onLoadMore = { viewModel.loadPosts(refresh = false) },
             onSaveClick = {
@@ -133,14 +117,13 @@ class HomeFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     // Stories
-                    Log.d("HomeFragment", "Stories: ${state.stories.size}")
                     storyAdapter.submitList(state.stories)
 
                     // Posts
                     postAdapter.submitList(state.posts)
 
                     // Loading
-                    if (state.isLoadingPosts) {
+                    if (state.isLoadingPosts || state.isLoadingStories) {
                         binding.shimmerViewContainer.visible()
                         binding.shimmerViewContainer.startShimmer()
                         binding.dataContainer.gone()
@@ -152,15 +135,11 @@ class HomeFragment : Fragment() {
 
                     // Swipe refresh
                     binding.swipeRefreshLayout.isRefreshing =
-                        state.isLoadingPosts && state.posts.isNotEmpty()
+                        state.isRefreshing
 
                     // Error
                     state.error?.let { error ->
-                        Toast.makeText(
-                            requireContext(),
-                            error,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        requireContext().toast(error)
                         viewModel.clearError()
                     }
                 }

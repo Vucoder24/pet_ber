@@ -570,16 +570,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:layout_marginTop="18dp"
+                        android:fontFamily="@font/baloo2"
                         android:text="@string/add"
                         android:textAllCaps="false"
                         android:textColor="@android:color/white"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         app:backgroundTint="@color/pet_accent"
                         app:cornerRadius="18dp"
                         app:iconPadding="8dp"
                         app:iconTint="@android:color/white"
-                        tools:ignore="VisualLintButtonSize" />
+                        tools:ignore="VisualLintButtonSize,TextContrastCheck" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

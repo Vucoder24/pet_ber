@@ -3,7 +3,6 @@ package com.nvv.petber.ui.auth.login
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,10 +13,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityLoginBinding
-import com.nvv.petber.ui.auth.register.RegisterActivity
 import com.nvv.petber.ui.activity.MainActivity
+import com.nvv.petber.ui.auth.register.RegisterActivity
 import com.nvv.petber.ui.forgot_pw.ForgotPwActivity
 import com.nvv.petber.utils.ValidationUtils
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.AuthState
 import com.nvv.petber.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,11 +60,7 @@ class LoginActivity : AppCompatActivity() {
                         is AuthState.Success -> {
                             // navigate to home screen
                             showLoading(false)
-                            Toast.makeText(
-                                this@LoginActivity,
-                                getString(R.string.login_success),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toast(getString(R.string.login_success))
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                             finishAffinity()
                         }
@@ -72,8 +68,7 @@ class LoginActivity : AppCompatActivity() {
                         is AuthState.Error -> {
                             // show error message
                             showLoading(false)
-                            Toast.makeText(this@LoginActivity, state.error, Toast.LENGTH_SHORT)
-                                .show()
+                            toast(state.error)
                             authViewModel.resetState()
                         }
                     }

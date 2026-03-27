@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -15,6 +14,7 @@ import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivitySplashBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
 import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.utils.ext.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -59,7 +59,7 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                 } catch (e: Exception) {
                     delayJob.join()
-                    Toast.makeText(this@SplashActivity, "Error checking session: ${e.message}", Toast.LENGTH_LONG).show()
+                    toast(getString(R.string.error_checking_session, e.message))
                     startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                     finish()
                 }

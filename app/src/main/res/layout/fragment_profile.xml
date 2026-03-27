@@ -163,7 +163,7 @@
                     <!-- BIO -->
                     <TextView
                         android:id="@+id/tvBio"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:ellipsize="end"
@@ -287,6 +287,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/baloo2"
                     android:text="@string/address"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 
@@ -421,6 +423,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/baloo2"
                     android:text="@string/hobbies"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 

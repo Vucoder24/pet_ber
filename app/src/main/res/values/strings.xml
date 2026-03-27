@@ -151,6 +151,17 @@
     <string name="updating_avatar">Updating avatar…</string>
     <string name="updating_cover">Updating cover…</string>
     <string name="update_user_success">Updated user information successfully.</string>
+    <string name="no_cover_found">No cover found!</string>
+    <string name="no_avatar_found">No avatar found!</string>
+    <string name="full_name">Full name</string>
+    <string name="bio">Bio</string>
+    <string name="action_save">Save</string>
+    <string name="please_enter_full_name">Please enter full name!</string>
+    <string name="error_get_arg">Error retrieving data!</string>
+    <string name="media_not_found">Media not found!</string>
+    <string name="error_checking_session">Error checking session: %1$s</string>
+    <string name="maximum_media_and_count">Maximum %1$d items</string>
+    <string name="permission_media_request">Needs media access to continue.</string>
 
     <string-array name="media_types">
         <item>@string/all</item>
@@ -161,7 +172,7 @@
     <string-array name="gender_options">
         <item>Male</item>
         <item>Female</item>
-        <item>Unknown</item>
+        <item>Other</item>
     </string-array>
 
     <string-array name="preventive_status_options">

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
@@ -32,4 +33,25 @@ interface ProfileDao {
 
     @Update
     suspend fun updatePost(post: Post)
+
+    @Update
+    suspend fun updateUser(user: User)
+
+    @Query("DELETE FROM pets WHERE ownerId = :userId")
+    suspend fun deletePetsByUser(userId: String)
+
+    @Query("DELETE FROM posts WHERE userId = :userId")
+    suspend fun deletePostsByUser(userId: String)
+
+    @Transaction
+    suspend fun syncPetsData(userId: String, pets: List<Pet>) {
+        deletePetsByUser(userId)
+        insertPets(pets)
+    }
+
+    @Transaction
+    suspend fun syncPostsData(userId: String, posts: List<Post>) {
+        deletePostsByUser(userId)
+        insertPosts(posts)
+    }
 }

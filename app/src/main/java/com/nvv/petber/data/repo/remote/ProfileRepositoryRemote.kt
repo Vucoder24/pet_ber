@@ -2,6 +2,7 @@ package com.nvv.petber.data.repo.remote
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.webkit.MimeTypeMap
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
@@ -88,30 +89,36 @@ class ProfileRepositoryRemote @Inject constructor(
         }
     }
 
-    suspend fun updateAvatar(userId: String, uri: Uri): String {
+    suspend fun updateAvatar(userId: String, uri: Uri, oldAvatarUrl: String?): User {
         val avatarUrl = uploadMedia(uri, userId, "user")
 
-        supabase.from("users").update(
+        val userData = supabase.from("users").update(
             {
                 set("avatar_url", avatarUrl)
             }
         ) {
             filter { eq("id", userId) }
-        }
-        return avatarUrl
+            select()
+        }.decodeSingle<User>()
+
+        deleteOldMedia(oldAvatarUrl, "user")
+        return userData
     }
 
-    suspend fun updateCover(userId: String, uri: Uri): String {
+    suspend fun updateCover(userId: String, uri: Uri, oldCoverUrl: String?): User {
         val coverUrl = uploadMedia(uri, userId, "user")
 
-        supabase.from("users").update(
+        val userData = supabase.from("users").update(
             {
                 set("cover_url", coverUrl)
             }
         ) {
             filter { eq("id", userId) }
-        }
-        return coverUrl
+            select()
+        }.decodeSingle<User>()
+
+        deleteOldMedia(oldCoverUrl, "user")
+        return userData
     }
 
     private suspend fun uploadMedia(
@@ -132,6 +139,39 @@ class ProfileRepositoryRemote @Inject constructor(
         }
 
         return supabase.storage[bucket].publicUrl(fileName)
+    }
+
+    private suspend fun deleteOldMedia(oldUrl: String?, bucket: String) {
+        if (oldUrl.isNullOrEmpty()) return
+        try {
+            val pathIdentifier = "/object/public/$bucket/"
+            if (oldUrl.contains(pathIdentifier)) {
+                val filePath = oldUrl.substringAfter(pathIdentifier)
+                supabase.storage[bucket].delete(filePath)
+            }
+        } catch (e: Exception) {
+            Log.e("ProfileRepositoryRemote", "Failed to delete old media: ${e.message}")
+        }
+    }
+
+    suspend fun updateProfile(user: User) : User{
+        return supabase.from("users").update(
+            {
+                set("full_name", user.fullName)
+                set("username", user.username)
+                set("bio", user.bio)
+                set("address", user.address)
+                set("phone", user.phone)
+                set("gender", user.gender)
+                set("birthday", user.birthday)
+                set("hobbies", user.hobbies)
+            }
+        ) {
+            filter {
+                eq("id", user.id)
+            }
+            select()
+        }.decodeSingle<User>()
     }
 }
 

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -327,11 +326,7 @@ class CreatePetActivity : AppCompatActivity() {
                                 layoutLoading.gone()
                                 btnCreatePet.isEnabled = true
                             }
-                            Toast.makeText(
-                                this@CreatePetActivity,
-                                getString(R.string.create_pet_success),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toast(getString(R.string.create_pet_success))
                             setResult(RESULT_OK)
                             viewModel.resetState()
                             finish()
@@ -342,8 +337,7 @@ class CreatePetActivity : AppCompatActivity() {
                                 layoutLoading.gone()
                                 btnCreatePet.isEnabled = true
                             }
-                            Toast.makeText(this@CreatePetActivity, state.message, Toast.LENGTH_LONG)
-                                .show()
+                            toast(state.message)
                             Log.e("CreatePetActivity", "Error: ${state.message}")
                             viewModel.resetState()
                         }

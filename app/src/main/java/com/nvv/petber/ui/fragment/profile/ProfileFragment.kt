@@ -22,8 +22,11 @@ import com.nvv.petber.databinding.FragmentProfileBinding
 import com.nvv.petber.ui.activity.CreatePetActivity
 import com.nvv.petber.ui.activity.CreateStoryActivity
 import com.nvv.petber.ui.activity.CropImageActivity
+import com.nvv.petber.ui.activity.EditProfileActivity
 import com.nvv.petber.ui.activity.MediaPickerActivity
+import com.nvv.petber.ui.activity.MediaPreviewActivity
 import com.nvv.petber.ui.activity.SettingsActivity
+import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.ui.adapter.PetProfileAdapter
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.utils.DateTimeUtils
@@ -51,6 +54,7 @@ class ProfileFragment : Fragment() {
     private var pendingMediaAction: String = ""
 
     private var cropTarget: String? = null
+    private var userData: User? = null
 
     private val cropLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -71,7 +75,8 @@ class ProfileFragment : Fragment() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == android.app.Activity.RESULT_OK) {
-            viewModel.refreshProfile(isRefreshing = true)
+            viewModel.syncPets()
+            Log.d("Sync", "Sync pets")
         }
     }
 
@@ -94,7 +99,7 @@ class ProfileFragment : Fragment() {
             if (result.resultCode == android.app.Activity.RESULT_OK) {
                 @Suppress("DEPRECATION")
                 val medias =
-                    result.data?.getParcelableArrayListExtra<com.nvv.petber.ui.adapter.MediaItem>(
+                    result.data?.getParcelableArrayListExtra<MediaItem>(
                         MediaPickerActivity.EXTRA_RESULT_MEDIAS
                     )
                 val uris = medias?.map { it.uri }
@@ -110,7 +115,7 @@ class ProfileFragment : Fragment() {
             if (result.resultCode == android.app.Activity.RESULT_OK) {
                 @Suppress("DEPRECATION")
                 val medias =
-                    result.data?.getParcelableArrayListExtra<com.nvv.petber.ui.adapter.MediaItem>(
+                    result.data?.getParcelableArrayListExtra<MediaItem>(
                         MediaPickerActivity.EXTRA_RESULT_MEDIAS
                     )
                 medias?.firstOrNull()?.uri?.let { uri ->
@@ -124,7 +129,7 @@ class ProfileFragment : Fragment() {
             if (result.resultCode == android.app.Activity.RESULT_OK) {
                 @Suppress("DEPRECATION")
                 val medias =
-                    result.data?.getParcelableArrayListExtra<com.nvv.petber.ui.adapter.MediaItem>(
+                    result.data?.getParcelableArrayListExtra<MediaItem>(
                         MediaPickerActivity.EXTRA_RESULT_MEDIAS
                     )
                 medias?.firstOrNull()?.uri?.let { uri ->
@@ -235,17 +240,16 @@ class ProfileFragment : Fragment() {
     private fun observerData() {
         viewModel.user.observe(viewLifecycleOwner) { user ->
             user?.let {
+                userData = it
                 bindUserToUI(user)
             }
         }
 
         viewModel.pets.observe(viewLifecycleOwner) {
-            Log.d("ProfileFragment", "pets loaded: $it")
-            petProfileAdapter.submitList(it)
+            petProfileAdapter.submitPets(it)
         }
 
         viewModel.posts.observe(viewLifecycleOwner) {
-            Log.d("ProfileFragment", "Posts loaded: $it")
             historyPostAdapter.submitList(it)
         }
 
@@ -325,9 +329,19 @@ class ProfileFragment : Fragment() {
             }
 
             btnEditProfile.setOnClickListener {
+                startActivity(
+                    Intent(requireContext(), EditProfileActivity::class.java).apply {
+                        putExtra(EditProfileActivity.USER_DATA, userData)
+                    }
+                )
             }
 
             btnEditInformation.setOnClickListener {
+                startActivity(
+                    Intent(requireContext(), EditProfileActivity::class.java).apply {
+                        putExtra(EditProfileActivity.USER_DATA, userData)
+                    }
+                )
             }
 
             root.setOnRefreshListener { viewModel.refreshProfile(true) }
@@ -335,7 +349,21 @@ class ProfileFragment : Fragment() {
             imgCover.setOnClickListener {
                 requireContext().showCoverOptionDialog(
                     onViewCover = {
-
+                        val currentCoverUrl = viewModel.user.value?.coverUrl
+                        if (!currentCoverUrl.isNullOrEmpty()) {
+                            val mediaItem = MediaItem(
+                                uri = currentCoverUrl.toUri(),
+                                isVideo = false,
+                                duration = 0L
+                            )
+                            startActivity(
+                                Intent(requireContext(), MediaPreviewActivity::class.java).apply {
+                                    putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
+                                }
+                            )
+                        } else {
+                            requireContext().toast(getString(R.string.no_cover_found))
+                        }
                     },
                     onChooseCover = {
                         if (PermissionUtils.hasMediaPermissions(requireContext())) {
@@ -352,7 +380,21 @@ class ProfileFragment : Fragment() {
             avatar.setOnClickListener {
                 requireContext().showAvatarOptionDialog(
                     onViewAvatar = {
-
+                        val currentAvatarUrl = viewModel.user.value?.avatarUrl
+                        if (!currentAvatarUrl.isNullOrEmpty()) {
+                            val mediaItem = MediaItem(
+                                uri = currentAvatarUrl.toUri(),
+                                isVideo = false,
+                                duration = 0L
+                            )
+                            startActivity(
+                                Intent(requireContext(), MediaPreviewActivity::class.java).apply {
+                                    putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
+                                }
+                            )
+                        } else {
+                            requireContext().toast(getString(R.string.no_avatar_found))
+                        }
                     },
                     onChooseAvatar = {
                         if (PermissionUtils.hasMediaPermissions(requireContext())) {
@@ -364,6 +406,18 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 )
+            }
+
+            tvBio.setOnClickListener {
+                tvBio.maxLines = if (tvBio.maxLines == 2) Int.MAX_VALUE else 2
+            }
+
+            tvAddress.setOnClickListener {
+                tvAddress.maxLines = if (tvAddress.maxLines == 1) Int.MAX_VALUE else 1
+            }
+
+            tvHobbies.setOnClickListener {
+                tvHobbies.maxLines = if (tvHobbies.maxLines == 1) Int.MAX_VALUE else 1
             }
         }
     }

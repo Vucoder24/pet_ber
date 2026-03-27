@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +21,7 @@ data class HomeUiState(
     val isLoadingStories: Boolean = false,
     val isLoadingPosts: Boolean = false,
     val isLoadingMore: Boolean = false,
+    val isRefreshing: Boolean = false,
     val error: String? = null,
     val currentPage: Int = 0,
     val hasMore: Boolean = true
@@ -37,7 +37,6 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-
     init {
         observeStoriesRealtime()
         loadInitialData()
@@ -45,10 +44,10 @@ class HomeViewModel @Inject constructor(
 
     fun loadInitialData() {
         loadStories()
-        loadPosts(refresh = true)
+        loadPosts(refresh = false)
     }
 
-    private fun loadStories() {
+    fun loadStories() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = _uiState.value.copy(isLoadingStories = true)
             homeRepository.fetchStories()
@@ -68,16 +67,21 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadPosts(refresh: Boolean = false) {
-        if (_uiState.value.isLoadingPosts || _uiState.value.isLoadingMore) return
+        if (_uiState.value.isLoadingPosts || _uiState.value.isLoadingMore || _uiState.value.isRefreshing) return
 
         viewModelScope.launch {
             val page = if (refresh) 0 else _uiState.value.currentPage
 
             if (refresh) {
-                _uiState.value = _uiState.value.copy(isLoadingPosts = true, error = null)
+                if (_uiState.value.posts.isEmpty()) {
+                    _uiState.value = _uiState.value.copy(isLoadingPosts = true, error = null)
+                } else {
+                    _uiState.value = _uiState.value.copy(isRefreshing = true, error = null)
+                }
             } else {
                 _uiState.value = _uiState.value.copy(isLoadingMore = true)
             }
+
             try {
                 homeRepository.fetchPosts(currentUserId, page)
                     .onSuccess { newPosts ->
@@ -85,6 +89,7 @@ class HomeViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(
                             posts = updatedPosts,
                             isLoadingPosts = false,
+                            isRefreshing = false,
                             isLoadingMore = false,
                             currentPage = page + 1,
                             hasMore = newPosts.size == 10
@@ -93,14 +98,18 @@ class HomeViewModel @Inject constructor(
                     .onFailure { e ->
                         _uiState.value = _uiState.value.copy(
                             isLoadingPosts = false,
+                            isRefreshing = false,
                             isLoadingMore = false,
                             error = e.message
                         )
                     }
-            }catch (_: Exception){
+            } catch (_: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoadingPosts = false,
+                    isRefreshing = false,
+                    isLoadingMore = false
+                )
             }
-
-
         }
     }
 
@@ -126,7 +135,7 @@ class HomeViewModel @Inject constructor(
             }
             _uiState.value = _uiState.value.copy(posts = updatedPosts)
 
-            homeRepository.toggleLike(post.id!!, currentUserId, post.isLiked)
+            homeRepository.toggleLike(post.id, currentUserId, post.isLiked)
                 .onFailure {
                     // Revert on error
                     val revertedPosts = _uiState.value.posts.map { p ->

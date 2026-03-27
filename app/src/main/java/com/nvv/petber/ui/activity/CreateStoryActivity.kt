@@ -2,7 +2,6 @@ package com.nvv.petber.ui.activity
 
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +15,7 @@ import com.nvv.petber.utils.AppEventManager
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadImageUri
 import com.nvv.petber.utils.ext.loadMediaCoverWithExtremeGradient
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -98,7 +98,7 @@ class CreateStoryActivity : AppCompatActivity() {
 
             } ?: run {
 
-                Toast.makeText(this, "Media not found", Toast.LENGTH_SHORT).show()
+                toast(getString(R.string.media_not_found))
             }
         }
     }
@@ -119,11 +119,7 @@ class CreateStoryActivity : AppCompatActivity() {
 
         viewModel.storySuccess.observe(this) { success ->
             if (success) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.story_posted),
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast(getString(R.string.story_posted))
                 AppEventManager.triggerRefreshStories()
                 viewModel.resetStorySuccess()
                 finish()
@@ -132,7 +128,7 @@ class CreateStoryActivity : AppCompatActivity() {
 
         viewModel.error.observe(this) { error ->
             error?.let {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                toast(it)
                 viewModel.clearError()
             }
         }

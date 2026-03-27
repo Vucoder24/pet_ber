@@ -2,9 +2,7 @@ package com.nvv.petber.ui.auth.register
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +15,7 @@ import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityRegisterBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
 import com.nvv.petber.utils.ValidationUtils
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.AuthState
 import com.nvv.petber.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,22 +52,13 @@ class RegisterActivity : AppCompatActivity() {
 
                         is AuthState.Success -> {
                             showLoading(false)
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                getString(R.string.register_success),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toast(getString(R.string.register_success))
                             finish() // back to LoginActivity
                         }
 
                         is AuthState.Error -> {
                             showLoading(false)
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                state.error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.d("RegisterActivity", "Registration error: ${state.error}")
+                            toast(state.error)
                             authViewModel.resetState()
                         }
 

@@ -3,9 +3,7 @@ package com.nvv.petber.ui.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -19,6 +17,7 @@ import com.nvv.petber.databinding.ActivityCreatePostBinding
 import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.ui.adapter.MediaPreviewAdapter
 import com.nvv.petber.ui.dialog.UploadProgressDialog
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,14 +33,15 @@ class CreatePostActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            val items = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getParcelableArrayListExtra(
-                    MediaPickerActivity.EXTRA_RESULT_MEDIAS,
-                    MediaItem::class.java
-                )
-            } else {
-                result.data?.getParcelableArrayListExtra(MediaPickerActivity.EXTRA_RESULT_MEDIAS)
-            }
+            @Suppress("DEPRECATION") val items =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableArrayListExtra(
+                        MediaPickerActivity.EXTRA_RESULT_MEDIAS,
+                        MediaItem::class.java
+                    )
+                } else {
+                    result.data?.getParcelableArrayListExtra(MediaPickerActivity.EXTRA_RESULT_MEDIAS)
+                }
 
             items?.let {
                 selectedMediaItems.clear()
@@ -59,11 +59,7 @@ class CreatePostActivity : AppCompatActivity() {
         if (allGranted) {
             openMediaPicker()
         } else {
-            Toast.makeText(
-                this,
-                getString(R.string.permission_question),
-                Toast.LENGTH_SHORT
-            ).show()
+            toast(getString(R.string.permission_question))
         }
     }
 
@@ -123,19 +119,14 @@ class CreatePostActivity : AppCompatActivity() {
 
         viewModel.postSuccess.observe(this) { success ->
             if (success) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.story_posted),
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast(getString(R.string.story_posted))
                 finish()
             }
         }
 
         viewModel.error.observe(this) { errorMsg ->
             errorMsg?.let {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-                Log.d("CreatePostActivity", "Error: $it")
+                toast(it)
                 viewModel.clearError()
             }
         }
@@ -158,11 +149,7 @@ class CreatePostActivity : AppCompatActivity() {
             }
 
             if (selectedMediaItems.isEmpty()) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.error_select_media),
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast(getString(R.string.error_select_media))
                 return@setOnClickListener
             }
 

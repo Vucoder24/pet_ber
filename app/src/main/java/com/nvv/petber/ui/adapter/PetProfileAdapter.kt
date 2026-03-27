@@ -15,43 +15,46 @@ import com.nvv.petber.utils.ext.loadAvatar
 class PetProfileAdapter(
     private val onAddClick: () -> Unit,
     private val onClick: (Pet) -> Unit
-) : ListAdapter<Pet, RecyclerView.ViewHolder>(StoryDiffCallback()) {
+) : ListAdapter<PetProfileAdapter.Item, RecyclerView.ViewHolder>(ItemDiffCallback()) {
+
+    sealed class Item {
+        object Add : Item()
+        data class PetData(val pet: Pet) : Item()
+    }
 
     companion object {
         private const val TYPE_ADD = 0
         private const val TYPE_PET = 1
     }
 
-    override fun getItemCount(): Int {
-        val count = super.getItemCount()
-        return if (count >= 0) count + 1 else 1
-    }
-
     override fun getItemViewType(position: Int): Int {
-        return if (position == 0) TYPE_ADD else TYPE_PET
+        return when (getItem(position)) {
+            is Item.Add -> TYPE_ADD
+            is Item.PetData -> TYPE_PET
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_ADD) {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_add_pet, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_add_pet, parent, false)
             AddPetViewHolder(view)
         } else {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_pet_profile, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pet_profile, parent, false)
             PetProfileViewHolder(view)
         }
     }
 
-    override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
-        position: Int
-    ) {
-        if (holder is PetProfileViewHolder) {
-            holder.bind(getItem(position - 1))
-        } else if (holder is AddPetViewHolder) {
-            holder.itemView.setOnClickListener { onAddClick() }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = getItem(position)) {
+            is Item.PetData -> (holder as PetProfileViewHolder).bind(item.pet)
+            is Item.Add -> (holder as AddPetViewHolder).itemView.setOnClickListener { onAddClick() }
         }
+    }
+
+    fun submitPets(pets: List<Pet>?) {
+        val list = mutableListOf<Item>(Item.Add)
+        pets?.let { list.addAll(it.map { pet -> Item.PetData(pet) }) }
+        submitList(list)
     }
 
     inner class PetProfileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -61,16 +64,21 @@ class PetProfileAdapter(
         fun bind(pet: Pet) {
             tvPetName.text = pet.name
             ivPetAvatar.loadAvatar(pet.avatarUrl)
-
             itemView.setOnClickListener { onClick(pet) }
         }
     }
 
     inner class AddPetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
+    private class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return if (oldItem is Item.Add && newItem is Item.Add) true
+            else if (oldItem is Item.PetData && newItem is Item.PetData) oldItem.pet.id == newItem.pet.id
+            else false
+        }
 
-    private class StoryDiffCallback : DiffUtil.ItemCallback<Pet>() {
-        override fun areItemsTheSame(oldItem: Pet, newItem: Pet) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Pet, newItem: Pet) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
     }
 }

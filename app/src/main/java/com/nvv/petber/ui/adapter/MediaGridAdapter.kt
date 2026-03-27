@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nvv.petber.databinding.ItemMediaGridBinding
+import com.nvv.petber.utils.ext.toast
 import kotlinx.parcelize.Parcelize
 import java.util.Locale
+import com.nvv.petber.R
 
 @Parcelize
 data class MediaItem(
@@ -136,13 +138,7 @@ class MediaGridAdapter(
         } else {
             // add
             if (selected.size >= maxSelect) {
-                // optional: toast
-                // We don't have direct context to show toast here safely, but ctx is Context -> show
-                android.widget.Toast.makeText(
-                    ctx,
-                    "Tối đa $maxSelect mục",
-                    android.widget.Toast.LENGTH_SHORT
-                ).show()
+                ctx.toast(ctx.getString(R.string.maximum_media_and_count, maxSelect))
                 return
             }
             selected[uri] = selected.size + 1

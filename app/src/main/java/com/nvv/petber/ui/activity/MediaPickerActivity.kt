@@ -10,7 +10,6 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -24,6 +23,7 @@ import com.nvv.petber.ui.adapter.ActivityWithResult
 import com.nvv.petber.ui.adapter.MediaGridAdapter
 import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.ext.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -82,7 +82,7 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
 
         updateModeUi()
 
-        when(mediaKind){
+        when (mediaKind) {
             MEDIA_KIND_IMAGES, MEDIA_KIND_VIDEOS -> binding.typeMedia.gone()
             MEDIA_KIND_ALL -> binding.typeMedia.visible()
         }
@@ -92,11 +92,7 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
         binding.btnDone.setOnClickListener {
             val selected = adapter.getSelectedItems()
             if (selected.isEmpty()) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.error_select_media),
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast(getString(R.string.error_select_media))
                 return@setOnClickListener
             }
             val result = Intent()
@@ -188,8 +184,7 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             val denied = grantResults.any { it != PackageManager.PERMISSION_GRANTED }
             if (denied) {
-                Toast.makeText(this, "Cần quyền truy cập media để tiếp tục", Toast.LENGTH_LONG)
-                    .show()
+                toast(getString(R.string.permission_media_request))
             } else {
                 loadMedia()
             }
@@ -197,7 +192,7 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
     }
 
     private fun loadMedia() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.visible()
         lifecycleScope.launch {
             val items = queryMediaStore()
             val preselectedUris = preselectedItems.map { it.uri }.toSet()
@@ -217,12 +212,11 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
             }
 
             updateDoneButton(adapter.getSelectedUris().size)
-            binding.progressBar.visibility = View.GONE
+            binding.progressBar.gone()
         }
     }
 
-    private suspend fun queryMediaStore(): List<MediaItem>
-    = withContext(Dispatchers.IO) {
+    private suspend fun queryMediaStore(): List<MediaItem> = withContext(Dispatchers.IO) {
 
         val results = mutableListOf<MediaItem>()
 
@@ -235,7 +229,7 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
             MediaStore.Video.Media.DURATION
         )
 
-        val selection =when (mediaKind) {
+        val selection = when (mediaKind) {
             MEDIA_KIND_IMAGES -> "${MediaStore.Files.FileColumns.MEDIA_TYPE}=?"
             MEDIA_KIND_VIDEOS -> "${MediaStore.Files.FileColumns.MEDIA_TYPE}=?"
             else -> "${MediaStore.Files.FileColumns.MEDIA_TYPE}=? OR ${MediaStore.Files.FileColumns.MEDIA_TYPE}=?"
@@ -253,36 +247,38 @@ class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
 
         val sortOrder = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
 
-        contentResolver.query(collection, projection, selection, selectionArgs, sortOrder)?.use { cursor ->
-            val idIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
-            val typeIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
-            val durationIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
+        contentResolver.query(collection, projection, selection, selectionArgs, sortOrder)
+            ?.use { cursor ->
+                val idIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+                val typeIndex =
+                    cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
+                val durationIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
 
-            while (cursor.moveToNext()) {
-                val id = cursor.getLong(idIndex)
-                val type = cursor.getInt(typeIndex)
-                val uri = ContentUris.withAppendedId(collection, id)
+                while (cursor.moveToNext()) {
+                    val id = cursor.getLong(idIndex)
+                    val type = cursor.getInt(typeIndex)
+                    val uri = ContentUris.withAppendedId(collection, id)
 
-                if (type == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) {
-                    results.add(
-                        MediaItem(
-                            uri = uri,
-                            isVideo = false,
-                            duration = 0L
+                    if (type == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) {
+                        results.add(
+                            MediaItem(
+                                uri = uri,
+                                isVideo = false,
+                                duration = 0L
+                            )
                         )
-                    )
-                } else if (mediaKind != MEDIA_KIND_IMAGES && type == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
-                    val duration = cursor.getLong(durationIndex)
-                    results.add(
-                        MediaItem(
-                            uri = uri,
-                            isVideo = true,
-                            duration = duration
+                    } else if (mediaKind != MEDIA_KIND_IMAGES && type == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
+                        val duration = cursor.getLong(durationIndex)
+                        results.add(
+                            MediaItem(
+                                uri = uri,
+                                isVideo = true,
+                                duration = duration
+                            )
                         )
-                    )
+                    }
                 }
             }
-        }
 
         results
     }
