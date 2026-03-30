@@ -50,19 +50,21 @@ class HomeViewModel @Inject constructor(
     fun loadStories() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = _uiState.value.copy(isLoadingStories = true)
-            homeRepository.fetchStories()
-                .onSuccess { stories ->
-                    _uiState.value = _uiState.value.copy(
-                        stories = stories,
-                        isLoadingStories = false
-                    )
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoadingStories = false,
-                        error = e.message
-                    )
-                }
+            try {
+                homeRepository.fetchStories()
+                    .onSuccess { stories ->
+                        _uiState.value = _uiState.value.copy(
+                            stories = stories,
+                            isLoadingStories = false
+                        )
+                    }
+                    .onFailure { e ->
+                        _uiState.value = _uiState.value.copy(
+                            isLoadingStories = false,
+                            error = e.message
+                        )
+                    }
+            }catch (e: Exception){}
         }
     }
 
@@ -115,39 +117,43 @@ class HomeViewModel @Inject constructor(
 
     private fun observeStoriesRealtime() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.getStoriesFlow()
-                .collect {
-                    loadStories()
-                }
+            try {
+                homeRepository.getStoriesFlow()
+                    .collect {
+                        loadStories()
+                    }
+            }catch (e: Exception){}
         }
     }
 
     fun toggleLike(post: Post) {
         viewModelScope.launch {
-            // Optimistic update
-            val updatedPosts = _uiState.value.posts.map { p ->
-                if (p.id == post.id) {
-                    p.copy(
-                        isLiked = !p.isLiked,
-                        likeCount = if (p.isLiked) p.likeCount - 1 else p.likeCount + 1
-                    )
-                } else p
-            }
-            _uiState.value = _uiState.value.copy(posts = updatedPosts)
-
-            homeRepository.toggleLike(post.id, currentUserId, post.isLiked)
-                .onFailure {
-                    // Revert on error
-                    val revertedPosts = _uiState.value.posts.map { p ->
-                        if (p.id == post.id) {
-                            p.copy(
-                                isLiked = post.isLiked,
-                                likeCount = post.likeCount
-                            )
-                        } else p
-                    }
-                    _uiState.value = _uiState.value.copy(posts = revertedPosts, error = it.message)
+            try {
+                // Optimistic update
+                val updatedPosts = _uiState.value.posts.map { p ->
+                    if (p.id == post.id) {
+                        p.copy(
+                            isLiked = !p.isLiked,
+                            likeCount = if (p.isLiked) p.likeCount - 1 else p.likeCount + 1
+                        )
+                    } else p
                 }
+                _uiState.value = _uiState.value.copy(posts = updatedPosts)
+
+                homeRepository.toggleLike(post.id, currentUserId, post.isLiked)
+                    .onFailure {
+                        // Revert on error
+                        val revertedPosts = _uiState.value.posts.map { p ->
+                            if (p.id == post.id) {
+                                p.copy(
+                                    isLiked = post.isLiked,
+                                    likeCount = post.likeCount
+                                )
+                            } else p
+                        }
+                        _uiState.value = _uiState.value.copy(posts = revertedPosts, error = it.message)
+                    }
+            }catch (e: Exception){}
         }
     }
 

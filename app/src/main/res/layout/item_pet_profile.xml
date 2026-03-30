@@ -14,7 +14,7 @@
         android:layout_height="65dp"
         android:padding="3dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@color/white"
         app:shapeAppearanceOverlay="@style/CircleImage"
         app:strokeColor="@color/bg_btn"
         app:strokeWidth="2dp"

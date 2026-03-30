@@ -162,6 +162,7 @@
     <string name="error_checking_session">Error checking session: %1$s</string>
     <string name="maximum_media_and_count">Maximum %1$d items</string>
     <string name="permission_media_request">Needs media access to continue.</string>
+    <string name="error_fetch_data">There was an error loading data.</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

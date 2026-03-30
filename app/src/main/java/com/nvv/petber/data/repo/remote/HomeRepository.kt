@@ -26,11 +26,12 @@ class HomeRepository @Inject constructor(
             val stories = db["stories"]
                 .select(
                     columns = Columns.raw(
-                        "id," +
-                                " user_id, media_url, media_type, created_at, " +
-                                "expires_at, users(id, username, full_name, avatar_url)"
+                        "*, users(id, username, full_name, avatar_url)"
                     )
                 ) {
+                    filter {
+                        eq("is_expired", false)
+                    }
                     order("created_at", Order.DESCENDING)
                     limit(30)
                 }

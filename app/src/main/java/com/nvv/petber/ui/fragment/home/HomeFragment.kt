@@ -1,5 +1,6 @@
 package com.nvv.petber.ui.fragment.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,18 +12,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
+import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.FragmentHomeBinding
+import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.adapter.StoryAdapter
 import com.nvv.petber.ui.adapter.StoryRowAdapter
 import com.nvv.petber.utils.AppEventManager
+import com.nvv.petber.utils.ext.addFeedScrollListener
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -33,6 +40,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var storyAdapter: StoryAdapter
     private lateinit var postAdapter: PostAdapter
+    private var scrollListener: RecyclerView.OnScrollListener? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,7 +86,22 @@ class HomeFragment : Fragment() {
     private fun setupAdapters() {
         storyAdapter = StoryAdapter(
             onStoryClick = { story ->
-                // navigate to story viewer
+                val allStories = storyAdapter.originalStories
+                val groupedStories = allStories.groupBy { it.userId }.map { entry ->
+                    UserStoryGroup(
+                        userId = entry.key,
+                        user = entry.value.first().users,
+                        stories = entry.value
+                    )
+                }
+
+                val initialPosition = groupedStories.indexOfFirst { it.userId == story.userId }
+
+                val intent = Intent(requireContext(), ViewStoryActivity::class.java).apply {
+                    putExtra(ViewStoryActivity.EXTRA_STORY_GROUPS, Json.encodeToString(groupedStories))
+                    putExtra(ViewStoryActivity.EXTRA_INITIAL_POSITION, initialPosition)
+                }
+                startActivity(intent)
             }
         )
 
@@ -105,11 +129,34 @@ class HomeFragment : Fragment() {
             postAdapter
         )
 
+        val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rvFeed.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = linearLayoutManager
             adapter = concatAdapter
             setHasFixedSize(false)
+
+            scrollListener = addFeedScrollListener(
+                layoutManager = linearLayoutManager,
+                headerCount = 1,
+                preloadCount = 3,
+                onPauseItem = { viewHolder ->
+                    if (viewHolder is PostAdapter.PostViewHolder) {
+                        viewHolder.pausePlayer()
+                    }
+                },
+                onPreloadItem = { index ->
+                    val currentList = postAdapter.currentList
+                    if (index < currentList.size) {
+                        currentList.getOrNull(index)?.postMedia?.firstOrNull()?.mediaUrl?.let { url ->
+                            com.bumptech.glide.Glide.with(requireContext())
+                                .load(url)
+                                .preload()
+                        }
+                    }
+                }
+            )
         }
+        scrollListener?.let { binding.rvFeed.addOnScrollListener(it) }
     }
 
     private fun observeUiState() {
@@ -139,7 +186,7 @@ class HomeFragment : Fragment() {
 
                     // Error
                     state.error?.let { error ->
-                        requireContext().toast(error)
+                        requireContext().toast(R.string.error_fetch_data)
                         viewModel.clearError()
                     }
                 }
@@ -147,9 +194,19 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (::postAdapter.isInitialized) {
+            postAdapter.pauseAllPlayers()
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
+        if (::postAdapter.isInitialized) {
+            postAdapter.releaseAllPlayers()
+        }
         _binding = null
     }
 }
