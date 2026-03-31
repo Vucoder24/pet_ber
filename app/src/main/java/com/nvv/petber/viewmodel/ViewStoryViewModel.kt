@@ -123,14 +123,12 @@ class ViewStoryViewModel @Inject constructor() : ViewModel() {
         when {
             state.currentIndex > 0 -> loadStory(state.currentIndex - 1)
             else -> {
-                viewModelScope.launch {
-                    _navigationEvent.emit(StoryNavigationEvent.PREV_USER)
-                }
+                replayCurrentStory()
             }
         }
     }
 
-    private fun restartCurrentMedia() {
+    fun replayCurrentStory() {
         timerJob?.cancel()
         _uiState.update { it.copy(currentProgress = 0L, isPaused = false) }
 

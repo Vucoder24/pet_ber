@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.annotation.OptIn
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
@@ -20,7 +22,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -31,6 +35,7 @@ import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.FragmentStoryUserBinding
 import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.TimeUtils
+import com.nvv.petber.utils.buildCacheDataSource
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.loadMediaCoverWithExtremeGradient
@@ -52,6 +57,9 @@ class StoryUserFragment : Fragment() {
     private var exoPlayer: ExoPlayer? = null
     private var isHolding = false
     private var lastRenderedIndex = -1
+    private var downX = 0f
+    private var downY = 0f
+    private var downTime = 0L
 
     companion object {
         private const val ARG_STORY_GROUP = "arg_story_group"
@@ -83,8 +91,15 @@ class StoryUserFragment : Fragment() {
         setupTouchListener()
     }
 
+    @OptIn(UnstableApi::class)
     private fun initializePlayer() {
-        exoPlayer = ExoPlayer.Builder(requireContext()).build()
+        val mediaSourceFactory = DefaultMediaSourceFactory(
+            buildCacheDataSource(requireContext())
+        )
+
+        exoPlayer = ExoPlayer.Builder(requireContext())
+            .setMediaSourceFactory(mediaSourceFactory)
+            .build()
         binding.videoView.player = exoPlayer
 
         exoPlayer?.addListener(object : Player.Listener {
@@ -93,6 +108,7 @@ class StoryUserFragment : Fragment() {
                     Player.STATE_BUFFERING -> {
                         showLoading()
                     }
+
                     Player.STATE_READY -> {
                         hideLoading()
                         val duration = exoPlayer?.duration ?: 0L
@@ -101,6 +117,7 @@ class StoryUserFragment : Fragment() {
                             startVideoSync()
                         }
                     }
+
                     Player.STATE_ENDED -> {
                         viewModel.nextStory()
                     }
@@ -115,6 +132,7 @@ class StoryUserFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.replayCurrentStory()
         if (!isHolding) viewModel.resumeTimer()
         if (binding.videoView.isVisible && !isHolding) {
             exoPlayer?.play()
@@ -169,7 +187,9 @@ class StoryUserFragment : Fragment() {
                             StoryNavigationEvent.RESTART_CURRENT_STORY -> {
                                 if (binding.videoView.isVisible) {
                                     exoPlayer?.seekTo(0L)
+                                    exoPlayer?.playWhenReady = true
                                     exoPlayer?.play()
+                                    startVideoSync()
                                 }
                             }
                         }
@@ -341,45 +361,110 @@ class StoryUserFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupTouchListener() {
-        var downTime = 0L
+        val swipeThreshold = ViewConfiguration.get(requireContext()).scaledTouchSlop * 3
+
         binding.vTouchOverlay.setOnTouchListener { v, event ->
-            when (event.action) {
+            when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    downX = event.x
+                    downY = event.y
                     downTime = System.currentTimeMillis()
+
                     isHolding = true
                     binding.groupUserInfo.gone()
                     viewModel.pauseTimer()
-                    if (binding.videoView.isVisible) {
-                        exoPlayer?.pause()
-                    }
-                    return@setOnTouchListener true
+                    if (binding.videoView.isVisible) exoPlayer?.pause()
+                    true
                 }
 
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                MotionEvent.ACTION_UP -> {
+                    val upX = event.x
+                    val upY = event.y
+                    val dx = upX - downX
+                    val dy = upY - downY
                     val duration = System.currentTimeMillis() - downTime
+
                     isHolding = false
                     binding.groupUserInfo.visible()
-
                     viewModel.resumeTimer()
+
                     if (binding.videoView.isVisible && exoPlayer?.playbackState == Player.STATE_READY) {
                         exoPlayer?.play()
                         startVideoSync()
                     }
 
-                    if (duration < 200 && event.action == MotionEvent.ACTION_UP) {
-                        val x = event.x
-                        if (x < v.width * 0.3f) {
-                            viewModel.previousStory()
+                    val isSwipe = kotlin.math.abs(dx) > swipeThreshold &&
+                            kotlin.math.abs(dx) > kotlin.math.abs(dy)
+
+                    if (isSwipe) {
+                        if (dx > 0) {
+                            if (viewModel.uiState.value.currentIndex == 0) {
+                                viewModel.replayCurrentStory()
+                            } else {
+                                viewModel.previousStory()
+                            }
+                        } else {
+                            viewModel.nextStory()
+                        }
+                    } else if (duration < 200) {
+                        // tap ngắn
+                        if (upX < v.width * 0.3f) {
+                            if (viewModel.uiState.value.currentIndex == 0) {
+                                viewModel.replayCurrentStory()
+                            } else {
+                                viewModel.previousStory()
+                            }
                         } else {
                             viewModel.nextStory()
                         }
                     }
-                    return@setOnTouchListener true
+
+                    true
                 }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    isHolding = false
+                    binding.groupUserInfo.visible()
+                    viewModel.resumeTimer()
+                    if (binding.videoView.isVisible && exoPlayer?.playbackState == Player.STATE_READY) {
+                        exoPlayer?.play()
+                        startVideoSync()
+                    }
+                    true
+                }
+
+                else -> false
             }
-            false
         }
     }
+
+    fun onUserSwipedTo() {
+        viewModel.replayCurrentStory()
+
+        if (binding.videoView.isVisible) {
+            exoPlayer?.seekTo(0L)
+            exoPlayer?.playWhenReady = true
+            exoPlayer?.play()
+            startVideoSync()
+        }
+    }
+
+    fun onFragmentActive() {
+        viewModel.replayCurrentStory()
+
+        if (binding.videoView.isVisible) {
+            exoPlayer?.seekTo(0)
+            exoPlayer?.play()
+            startVideoSync()
+        }
+    }
+
+    fun onFragmentInactive() {
+        viewModel.pauseTimer()
+        exoPlayer?.pause()
+        stopVideoSync()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

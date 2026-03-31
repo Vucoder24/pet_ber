@@ -5,10 +5,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.viewpager2.widget.ViewPager2
 import com.nvv.petber.R
 import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.ActivityViewStoryBinding
 import com.nvv.petber.ui.adapter.StoryPagerAdapter
+import com.nvv.petber.ui.view_story.fragment.StoryUserFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 
@@ -16,6 +18,7 @@ import kotlinx.serialization.json.Json
 class ViewStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewStoryBinding
     private var storyGroups: List<UserStoryGroup> = emptyList()
+    private var currentPosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +48,28 @@ class ViewStoryActivity : AppCompatActivity() {
     private fun setupViewPager(initialPosition: Int) {
         val adapter = StoryPagerAdapter(this, storyGroups)
         binding.viewPager.adapter = adapter
+        binding.viewPager.offscreenPageLimit = 1
         binding.viewPager.setCurrentItem(initialPosition, false)
 
+        binding.viewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                // find fragment present
+                val oldFragment =
+                    supportFragmentManager.findFragmentByTag("f$currentPosition") as? StoryUserFragment
+                val newFragment =
+                    supportFragmentManager.findFragmentByTag("f$position") as? StoryUserFragment
+
+                newFragment?.onUserSwipedTo()
+                oldFragment?.onFragmentInactive()
+                newFragment?.onFragmentActive()
+
+                currentPosition = position
+            }
+        })
     }
 
     fun moveToNextUser() {
