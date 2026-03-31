@@ -114,7 +114,9 @@ class StoryUserFragment : Fragment() {
                         val duration = exoPlayer?.duration ?: 0L
                         if (duration > 0) {
                             viewModel.setVideoDurationAndStart(duration)
-                            startVideoSync()
+                            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && !isHolding) {
+                                startVideoSync()
+                            }
                         }
                     }
 
@@ -132,7 +134,6 @@ class StoryUserFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.replayCurrentStory()
         if (!isHolding) viewModel.resumeTimer()
         if (binding.videoView.isVisible && !isHolding) {
             exoPlayer?.play()
@@ -160,7 +161,7 @@ class StoryUserFragment : Fragment() {
 
     private fun hideLoading() {
         binding.pbLoading.gone()
-        if (!isHolding) {
+        if (!isHolding && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             viewModel.resumeTimer()
         }
     }
@@ -278,7 +279,11 @@ class StoryUserFragment : Fragment() {
             val mediaItem = MediaItem.fromUri(story.mediaUrl)
             exoPlayer?.setMediaItem(mediaItem)
             exoPlayer?.prepare()
-            exoPlayer?.play()
+
+            // Only play video if this Fragment is visible on screen
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && !isHolding) {
+                exoPlayer?.play()
+            }
 
         } else {
             binding.videoView.gone()
@@ -326,7 +331,7 @@ class StoryUserFragment : Fragment() {
                         ((state.currentProgress.toFloat() / state.currentDuration) * 10000).toInt()
                 }
 
-                i > state.currentIndex -> {
+                else -> {
                     progressBars[i].progress = 0
                 }
             }

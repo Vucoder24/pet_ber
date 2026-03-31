@@ -47,7 +47,6 @@ class ViewStoryViewModel @Inject constructor() : ViewModel() {
                 currentIndex = index,
                 currentProgress = 0L,
                 currentDuration = duration,
-                isPaused = false
             )
         }
 
@@ -130,7 +129,7 @@ class ViewStoryViewModel @Inject constructor() : ViewModel() {
 
     fun replayCurrentStory() {
         timerJob?.cancel()
-        _uiState.update { it.copy(currentProgress = 0L, isPaused = false) }
+        _uiState.update { it.copy(currentProgress = 0L) }
 
         val state = _uiState.value
         val story = state.storyGroup?.stories?.getOrNull(state.currentIndex)
@@ -151,7 +150,7 @@ data class StoryUiState(
     val currentIndex: Int = 0,
     val currentProgress: Long = 0L,
     val currentDuration: Long = 5000L,
-    val isPaused: Boolean = false
+    val isPaused: Boolean = true
 )
 
 enum class StoryNavigationEvent {
