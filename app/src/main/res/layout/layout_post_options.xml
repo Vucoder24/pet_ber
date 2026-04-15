@@ -1,0 +1,275 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:orientation="vertical"
+    android:paddingVertical="16dp">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:background="#DDDDDD" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/layoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:paddingBottom="16dp">
+
+        <LinearLayout
+            android:id="@+id/btnFollow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/ivFollow"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_followw" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvFollow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/follow_user"
+                    android:textColor="@color/text_brown"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/ivSave"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_bookmark" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/save_post"
+                    android:textColor="@color/text_brown"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/depTvSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dep_save_post"
+                    android:textColor="#757575"
+                    android:layout_marginTop="-4dp"
+                    android:fontFamily="@font/baloo2"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnEditPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp"
+            android:background="?attr/selectableItemBackground"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginVertical="4dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_edit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/baloo2"
+                android:text="@string/edit_post"
+                android:textColor="@color/text_brown"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnCopyLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp"
+            android:background="?attr/selectableItemBackground"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginVertical="4dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_copy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/baloo2"
+                android:text="@string/copy_link"
+                android:textColor="@color/text_brown"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnEditPrivacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp"
+            android:background="?attr/selectableItemBackground"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginVertical="4dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_globe" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/baloo2"
+                android:text="@string/edit_privacy"
+                android:textColor="@color/text_brown"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnHide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:paddingHorizontal="16dp"
+
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_close_window" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/hide_this_post"
+                    android:textColor="@color/text_brown"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dep_hide_post"
+                    android:textColor="#757575"
+                    android:layout_marginTop="-4dp"
+                    android:fontFamily="@font/baloo2"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_ban_user"
+                app:tint="#B8322F" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvBlock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/block_user"
+                    android:textColor="#B8322F"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/baloo2"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dep_block_user"
+                    android:textColor="#E57373"
+                    android:textSize="16sp"
+                    android:layout_marginTop="-4dp"
+                    android:fontFamily="@font/baloo2"
+                    tools:ignore="TextContrastCheck" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.graphics.get
+import com.bumptech.glide.load.DecodeFormat
 
 @SuppressLint("CheckResult")
 fun ImageView.loadImage(
@@ -31,6 +32,8 @@ fun ImageView.loadImage(
         .load(url)
         .placeholder(placeholder)
         .error(placeholder)
+        .override(600, 600)
+        .format(DecodeFormat.PREFER_RGB_565)
 
     if (centerCrop) request.centerCrop()
 
@@ -88,6 +91,8 @@ fun ImageView.loadMediaCoverWithExtremeGradient(
         Glide.with(this)
             .asBitmap()
             .load(uri)
+            .override(300, 300)
+            .format(DecodeFormat.PREFER_RGB_565)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(
                     resource: Bitmap,

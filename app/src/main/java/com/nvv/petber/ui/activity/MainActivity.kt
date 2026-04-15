@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.nvv.petber.R
@@ -25,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var supabaseClient: SupabaseClient
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +83,22 @@ class MainActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
 
-        binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            val navController = findNavController(R.id.nav_host_fragment)
+
+            navController.navigate(
+                item.itemId,
+                null,
+                NavOptions.Builder()
+                    .setPopUpTo(navController.graph.startDestinationId, false)
+                    .build()
+            )
+            true
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlayer.release()
     }
 }

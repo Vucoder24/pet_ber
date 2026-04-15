@@ -8,6 +8,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
 import com.github.chrisbanes.photoview.PhotoView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.PostMedia
@@ -58,7 +59,11 @@ class MediaPagerAdapter(
     inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val photoView: PhotoView = itemView.findViewById(R.id.photoView)
         fun bind(url: String) {
-            Glide.with(itemView.context).load(url).into(photoView)
+            Glide.with(itemView.context)
+                .load(url)
+                .override(600, 600)
+                .format(DecodeFormat.PREFER_RGB_565)
+                .into(photoView)
         }
     }
 

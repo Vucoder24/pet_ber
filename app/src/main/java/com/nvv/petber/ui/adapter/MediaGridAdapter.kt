@@ -7,10 +7,12 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
 import com.nvv.petber.databinding.ItemMediaGridBinding
 import com.nvv.petber.utils.ext.toast
 import kotlinx.parcelize.Parcelize
@@ -50,7 +52,10 @@ class MediaGridAdapter(
             // load thumbnail
             Glide.with(ctx)
                 .load(item.uri)
+                .thumbnail(0.25f)
+                .override(300, 300)
                 .centerCrop()
+                .format(DecodeFormat.PREFER_RGB_565)
                 .into(b.ivThumbnail)
 
             // video duration

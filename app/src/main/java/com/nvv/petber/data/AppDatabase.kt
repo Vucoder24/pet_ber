@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nvv.petber.data.converter.DataConverters
+import com.nvv.petber.data.converter.StringListConverter
 import com.nvv.petber.data.dao.ProfileDao
 import com.nvv.petber.data.model.Comment
 import com.nvv.petber.data.model.Follow
@@ -23,10 +24,10 @@ import com.nvv.petber.data.model.User
     entities = [User::class, Pet::class, Post::class, Story::class, Follow::class,
         Comment::class, Hashtag::class, Notification::class, PetFollow::class,
         PetImage::class, PostHashtag::class, PostLike::class, PostMedia::class],
-    version = 4,
+    version = 8,
     exportSchema = false
 )
-@TypeConverters(DataConverters::class)
+@TypeConverters(DataConverters::class, StringListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
 }

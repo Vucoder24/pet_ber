@@ -13,10 +13,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.nvv.petber.R
+import com.nvv.petber.data.model.Pet
 import com.nvv.petber.databinding.ActivityCreatePostBinding
 import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.ui.adapter.MediaPreviewAdapter
 import com.nvv.petber.ui.dialog.UploadProgressDialog
+import com.nvv.petber.ui.mention.MentionEditText
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,6 +62,20 @@ class CreatePostActivity : AppCompatActivity() {
             openMediaPicker()
         } else {
             toast(getString(R.string.permission_question))
+        }
+    }
+
+    private fun createChipListener(pet: Pet): (android.widget.CompoundButton, Boolean) -> Unit {
+        return { _, isChecked ->
+            if (isChecked) {
+                if (!binding.etCaption.hasMention(pet.id)) {
+                    binding.etCaption.insertMention(pet.id, pet.name)
+                    viewModel.togglePetTag(pet)
+                }
+            } else {
+                binding.etCaption.removeMention(pet.id)
+                viewModel.removePetTag(pet.id)
+            }
         }
     }
 
@@ -148,17 +164,21 @@ class CreatePostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (selectedMediaItems.isEmpty()) {
-                toast(getString(R.string.error_select_media))
-                return@setOnClickListener
-            }
-
             //call ViewModel
             viewModel.createPost(
                 caption = caption, location = null, mediaUris = selectedMediaItems.map { it.uri },
                 hashtags = hashtagsStr,
+                petIds = binding.etCaption.getMentions()
             )
         }
+
+        binding.etCaption.mentionRemovedListener =
+            object : MentionEditText.OnMentionRemovedListener {
+                override fun onMentionRemoved(petId: String) {
+                    viewModel.removePetTag(petId)
+                    unselectChip(petId)
+                }
+            }
 
         binding.btnEditMedia.setOnClickListener {
             val intent = Intent(this, MediaPickerActivity::class.java).apply {
@@ -181,11 +201,32 @@ class CreatePostActivity : AppCompatActivity() {
                 val chip = Chip(this).apply {
                     text = pet.name
                     isCheckable = true
-                    setOnClickListener {
-                        viewModel.togglePetTag(pet)
-                    }
                 }
+
+                chip.setOnCheckedChangeListener(createChipListener(pet))
+
                 binding.chipGroupPets.addView(chip)
+            }
+        }
+    }
+
+
+    private fun unselectChip(petId: String) {
+        val pets = viewModel.userPets.value ?: return
+
+        for (i in 0 until binding.chipGroupPets.childCount) {
+            val chip = binding.chipGroupPets.getChildAt(i) as Chip
+            val pet = pets[i]
+
+            if (pet.id == petId) {
+
+                chip.setOnCheckedChangeListener(null)
+
+                chip.isChecked = false
+
+                chip.setOnCheckedChangeListener(createChipListener(pet))
+
+                break
             }
         }
     }

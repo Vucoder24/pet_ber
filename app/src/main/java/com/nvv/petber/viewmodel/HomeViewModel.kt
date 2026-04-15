@@ -18,6 +18,7 @@ import javax.inject.Inject
 data class HomeUiState(
     val stories: List<Story> = emptyList(),
     val posts: List<Post> = emptyList(),
+    val isInitialLoading: Boolean = true,
     val isLoadingStories: Boolean = false,
     val isLoadingPosts: Boolean = false,
     val isLoadingMore: Boolean = false,
@@ -43,8 +44,16 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadInitialData() {
+        _uiState.value = _uiState.value.copy(
+            isInitialLoading = true
+        )
         loadStories()
         loadPosts(refresh = false)
+    }
+
+    fun refreshData() {
+        loadStories()
+        loadPosts(refresh = true)
     }
 
     fun loadStories() {
@@ -93,6 +102,7 @@ class HomeViewModel @Inject constructor(
                             isLoadingPosts = false,
                             isRefreshing = false,
                             isLoadingMore = false,
+                            isInitialLoading = false,
                             currentPage = page + 1,
                             hasMore = newPosts.size == 10
                         )
@@ -102,6 +112,7 @@ class HomeViewModel @Inject constructor(
                             isLoadingPosts = false,
                             isRefreshing = false,
                             isLoadingMore = false,
+                            isInitialLoading = false,
                             error = e.message
                         )
                     }
@@ -159,5 +170,11 @@ class HomeViewModel @Inject constructor(
 
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
+    }
+
+    fun incrementShareCount(postId: String) {
+        viewModelScope.launch {
+            homeRepository.incrementShareCount(postId)
+        }
     }
 }

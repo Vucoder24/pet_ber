@@ -27,6 +27,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.nvv.petber.R
@@ -291,6 +292,8 @@ class StoryUserFragment : Fragment() {
 
             Glide.with(this)
                 .load(story.mediaUrl)
+                .override(600, 600)
+                .format(DecodeFormat.PREFER_RGB_565)
                 .listener(object : RequestListener<Drawable> {
 
                     override fun onLoadFailed(

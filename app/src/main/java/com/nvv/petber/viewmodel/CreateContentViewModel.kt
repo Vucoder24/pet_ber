@@ -71,7 +71,8 @@ class CreateContentViewModel @Inject constructor(
         caption: String,
         location: String?,
         hashtags: String?,
-        mediaUris: List<Uri>
+        mediaUris: List<Uri>,
+        petIds: List<String>
     ) {
 
         _isLoading.value = true
@@ -81,14 +82,12 @@ class CreateContentViewModel @Inject constructor(
 
             try {
 
-                val petId = _selectedPetIds.value?.firstOrNull()
-
                 createContentRepository.createPost(
                     caption = caption,
                     hashtags = hashtags,
                     location = location,
                     mediaUris = mediaUris,
-                    petId = petId
+                    petIds = petIds
                 ).collect { progress ->
 
                     _uploadProgress.value = progress
@@ -138,6 +137,12 @@ class CreateContentViewModel @Inject constructor(
                 _isLoading.value = false
             }
         }
+    }
+
+    fun removePetTag(petId: String) {
+        val current = _selectedPetIds.value ?: mutableSetOf()
+        current.remove(petId)
+        _selectedPetIds.value = current
     }
 
     fun clearError() {

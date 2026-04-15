@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -16,6 +17,8 @@ import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Post
@@ -35,8 +38,8 @@ class PostAdapter(
     private val onLikeClick: (Post) -> Unit,
     private val onCommentClick: (Post) -> Unit,
     private val onShareClick: (Post) -> Unit,
-    private val onSaveClick: (Post) -> Unit,
     private val onProfileClick: (Post) -> Unit,
+    private val onMoreOption: (Post) -> Unit,
     private val onLoadMore: () -> Unit
 ) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback()) {
     private val activePlayers = mutableListOf<ExoPlayer>()
@@ -50,6 +53,11 @@ class PostAdapter(
     override fun onViewRecycled(holder: PostViewHolder) {
         super.onViewRecycled(holder)
         holder.releasePlayer()
+        Glide.with(holder.itemView).clear(holder.ivSingleImage)
+        Glide.with(holder.itemView).clear(holder.ivGrid1)
+        Glide.with(holder.itemView).clear(holder.ivGrid2)
+        Glide.with(holder.itemView).clear(holder.ivGrid3)
+        Glide.with(holder.itemView).clear(holder.ivGrid4)
     }
 
     override fun onViewDetachedFromWindow(holder: PostViewHolder) {
@@ -61,35 +69,35 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.bind(getItem(position))
         // Trigger load more when near end
-        if (position >= itemCount - 2) {
+        if (position >= itemCount - 1) {
             onLoadMore()
         }
     }
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val icPlay1: ImageView = itemView.findViewById(R.id.icPlay1)
+        private val containerMedia: MaterialCardView = itemView.findViewById(R.id.containerMedia)
         private val icPlay2: ImageView = itemView.findViewById(R.id.icPlay2)
         private val icPlay3: ImageView = itemView.findViewById(R.id.icPlay3)
         private val icPlay4: ImageView = itemView.findViewById(R.id.icPlay4)
+        private val ibMore: ImageButton = itemView.findViewById(R.id.btnMore)
         private val ivUserAvatar: ImageView = itemView.findViewById(R.id.imgUser)
         private val tvUsername: TextView = itemView.findViewById(R.id.tvUserName)
-        private val petName: TextView = itemView.findViewById(R.id.pet_name)
         private val hashtags: TextView = itemView.findViewById(R.id.hashtags)
         private val ibLike: ImageView = itemView.findViewById(R.id.btn_like)
         private val ibComment: ImageView = itemView.findViewById(R.id.btn_cmt)
         private val ibShare: ImageView = itemView.findViewById(R.id.btn_share)
-        private val ibSave: ImageView = itemView.findViewById(R.id.btn_bookmark)
         private val tvLikeCount: TextView = itemView.findViewById(R.id.tvLikeCount)
         private val tvCaption: TextView = itemView.findViewById(R.id.caption)
         private val tvCommentCount: TextView = itemView.findViewById(R.id.tvCmtCount)
         private val tvShareCount: TextView = itemView.findViewById(R.id.tvShareCount)
         private val tvTimeAgo: TextView = itemView.findViewById(R.id.tvTimeAgo)
-        private val ivSingleImage: ImageView = itemView.findViewById(R.id.ivSingleImage)
+        val ivSingleImage: ImageView = itemView.findViewById(R.id.ivSingleImage)
         private val layoutMediaGrid: ConstraintLayout = itemView.findViewById(R.id.layoutMediaGrid)
-        private val ivGrid1: ImageView = itemView.findViewById(R.id.ivGrid1)
-        private val ivGrid2: ImageView = itemView.findViewById(R.id.ivGrid2)
-        private val ivGrid3: ImageView = itemView.findViewById(R.id.ivGrid3)
-        private val ivGrid4: ImageView = itemView.findViewById(R.id.ivGrid4)
+        val ivGrid1: ImageView = itemView.findViewById(R.id.ivGrid1)
+        val ivGrid2: ImageView = itemView.findViewById(R.id.ivGrid2)
+        val ivGrid3: ImageView = itemView.findViewById(R.id.ivGrid3)
+        val ivGrid4: ImageView = itemView.findViewById(R.id.ivGrid4)
         private val overlayMore: View = itemView.findViewById(R.id.overlayMore)
         private val tvMoreCount: TextView = itemView.findViewById(R.id.tvMoreCount)
         private val pbLoadingSingle: ProgressBar = itemView.findViewById(R.id.pbLoadingSingle)
@@ -102,12 +110,6 @@ class PostAdapter(
             tvUsername.text =
                 post.users?.fullName ?: itemView.context.getString(R.string.petber_user)
 
-            if (post.pets == null) {
-                petName.gone()
-            } else {
-                petName.visible()
-            }
-            petName.text = "${post.pets?.name} (${post.pets?.breed})"
             tvLikeCount.text = post.likeCount.formatSocialCount()
 
             if (post.hashtags.isNullOrEmpty()) {
@@ -136,6 +138,11 @@ class PostAdapter(
 
             releasePlayer() // Reset player old
             val mediaList = post.postMedia ?: emptyList()
+            if (mediaList.isEmpty()) {
+                containerMedia.gone()
+            } else {
+                containerMedia.visible()
+            }
 
             playerViewSingle.gone()
             icPlaySingle.gone()
@@ -181,9 +188,9 @@ class PostAdapter(
             ibLike.setOnClickListener { onLikeClick(post) }
             ibComment.setOnClickListener { onCommentClick(post) }
             ibShare.setOnClickListener { onShareClick(post) }
-            ibSave.setOnClickListener { onSaveClick(post) }
             ivUserAvatar.setOnClickListener { onProfileClick(post) }
             tvUsername.setOnClickListener { onProfileClick(post) }
+            ibMore.setOnClickListener { onMoreOption(post) }
         }
 
         private fun setupVideoPlayer(url: String) {

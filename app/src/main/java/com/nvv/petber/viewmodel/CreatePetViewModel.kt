@@ -44,6 +44,19 @@ class CreatePetViewModel @Inject constructor(
     fun resetState() {
         _uiState.value = CreatePetState.Idle
     }
+
+    fun savePet(pet: Pet) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = CreatePetState.Loading
+
+            val result = repository.updatePet(pet)
+            _uiState.value = if (result.isSuccess) {
+                CreatePetState.Success
+            } else {
+                CreatePetState.Error(result.exceptionOrNull()?.message ?: "Error")
+            }
+        }
+    }
 }
 
 sealed class CreatePetState {

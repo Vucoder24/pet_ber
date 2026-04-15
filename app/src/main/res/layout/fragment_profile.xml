@@ -47,7 +47,7 @@
                 android:id="@+id/btnMore"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_icon_button_dark"
                 android:importantForAccessibility="no"
@@ -105,15 +105,120 @@
                         tools:ignore="HardcodedText" />
 
                     <!-- STATS -->
-                    <TextView
-                        android:id="@+id/tvStats"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/layoutStats"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/baloo2"
-                        android:text="0 Posts | 0 followers | 0 following"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
+                        android:layout_marginTop="8dp"
+                        android:paddingHorizontal="16dp"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <!-- POSTS -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/tvPostCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/baloo2"
+                                android:textColor="@color/text_color"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:id="@+id/tvPosts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/baloo2"
+                                android:text="@string/posts"
+                                android:textColor="#888888"
+                                android:textSize="13sp"
+                                tools:ignore="TextContrastCheck" />
+                        </LinearLayout>
+
+                        <!-- LINE -->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="20dp"
+                            android:background="#DDDDDD"/>
+
+                        <!-- FOLLOWERS -->
+                        <LinearLayout
+                            android:id="@+id/itemFollowers"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/tvFollowerCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/baloo2"
+                                android:textColor="@color/text_color"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:id="@+id/tvFollowers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/baloo2"
+                                android:text="@string/followers"
+                                android:textColor="#888888"
+                                android:textSize="13sp"
+                                tools:ignore="TextContrastCheck" />
+                        </LinearLayout>
+
+                        <!-- LINE -->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="20dp"
+                            android:background="#DDDDDD"/>
+
+                        <!-- FOLLOWING -->
+                        <LinearLayout
+                            android:id="@+id/itemFollowing"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/tvFollowingCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/baloo2"
+                                android:textColor="@color/text_color"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:id="@+id/tvFollowings"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/baloo2"
+                                android:text="@string/following"
+                                android:textColor="#888888"
+                                android:textSize="13sp"
+                                tools:ignore="TextContrastCheck" />
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                     <!-- BUTTONS -->
                     <LinearLayout
@@ -443,13 +548,13 @@
 
             <!-- POSTS TITLE -->
             <TextView
-                android:id="@+id/tvPosts"
+                android:id="@+id/allPostsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/baloo2"
-                android:text="@string/article_history"
+                android:text="@string/all_posts"
                 android:textColor="@color/title_color"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -469,7 +574,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvPosts" />
+                app:layout_constraintTop_toBottomOf="@id/allPostsTitle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

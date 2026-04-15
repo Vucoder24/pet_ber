@@ -102,7 +102,7 @@
                 app:drawableEndCompat="@drawable/ic_edit"
                 app:drawableTint="#FF7043" />
 
-            <EditText
+            <com.nvv.petber.ui.mention.MentionEditText
                 android:id="@+id/et_caption"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"

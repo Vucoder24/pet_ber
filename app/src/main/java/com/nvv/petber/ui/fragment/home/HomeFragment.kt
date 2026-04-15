@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.FragmentHomeBinding
-import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.adapter.StoryAdapter
 import com.nvv.petber.ui.adapter.StoryRowAdapter
+import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
+import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
+import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.AppEventManager
 import com.nvv.petber.utils.ext.addFeedScrollListener
 import com.nvv.petber.utils.ext.gone
@@ -74,7 +76,7 @@ class HomeFragment : Fragment() {
 
     private fun initViews() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.loadInitialData()
+            viewModel.refreshData()
         }
 
         // set color scheme for swipe refresh layout
@@ -98,7 +100,10 @@ class HomeFragment : Fragment() {
                 val initialPosition = groupedStories.indexOfFirst { it.userId == story.userId }
 
                 val intent = Intent(requireContext(), ViewStoryActivity::class.java).apply {
-                    putExtra(ViewStoryActivity.EXTRA_STORY_GROUPS, Json.encodeToString(groupedStories))
+                    putExtra(
+                        ViewStoryActivity.EXTRA_STORY_GROUPS,
+                        Json.encodeToString(groupedStories)
+                    )
                     putExtra(ViewStoryActivity.EXTRA_INITIAL_POSITION, initialPosition)
                 }
                 startActivity(intent)
@@ -110,16 +115,28 @@ class HomeFragment : Fragment() {
                 viewModel.toggleLike(post)
             },
             onCommentClick = { post ->
-
+                val bottomSheet = CommentBottomSheetFragment.newInstance(post.id, post.userId)
+                bottomSheet.show(childFragmentManager, "CommentBottomSheet")
             },
-            onShareClick = { },
+            onShareClick = {
+                val link = "https://project-ilyyx.vercel.app/post/${it.id}"
+
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, link)
+                }
+                startActivity(Intent.createChooser(intent, getString(R.string.share_post)))
+                viewModel.incrementShareCount(it.id)
+            },
             onProfileClick = { post ->
 
             },
             onLoadMore = { viewModel.loadPosts(refresh = false) },
-            onSaveClick = {
-
+            onMoreOption = {
+                val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
+                bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
             }
+
         )
     }
 
@@ -169,8 +186,8 @@ class HomeFragment : Fragment() {
                     // Posts
                     postAdapter.submitList(state.posts)
 
-                    // Loading
-                    if (state.isLoadingPosts || state.isLoadingStories) {
+                    // init Loading
+                    if (state.isInitialLoading) {
                         binding.shimmerViewContainer.visible()
                         binding.shimmerViewContainer.startShimmer()
                         binding.dataContainer.gone()

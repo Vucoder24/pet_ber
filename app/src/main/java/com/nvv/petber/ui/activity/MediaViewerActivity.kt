@@ -5,7 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nvv.petber.R
@@ -16,7 +18,6 @@ import com.nvv.petber.ui.adapter.MediaPagerAdapter
 class MediaViewerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMediaViewerBinding
     private var mediaList: List<PostMedia> = emptyList()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -35,20 +36,25 @@ class MediaViewerActivity : AppCompatActivity() {
         val jsonMedia = intent.getStringExtra(EXTRA_MEDIA_LIST)
         val startIndex = intent.getIntExtra(EXTRA_START_INDEX, 0)
 
+        binding.btnClose.setOnClickListener {
+            finish()
+        }
+
         if (jsonMedia != null) {
             val type = object : TypeToken<List<PostMedia>>() {}.type
             mediaList = Gson().fromJson(jsonMedia, type)
 
+            binding.tabLayoutDots.isVisible = mediaList.size > 1
+
             val adapter = MediaPagerAdapter(mediaList)
             binding.viewPagerMedia.adapter = adapter
             binding.viewPagerMedia.setCurrentItem(startIndex, false)
+            TabLayoutMediator(binding.tabLayoutDots, binding.viewPagerMedia) { _, _ -> }.attach()
         }
 
-        // Tối ưu giải phóng/phát video khi người dùng vuốt ViewPager
         binding.viewPagerMedia.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                // ExoPlayer được setup tự động phát trong bind() và tự giải phóng trong onViewRecycled() của Adapter
             }
         })
     }

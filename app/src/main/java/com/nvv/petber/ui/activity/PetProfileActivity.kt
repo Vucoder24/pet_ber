@@ -1,0 +1,439 @@
+package com.nvv.petber.ui.activity
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.nvv.petber.R
+import com.nvv.petber.data.model.Pet
+import com.nvv.petber.databinding.ActivityPetProfileBinding
+import com.nvv.petber.ui.adapter.PostAdapter
+import com.nvv.petber.utils.ext.loadAvatar
+import com.nvv.petber.utils.ext.toast
+import com.nvv.petber.viewmodel.PetProfileViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import androidx.core.net.toUri
+import androidx.media3.exoplayer.ExoPlayer
+import com.bumptech.glide.load.DecodeFormat
+import com.nvv.petber.utils.PermissionUtils
+import com.nvv.petber.utils.ext.showAvatarOptionDialog
+import com.nvv.petber.utils.ext.showCoverOptionDialog
+import com.nvv.petber.viewmodel.UpdatePetState
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class PetProfileActivity : AppCompatActivity() {
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
+
+    private lateinit var binding: ActivityPetProfileBinding
+    private val viewModel: PetProfileViewModel by viewModels()
+    private lateinit var postAdapter: PostAdapter
+
+    private var pendingMediaAction: String = ""
+    private var cropTarget: String? = null
+    private var currentPet: Pet? = null
+
+    private val editPetLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val petId = viewModel.petState.value?.id
+            if (petId != null) {
+                viewModel.fetchPetById(petId)
+            }
+        }
+    }
+
+    private val cropLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val uriString = result.data?.getStringExtra(CropImageActivity.EXTRA_RESULT_URI)
+                    ?: return@registerForActivityResult
+                val uri = uriString.toUri()
+
+                when (cropTarget) {
+                    CropImageActivity.TARGET_AVATAR -> viewModel.updateAvatar(uri)
+                    CropImageActivity.TARGET_COVER -> viewModel.updateCover(uri)
+                }
+                cropTarget = null
+            }
+        }
+
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            val granted = result.all { it.value }
+            if (granted) {
+                when (pendingMediaAction) {
+                    "avatar" -> openMediaPickerForAvatar()
+                    "cover" -> openMediaPickerForCover()
+                }
+            } else {
+                toast(getString(R.string.permission_question))
+            }
+        }
+
+    private val avatarPickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                @Suppress("DEPRECATION")
+                val medias =
+                    result.data?.getParcelableArrayListExtra<com.nvv.petber.ui.adapter.MediaItem>(
+                        MediaPickerActivity.EXTRA_RESULT_MEDIAS
+                    )
+                medias?.firstOrNull()?.uri?.let { uri ->
+                    launchCrop(uri, CropImageActivity.TARGET_AVATAR)
+                }
+            }
+        }
+
+    private val coverPickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                @Suppress("DEPRECATION")
+                val medias =
+                    result.data?.getParcelableArrayListExtra<com.nvv.petber.ui.adapter.MediaItem>(
+                        MediaPickerActivity.EXTRA_RESULT_MEDIAS
+                    )
+                medias?.firstOrNull()?.uri?.let { uri ->
+                    launchCrop(uri, CropImageActivity.TARGET_COVER)
+                }
+            }
+        }
+
+    companion object {
+        private const val EXTRA_PET_JSON = "extra_pet_json"
+        private const val EXTRA_PET_ID = "extra_pet_id"
+
+        fun start(context: Context, pet: Pet) {
+            val intent = Intent(context, PetProfileActivity::class.java).apply {
+                putExtra(EXTRA_PET_JSON, Json.encodeToString(pet))
+            }
+            context.startActivity(intent)
+        }
+
+        fun start(context: Context, petId: String) {
+            val intent = Intent(context, PetProfileActivity::class.java).apply {
+                putExtra(EXTRA_PET_ID, petId)
+            }
+            context.startActivity(intent)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        binding = ActivityPetProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        setupRecyclerView()
+        setupIntentData()
+        setupListeners()
+        observeViewModel()
+    }
+
+    private fun setupRecyclerView() {
+        postAdapter = PostAdapter(
+            onLikeClick = { post ->
+                // Xử lý like/unlike
+            },
+            onCommentClick = { post ->
+                // Xử lý mở comment
+            },
+            onShareClick = { post ->
+            },
+            onProfileClick = {
+            },
+            onMoreOption = {},
+            onLoadMore = {}
+        )
+        binding.rvPetPosts.apply {
+            layoutManager = LinearLayoutManager(this@PetProfileActivity)
+             adapter = postAdapter
+        }
+    }
+
+    private fun setupIntentData() {
+        val petJson = intent.getStringExtra(EXTRA_PET_JSON)
+        val petId = intent.getStringExtra(EXTRA_PET_ID)
+
+        if (petJson != null) {
+            try {
+                val pet = Json.decodeFromString<Pet>(petJson)
+                viewModel.setPetData(pet)
+            } catch (_: Exception) {
+                toast(getString(R.string.fail_to_load_pet_data))
+                finish()
+            }
+        } else if (petId != null) {
+            viewModel.fetchPetById(petId)
+        } else {
+            finish()
+        }
+    }
+
+    private fun setupListeners() {
+        binding.btnBack.setOnClickListener { finish() }
+
+        binding.root.setOnRefreshListener {
+            val currentPet = viewModel.petState.value
+            if (currentPet != null) {
+                viewModel.fetchPetById(currentPet.id)
+            } else {
+                binding.root.isRefreshing = false
+            }
+        }
+        binding.dataContainer.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+                if (scrollY > oldScrollY) { // Đang cuộn xuống
+                    val childHeight = v.getChildAt(0).measuredHeight
+                    val scrollHeight = v.measuredHeight
+
+                    // Kích hoạt khi cuộn đến gần cuối (cách 100px để mượt)
+                    if (scrollY >= childHeight - scrollHeight - 100) {
+                        viewModel.petState.value?.id?.let { petId ->
+                            viewModel.loadPetPosts(petId)
+                        }
+                    }
+                }
+            }
+        )
+
+        binding.avatar.setOnClickListener {
+            val currentPet = viewModel.petState.value ?: return@setOnClickListener
+
+            showAvatarOptionDialog(
+                onViewAvatar = {
+                    if (!currentPet.avatarUrl.isNullOrEmpty()) {
+                        val mediaItem = com.nvv.petber.ui.adapter.MediaItem(
+                            uri = currentPet.avatarUrl.toUri(),
+                            isVideo = false,
+                            duration = 0L
+                        )
+                        startActivity(
+                            Intent(
+                                this@PetProfileActivity,
+                                MediaPreviewActivity::class.java
+                            ).apply {
+                                putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
+                            })
+                    } else {
+                        toast(getString(R.string.no_avatar_found))
+                    }
+                },
+                onChooseAvatar = {
+                    if (PermissionUtils.hasMediaPermissions(this@PetProfileActivity)) {
+                        openMediaPickerForAvatar()
+                    } else {
+                        pendingMediaAction = "avatar"
+                        val denied =
+                            PermissionUtils.getDeniedPermissions(this@PetProfileActivity)
+                        permissionLauncher.launch(denied)
+                    }
+                }
+            )
+        }
+
+        binding.imgCover.setOnClickListener {
+            val currentPet = viewModel.petState.value ?: return@setOnClickListener
+
+            showCoverOptionDialog(
+                onViewCover = {
+                    if (!currentPet.coverUrl.isNullOrEmpty()) {
+                        val mediaItem = com.nvv.petber.ui.adapter.MediaItem(
+                            uri = currentPet.coverUrl.toUri(),
+                            isVideo = false,
+                            duration = 0L
+                        )
+                        startActivity(
+                            Intent(
+                                this@PetProfileActivity,
+                                MediaPreviewActivity::class.java
+                            ).apply {
+                                putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
+                            })
+                    } else {
+                        toast(getString(R.string.no_cover_found))
+                    }
+                },
+                onChooseCover = {
+                    if (PermissionUtils.hasMediaPermissions(this@PetProfileActivity)) {
+                        openMediaPickerForCover()
+                    } else {
+                        pendingMediaAction = "cover"
+                        val denied =
+                            PermissionUtils.getDeniedPermissions(this@PetProfileActivity)
+                        permissionLauncher.launch(denied)
+                    }
+                }
+            )
+        }
+        binding.btnEditPet.setOnClickListener {
+            val pet = currentPet ?: return@setOnClickListener
+
+            val intent = Intent(this, CreateEditPetActivity::class.java).apply {
+                putExtra(CreateEditPetActivity.EXTRA_PET, pet)
+            }
+            editPetLauncher.launch(intent)
+        }
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.petState.collectLatest { pet ->
+                pet?.let {
+                    bindPetData(it)
+                    currentPet = it
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.posts.collectLatest { posts ->
+                Log.d("PetProfileActivity", "$posts")
+                postAdapter.submitList(posts)
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isLoading.collectLatest { isLoading ->
+                binding.root.isRefreshing = isLoading
+                binding.shimmerView.visibility =
+                    if (isLoading && viewModel.petState.value == null) View.VISIBLE else View.GONE
+                binding.dataContainer.visibility =
+                    if (isLoading && viewModel.petState.value == null) View.INVISIBLE else View.VISIBLE
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isLoadMore.collectLatest { isLoadMore ->
+                binding.progressBarLoadMore.visibility = if (isLoadMore) View.VISIBLE else View.GONE
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.error.collectLatest { errorMsg ->
+                errorMsg?.let {
+                    toast(it)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.uiState.collectLatest { state ->
+                when (state) {
+                    is UpdatePetState.Loading -> {
+                        if (state.style == "avatar") {
+                            toast(getString(R.string.updating_avatar))
+                        } else if (state.style == "cover") {
+                            toast(getString(R.string.updating_cover))
+                        }
+                    }
+
+                    is UpdatePetState.Success -> {
+                        toast(getString(R.string.update_pet_success))
+                        viewModel.resetUiState()
+                    }
+
+                    is UpdatePetState.Error -> {
+                        toast(state.message)
+                        viewModel.resetUiState()
+                    }
+
+                    is UpdatePetState.Idle -> {}
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun bindPetData(pet: Pet) {
+        with(binding) {
+            tvPetName.text = pet.name
+
+            val speciesTxt = pet.species ?: getString(R.string.not_updated)
+            val breedTxt = pet.breed ?: getString(R.string.not_updated)
+            tvSpeciesBreed.text = "$speciesTxt • $breedTxt"
+
+            tvDescription.text = if (pet.description.isNullOrEmpty()) {
+                getString(R.string.not_desc_yet)
+            } else pet.description
+
+            avatar.loadAvatar(pet.avatarUrl)
+            pet.coverUrl?.let { url ->
+                Glide.with(this@PetProfileActivity)
+                    .load(url)
+                    .override(600, 600)
+                    .format(DecodeFormat.PREFER_RGB_565)
+                    .into(imgCover)
+            } ?: imgCover.setImageResource(R.color.gray_light) // Default cover
+
+            val na = getString(R.string.value_na)
+            tvGender.text = getString(R.string.label_gender, pet.gender ?: na)
+            tvWeight.text = getString(R.string.label_weight, pet.weight?.let { "$it kg" } ?: na)
+            tvBirthday.text = getString(R.string.label_birthday, pet.birthday ?: na)
+            tvNeutered.text = getString(
+                R.string.label_neutered,
+                if (pet.isNeutered == true) getString(R.string.value_neutered_yes)
+                else getString(R.string.value_neutered_no)
+            )
+
+            tvBodyCondition.text = getString(R.string.label_body_condition, pet.bodyCondition ?: na)
+            tvClinicalStatus.text =
+                getString(R.string.label_clinical_status, pet.clinicalStatus ?: na)
+            tvMentalState.text =
+                getString(R.string.label_mental_state, pet.activityAndMentalState ?: na)
+            tvMedicalHistory.text =
+                getString(R.string.label_medical_history, pet.medicalHistoryAndTreatment ?: na)
+            tvPreventive.text = getString(R.string.label_preventive, pet.preventiveStatus ?: na)
+        }
+    }
+
+    private fun launchCrop(sourceUri: android.net.Uri, target: String) {
+        cropTarget = target
+        val intent = Intent(this, CropImageActivity::class.java).apply {
+            putExtra(CropImageActivity.EXTRA_SOURCE_URI, sourceUri)
+            putExtra(CropImageActivity.EXTRA_TARGET_TYPE, target)
+        }
+        cropLauncher.launch(intent)
+    }
+
+    private fun openMediaPickerForAvatar() {
+        val intent = Intent(this, MediaPickerActivity::class.java).apply {
+            putExtra(MediaPickerActivity.EXTRA_MODE, MediaPickerActivity.MODE_SINGLE)
+            putExtra(MediaPickerActivity.EXTRA_MEDIA_KIND, MediaPickerActivity.MEDIA_KIND_IMAGES)
+        }
+        avatarPickerLauncher.launch(intent)
+    }
+
+    private fun openMediaPickerForCover() {
+        val intent = Intent(this, MediaPickerActivity::class.java).apply {
+            putExtra(MediaPickerActivity.EXTRA_MODE, MediaPickerActivity.MODE_SINGLE)
+            putExtra(MediaPickerActivity.EXTRA_MEDIA_KIND, MediaPickerActivity.MEDIA_KIND_IMAGES)
+        }
+        coverPickerLauncher.launch(intent)
+    }
+
+
+}

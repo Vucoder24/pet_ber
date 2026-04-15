@@ -32,7 +32,7 @@ class CreateContentRepository @Inject constructor(
         hashtags: String?,
         location: String?,
         mediaUris: List<Uri>,
-        petId: String?
+        petIds: List<String>
     ) = flow {
         val userId = supabaseClient.auth.currentUserOrNull()?.id
             ?: throw IllegalStateException("User is not logged in")
@@ -40,7 +40,7 @@ class CreateContentRepository @Inject constructor(
 
         val post = Post(
             userId = userId,
-            petId = petId,
+            petIds = petIds,
             caption = caption,
             location = location,
             hashtags = hashtags,
@@ -67,6 +67,11 @@ class CreateContentRepository @Inject constructor(
                     onConflict = "name"
                     ignoreDuplicates = true
                 }
+        }
+
+        if (mediaUris.isEmpty()) {
+            emit(100)
+            return@flow
         }
 
         val postId = insertedPost.id

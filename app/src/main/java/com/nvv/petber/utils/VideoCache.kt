@@ -22,7 +22,7 @@ object VideoCache {
             @Suppress("DEPRECATION")
             simpleCache = SimpleCache(
                 cacheDir,
-                LeastRecentlyUsedCacheEvictor(200L * 1024 * 1024) // 200MB
+                LeastRecentlyUsedCacheEvictor(50L * 1024 * 1024) // 200MB
             )
         }
         return simpleCache!!

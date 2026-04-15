@@ -52,9 +52,24 @@
                     android:fontFamily="@font/baloo2"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnMore"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/btn_icon_background"
+                android:importantForAccessibility="no"
+                android:padding="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_more"
+                app:tint="@color/text_brown"
+                tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+
         </RelativeLayout>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerMedia"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginTop="10dp"
@@ -224,23 +239,37 @@
                         android:textStyle="bold" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/pet_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|start"
-                android:layout_margin="12dp"
-                android:background="@drawable/bg_tag_pet"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:textColor="@color/white" />
         </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="caption"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textStyle="normal"
+            android:fontFamily="@font/baloo2"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/hashtags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/hashtags"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/text_orange"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,TextContrastCheck" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -294,39 +323,7 @@
                 android:fontFamily="@font/baloo2"
                 tools:ignore="HardcodedText" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/btn_bookmark"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_bookmark" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="caption"
-            android:textStyle="normal"
-            android:fontFamily="@font/baloo2"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:id="@+id/hashtags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/baloo2"
-            android:text="@string/hashtags"
-            android:textColor="@color/text_orange"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText,TextContrastCheck" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

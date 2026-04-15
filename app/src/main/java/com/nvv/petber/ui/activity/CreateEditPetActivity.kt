@@ -21,7 +21,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Pet
-import com.nvv.petber.databinding.ActivityCreatePetBinding
+import com.nvv.petber.databinding.ActivityCreateEditPetBinding
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.toast
@@ -36,8 +36,8 @@ import java.util.Locale
 import java.util.TimeZone
 
 @AndroidEntryPoint
-class CreatePetActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityCreatePetBinding
+class CreateEditPetActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityCreateEditPetBinding
     private val viewModel: CreatePetViewModel by viewModels()
 
     private var avatarUri: Uri? = null
@@ -47,6 +47,12 @@ class CreatePetActivity : AppCompatActivity() {
     private var selectedBirthdayDisplay: String? = null
 
     private var cropTarget: String? = null
+    private var isEditMode = false
+    private var existingPet: Pet? = null
+
+    companion object {
+        const val EXTRA_PET = "extra_pet"
+    }
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -108,20 +114,71 @@ class CreatePetActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityCreatePetBinding.inflate(layoutInflater)
+        binding = ActivityCreateEditPetBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        @Suppress("DEPRECATION")
+        existingPet = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_PET, Pet::class.java)
+        } else {
+            intent.getParcelableExtra(EXTRA_PET)
+        }
+
+        isEditMode = existingPet != null
+
+        if (isEditMode) {
+            setupEditMode()
+        } else {
+            updateBirthday(Calendar.getInstance())
+        }
         currentUserId = SharePrefUtils.getCurrentUserId(this)
-        updateBirthday(Calendar.getInstance())
         setupHealthDropdown()
         setupClicks()
         observeState()
 
     }
+
+    private fun setupEditMode() {
+        val pet = existingPet ?: return
+        binding.apply {
+            tvTitle.text = getString(R.string.edit_pet_info)
+            btnCreatePet.text = getString(R.string.save)
+
+            cardCover.gone()
+            cardAvatar.gone()
+
+            edtName.setText(pet.name)
+            edtSpecies.setText(pet.species)
+            edtBreed.setText(pet.breed)
+            edtWeight.setText(pet.weight?.toString())
+            swNeutered.isChecked = pet.isNeutered == true
+            edtDescription.setText(pet.description)
+
+            pet.birthday?.let { dateStr ->
+                selectedBirthdayDb = dateStr
+                // Convert yyyy-MM-dd sang dd/MM/yyyy để hiển thị
+                try {
+                    val dbSdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    val displaySdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    val date = dbSdf.parse(dateStr)
+                    if (date != null) edtBirthday.setText(displaySdf.format(date))
+                } catch (_: Exception) {
+                }
+            }
+
+            // Set giá trị cho dropdowns
+            actGender.setText(pet.gender, false)
+            actPreventiveStatus.setText(pet.preventiveStatus, false)
+            actBodyCondition.setText(pet.bodyCondition, false)
+            actClinicalStatus.setText(pet.clinicalStatus, false)
+            actActivityLevel.setText(pet.activityAndMentalState, false)
+        }
+    }
+
 
     private fun setupClicks() {
         binding.btnBack.setOnClickListener { finish() }
@@ -156,7 +213,10 @@ class CreatePetActivity : AppCompatActivity() {
         }
 
         val isAllGranted = permissions.all {
-            ContextCompat.checkSelfPermission(this, it) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                this,
+                it
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
         }
 
         if (isAllGranted) {
@@ -183,7 +243,9 @@ class CreatePetActivity : AppCompatActivity() {
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             try {
                 sdf.parse(it)?.time
-            } catch (_: Exception) { null }
+            } catch (_: Exception) {
+                null
+            }
         } ?: MaterialDatePicker.todayInUtcMilliseconds()
 
         val picker = MaterialDatePicker.Builder.datePicker()
@@ -247,6 +309,7 @@ class CreatePetActivity : AppCompatActivity() {
         if (!validateInput(name, species)) return
 
         val pet = Pet(
+            id = existingPet?.id ?: java.util.UUID.randomUUID().toString(),
             ownerId = currentUserId,
             name = name,
             breed = breed,
@@ -262,11 +325,15 @@ class CreatePetActivity : AppCompatActivity() {
             preventiveStatus = preventiveStatus
         )
 
-        viewModel.createPet(
-            pet = pet,
-            avatarUri = avatarUri,
-            coverUri = coverUri
-        )
+        if (isEditMode) {
+            viewModel.savePet(pet = pet)
+        } else {
+            viewModel.createPet(
+                pet = pet,
+                avatarUri = avatarUri,
+                coverUri = coverUri
+            )
+        }
     }
 
     private fun validateInput(name: String, species: String): Boolean {
@@ -326,7 +393,9 @@ class CreatePetActivity : AppCompatActivity() {
                                 layoutLoading.gone()
                                 btnCreatePet.isEnabled = true
                             }
-                            toast(getString(R.string.create_pet_success))
+                            val msg = if (isEditMode) getString(R.string.update_pet_success)
+                            else getString(R.string.create_pet_success)
+                            toast(msg)
                             setResult(RESULT_OK)
                             viewModel.resetState()
                             finish()

@@ -138,4 +138,8 @@ dependencies {
     implementation("com.github.Baseflow:PhotoView:2.3.0")
     // Gson 
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // emoji
+    implementation("com.vanniktech:emoji-google:0.15.0")
+    implementation("com.vanniktech:emoji:0.15.0")
 }

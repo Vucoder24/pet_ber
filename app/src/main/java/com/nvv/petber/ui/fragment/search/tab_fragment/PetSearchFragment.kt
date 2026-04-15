@@ -12,9 +12,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.databinding.FragmentPetSearchBinding
 import com.nvv.petber.ui.adapter.SearchPetResultAdapter
 import com.nvv.petber.viewmodel.SearchViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class PetSearchFragment : Fragment() {
     private var _binding: FragmentPetSearchBinding? = null
     private val binding get() = _binding!!
@@ -47,8 +48,8 @@ class PetSearchFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }

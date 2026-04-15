@@ -9,7 +9,7 @@ import io.github.jan.supabase.postgrest.query.Columns
 import javax.inject.Inject
 
 class SearchRepository @Inject constructor(
-    private val supabaseClient: SupabaseClient
+    supabaseClient: SupabaseClient
 ) {
     private val db = supabaseClient.postgrest
 
@@ -41,14 +41,24 @@ class SearchRepository @Inject constructor(
     suspend fun searchPostsByHashtag(query: String, currentUserId: String): List<Post> {
         val rawQuery = "%$query%"
         return try {
-            db["posts"].select(
+            val posts = db["posts"].select(
                 Columns.raw("*, users(*), post_media(*), " +
-                    "post_likes(*).filter(user_id.eq.$currentUserId)"
+                        "post_likes(*).filter(user_id.eq.$currentUserId)"
                 )) {
                 if (query.isNotEmpty()) filter { ilike("hashtags", rawQuery) }
                 limit(15)
-            }.decodeList<Post>().map {
-                it.apply { isLiked = !postLikes.isNullOrEmpty() }
+            }.decodeList<Post>()
+
+            val allPetIds = posts.flatMap { it.petIds ?: emptyList() }.distinct()
+            val petsList = if (allPetIds.isNotEmpty()) {
+                db["pets"].select { filter { isIn("id", allPetIds) } }.decodeList<Pet>()
+            } else emptyList()
+
+            posts.map { post ->
+                post.apply {
+                    isLiked = !postLikes.isNullOrEmpty()
+                    taggedPets = petsList.filter { pet -> petIds?.contains(pet.id) == true }
+                }
             }
         } catch (e: Exception) { emptyList() }
     }

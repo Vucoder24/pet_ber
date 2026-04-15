@@ -22,4 +22,5 @@
     <color name="pet_primary">#FF9356</color>
     <color name="red_500">#D54945</color>
     <color name="text_white">#E0E0E0</color>
+    <color name="gray_400">#888888</color>
 </resources>

@@ -1,0 +1,130 @@
+package com.nvv.petber.ui.activity
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.nvv.petber.R
+import com.nvv.petber.databinding.ActivityPostDetailBinding
+import com.nvv.petber.ui.adapter.PostAdapter
+import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
+import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
+import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.utils.ext.toast
+import com.nvv.petber.viewmodel.PostDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class PostDetailActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityPostDetailBinding
+    private val viewModel: PostDetailViewModel by viewModels()
+    private lateinit var currentUserId: String
+    private lateinit var adapter: PostAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        binding = ActivityPostDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        val postId = intent.getStringExtra(EXTRA_POST_ID)
+        currentUserId = SharePrefUtils.getCurrentUserId(this)
+
+        if (postId.isNullOrEmpty()) {
+            finish()
+            return
+        }
+
+        setupRecyclerView()
+        observeData()
+
+        viewModel.loadPostById(postId)
+    }
+
+    private fun requireLogin(action: () -> Unit) {
+        if (currentUserId.isNotEmpty()) {
+            action()
+        } else {
+            navigateToLogin()
+        }
+    }
+
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        toast(getString(R.string.please_login))
+        finish()
+    }
+
+    private fun setupRecyclerView() {
+        adapter = PostAdapter(
+            onLikeClick = { post ->
+                requireLogin {
+                    viewModel.toggleLike(post)
+                }
+            },
+            onCommentClick = { post ->
+                requireLogin {
+                    val bottomSheet = CommentBottomSheetFragment
+                        .newInstance(post.id, post.userId)
+                    bottomSheet.show(supportFragmentManager, "CommentBottomSheet")
+                }
+            },
+            onShareClick = { post ->
+                requireLogin {
+                    sharePost(post.id)
+                }
+            },
+            onProfileClick = { },
+            onMoreOption = { post ->
+                requireLogin {
+                    val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)
+                    bottomSheet.show(supportFragmentManager, "PostOptionsBottomSheet")
+                }
+            },
+            onLoadMore = {}
+        )
+
+        binding.rvPost.apply {
+            layoutManager = LinearLayoutManager(this@PostDetailActivity)
+            adapter = this@PostDetailActivity.adapter
+        }
+
+        binding.btnBack.setOnClickListener { finish() }
+    }
+
+    private fun observeData() {
+        viewModel.post.observe(this){
+            adapter.submitList(it?.let { listOf(it) } ?: emptyList())
+        }
+        viewModel.isLoading.observe(this){
+                binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        }
+        viewModel.error.observe(this) {
+            toast(R.string.error_fetch_data)
+        }
+    }
+
+    private fun sharePost(postId: String) {
+        val link = "https://project-ilyyx.vercel.app/post/$postId"
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, link)
+        }
+        startActivity(Intent.createChooser(intent, getString(R.string.share_post)))
+        viewModel.incrementShareCount()
+    }
+
+    companion object {
+        const val EXTRA_POST_ID = "postId"
+    }
+}

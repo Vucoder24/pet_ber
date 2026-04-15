@@ -18,5 +18,14 @@ data class Follow(
     val followingId: String,
 
     @SerialName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+
+    val follower: User? = null,
+
+    val following: User? = null
+)
+
+data class FollowUserUI(
+    val user: User,
+    var isFollowing: Boolean
 )

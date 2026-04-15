@@ -18,6 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBer">
         <activity
+            android:name=".ui.activity.PetProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ViewFollowsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.PostDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.MediaViewerActivity"
             android:exported="false" />
         <activity
@@ -50,7 +59,7 @@
             android:name=".ui.activity.CropImageActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.CreatePetActivity"
+            android:name=".ui.activity.CreateEditPetActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.MediaPreviewActivity"
@@ -82,11 +91,52 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.MainActivity"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="petber.vercel.app"
+                    android:pathPrefix="/post"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".ui.deeplink.DeepLinkActivity"
+            android:exported="true">
+
+            <!-- intent-filter 1: Web link https -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="project-ilyyx.vercel.app"
+                    android:pathPrefix="/post/"
+                    android:scheme="https" />
+            </intent-filter>
+
+            <!-- intent-filter 2: Custom scheme petber:// -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="post"
+                    android:scheme="petber" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
