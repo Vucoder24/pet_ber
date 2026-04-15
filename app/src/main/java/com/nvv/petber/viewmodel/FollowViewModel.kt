@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
 import com.nvv.petber.data.model.FollowUserUI
+import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.repo.remote.ProfileRepositoryRemote
 import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.utils.ext.toast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +24,12 @@ data class FollowUiState(
     val isLoading: Boolean = true,
     val error: String? = null
 )
+data class PetFollowUiState(
+    val pets: List<Pet> = emptyList(),
+    val isLoading: Boolean = true,
+    val error: String? = null
+)
+
 
 @HiltViewModel
 class FollowViewModel @Inject constructor(
@@ -40,21 +48,29 @@ class FollowViewModel @Inject constructor(
     private val _friendsState = MutableStateFlow(FollowUiState())
     val friendsState: StateFlow<FollowUiState> = _friendsState.asStateFlow()
 
+    private val _petFollowingState = MutableStateFlow(PetFollowUiState())
+    val petFollowingState: StateFlow<PetFollowUiState> = _petFollowingState.asStateFlow()
+
     fun loadData(userId: String, type: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (type) {
-                    0 -> { // Followers
+                    0 -> { // Pet Following
+                        _petFollowingState.value = _petFollowingState.value.copy(isLoading = true)
+                        val data = repository.getPetFollowing(userId)
+                        _petFollowingState.value = PetFollowUiState(pets = data, isLoading = false)
+                    }
+                    1 -> { // Followers
                         _followersState.value = _followersState.value.copy(isLoading = true)
                         val data = repository.getFollowers(userId, currentUserId)
                         _followersState.value = FollowUiState(users = data, isLoading = false)
                     }
-                    1 -> { // Following
+                    2 -> { // Following
                         _followingState.value = _followingState.value.copy(isLoading = true)
                         val data = repository.getFollowing(userId, currentUserId)
                         _followingState.value = FollowUiState(users = data, isLoading = false)
                     }
-                    2 -> { // Friends
+                    3 -> { // Friends
                         _friendsState.value = _friendsState.value.copy(isLoading = true)
                         val data = repository.getFriends(userId, currentUserId)
                         _friendsState.value = FollowUiState(users = data, isLoading = false)
@@ -62,9 +78,10 @@ class FollowViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 when (type) {
-                    0 -> _followersState.value = FollowUiState(isLoading = false, error = e.message)
-                    1 -> _followingState.value = FollowUiState(isLoading = false, error = e.message)
-                    2 -> _friendsState.value = FollowUiState(isLoading = false, error = e.message)
+                    0 -> _petFollowingState.value = PetFollowUiState(isLoading = false, error = e.message)
+                    1 -> _followersState.value = FollowUiState(isLoading = false, error = e.message)
+                    2 -> _followingState.value = FollowUiState(isLoading = false, error = e.message)
+                    3 -> _friendsState.value = FollowUiState(isLoading = false, error = e.message)
                 }
             }
         }
@@ -104,6 +121,23 @@ class FollowViewModel @Inject constructor(
                         2 -> revertList(_friendsState)
                     }
                 }
+        }
+    }
+
+    fun unfollowPet(petId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentList = _petFollowingState.value.pets
+
+            _petFollowingState.value = _petFollowingState.value.copy(
+                pets = currentList.filter { it.id != petId }
+            )
+
+            repository.unfollowPet(currentUserId, petId).onFailure {
+                loadData(currentUserId, 0)
+                launch(Dispatchers.Main) {
+                    context.toast(context.getString(R.string.error_action))
+                }
+            }
         }
     }
 }

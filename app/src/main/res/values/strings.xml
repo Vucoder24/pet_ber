@@ -219,6 +219,9 @@
     <string name="update_pet_success">Update pet infomation success.</string>
     <string name="edit_pet_info">Edit Pet Information</string>
     <string name="save">Save</string>
+    <string name="pet_following">Pet following</string>
+    <string name="friends">Friends</string>
+    <string name="unfollow">Unfollow</string>
 
 
     <string-array name="media_types">

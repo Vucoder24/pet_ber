@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nvv.petber.databinding.FragmentFollowListBinding
+import com.nvv.petber.ui.adapter.FollowPetAdapter
 import com.nvv.petber.ui.adapter.FollowUserAdapter
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.gone
@@ -26,11 +27,16 @@ class FollowListFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: FollowViewModel by viewModels()
     private lateinit var adapter: FollowUserAdapter
+    private lateinit var petAdapter: FollowPetAdapter
 
     private var targetUserId: String = ""
     private var listType: Int = 0 // 0: Followers, 1: Following, 2: Friends
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentFollowListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -50,56 +56,79 @@ class FollowListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = FollowUserAdapter(
-            currentUserId = SharePrefUtils.getCurrentUserId(requireContext()),
-            onFollowClick = { uiModel ->
-                viewModel.toggleFollow(uiModel.user.id, uiModel.isFollowing, listType)
-            },
-            onItemClick = { userId ->
-                // Chuyển sang profile user khác
-            }
-        )
+        if (listType == 0) {
+            petAdapter = FollowPetAdapter(
+                onItemClick = { petId -> /* sang profile pet */ },
+                onUnfollowClick = { petId ->
+                    viewModel.unfollowPet(petId)
+                }
+            )
+            binding.rvList.adapter = petAdapter
+        } else {
+            adapter = FollowUserAdapter(
+                currentUserId = SharePrefUtils.getCurrentUserId(requireContext()),
+                onFollowClick = { uiModel ->
+                    viewModel.toggleFollow(uiModel.user.id, uiModel.isFollowing, listType)
+                },
+                onItemClick = { userId ->
+                    // Chuyển sang profile user khác
+                }
+            )
+            binding.rvList.adapter = adapter
+        }
         binding.rvList.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvList.adapter = adapter
     }
 
     private fun observeData() {
-        val stateFlow = when (listType) {
-            0 -> viewModel.followersState
-            1 -> viewModel.followingState
-            else -> viewModel.friendsState
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                stateFlow.collect { state ->
-                    binding.swipeRefresh.isRefreshing = false
-
-                    if (state.isLoading && state.users.isEmpty()) {
-                        binding.shimmerViewContainer.visible()
-                        binding.shimmerViewContainer.startShimmer()
-                        binding.rvList.gone()
-                        binding.tvEmpty.gone()
-                    } else {
-                        binding.shimmerViewContainer.stopShimmer()
-                        binding.shimmerViewContainer.gone()
-
-                        if (state.users.isEmpty()) {
-                            binding.tvEmpty.visible()
-                            binding.rvList.gone()
-                        } else {
-                            binding.tvEmpty.gone()
-                            binding.rvList.visible()
-                            adapter.submitList(state.users)
+                if (listType == 0) {
+                    viewModel.petFollowingState.collect { state ->
+                        updateUI(state.isLoading, state.pets, state.error) {
+                            if (::petAdapter.isInitialized) {
+                                petAdapter.submitList(state.pets)
+                            }
                         }
                     }
-
-                    state.error?.let {
-                        requireContext().toast(it)
+                } else {
+                    val stateFlow = when (listType) {
+                        1 -> viewModel.followersState
+                        2 -> viewModel.followingState
+                        3 -> viewModel.friendsState
+                        else -> null
+                    }
+                    stateFlow?.collect { state ->
+                        updateUI(state.isLoading, state.users, state.error) {
+                            if (::adapter.isInitialized) {
+                                adapter.submitList(state.users)
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun <T> updateUI(
+        isLoading: Boolean,
+        data: List<T>,
+        error: String?,
+        onDataLoaded: () -> Unit
+    ) {
+        binding.swipeRefresh.isRefreshing = false
+        if (isLoading && data.isEmpty()) {
+            binding.shimmerViewContainer.visible(); binding.shimmerViewContainer.startShimmer()
+            binding.rvList.gone(); binding.tvEmpty.gone()
+        } else {
+            binding.shimmerViewContainer.stopShimmer(); binding.shimmerViewContainer.gone()
+            if (data.isEmpty()) {
+                binding.tvEmpty.visible(); binding.rvList.gone()
+            } else {
+                binding.tvEmpty.gone(); binding.rvList.visible()
+                onDataLoaded()
+            }
+        }
+        error?.let { requireContext().toast(it) }
     }
 
     override fun onDestroyView() {

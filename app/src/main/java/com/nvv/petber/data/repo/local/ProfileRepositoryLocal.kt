@@ -33,7 +33,8 @@ class ProfileRepositoryLocal @Inject constructor(
             var remoteUser = profileRepositoryRemote.getUser(userId)
             val userStats = profileRepositoryRemote.getUserStats(userId)
             remoteUser = remoteUser?.copy(
-                postCount = userStats.postCount,
+                friendsCount = userStats.friendsCount,
+                petFollowingCount = userStats.petFollowingCount,
                 followerCount = userStats.followerCount,
                 followingCount = userStats.followingCount
             )

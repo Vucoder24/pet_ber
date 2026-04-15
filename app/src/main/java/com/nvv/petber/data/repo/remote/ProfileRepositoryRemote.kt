@@ -11,12 +11,16 @@ import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
 import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.rpc
 import io.github.jan.supabase.storage.storage
 import io.github.jan.supabase.storage.upload
 import io.ktor.http.ContentType
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.UUID
 import javax.inject.Inject
 
@@ -76,7 +80,7 @@ class ProfileRepositoryRemote @Inject constructor(
 
     suspend fun getUserStats(userId: String): UserStats {
         return try {
-            val postsResponse = supabase.from("posts")
+            val petFollowingResponse = supabase.from("pet_follows")
                 .select {
                     filter { eq("user_id", userId) }
                     count(Count.EXACT)
@@ -94,8 +98,14 @@ class ProfileRepositoryRemote @Inject constructor(
                     count(Count.EXACT)
                 }
 
+            val friendsCount = supabase.postgrest.rpc(
+                function = "get_friends_count",
+                parameters = mapOf("user_uuid" to userId)
+            ).data.toLong()
+
             UserStats(
-                postCount = postsResponse.countOrNull() ?: 0,
+                friendsCount = friendsCount,
+                petFollowingCount = petFollowingResponse.countOrNull() ?: 0,
                 followerCount = followersResponse.countOrNull() ?: 0,
                 followingCount = followingResponse.countOrNull() ?: 0
             )
@@ -320,10 +330,50 @@ class ProfileRepositoryRemote @Inject constructor(
             emptyList()
         }
     }
+
+    suspend fun getPetFollowing(userId: String): List<Pet> {
+        return try {
+            val response = supabase.from("pet_follows")
+                .select(Columns.raw("*, pet:pets(*)")) {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+
+            val joinedData = response.decodeList<PetFollowJoin>()
+            joinedData.map { it.pet }
+
+        } catch (e: Exception) {
+            Log.e("ProfileRepo", "Error fetching pet following: ${e.message}")
+            emptyList()
+        }
+    }
+
+    suspend fun unfollowPet(userId: String, petId: String): Result<Unit> {
+        return try {
+            supabase.from("pet_follows").delete {
+                filter {
+                    eq("user_id", userId)
+                    eq("pet_id", petId)
+                }
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
 
+@Serializable
+private data class PetFollowJoin(
+    @SerialName("pet")
+    val pet: Pet
+)
+
+
 data class UserStats(
-    val postCount: Long = 0,
+    val petFollowingCount: Long = 0,
     val followerCount: Long = 0,
-    val followingCount: Long = 0
+    val followingCount: Long = 0,
+    val friendsCount: Long = 0
 )

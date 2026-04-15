@@ -10,7 +10,7 @@ class FollowPagerAdapter(
     private val userId: String
 ) : FragmentStateAdapter(activity) {
 
-    override fun getItemCount(): Int = 3
+    override fun getItemCount(): Int = 4
 
     override fun createFragment(position: Int): Fragment {
         return FollowListFragment.newInstance(userId, position)

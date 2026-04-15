@@ -62,6 +62,7 @@ class ProfileFragment : Fragment() {
 
     private var cropTarget: String? = null
     private var userData: User? = null
+
     @Inject
     lateinit var exoPlayer: ExoPlayer
 
@@ -269,6 +270,7 @@ class ProfileFragment : Fragment() {
         }
 
     }
+
     private fun checkVideoVisibility() {
         val scrollRect = android.graphics.Rect()
         binding.dataContainer.getGlobalVisibleRect(scrollRect)
@@ -322,7 +324,8 @@ class ProfileFragment : Fragment() {
             binding.tvFullName.text = if (!it.fullName.isNullOrEmpty()) it.fullName
             else requireContext().getString(R.string.petber_user)
 
-            binding.tvPostCount.text = it.postCount.formatSocialCount()
+            binding.tvFriendsCount.text = it.friendsCount.formatSocialCount()
+            binding.tvPetFollowingCount.text = it.petFollowingCount.formatSocialCount()
             binding.tvFollowerCount.text = it.followerCount.formatSocialCount()
             binding.tvFollowingCount.text = it.followingCount.formatSocialCount()
 
@@ -468,20 +471,25 @@ class ProfileFragment : Fragment() {
                 tvHobbies.maxLines = if (tvHobbies.maxLines == 1) Int.MAX_VALUE else 1
             }
 
-            tvPostCount.setOnClickListener { handleViewPostsClick() }
-            tvPosts.setOnClickListener { handleViewPostsClick() }
+            itemPetFollowing.setOnClickListener {
+                handleViewPetFollowingClick(
+                    userData!!.id,
+                    0,
+                    userData!!.username.toString()
+                )
+            }
 
             itemFollowers.setOnClickListener {
                 handleViewFollowersClick(
                     userData!!.id,
-                    0,
+                    1,
                     userData!!.username.toString()
                 )
             }
             itemFollowing.setOnClickListener {
                 handleViewFollowingClick(
                     userData!!.id,
-                    1,
+                    2,
                     userData!!.username.toString()
                 )
             }
@@ -510,8 +518,15 @@ class ProfileFragment : Fragment() {
         )
     }
 
-    private fun handleViewPostsClick() {
-
+    private fun handleViewPetFollowingClick(userId: String, extraTab: Int, userName: String) {
+        startActivity(
+            ViewFollowsActivity.newIntent(
+                requireContext(),
+                userId,
+                extraTab,
+                userName
+            )
+        )
     }
 
     private fun handleAddStoryClick() {

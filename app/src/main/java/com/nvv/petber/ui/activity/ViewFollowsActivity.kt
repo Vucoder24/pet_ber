@@ -41,9 +41,10 @@ class ViewFollowsActivity : AppCompatActivity() {
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> getString(R.string.followers)
-                1 -> getString(R.string.following)
-                2 -> getString(R.string.friend)
+                0 -> getString(R.string.pet_following)
+                1 -> getString(R.string.followers)
+                2 -> getString(R.string.following)
+                3 -> getString(R.string.friends)
                 else -> ""
             }
         }.attach()
