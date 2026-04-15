@@ -85,23 +85,6 @@
                 app:resize_mode="zoom"
                 android:visibility="gone" />
 
-            <ProgressBar
-                android:id="@+id/pbLoadingSingle"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/text_orange"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/icPlaySingle"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_play_btn"
-                android:importantForAccessibility="no"
-                android:visibility="gone"
-                app:tint="@color/white" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivSingleImage"
@@ -218,6 +201,7 @@
                     app:layout_constraintStart_toStartOf="@+id/ivGrid4"
                     app:layout_constraintTop_toTopOf="@+id/ivGrid4" />
 
+
                 <FrameLayout
                     android:id="@+id/overlayMore"
                     android:layout_width="0dp"
@@ -239,6 +223,23 @@
                         android:textStyle="bold" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <ProgressBar
+                android:id="@+id/pbLoadingSingle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/text_orange"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/icPlaySingle"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_play_btn"
+                android:importantForAccessibility="no"
+                android:visibility="gone"
+                app:tint="@color/white" />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView

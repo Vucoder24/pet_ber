@@ -10,15 +10,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.databinding.FragmentHashtagSearchBinding
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
 import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
+import com.nvv.petber.utils.ext.addFeedScrollListener
 import com.nvv.petber.viewmodel.HomeViewModel
 import com.nvv.petber.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HashtagSearchFragment : Fragment() {
@@ -26,7 +31,10 @@ class HashtagSearchFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModels({ requireParentFragment() })
     private val homeViewModel: HomeViewModel by viewModels({ requireParentFragment() })
-    private lateinit var adapter: PostAdapter
+    private lateinit var adapterResults: PostAdapter
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
+    private var scrollListener: RecyclerView.OnScrollListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +47,8 @@ class HashtagSearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = PostAdapter(
+        adapterResults = PostAdapter(
+            exoPlayer = exoPlayer,
             onLikeClick = { post ->
                 homeViewModel.toggleLike(post)
             },
@@ -67,12 +76,38 @@ class HashtagSearchFragment : Fragment() {
                 bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
             }
         )
-        binding.rvResults.adapter = adapter
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        binding.rvResults.apply {
+            layoutManager = linearLayoutManager
+            setHasFixedSize(false)
+            adapter = adapterResults
+            scrollListener = addFeedScrollListener(
+                layoutManager = linearLayoutManager,
+                headerCount = 1,
+                preloadCount = 3,
+                onPauseItem = { viewHolder ->
+                    if (viewHolder is PostAdapter.PostViewHolder) {
+                        viewHolder.pausePlayer()
+                    }
+                },
+                onPreloadItem = { index ->
+                    val currentList = adapterResults.currentList
+                    if (index < currentList.size) {
+                        currentList.getOrNull(index)?.postMedia?.firstOrNull()?.mediaUrl?.let { url ->
+                            com.bumptech.glide.Glide.with(requireContext())
+                                .load(url)
+                                .preload()
+                        }
+                    }
+                }
+            )
+        }
+        scrollListener?.let { binding.rvResults.addOnScrollListener(it) }
         // observe search results'
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.posts.collect { list ->
-                    adapter.submitList(list)
+                    adapterResults.submitList(list)
                 }
             }
         }
@@ -80,9 +115,13 @@ class HashtagSearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (::adapter.isInitialized) {
-            adapter.pauseAllPlayers()
+        if (::adapterResults.isInitialized) {
+            adapterResults.pauseAllPlayers()
         }
+
+        binding.rvResults.adapter = null
+
+        scrollListener?.let { binding.rvResults.removeOnScrollListener(it) }
         _binding = null
     }
 }

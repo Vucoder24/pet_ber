@@ -49,7 +49,6 @@ class PetProfileActivity : AppCompatActivity() {
     private var pendingMediaAction: String = ""
     private var cropTarget: String? = null
     private var currentPet: Pet? = null
-
     private val editPetLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -155,6 +154,7 @@ class PetProfileActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         postAdapter = PostAdapter(
+            exoPlayer = exoPlayer,
             onLikeClick = { post ->
                 // Xử lý like/unlike
             },

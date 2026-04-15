@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -43,7 +45,8 @@ class HomeFragment : Fragment() {
     private lateinit var storyAdapter: StoryAdapter
     private lateinit var postAdapter: PostAdapter
     private var scrollListener: RecyclerView.OnScrollListener? = null
-
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,6 +114,7 @@ class HomeFragment : Fragment() {
         )
 
         postAdapter = PostAdapter(
+            exoPlayer = exoPlayer,
             onLikeClick = { post ->
                 viewModel.toggleLike(post)
             },
@@ -222,8 +226,12 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         if (::postAdapter.isInitialized) {
-            postAdapter.releaseAllPlayers()
+            postAdapter.pauseAllPlayers()
         }
+
+        binding.rvFeed.adapter = null
+
+        scrollListener?.let { binding.rvFeed.removeOnScrollListener(it) }
         _binding = null
     }
 }

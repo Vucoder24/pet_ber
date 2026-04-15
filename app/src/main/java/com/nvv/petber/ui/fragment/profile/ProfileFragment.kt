@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -212,6 +213,7 @@ class ProfileFragment : Fragment() {
     private fun initView() {
         // init adapter
         historyPostAdapter = PostAdapter(
+            exoPlayer = exoPlayer,
             onLikeClick = { post ->
                 viewModel.toggleLike(post)
             },
@@ -255,9 +257,34 @@ class ProfileFragment : Fragment() {
                 false
             )
         }
+
         binding.rvPosts.apply {
             adapter = historyPostAdapter
             layoutManager = LinearLayoutManager(requireContext())
+            isNestedScrollingEnabled = false
+        }
+
+        binding.dataContainer.setOnScrollChangeListener { _, _, _, _, _ ->
+            checkVideoVisibility()
+        }
+
+    }
+    private fun checkVideoVisibility() {
+        val scrollRect = android.graphics.Rect()
+        binding.dataContainer.getGlobalVisibleRect(scrollRect)
+
+        for (i in 0 until binding.rvPosts.childCount) {
+            val child = binding.rvPosts.getChildAt(i)
+            val viewHolder = binding.rvPosts.getChildViewHolder(child)
+
+            if (viewHolder is PostAdapter.PostViewHolder) {
+                val childRect = android.graphics.Rect()
+                child.getGlobalVisibleRect(childRect)
+
+                if (!android.graphics.Rect.intersects(scrollRect, childRect)) {
+                    viewHolder.pausePlayer()
+                }
+            }
         }
     }
 
@@ -529,6 +556,11 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        if (::historyPostAdapter.isInitialized) {
+            historyPostAdapter.pauseAllPlayers()
+        }
+        binding.rvPosts.adapter = null
+        binding.dataContainer.setOnScrollChangeListener(null as NestedScrollView.OnScrollChangeListener?)
         _binding = null
     }
 }

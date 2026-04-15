@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityPostDetailBinding
@@ -19,6 +20,7 @@ import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.PostDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PostDetailActivity : AppCompatActivity() {
@@ -26,6 +28,9 @@ class PostDetailActivity : AppCompatActivity() {
     private val viewModel: PostDetailViewModel by viewModels()
     private lateinit var currentUserId: String
     private lateinit var adapter: PostAdapter
+
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +72,7 @@ class PostDetailActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = PostAdapter(
+            exoPlayer = exoPlayer,
             onLikeClick = { post ->
                 requireLogin {
                     viewModel.toggleLike(post)

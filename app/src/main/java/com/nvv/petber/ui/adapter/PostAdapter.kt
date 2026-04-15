@@ -26,15 +26,10 @@ import com.nvv.petber.data.model.PostMedia
 import com.nvv.petber.ui.activity.MediaViewerActivity
 import com.nvv.petber.ui.dialog.MediaFullscreenDialog
 import com.nvv.petber.utils.TimeUtils
-import com.nvv.petber.utils.ext.formatSocialCount
-import com.nvv.petber.utils.ext.getFragmentActivity
-import com.nvv.petber.utils.ext.gone
-import com.nvv.petber.utils.ext.loadAvatar
-import com.nvv.petber.utils.ext.loadImage
-import com.nvv.petber.utils.ext.setSafeOnClickListener
-import com.nvv.petber.utils.ext.visible
+import com.nvv.petber.utils.ext.*
 
 class PostAdapter(
+    private val exoPlayer: ExoPlayer, // Inject instance duy nhất từ Fragment/Activity
     private val onLikeClick: (Post) -> Unit,
     private val onCommentClick: (Post) -> Unit,
     private val onShareClick: (Post) -> Unit,
@@ -42,7 +37,6 @@ class PostAdapter(
     private val onMoreOption: (Post) -> Unit,
     private val onLoadMore: () -> Unit
 ) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback()) {
-    private val activePlayers = mutableListOf<ExoPlayer>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -50,14 +44,24 @@ class PostAdapter(
         return PostViewHolder(view)
     }
 
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        holder.bind(getItem(position))
+        if (position >= itemCount - 1) {
+            onLoadMore()
+        }
+    }
+
     override fun onViewRecycled(holder: PostViewHolder) {
         super.onViewRecycled(holder)
-        holder.releasePlayer()
-        Glide.with(holder.itemView).clear(holder.ivSingleImage)
-        Glide.with(holder.itemView).clear(holder.ivGrid1)
-        Glide.with(holder.itemView).clear(holder.ivGrid2)
-        Glide.with(holder.itemView).clear(holder.ivGrid3)
-        Glide.with(holder.itemView).clear(holder.ivGrid4)
+        // Giải phóng Player khỏi View cũ và xóa listener để tránh leak
+        holder.detachPlayer()
+
+        // Dọn dẹp Glide
+        val viewsToClear = listOf(
+            holder.ivSingleImage, holder.ivGrid1, holder.ivGrid2,
+            holder.ivGrid3, holder.ivGrid4
+        )
+        viewsToClear.forEach { Glide.with(holder.itemView.context).clear(it) }
     }
 
     override fun onViewDetachedFromWindow(holder: PostViewHolder) {
@@ -65,16 +69,8 @@ class PostAdapter(
         holder.pausePlayer()
     }
 
-
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        // Trigger load more when near end
-        if (position >= itemCount - 1) {
-            onLoadMore()
-        }
-    }
-
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // UI Components
         private val icPlay1: ImageView = itemView.findViewById(R.id.icPlay1)
         private val containerMedia: MaterialCardView = itemView.findViewById(R.id.containerMedia)
         private val icPlay2: ImageView = itemView.findViewById(R.id.icPlay2)
@@ -103,88 +99,92 @@ class PostAdapter(
         private val pbLoadingSingle: ProgressBar = itemView.findViewById(R.id.pbLoadingSingle)
         private val playerViewSingle: PlayerView = itemView.findViewById(R.id.playerViewSingle)
         private val icPlaySingle: ImageView = itemView.findViewById(R.id.icPlaySingle)
-        private var exoPlayer: ExoPlayer? = null
+
+        private var currentVideoUrl: String? = null
+
+        private val playerListener = object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                if (isPlaying) {
+                    icPlaySingle.gone()
+                    pbLoadingSingle.gone()
+                    ivSingleImage.gone()
+                } else {
+                    if (exoPlayer.playbackState == Player.STATE_READY) icPlaySingle.visible()
+                }
+            }
+
+            override fun onPlaybackStateChanged(state: Int) {
+                when (state) {
+                    Player.STATE_BUFFERING -> {
+                        pbLoadingSingle.visible(); icPlaySingle.gone()
+                    }
+
+                    Player.STATE_READY -> {
+                        pbLoadingSingle.gone()
+                        if (exoPlayer.playWhenReady) {
+                            ivSingleImage.gone()
+                        } else {
+                            icPlaySingle.visible()
+                        }
+                    }
+
+                    Player.STATE_ENDED, Player.STATE_IDLE -> {
+                        pbLoadingSingle.gone()
+                        icPlaySingle.visible()
+                        ivSingleImage.visible()
+                    }
+                }
+            }
+        }
 
         @SuppressLint("SetTextI18n")
         fun bind(post: Post) {
+            // Bind Basic Data
             tvUsername.text =
                 post.users?.fullName ?: itemView.context.getString(R.string.petber_user)
-
             tvLikeCount.text = post.likeCount.formatSocialCount()
-
-            if (post.hashtags.isNullOrEmpty()) {
-                hashtags.gone()
-            } else {
-                hashtags.text = post.hashtags
-                hashtags.visible()
-            }
+            tvCommentCount.text = post.commentCount.formatSocialCount()
+            tvShareCount.text = post.shareCount.formatSocialCount()
             tvCaption.text = post.caption?.ifEmpty { "" }
             tvCaption.visibility =
                 if (post.caption?.isNotEmpty() == true) View.VISIBLE else View.GONE
-            tvCommentCount.text = post.commentCount.formatSocialCount()
 
-            tvShareCount.text = post.shareCount.formatSocialCount()
-
-            post.createdAt?.let {
-                tvTimeAgo.text = TimeUtils.formatTimeAgo(itemView.context, it)
+            if (post.hashtags.isNullOrEmpty()) hashtags.gone() else {
+                hashtags.text = post.hashtags; hashtags.visible()
             }
-            // Like state
-            ibLike.setImageResource(
-                if (post.isLiked) R.drawable.ic_liked else R.drawable.ic_like
-            )
-
-            // Avatar
+            post.createdAt?.let { tvTimeAgo.text = TimeUtils.formatTimeAgo(itemView.context, it) }
+            ibLike.setImageResource(if (post.isLiked) R.drawable.ic_liked else R.drawable.ic_like)
             ivUserAvatar.loadAvatar(post.users?.avatarUrl)
 
-            releasePlayer() // Reset player old
+            // Media Reset & Logic
+            detachPlayer()
             val mediaList = post.postMedia ?: emptyList()
-            if (mediaList.isEmpty()) {
-                containerMedia.gone()
-            } else {
-                containerMedia.visible()
-            }
+            if (mediaList.isEmpty()) containerMedia.gone() else containerMedia.visible()
 
-            playerViewSingle.gone()
-            icPlaySingle.gone()
-            ivSingleImage.gone()
-            layoutMediaGrid.gone()
+            resetMediaVisibility()
 
             if (mediaList.isNotEmpty()) {
                 if (mediaList.size == 1) {
                     val media = mediaList[0]
                     if (media.mediaType.lowercase().contains("video")) {
+                        currentVideoUrl = media.mediaUrl
+                        ivSingleImage.visible()
                         playerViewSingle.visible()
                         icPlaySingle.visible()
-                        setupVideoPlayer(media.mediaUrl)
+                        ivSingleImage.loadImage(media.mediaUrl)
+                        setupVideoListeners()
                     } else {
                         ivSingleImage.visible()
                         ivSingleImage.loadImage(media.mediaUrl)
-                        ivSingleImage.setSafeOnClickListener {
-                            val fragmentActivity = itemView.context.getFragmentActivity()
-                                ?: return@setSafeOnClickListener
-                            val uniqueTag = "image_fullscreen_${System.currentTimeMillis()}"
-
-                            try {
-                                MediaFullscreenDialog.newImageInstance(media.mediaUrl)
-                                    .show(fragmentActivity.supportFragmentManager, uniqueTag)
-                            } catch (e: IllegalStateException) {
-                                e.printStackTrace()
-                            }
-                        }
+                        ivSingleImage.setSafeOnClickListener { openFullscreenImage(media.mediaUrl) }
                     }
-
                 } else {
                     layoutMediaGrid.visible()
                     setupMediaGrid(mediaList)
-
-                    ivGrid1.setOnClickListener { openMediaViewer(mediaList, 0) }
-                    ivGrid2.setOnClickListener { openMediaViewer(mediaList, 1) }
-                    ivGrid3.setOnClickListener { openMediaViewer(mediaList, 2) }
-                    ivGrid4.setOnClickListener { openMediaViewer(mediaList, 3) }
                 }
             }
 
-            // Listeners
+            // Click Listeners
             ibLike.setOnClickListener { onLikeClick(post) }
             ibComment.setOnClickListener { onCommentClick(post) }
             ibShare.setOnClickListener { onShareClick(post) }
@@ -193,99 +193,98 @@ class PostAdapter(
             ibMore.setOnClickListener { onMoreOption(post) }
         }
 
-        private fun setupVideoPlayer(url: String) {
-            exoPlayer = ExoPlayer.Builder(itemView.context).build().apply {
-                setMediaItem(MediaItem.fromUri(url))
-                repeatMode = ExoPlayer.REPEAT_MODE_ALL
-                prepare()
-                playWhenReady = false
-            }
-            playerViewSingle.player = exoPlayer
-            exoPlayer?.let { activePlayers.add(it) }
+        private fun resetMediaVisibility() {
+            playerViewSingle.gone()
+            icPlaySingle.gone()
+            ivSingleImage.gone()
+            layoutMediaGrid.gone()
+            pbLoadingSingle.gone()
+            playerViewSingle.player = null
+        }
 
-            // Update play/pause icon according to status
-            exoPlayer?.addListener(object : Player.Listener {
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    if (isPlaying) {
-                        icPlaySingle.gone()
-                        pbLoadingSingle.gone()
-                    } else {
-                        if (exoPlayer?.playbackState == Player.STATE_READY) {
-                            icPlaySingle.visible()
-                            pbLoadingSingle.gone()
-                        }
-                    }
-                }
-
-                override fun onPlaybackStateChanged(playbackState: Int) {
-                    when (playbackState) {
-                        Player.STATE_BUFFERING -> {
-                            // Loading video -> Show Loading, Hide Play
-                            pbLoadingSingle.visible()
-                            icPlaySingle.gone()
-                        }
-                        Player.STATE_READY -> {
-                            // Download completed -> Hide Loading, Show Play (if stopped)
-                            pbLoadingSingle.gone()
-                            if (exoPlayer?.isPlaying == false) {
-                                icPlaySingle.visible()
-                            }
-                        }
-                        Player.STATE_ENDED, Player.STATE_IDLE -> {
-                            pbLoadingSingle.gone()
-                            icPlaySingle.visible()
-                        }
-                    }
-                }
-            })
-
-            // Click the play icon → play the video in place
-            icPlaySingle.setSafeOnClickListener {
-                exoPlayer?.play()
-            }
-
-            // Click PlayerView → open fullscreen dialog, reuse player
+        private fun setupVideoListeners() {
+            icPlaySingle.setSafeOnClickListener { playThisVideo() }
             playerViewSingle.setSafeOnClickListener {
-                openVideoFullscreen()
+                if (playerViewSingle.player == exoPlayer && exoPlayer.isPlaying) {
+                    openVideoFullscreen()
+                } else {
+                    playThisVideo()
+                }
+            }
+        }
+
+        private fun playThisVideo() {
+            val url = currentVideoUrl ?: return
+
+            exoPlayer.stop()
+            exoPlayer.removeListener(playerListener)
+
+            // Gán player vào view hiện tại
+            playerViewSingle.visible()
+            playerViewSingle.player = exoPlayer
+            exoPlayer.addListener(playerListener)
+
+            val mediaItem = MediaItem.fromUri(url)
+            exoPlayer.setMediaItem(mediaItem)
+            exoPlayer.prepare()
+            exoPlayer.play()
+        }
+
+        fun detachPlayer() {
+            if (playerViewSingle.player == exoPlayer) {
+                exoPlayer.removeListener(playerListener)
+                playerViewSingle.player = null
+            }
+
+            playerViewSingle.gone()
+            if (currentVideoUrl != null) {
+                ivSingleImage.visible()
+                icPlaySingle.visible()
+            }
+
+            currentVideoUrl = null
+        }
+
+        fun pausePlayer() {
+            if (playerViewSingle.player == exoPlayer) {
+                exoPlayer.pause()
             }
         }
 
         private fun openVideoFullscreen() {
             val fragment = itemView.context.getFragmentActivity() ?: return
+            playerViewSingle.player = null // Tạm gỡ để Dialog sử dụng
 
-            // Detach the player from the small playerView first
-            val player = exoPlayer ?: return
-            playerViewSingle.player = null
-
-            val dialog = MediaFullscreenDialog.newVideoInstance(player)
+            val dialog = MediaFullscreenDialog.newVideoInstance(exoPlayer)
             dialog.onDismissCallback = {
-                // Returns the player to the small playerView
                 playerViewSingle.player = exoPlayer
             }
-            val uniqueTag = "video_fullscreen_${System.currentTimeMillis()}"
-            try {
-                dialog.show(fragment.supportFragmentManager, uniqueTag)
-            } catch (e: IllegalStateException) {
-                e.printStackTrace()
-                playerViewSingle.player = exoPlayer
-            }
+            dialog.show(
+                fragment.supportFragmentManager,
+                "video_fullscreen_${System.currentTimeMillis()}"
+            )
+        }
+
+        private fun openFullscreenImage(url: String) {
+            val fragment = itemView.context.getFragmentActivity() ?: return
+            MediaFullscreenDialog.newImageInstance(url)
+                .show(fragment.supportFragmentManager, "image_full_${System.currentTimeMillis()}")
         }
 
         @SuppressLint("SetTextI18n")
         private fun setupMediaGrid(mediaList: List<PostMedia>) {
             val views = listOf(ivGrid1, ivGrid2, ivGrid3, ivGrid4)
             val playIcons = listOf(icPlay1, icPlay2, icPlay3, icPlay4)
-            playIcons.forEach { it.gone() }
             views.forEach { it.gone() }
+            playIcons.forEach { it.gone() }
             overlayMore.gone()
 
             val displayCount = minOf(mediaList.size, 4)
             for (i in 0 until displayCount) {
                 views[i].visible()
                 views[i].loadImage(mediaList[i].mediaUrl)
-                if (mediaList[i].mediaType.lowercase().contains("video")) {
-                    playIcons[i].visible()
-                }
+                if (mediaList[i].mediaType.lowercase().contains("video")) playIcons[i].visible()
+                views[i].setOnClickListener { openMediaViewer(mediaList, i) }
             }
 
             if (mediaList.size > 4) {
@@ -301,27 +300,10 @@ class PostAdapter(
             }
             itemView.context.startActivity(intent)
         }
-
-        fun releasePlayer() {
-            exoPlayer?.let {
-                activePlayers.remove(it)
-                it.release()
-            }
-            exoPlayer = null
-            playerViewSingle.player = null
-        }
-        fun pausePlayer() {
-            exoPlayer?.playWhenReady = false
-            exoPlayer?.pause()
-        }
     }
 
     fun pauseAllPlayers() {
-        activePlayers.forEach { it.pause() }
-    }
-    fun releaseAllPlayers() {
-        activePlayers.forEach { it.release() }
-        activePlayers.clear()
+        exoPlayer.pause()
     }
 
     private class PostDiffCallback : DiffUtil.ItemCallback<Post>() {

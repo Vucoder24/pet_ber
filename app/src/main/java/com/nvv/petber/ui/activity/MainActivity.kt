@@ -9,9 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityMainBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
@@ -80,19 +78,21 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigation() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-
         val navController = navHostFragment.navController
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            val navController = findNavController(R.id.nav_host_fragment)
+            if (item.itemId == navController.currentDestination?.id) return@setOnItemSelectedListener false
 
-            navController.navigate(
-                item.itemId,
-                null,
-                NavOptions.Builder()
-                    .setPopUpTo(navController.graph.startDestinationId, false)
-                    .build()
-            )
+            val builder = NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setRestoreState(true)
+                .setPopUpTo(
+                    navController.graph.startDestinationId,
+                    inclusive = false,
+                    saveState = true
+                )
+
+            navController.navigate(item.itemId, null, builder.build())
             true
         }
     }
