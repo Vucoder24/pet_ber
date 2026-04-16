@@ -154,6 +154,18 @@ class PetProfileActivity : AppCompatActivity() {
         setupIntentData()
         setupListeners()
         observeViewModel()
+        setupFragmentResultListener()
+    }
+
+    private fun setupFragmentResultListener() {
+        supportFragmentManager.setFragmentResultListener("refresh_key", this) { _, bundle ->
+            val isUpdated = bundle.getBoolean("bundle_is_updated", false)
+            if (isUpdated) {
+                viewModel.petState.value?.id?.let { petId ->
+                    viewModel.fetchPetById(petId)
+                }
+            }
+        }
     }
 
     private fun setupRecyclerView() {

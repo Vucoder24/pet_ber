@@ -74,7 +74,7 @@
             android:name=".ui.activity.CreateStoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.CreatePostActivity"
+            android:name=".ui.activity.CreateEditPostActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.SplashActivity"

@@ -6,6 +6,7 @@ import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -260,21 +261,73 @@ class PostAdapter(
             binding.apply {
                 val views = listOf(ivGrid1, ivGrid2, ivGrid3, ivGrid4)
                 val playIcons = listOf(icPlay1, icPlay2, icPlay3, icPlay4)
+
                 views.forEach { it.gone() }
                 playIcons.forEach { it.gone() }
                 overlayMore.gone()
 
-                val displayCount = minOf(mediaList.size, 4)
-                for (i in 0 until displayCount) {
-                    views[i].visible()
-                    views[i].loadImage(mediaList[i].mediaUrl)
-                    if (mediaList[i].mediaType.lowercase().contains("video")) playIcons[i].visible()
-                    views[i].setOnClickListener { openMediaViewer(mediaList, i) }
+                val size = mediaList.size
+
+                // 🔥 CASE ĐẶC BIỆT: 3 ITEM
+                if (size == 3) {
+                    // show 3 view
+                    ivGrid1.visible()
+                    ivGrid2.visible()
+                    ivGrid3.visible()
+                    ivGrid4.gone()
+
+                    // 👉 set constraint động
+                    val params1 = ivGrid1.layoutParams as ConstraintLayout.LayoutParams
+                    val params2 = ivGrid2.layoutParams as ConstraintLayout.LayoutParams
+                    val params3 = ivGrid3.layoutParams as ConstraintLayout.LayoutParams
+
+                    // ivGrid1 chiếm full bên trái
+                    params1.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    params1.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                    params1.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    params1.endToStart = ivGrid2.id
+
+                    // ivGrid2 (trên phải)
+                    params2.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    params2.startToEnd = ivGrid1.id
+                    params2.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    params2.bottomToTop = ivGrid3.id
+
+                    // ivGrid3 (dưới phải)
+                    params3.topToBottom = ivGrid2.id
+                    params3.startToEnd = ivGrid1.id
+                    params3.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    params3.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+
+                    ivGrid1.layoutParams = params1
+                    ivGrid2.layoutParams = params2
+                    ivGrid3.layoutParams = params3
+
+                } else {
+                    // default (1,2,4+)
+                    val displayCount = minOf(size, 4)
+                    for (i in 0 until displayCount) {
+                        views[i].visible()
+                    }
                 }
 
-                if (mediaList.size > 4) {
+                // bind data chung
+                val displayCount = minOf(size, 4)
+                for (i in 0 until displayCount) {
+                    views[i].loadImage(mediaList[i].mediaUrl)
+
+                    if (mediaList[i].mediaType.lowercase().contains("video")) {
+                        playIcons[i].visible()
+                    }
+
+                    views[i].setOnClickListener {
+                        openMediaViewer(mediaList, i)
+                    }
+                }
+
+                if (size > 4) {
                     overlayMore.visible()
-                    tvMoreCount.text = "+${mediaList.size - 4}"
+                    tvMoreCount.text = "+${size - 4}"
                 }
             }
         }

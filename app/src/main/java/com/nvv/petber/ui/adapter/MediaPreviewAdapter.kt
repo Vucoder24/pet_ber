@@ -14,8 +14,8 @@ class MediaPreviewAdapter(
     private val onClick: (Int) -> Unit
 ) : RecyclerView.Adapter<MediaPreviewAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding: ItemMediaPreviewBinding)
-        : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemMediaPreviewBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemMediaPreviewBinding.inflate(
@@ -36,7 +36,9 @@ class MediaPreviewAdapter(
 
         if (item.isVideo) {
             holder.binding.txtDuration.visibility = View.VISIBLE
-            holder.binding.txtDuration.text = formatDuration(item.duration)
+            item.duration?.let {
+                holder.binding.txtDuration.text = formatDuration(it)
+            }
         } else {
             holder.binding.txtDuration.visibility = View.GONE
         }

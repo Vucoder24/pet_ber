@@ -68,6 +68,16 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         observeUiState()
         observeEventBus()
+        setupFragmentResultListeners()
+    }
+
+    private fun setupFragmentResultListeners() {
+        childFragmentManager.setFragmentResultListener("refresh_key", viewLifecycleOwner) { _, bundle ->
+            val isUpdated = bundle.getBoolean("bundle_is_updated", false)
+            if (isUpdated) {
+                viewModel.refreshData()
+            }
+        }
     }
 
     private fun observeEventBus() {

@@ -52,8 +52,18 @@ class PostDetailActivity : AppCompatActivity() {
 
         setupRecyclerView()
         observeData()
+        setupFragmentResultListener(postId)
 
         viewModel.loadPostById(postId)
+    }
+
+    private fun setupFragmentResultListener(postId: String) {
+        supportFragmentManager.setFragmentResultListener("refresh_key", this) { _, bundle ->
+            val isUpdated = bundle.getBoolean("bundle_is_updated", false)
+            if (isUpdated) {
+                viewModel.loadPostById(postId)
+            }
+        }
     }
 
     private fun requireLogin(action: () -> Unit) {

@@ -5,6 +5,7 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
+import com.nvv.petber.data.model.PostMedia
 import com.nvv.petber.data.model.Story
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -15,8 +16,10 @@ import io.ktor.http.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.serialization.json.add
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
 import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
@@ -55,18 +58,14 @@ class CreateContentRepository @Inject constructor(
             }
             .decodeSingle<Post>()
 
-        // Insert hashtags table
-        hashtags?.forEach { tag ->
-
+        hashtags?.split(" ")?.filter { it.startsWith("#") }?.forEach { tag ->
             val hJson = buildJsonObject {
                 put("name", tag.lowercase())
             }
-
-            db["hashtags"]
-                .upsert(hJson) {
-                    onConflict = "name"
-                    ignoreDuplicates = true
-                }
+            db["hashtags"].upsert(hJson) {
+                onConflict = "name"
+                ignoreDuplicates = true
+            }
         }
 
         if (mediaUris.isEmpty()) {
@@ -125,7 +124,7 @@ class CreateContentRepository @Inject constructor(
         return supabaseClient.storage[bucket].publicUrl(fileName)
     }
 
-    fun createStory(mediaUri: Uri) = flow<Int> {
+    fun createStory(mediaUri: Uri) = flow {
         val userId = supabaseClient.auth.currentUserOrNull()?.id
             ?: throw IllegalStateException("User is not logged in")
 
@@ -141,7 +140,7 @@ class CreateContentRepository @Inject constructor(
             emit(50)
             emit(60)
             emit(70)
-             mediaUrl = uploadMedia(mediaUri, userId, "stories")
+            mediaUrl = uploadMedia(mediaUri, userId, "stories")
 
             emit(80)
 
@@ -184,4 +183,91 @@ class CreateContentRepository @Inject constructor(
             }
             .decodeList<Pet>()
     }
+
+    fun updatePost(
+        postId: String,
+        caption: String,
+        hashtags: String?,
+        newMediaUris: List<Uri>,
+        deletedMediaIds: List<String>,
+        petIds: List<String>
+    ) = flow {
+        val userId = supabaseClient.auth.currentUserOrNull()?.id
+            ?: throw IllegalStateException("User is not logged in")
+
+        val updateJson = buildJsonObject {
+            put("caption", caption)
+            put("hashtags", hashtags)
+            putJsonArray("pet_id") {
+                petIds.forEach { id ->
+                    add(id)
+                }
+            }
+        }
+
+        db["posts"].update(updateJson) {
+            filter { eq("id", postId) }
+        }
+
+        // 2. Xử lý Hashtags (Tương tự Create)
+        hashtags?.split(" ")?.filter { it.startsWith("#") }?.forEach { tag ->
+            val hJson = buildJsonObject {
+                put("name", tag.lowercase())
+            }
+            db["hashtags"].upsert(hJson) {
+                onConflict = "name"
+                ignoreDuplicates = true
+            }
+        }
+
+        emit(30) // Tiến trình tượng trưng
+
+        // 3. Xóa các Media bị loại bỏ
+        if (deletedMediaIds.isNotEmpty()) {
+            val mediaToDelete = db["post_media"].select {
+                filter { isIn("id", deletedMediaIds) }
+            }.decodeList<PostMedia>()
+
+            db["post_media"].delete {
+                filter { isIn("id", deletedMediaIds) }
+            }
+
+            val fileNames = mediaToDelete.map {
+                it.mediaUrl.substringAfterLast("/").substringBefore("?")
+            }.map { "$userId/$it" }
+
+            if (fileNames.isNotEmpty()) {
+                supabaseClient.storage["posts"].delete(fileNames)
+            }
+        }
+
+        emit(50)
+
+        // 4. Upload Media mới (nếu có)
+        if (newMediaUris.isEmpty()) {
+            emit(100)
+            return@flow
+        }
+
+        val total = newMediaUris.size
+        var uploaded = 0
+
+        newMediaUris.forEach { uri ->
+            val mediaUrl = uploadMedia(uri, userId, bucket = "posts")
+            val mimeType = context.contentResolver.getType(uri) ?: "image/jpeg"
+            val mediaType = if (mimeType.startsWith("video")) "video" else "image"
+
+            val mediaJson = buildJsonObject {
+                put("post_id", postId)
+                put("media_url", mediaUrl)
+                put("media_type", mediaType)
+            }
+
+            db["post_media"].insert(mediaJson)
+            uploaded++
+
+            val progress = 50 + ((uploaded * 50) / total)
+            emit(progress)
+        }
+    }.flowOn(Dispatchers.IO)
 }

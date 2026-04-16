@@ -69,12 +69,21 @@ class UserProfileActivity : AppCompatActivity() {
             v.setPadding(0, systemBars.top, 0, 0)
             insets
         }
-
+        setupFragmentResultListener()
         viewModel.loadUserProfile(targetUserId)
 
         initView()
         setupListener()
         observerData()
+    }
+
+    private fun setupFragmentResultListener() {
+        supportFragmentManager.setFragmentResultListener("refresh_key", this) { _, bundle ->
+            val isUpdated = bundle.getBoolean("bundle_is_updated", false)
+            if (isUpdated) {
+                viewModel.refreshProfile()
+            }
+        }
     }
 
     private fun initView() {

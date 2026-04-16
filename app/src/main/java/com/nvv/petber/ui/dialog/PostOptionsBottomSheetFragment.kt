@@ -3,10 +3,13 @@ package com.nvv.petber.ui.dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.databinding.LayoutPostOptionsBinding
+import com.nvv.petber.ui.activity.CreateEditPostActivity
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.toast
@@ -34,6 +38,20 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
     private val viewModel: PostOptionsViewModel by viewModels()
     private var currentUserId: String? = null
     private var post: Post? = null
+
+    private val editPostLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
+            val isUpdated = result.data?.getBooleanExtra("is_updated", false) ?: false
+            if (isUpdated) {
+                parentFragmentManager.setFragmentResult("refresh_key", Bundle().apply {
+                    putBoolean("bundle_is_updated", true)
+                })
+                dismiss()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,7 +118,13 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
                 viewModel.toggleFollowUser(p)
             }
 
-            binding.btnEditPost.setOnClickListener { }
+            binding.btnEditPost.setOnClickListener {
+                val intent = Intent(requireContext(), CreateEditPostActivity::class.java).apply {
+                    putExtra(CreateEditPostActivity.IS_EDIT_MODE, true)
+                    putExtra(CreateEditPostActivity.EXTRA_POST_JSON, Json.encodeToString(p))
+                }
+                editPostLauncher.launch(intent)
+            }
 
             binding.btnEditPrivacy.setOnClickListener { }
 
@@ -203,6 +227,7 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
             requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(getString(R.string.post_link), text)
         clipboard.setPrimaryClip(clip)
+            requireContext().toast(getString(R.string.copied_to_clipboard))
     }
 
     companion object {

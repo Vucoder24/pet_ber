@@ -169,6 +169,16 @@ class ProfileFragment : Fragment() {
         setupListener()
         observerData()
         observerUiState()
+        setupFragmentResultListeners()
+    }
+
+    private fun setupFragmentResultListeners() {
+        childFragmentManager.setFragmentResultListener("refresh_key", viewLifecycleOwner) { _, bundle ->
+            val isUpdated = bundle.getBoolean("bundle_is_updated", false)
+            if (isUpdated) {
+                viewModel.refreshProfile(true)
+            }
+        }
     }
 
     private fun observerUiState() {
