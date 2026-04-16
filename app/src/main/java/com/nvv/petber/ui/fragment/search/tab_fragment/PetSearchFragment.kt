@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.databinding.FragmentPetSearchBinding
+import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.adapter.SearchPetResultAdapter
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.SearchViewModel
@@ -37,7 +38,7 @@ class PetSearchFragment : Fragment() {
 
         adapter = SearchPetResultAdapter(
             onClick = {
-
+                PetProfileActivity.start(requireContext(), it.pet)
             },
              onFollowClick = {
                  sharedViewModel.toggleFollowPet(

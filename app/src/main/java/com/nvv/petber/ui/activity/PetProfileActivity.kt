@@ -31,7 +31,10 @@ import kotlinx.serialization.json.Json
 import androidx.core.net.toUri
 import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.load.DecodeFormat
+import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
+import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
 import com.nvv.petber.utils.PermissionUtils
+import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.showAvatarOptionDialog
 import com.nvv.petber.utils.ext.showCoverOptionDialog
 import com.nvv.petber.viewmodel.UpdatePetState
@@ -49,6 +52,7 @@ class PetProfileActivity : AppCompatActivity() {
     private var pendingMediaAction: String = ""
     private var cropTarget: String? = null
     private var currentPet: Pet? = null
+    private lateinit var currentUserId: String
     private val editPetLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -145,7 +149,7 @@ class PetProfileActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        currentUserId = SharePrefUtils.getCurrentUserId(this)
         setupRecyclerView()
         setupIntentData()
         setupListeners()
@@ -156,17 +160,28 @@ class PetProfileActivity : AppCompatActivity() {
         postAdapter = PostAdapter(
             exoPlayer = exoPlayer,
             onLikeClick = { post ->
-                // Xử lý like/unlike
+                viewModel.toggleLike(post)
             },
             onCommentClick = { post ->
-                // Xử lý mở comment
+                val bottomSheet = CommentBottomSheetFragment.newInstance(post.id, post.userId)
+                bottomSheet.show(supportFragmentManager, "CommentBottomSheet")
             },
             onShareClick = { post ->
+                val link = "https://project-ilyyx.vercel.app/post/${post.id}"
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, link)
+                }
+                startActivity(Intent.createChooser(intent, getString(R.string.share_post)))
+                viewModel.incrementShareCount(post.id)
             },
             onProfileClick = {
                 UserProfileActivity.start(this, it.userId)
             },
-            onMoreOption = {},
+            onMoreOption = {
+                val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
+                bottomSheet.show(supportFragmentManager, "PostOptionsBottomSheet")
+            },
             onLoadMore = {}
         )
         binding.rvPetPosts.apply {
@@ -182,7 +197,7 @@ class PetProfileActivity : AppCompatActivity() {
         if (petJson != null) {
             try {
                 val pet = Json.decodeFromString<Pet>(petJson)
-                viewModel.setPetData(pet)
+                viewModel.setPetData(pet, currentUserId == pet.ownerId)
             } catch (_: Exception) {
                 toast(getString(R.string.fail_to_load_pet_data))
                 finish()
@@ -196,7 +211,9 @@ class PetProfileActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener { finish() }
-
+        binding.btnFollow.setOnClickListener {
+            viewModel.toggleFollow(this)
+        }
         binding.root.setOnRefreshListener {
             val currentPet = viewModel.petState.value
             if (currentPet != null) {
@@ -207,11 +224,10 @@ class PetProfileActivity : AppCompatActivity() {
         }
         binding.dataContainer.setOnScrollChangeListener(
             NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
-                if (scrollY > oldScrollY) { // Đang cuộn xuống
+                if (scrollY > oldScrollY) {
                     val childHeight = v.getChildAt(0).measuredHeight
                     val scrollHeight = v.measuredHeight
 
-                    // Kích hoạt khi cuộn đến gần cuối (cách 100px để mượt)
                     if (scrollY >= childHeight - scrollHeight - 100) {
                         viewModel.petState.value?.id?.let { petId ->
                             viewModel.loadPetPosts(petId)
@@ -222,73 +238,81 @@ class PetProfileActivity : AppCompatActivity() {
         )
 
         binding.avatar.setOnClickListener {
-            val currentPet = viewModel.petState.value ?: return@setOnClickListener
+            if(viewModel.isOwner.value){
+                val currentPet = viewModel.petState.value ?: return@setOnClickListener
 
-            showAvatarOptionDialog(
-                onViewAvatar = {
-                    if (!currentPet.avatarUrl.isNullOrEmpty()) {
-                        val mediaItem = com.nvv.petber.ui.adapter.MediaItem(
-                            uri = currentPet.avatarUrl.toUri(),
-                            isVideo = false,
-                            duration = 0L
-                        )
-                        startActivity(
-                            Intent(
-                                this@PetProfileActivity,
-                                MediaPreviewActivity::class.java
-                            ).apply {
-                                putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
-                            })
-                    } else {
-                        toast(getString(R.string.no_avatar_found))
+                showAvatarOptionDialog(
+                    onViewAvatar = {
+                        if (!currentPet.avatarUrl.isNullOrEmpty()) {
+                            val mediaItem = com.nvv.petber.ui.adapter.MediaItem(
+                                uri = currentPet.avatarUrl.toUri(),
+                                isVideo = false,
+                                duration = 0L
+                            )
+                            startActivity(
+                                Intent(
+                                    this@PetProfileActivity,
+                                    MediaPreviewActivity::class.java
+                                ).apply {
+                                    putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
+                                })
+                        } else {
+                            toast(getString(R.string.no_avatar_found))
+                        }
+                    },
+                    onChooseAvatar = {
+                        if (PermissionUtils.hasMediaPermissions(this@PetProfileActivity)) {
+                            openMediaPickerForAvatar()
+                        } else {
+                            pendingMediaAction = "avatar"
+                            val denied =
+                                PermissionUtils.getDeniedPermissions(this@PetProfileActivity)
+                            permissionLauncher.launch(denied)
+                        }
                     }
-                },
-                onChooseAvatar = {
-                    if (PermissionUtils.hasMediaPermissions(this@PetProfileActivity)) {
-                        openMediaPickerForAvatar()
-                    } else {
-                        pendingMediaAction = "avatar"
-                        val denied =
-                            PermissionUtils.getDeniedPermissions(this@PetProfileActivity)
-                        permissionLauncher.launch(denied)
-                    }
-                }
-            )
+                )
+            } else{
+                viewMediaOnly(currentPet?.avatarUrl)
+            }
         }
 
         binding.imgCover.setOnClickListener {
-            val currentPet = viewModel.petState.value ?: return@setOnClickListener
+            if (viewModel.isOwner.value){
+                val currentPet = viewModel.petState.value ?: return@setOnClickListener
 
-            showCoverOptionDialog(
-                onViewCover = {
-                    if (!currentPet.coverUrl.isNullOrEmpty()) {
-                        val mediaItem = com.nvv.petber.ui.adapter.MediaItem(
-                            uri = currentPet.coverUrl.toUri(),
-                            isVideo = false,
-                            duration = 0L
-                        )
-                        startActivity(
-                            Intent(
-                                this@PetProfileActivity,
-                                MediaPreviewActivity::class.java
-                            ).apply {
-                                putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
-                            })
-                    } else {
-                        toast(getString(R.string.no_cover_found))
+                showCoverOptionDialog(
+                    onViewCover = {
+                        if (!currentPet.coverUrl.isNullOrEmpty()) {
+                            val mediaItem = com.nvv.petber.ui.adapter.MediaItem(
+                                uri = currentPet.coverUrl.toUri(),
+                                isVideo = false,
+                                duration = 0L
+                            )
+                            startActivity(
+                                Intent(
+                                    this@PetProfileActivity,
+                                    MediaPreviewActivity::class.java
+                                ).apply {
+                                    putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
+                                })
+                        } else {
+                            toast(getString(R.string.no_cover_found))
+                        }
+                    },
+                    onChooseCover = {
+                        if (PermissionUtils.hasMediaPermissions(this@PetProfileActivity)) {
+                            openMediaPickerForCover()
+                        } else {
+                            pendingMediaAction = "cover"
+                            val denied =
+                                PermissionUtils.getDeniedPermissions(this@PetProfileActivity)
+                            permissionLauncher.launch(denied)
+                        }
                     }
-                },
-                onChooseCover = {
-                    if (PermissionUtils.hasMediaPermissions(this@PetProfileActivity)) {
-                        openMediaPickerForCover()
-                    } else {
-                        pendingMediaAction = "cover"
-                        val denied =
-                            PermissionUtils.getDeniedPermissions(this@PetProfileActivity)
-                        permissionLauncher.launch(denied)
-                    }
-                }
-            )
+                )
+            } else{
+                viewMediaOnly(currentPet?.coverUrl)
+            }
         }
         binding.btnEditPet.setOnClickListener {
             val pet = currentPet ?: return@setOnClickListener
@@ -300,7 +324,43 @@ class PetProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun viewMediaOnly(url: String?) {
+        if (!url.isNullOrEmpty()) {
+            val mediaItem = com.nvv.petber.ui.adapter.MediaItem(
+                uri = url.toUri(),
+                isVideo = false,
+                duration = 0L
+            )
+            startActivity(
+                Intent(this@PetProfileActivity, MediaPreviewActivity::class.java).apply {
+                    putExtra(MediaPreviewActivity.EXTRA_MEDIA, mediaItem)
+                }
+            )
+        } else {
+            toast(getString(R.string.img_not_updated))
+        }
+    }
+
     private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.isOwner.collectLatest { isOwner ->
+                binding.btnEditPet.visibility = if (isOwner) View.VISIBLE else View.GONE
+                binding.btnFollow.visibility = if (!isOwner) View.VISIBLE else View.GONE
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.isFollowing.collectLatest { isFollowing ->
+                if (isFollowing) {
+                    binding.btnFollow.text = getString(R.string.unfollow)
+                    binding.btnFollow.setBackgroundColor(getColor(R.color.gray_light))
+                    binding.btnFollow.setTextColor(getColor(R.color.black))
+                } else {
+                    binding.btnFollow.text = getString(R.string.follow)
+                    binding.btnFollow.setBackgroundColor(getColor(R.color.bg_btn))
+                    binding.btnFollow.setTextColor(getColor(R.color.white))
+                }
+            }
+        }
         lifecycleScope.launch {
             viewModel.petState.collectLatest { pet ->
                 pet?.let {

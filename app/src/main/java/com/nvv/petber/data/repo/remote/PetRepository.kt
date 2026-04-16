@@ -3,6 +3,7 @@ package com.nvv.petber.data.repo.remote
 import android.content.Context
 import android.net.Uri
 import com.nvv.petber.data.model.Pet
+import com.nvv.petber.data.model.PetFollowRecord
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.storage.storage
 import io.github.jan.supabase.postgrest.from
@@ -30,7 +31,7 @@ class PetRepository @Inject constructor(
             }
 
             val coverUrl = coverUri?.let {
-                uploadImage( it, "covers")
+                uploadImage(it, "covers")
             }
 
             val data = buildJsonObject {
@@ -128,6 +129,42 @@ class PetRepository @Inject constructor(
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun checkIsFollowingPet(userId: String, petId: String): Boolean {
+        return try {
+            val result = supabase.from("pet_follows").select {
+                filter {
+                    eq("user_id", userId)
+                    eq("pet_id", petId)
+                }
+            }.decodeList<PetFollowRecord>()
+            result.isNotEmpty()
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    suspend fun toggleFollowPet(
+        userId: String,
+        petId: String,
+        isCurrentlyFollowing: Boolean
+    ): Boolean {
+        return try {
+            if (isCurrentlyFollowing) {
+                supabase.from("pet_follows").delete {
+                    filter {
+                        eq("user_id", userId)
+                        eq("pet_id", petId)
+                    }
+                }
+            } else {
+                supabase.from("pet_follows").insert(mapOf("user_id" to userId, "pet_id" to petId))
+            }
+            true
+        } catch (_: Exception) {
+            false
         }
     }
 }

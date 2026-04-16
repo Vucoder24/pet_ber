@@ -108,10 +108,24 @@
                             android:orientation="horizontal">
 
                             <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnFollow"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/bg_btn"
+                                android:fontFamily="@font/baloo2"
+                                android:text="@string/follow"
+                                android:layout_marginHorizontal="24dp"
+                                app:iconTint="@color/white"
+                                app:iconPadding="0dp"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:ignore="ButtonStyle,TouchTargetSizeCheck,TextContrastCheck,VisualLintButtonSize" />
+
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnEditPet"
                                 android:layout_width="0dp"
                                 android:layout_height="48dp"
-                                android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/gray_light"
                                 android:fontFamily="@font/baloo2"
@@ -158,13 +172,12 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/baloo2"
-                    android:text="Thông tin cơ bản"
+                    android:text="@string/basic_info"
                     android:textColor="@color/title_color"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/profileCard"
-                    tools:ignore="HardcodedText" />
+                    app:layout_constraintTop_toBottomOf="@id/profileCard" />
 
                 <LinearLayout
                     android:id="@+id/layoutBasicInfo"
@@ -181,7 +194,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Giới tính: Đực" />
+                        tools:text="Gender: Male" />
 
                     <TextView
                         android:id="@+id/tvWeight"
@@ -190,7 +203,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Cân nặng: 12.5 kg" />
+                        tools:text="Weight: 12.5 kg" />
 
                     <TextView
                         android:id="@+id/tvBirthday"
@@ -199,7 +212,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Sinh nhật: 12/05/2023" />
+                        tools:text="Birthday: 12/05/2023" />
 
                     <TextView
                         android:id="@+id/tvNeutered"
@@ -208,7 +221,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Triệt sản: Đã triệt sản" />
+                        tools:text="Neutered: Neutered" />
                 </LinearLayout>
 
                 <View
@@ -229,13 +242,12 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/baloo2"
-                    android:text="Tình trạng sức khỏe"
+                    android:text="@string/health_conditions"
                     android:textColor="@color/title_color"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line1"
-                    tools:ignore="HardcodedText" />
+                    app:layout_constraintTop_toBottomOf="@id/line1" />
 
                 <LinearLayout
                     android:id="@+id/itemHealthInfo"
@@ -254,7 +266,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Thể trạng: Bình thường" />
+                        tools:text="Physical condition: Normal" />
 
                     <TextView
                         android:id="@+id/tvClinicalStatus"
@@ -263,7 +275,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Lâm sàng: Khỏe mạnh" />
+                        tools:text="Clinical: Healthy" />
 
                     <TextView
                         android:id="@+id/tvMentalState"
@@ -272,7 +284,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Tinh thần: Năng động" />
+                        tools:text="Spirit: Dynamic" />
 
                     <TextView
                         android:id="@+id/tvMedicalHistory"
@@ -281,7 +293,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Bệnh sử: Không có" />
+                        tools:text="Medical History: None" />
 
                     <TextView
                         android:id="@+id/tvPreventive"
@@ -290,7 +302,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/baloo2"
                         android:textSize="16sp"
-                        tools:text="Phòng bệnh: Đã tiêm dại" />
+                        tools:text="Disease prevention: Rabies vaccinated" />
                 </LinearLayout>
 
                 <TextView

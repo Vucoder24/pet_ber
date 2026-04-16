@@ -225,6 +225,9 @@
     <string name="confirm_logout">Are you sure you want to log out?</string>
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
+    <string name="img_not_updated">Photo not updated</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="health_conditions">Health Conditions</string>
 
 
     <string-array name="media_types">

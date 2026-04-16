@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.repo.remote.UserSearchResult
 import com.nvv.petber.databinding.ItemUserSearchResultBinding
+import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadAvatar
 
 class SearchUserResultAdapter(
@@ -33,6 +34,8 @@ class SearchUserResultAdapter(
         holder.binding.apply {
             tvName.text =
                 item.fullName ?: holder.itemView.context.getString(R.string.petber_user)
+
+            if(item.bio.isNullOrEmpty()) tvSubInfo.gone()
             tvSubInfo.text = item.bio
 
             ivAvatar.loadAvatar(item.avatarUrl)

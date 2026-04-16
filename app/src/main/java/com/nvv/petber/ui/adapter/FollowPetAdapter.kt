@@ -13,7 +13,7 @@ import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.visible
 
 class FollowPetAdapter(
-    private val onItemClick: (String) -> Unit,
+    private val onItemClick: (Pet) -> Unit,
     private val onUnfollowClick: (String) -> Unit,
 ) : ListAdapter<Pet, FollowPetAdapter.PetViewHolder>(PetDiffCallback()) {
 
@@ -45,7 +45,7 @@ class FollowPetAdapter(
             )
 
             binding.btnFollow.setOnClickListener { onUnfollowClick(pet.id) }
-            binding.root.setOnClickListener { onItemClick(pet.id) }
+            binding.root.setOnClickListener { onItemClick(pet) }
         }
     }
 

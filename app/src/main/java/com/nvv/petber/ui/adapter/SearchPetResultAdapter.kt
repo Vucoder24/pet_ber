@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.PetSearchResult
 import com.nvv.petber.databinding.ItemPetSearchResultBinding
+import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadImage
 
 class SearchPetResultAdapter(
@@ -32,6 +33,7 @@ class SearchPetResultAdapter(
         val item = result.pet
         holder.binding.apply {
             tvPetName.text = item.name
+            if(item.breed.isNullOrEmpty()) tvPetBreed.gone()
             tvPetBreed.text = item.breed
             item.avatarUrl?.let {
                 ivPetAvatar.loadImage(it)

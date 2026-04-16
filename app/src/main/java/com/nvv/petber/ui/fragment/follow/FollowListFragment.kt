@@ -11,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nvv.petber.databinding.FragmentFollowListBinding
+import com.nvv.petber.ui.activity.PetProfileActivity
+import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.FollowPetAdapter
 import com.nvv.petber.ui.adapter.FollowUserAdapter
 import com.nvv.petber.utils.SharePrefUtils
@@ -58,7 +60,9 @@ class FollowListFragment : Fragment() {
     private fun setupRecyclerView() {
         if (listType == 0) {
             petAdapter = FollowPetAdapter(
-                onItemClick = { petId -> /* sang profile pet */ },
+                onItemClick = {
+                    PetProfileActivity.start(requireContext(), it)
+                },
                 onUnfollowClick = { petId ->
                     viewModel.unfollowPet(petId)
                 }
@@ -71,7 +75,7 @@ class FollowListFragment : Fragment() {
                     viewModel.toggleFollow(uiModel.user.id, uiModel.isFollowing, listType)
                 },
                 onItemClick = { userId ->
-                    // Chuyển sang profile user khác
+                    UserProfileActivity.start(requireContext(), userId)
                 }
             )
             binding.rvList.adapter = adapter
