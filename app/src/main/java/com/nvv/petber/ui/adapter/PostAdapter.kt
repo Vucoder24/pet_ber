@@ -17,7 +17,6 @@ import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import com.nvv.petber.R
@@ -26,10 +25,16 @@ import com.nvv.petber.data.model.PostMedia
 import com.nvv.petber.ui.activity.MediaViewerActivity
 import com.nvv.petber.ui.dialog.MediaFullscreenDialog
 import com.nvv.petber.utils.TimeUtils
-import com.nvv.petber.utils.ext.*
+import com.nvv.petber.utils.ext.formatSocialCount
+import com.nvv.petber.utils.ext.getFragmentActivity
+import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.loadAvatar
+import com.nvv.petber.utils.ext.loadImage
+import com.nvv.petber.utils.ext.setSafeOnClickListener
+import com.nvv.petber.utils.ext.visible
 
 class PostAdapter(
-    private val exoPlayer: ExoPlayer, // Inject instance duy nhất từ Fragment/Activity
+    private val exoPlayer: ExoPlayer,
     private val onLikeClick: (Post) -> Unit,
     private val onCommentClick: (Post) -> Unit,
     private val onShareClick: (Post) -> Unit,
@@ -53,15 +58,7 @@ class PostAdapter(
 
     override fun onViewRecycled(holder: PostViewHolder) {
         super.onViewRecycled(holder)
-        // Giải phóng Player khỏi View cũ và xóa listener để tránh leak
         holder.detachPlayer()
-
-        // Dọn dẹp Glide
-        val viewsToClear = listOf(
-            holder.ivSingleImage, holder.ivGrid1, holder.ivGrid2,
-            holder.ivGrid3, holder.ivGrid4
-        )
-        viewsToClear.forEach { Glide.with(holder.itemView.context).clear(it) }
     }
 
     override fun onViewDetachedFromWindow(holder: PostViewHolder) {

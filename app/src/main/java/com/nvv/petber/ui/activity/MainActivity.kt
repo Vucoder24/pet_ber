@@ -97,6 +97,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun selectProfileTab() {
+        binding.bottomNavigation.selectedItemId = R.id.navigation_profile
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         exoPlayer.release()

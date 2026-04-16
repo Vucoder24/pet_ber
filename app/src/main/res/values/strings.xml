@@ -222,6 +222,9 @@
     <string name="pet_following">Pet following</string>
     <string name="friends">Friends</string>
     <string name="unfollow">Unfollow</string>
+    <string name="confirm_logout">Are you sure you want to log out?</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
 
 
     <string-array name="media_types">

@@ -233,7 +233,7 @@ class ProfileFragment : Fragment() {
                 viewModel.incrementShareCount(post.id)
             },
             onProfileClick = { user ->
-
+                binding.dataContainer.smoothScrollTo(0, 0)
             },
             onLoadMore = { },
             onMoreOption = { post ->
@@ -242,6 +242,7 @@ class ProfileFragment : Fragment() {
             }
         )
         petProfileAdapter = PetProfileAdapter(
+            isOwner = true,
             onClick = { pet ->
                 PetProfileActivity.start(requireContext(), pet)
             },
@@ -471,60 +472,21 @@ class ProfileFragment : Fragment() {
                 tvHobbies.maxLines = if (tvHobbies.maxLines == 1) Int.MAX_VALUE else 1
             }
 
-            itemPetFollowing.setOnClickListener {
-                handleViewPetFollowingClick(
-                    userData!!.id,
-                    0,
-                    userData!!.username.toString()
-                )
-            }
-
-            itemFollowers.setOnClickListener {
-                handleViewFollowersClick(
-                    userData!!.id,
-                    1,
-                    userData!!.username.toString()
-                )
-            }
-            itemFollowing.setOnClickListener {
-                handleViewFollowingClick(
-                    userData!!.id,
-                    2,
-                    userData!!.username.toString()
-                )
-            }
+            itemPetFollowing.setOnClickListener { openFollowScreen(0) }
+            itemFollowers.setOnClickListener { openFollowScreen(1) }
+            itemFollowing.setOnClickListener { openFollowScreen(2) }
+            itemFriends.setOnClickListener { openFollowScreen(3) }
         }
     }
 
-    private fun handleViewFollowingClick(userId: String, extraTab: Int, userName: String) {
+    private fun openFollowScreen(extraTab: Int) {
+        val user = userData ?: return
         startActivity(
             ViewFollowsActivity.newIntent(
                 requireContext(),
-                userId,
+                user.id,
                 extraTab,
-                userName
-            )
-        )
-    }
-
-    private fun handleViewFollowersClick(userId: String, extraTab: Int, userName: String) {
-        startActivity(
-            ViewFollowsActivity.newIntent(
-                requireContext(),
-                userId,
-                extraTab,
-                userName
-            )
-        )
-    }
-
-    private fun handleViewPetFollowingClick(userId: String, extraTab: Int, userName: String) {
-        startActivity(
-            ViewFollowsActivity.newIntent(
-                requireContext(),
-                userId,
-                extraTab,
-                userName
+                user.username.toString()
             )
         )
     }

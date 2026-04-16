@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.FragmentHomeBinding
+import com.nvv.petber.ui.activity.MainActivity
+import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.adapter.StoryAdapter
 import com.nvv.petber.ui.adapter.StoryRowAdapter
@@ -24,6 +26,7 @@ import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
 import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
 import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.AppEventManager
+import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.addFeedScrollListener
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.toast
@@ -132,8 +135,12 @@ class HomeFragment : Fragment() {
                 startActivity(Intent.createChooser(intent, getString(R.string.share_post)))
                 viewModel.incrementShareCount(it.id)
             },
-            onProfileClick = { post ->
-
+            onProfileClick = {
+                if (it.userId == SharePrefUtils.getCurrentUserId(requireContext())){
+                    (activity as? MainActivity)?.selectProfileTab()
+                }else{
+                    UserProfileActivity.start(requireContext(), it.userId)
+                }
             },
             onLoadMore = { viewModel.loadPosts(refresh = false) },
             onMoreOption = {

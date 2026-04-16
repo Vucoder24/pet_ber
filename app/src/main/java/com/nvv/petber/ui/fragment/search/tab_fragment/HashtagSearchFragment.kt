@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.databinding.FragmentHashtagSearchBinding
+import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
 import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
@@ -67,7 +68,7 @@ class HashtagSearchFragment : Fragment() {
                 homeViewModel.incrementShareCount(post.id)
             },
             onProfileClick = { post ->
-                // Handle profile click
+                UserProfileActivity.start(requireContext(), post.userId)
             },
             onLoadMore = {
             },

@@ -90,7 +90,11 @@ class PostDetailActivity : AppCompatActivity() {
                     sharePost(post.id)
                 }
             },
-            onProfileClick = { },
+            onProfileClick = {
+                requireLogin {
+                    UserProfileActivity.start(this, it.userId)
+                }
+            },
             onMoreOption = { post ->
                 requireLogin {
                     val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)

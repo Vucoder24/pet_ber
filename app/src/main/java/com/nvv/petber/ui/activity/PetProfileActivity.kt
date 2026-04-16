@@ -164,6 +164,7 @@ class PetProfileActivity : AppCompatActivity() {
             onShareClick = { post ->
             },
             onProfileClick = {
+                UserProfileActivity.start(this, it.userId)
             },
             onMoreOption = {},
             onLoadMore = {}
