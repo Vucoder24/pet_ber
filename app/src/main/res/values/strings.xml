@@ -233,6 +233,9 @@
     <string name="post_created">Post created</string>
     <string name="post_updated">Post updated</string>
     <string name="add_media">Add media</string>
+    <string name="new_notification">New Notification</string>
+    <string name="no_notifications_yet">No notifications yet!</string>
+    <string name="dep_empty_notif">We\'ll notify you when there\'s a new interaction or news from your pet!</string>
 
 
     <string-array name="media_types">

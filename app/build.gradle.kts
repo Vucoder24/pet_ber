@@ -142,4 +142,7 @@ dependencies {
     // emoji
     implementation("com.vanniktech:emoji-google:0.15.0")
     implementation("com.vanniktech:emoji:0.15.0")
+
+    // alert
+    implementation("com.github.tapadoo:alerter:7.2.4")
 }

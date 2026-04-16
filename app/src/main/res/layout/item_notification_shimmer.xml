@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp">
+
+    <View
+        android:id="@+id/shimmerAvatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_circle_shimmer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/shimmerLine1"
+        android:layout_width="0dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_shimmer_rect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/shimmerAvatar"
+        app:layout_constraintTop_toTopOf="@+id/shimmerAvatar" />
+
+    <View
+        android:id="@+id/shimmerLine2"
+        android:layout_width="100dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_shimmer_rect"
+        app:layout_constraintStart_toStartOf="@+id/shimmerLine1"
+        app:layout_constraintTop_toBottomOf="@+id/shimmerLine1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

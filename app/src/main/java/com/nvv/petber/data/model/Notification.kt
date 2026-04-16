@@ -17,6 +17,9 @@ data class Notification(
     @SerialName("sender_id")
     val senderId: String? = null,
 
+    @SerialName("avatar_url")
+    val avatarUrl: String? = null,
+
     val type: String? = null,
 
     @SerialName("post_id")

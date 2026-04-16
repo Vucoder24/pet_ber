@@ -268,7 +268,6 @@ class PostAdapter(
 
                 val size = mediaList.size
 
-                // 🔥 CASE ĐẶC BIỆT: 3 ITEM
                 if (size == 3) {
                     // show 3 view
                     ivGrid1.visible()
