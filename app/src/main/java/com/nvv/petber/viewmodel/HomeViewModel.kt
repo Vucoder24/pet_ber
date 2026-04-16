@@ -25,7 +25,10 @@ data class HomeUiState(
     val isRefreshing: Boolean = false,
     val error: String? = null,
     val currentPage: Int = 0,
-    val hasMore: Boolean = true
+    val hasMorePost: Boolean = true,
+    val isLoadingMoreStories: Boolean = false,
+    val currentStoryPage: Int = 0,
+    val hasMoreStories: Boolean = true,
 )
 
 @HiltViewModel
@@ -37,6 +40,8 @@ class HomeViewModel @Inject constructor(
     private val currentUserId = SharePrefUtils.getCurrentUserId(context)
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    val limitPost = 4
+    val limitStory = 10
 
     init {
         observeStoriesRealtime()
@@ -56,30 +61,43 @@ class HomeViewModel @Inject constructor(
         loadPosts(refresh = true)
     }
 
-    fun loadStories() {
+    fun loadStories(refresh: Boolean = false) {
+        if (_uiState.value.isLoadingStories || _uiState.value.isLoadingMoreStories) return
+        if (!refresh && !_uiState.value.hasMoreStories) return
+
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.value = _uiState.value.copy(isLoadingStories = true)
-            try {
-                homeRepository.fetchStories()
-                    .onSuccess { stories ->
-                        _uiState.value = _uiState.value.copy(
-                            stories = stories,
-                            isLoadingStories = false
-                        )
-                    }
-                    .onFailure { e ->
-                        _uiState.value = _uiState.value.copy(
-                            isLoadingStories = false,
-                            error = e.message
-                        )
-                    }
-            }catch (e: Exception){}
+            val page = if (refresh) 0 else _uiState.value.currentStoryPage
+
+            if (refresh) {
+                _uiState.value = _uiState.value.copy(isLoadingStories = true)
+            } else {
+                _uiState.value = _uiState.value.copy(isLoadingMoreStories = true)
+            }
+
+            homeRepository.fetchStories(page = page, userLimit = limitStory)
+                .onSuccess { newStories ->
+                    val updatedStories = if (refresh) newStories else _uiState.value.stories + newStories
+
+                    val newUniqueUsersCount = newStories.distinctBy { it.userId }.size
+
+                    _uiState.value = _uiState.value.copy(
+                        stories = updatedStories,
+                        isLoadingStories = false,
+                        isLoadingMoreStories = false,
+                        currentStoryPage = page + 1,
+                        hasMoreStories = newUniqueUsersCount >= limitStory
+                    )
+                }
+                .onFailure { e ->
+                    _uiState.value =
+                        _uiState.value.copy(isLoadingStories = false, isLoadingMoreStories = false)
+                }
         }
     }
 
     fun loadPosts(refresh: Boolean = false) {
         if (_uiState.value.isLoadingPosts || _uiState.value.isLoadingMore || _uiState.value.isRefreshing) return
-
+        if (!refresh && !_uiState.value.hasMorePost) return
         viewModelScope.launch {
             val page = if (refresh) 0 else _uiState.value.currentPage
 
@@ -96,7 +114,8 @@ class HomeViewModel @Inject constructor(
             try {
                 homeRepository.fetchPosts(currentUserId, page)
                     .onSuccess { newPosts ->
-                        val updatedPosts = if (refresh) newPosts else _uiState.value.posts + newPosts
+                        val updatedPosts =
+                            if (refresh) newPosts else _uiState.value.posts + newPosts
                         _uiState.value = _uiState.value.copy(
                             posts = updatedPosts,
                             isLoadingPosts = false,
@@ -104,7 +123,7 @@ class HomeViewModel @Inject constructor(
                             isLoadingMore = false,
                             isInitialLoading = false,
                             currentPage = page + 1,
-                            hasMore = newPosts.size == 10
+                            hasMorePost = newPosts.size >= limitPost
                         )
                     }
                     .onFailure { e ->
@@ -133,7 +152,8 @@ class HomeViewModel @Inject constructor(
                     .collect {
                         loadStories()
                     }
-            }catch (e: Exception){}
+            } catch (_: Exception) {
+            }
         }
     }
 
@@ -162,9 +182,11 @@ class HomeViewModel @Inject constructor(
                                 )
                             } else p
                         }
-                        _uiState.value = _uiState.value.copy(posts = revertedPosts, error = it.message)
+                        _uiState.value =
+                            _uiState.value.copy(posts = revertedPosts, error = it.message)
                     }
-            }catch (e: Exception){}
+            } catch (_: Exception) {
+            }
         }
     }
 

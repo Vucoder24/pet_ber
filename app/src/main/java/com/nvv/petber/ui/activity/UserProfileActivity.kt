@@ -107,14 +107,12 @@ class UserProfileActivity : AppCompatActivity() {
             onProfileClick = {
                 binding.dataContainer.smoothScrollTo(0, 0)
             },
-            onLoadMore = { },
             onMoreOption = { post ->
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)
                 bottomSheet.show(supportFragmentManager, "PostOptionsBottomSheet")
             }
         )
 
-        // Khởi tạo Adapter với isOwner = false để ẩn nút thêm Pet
         petProfileAdapter = PetProfileAdapter(
             isOwner = false,
             onClick = { pet -> PetProfileActivity.start(this, pet) },
@@ -133,8 +131,18 @@ class UserProfileActivity : AppCompatActivity() {
             isNestedScrollingEnabled = false
         }
 
-        binding.dataContainer.setOnScrollChangeListener { _, _, _, _, _ ->
+
+        binding.dataContainer.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, oldScrollY ->
             checkVideoVisibility()
+
+            if (scrollY > oldScrollY) {
+                val childHeight = v.getChildAt(0).measuredHeight
+                val scrollHeight = v.measuredHeight
+
+                if (scrollY >= childHeight - scrollHeight - 200) {
+                    viewModel.loadMorePosts()
+                }
+            }
         }
     }
 
@@ -165,13 +173,22 @@ class UserProfileActivity : AppCompatActivity() {
                 bindUserToUI(it)
             }
         }
+        viewModel.posts.observe(this) { posts ->
+            historyPostAdapter.submitPostData(
+                list = posts,
+                isLoadingMore = viewModel.isLoadMore.value ?: false
+            )
+        }
+
+        viewModel.isLoadMore.observe(this) { isLoadMore ->
+            historyPostAdapter.submitPostData(
+                list = viewModel.posts.value ?: emptyList(),
+                isLoadingMore = isLoadMore
+            )
+        }
 
         viewModel.pets.observe(this) {
             petProfileAdapter.submitPets(it)
-        }
-
-        viewModel.posts.observe(this) { posts ->
-            historyPostAdapter.submitList(posts)
         }
 
         viewModel.isFollowing.observe(this) { isFollowing ->

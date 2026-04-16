@@ -9,6 +9,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.databinding.FragmentNotificationBinding
 import com.nvv.petber.ui.adapter.NotificationAdapter
 import com.nvv.petber.utils.SharePrefUtils
@@ -25,6 +27,8 @@ class NotificationFragment : Fragment() {
     private lateinit var currentUserId: String
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var notificationAdapter: NotificationAdapter
+    private lateinit var linearLayoutManager: LinearLayoutManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,9 +44,8 @@ class NotificationFragment : Fragment() {
         setupSwipeRefresh()
         observeData()
 
-        // Load data lần đầu
         currentUserId = SharePrefUtils.getCurrentUserId(requireContext())
-        mainViewModel.fetchNotifications(currentUserId)
+        mainViewModel.fetchNotifications(currentUserId, isRefresh = true)
     }
 
     private fun setupRecyclerView() {
@@ -52,13 +55,34 @@ class NotificationFragment : Fragment() {
 
             }
         )
-        binding.rvNotifications.adapter = notificationAdapter
+        linearLayoutManager = LinearLayoutManager(requireContext())
+
+        binding.rvNotifications.apply {
+            adapter = notificationAdapter
+            this.layoutManager = this@NotificationFragment.linearLayoutManager
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (dy > 0) {
+                        val visibleItemCount = linearLayoutManager.childCount
+                        val totalItemCount = linearLayoutManager.itemCount
+                        val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                            mainViewModel.fetchNotifications(currentUserId, isRefresh = false)
+                        }
+                    }
+                }
+            })
+        }
     }
 
     private fun setupSwipeRefresh() {
         binding.root.setOnRefreshListener {
             val userId = SharePrefUtils.getCurrentUserId(requireContext())
-            mainViewModel.fetchNotifications(userId)
+            mainViewModel.fetchNotifications(userId, isRefresh = true)
         }
     }
 
@@ -67,6 +91,11 @@ class NotificationFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     mainViewModel.isLoading.collect { updateUiState() }
+                }
+                launch {
+                    mainViewModel.isLoadMore.collect { isLoadMore ->
+                        notificationAdapter.isLoadMore = isLoadMore
+                    }
                 }
 
                 launch {

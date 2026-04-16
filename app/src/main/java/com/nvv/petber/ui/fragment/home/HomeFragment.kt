@@ -152,7 +152,6 @@ class HomeFragment : Fragment() {
                     UserProfileActivity.start(requireContext(), it.userId)
                 }
             },
-            onLoadMore = { viewModel.loadPosts(refresh = false) },
             onMoreOption = {
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
                 bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
@@ -162,8 +161,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
+        val storyRowAdapter = StoryRowAdapter(storyAdapter) {
+            viewModel.loadStories(refresh = false)
+        }
+
         val concatAdapter = ConcatAdapter(
-            StoryRowAdapter(storyAdapter),
+            storyRowAdapter,
             postAdapter
         )
 
@@ -172,6 +175,24 @@ class HomeFragment : Fragment() {
             layoutManager = linearLayoutManager
             adapter = concatAdapter
             setHasFixedSize(false)
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (dy > 0) {
+                        val layoutManager = recyclerView.layoutManager as? LinearLayoutManager ?: return
+                        val visibleItemCount = layoutManager.childCount
+                        val totalItemCount = layoutManager.itemCount
+                        val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                            viewModel.loadPosts(refresh = false)
+                        }
+                    }
+                }
+            })
+
 
             scrollListener = addFeedScrollListener(
                 layoutManager = linearLayoutManager,
@@ -184,8 +205,9 @@ class HomeFragment : Fragment() {
                 },
                 onPreloadItem = { index ->
                     val currentList = postAdapter.currentList
-                    if (index < currentList.size) {
-                        currentList.getOrNull(index)?.postMedia?.firstOrNull()?.mediaUrl?.let { url ->
+                    val item = currentList.getOrNull(index)
+                    if (item is PostAdapter.PostItem.Data) {
+                        item.post.postMedia?.firstOrNull()?.mediaUrl?.let { url ->
                             com.bumptech.glide.Glide.with(requireContext())
                                 .load(url)
                                 .preload()
@@ -202,10 +224,10 @@ class HomeFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     // Stories
-                    storyAdapter.submitList(state.stories)
+                    storyAdapter.submitStoryData(state.stories, state.isLoadingMoreStories)
 
                     // Posts
-                    postAdapter.submitList(state.posts)
+                    postAdapter.submitPostData(state.posts, state.isLoadingMore)
 
                     // init Loading
                     if (state.isInitialLoading) {

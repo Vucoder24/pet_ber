@@ -28,16 +28,46 @@ class MainViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    fun fetchNotifications(userId: String) {
+    private val _isLoadMore = MutableStateFlow(false)
+    val isLoadMore = _isLoadMore.asStateFlow()
+
+    private var currentPage = 1
+    private var isLastPage = false
+    private val pageSize = 15
+
+    fun fetchNotifications(userId: String, isRefresh: Boolean = false) {
+        if (_isLoading.value || _isLoadMore.value || (isLastPage && !isRefresh)) return
         viewModelScope.launch {
-            _isLoading.value = true
+            if (isRefresh) {
+                currentPage = 1
+                isLastPage = false
+                _isLoading.value = true
+            } else {
+                _isLoadMore.value = true
+            }
+
             try {
-                val list = repository.getNotifications(userId)
-                _notifications.value = list
+                val newItems = repository.getNotifications(userId, currentPage, pageSize)
+
+                if (newItems.isEmpty() || newItems.size < pageSize) {
+                    isLastPage = true
+                }
+
+                if (isRefresh) {
+                    _notifications.value = newItems
+                } else {
+                    _notifications.value = _notifications.value + newItems
+                }
+
+                if (newItems.isNotEmpty()) {
+                    currentPage++
+                }
+
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
+                _isLoadMore.value = false
             }
         }
     }

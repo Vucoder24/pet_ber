@@ -29,7 +29,6 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel(){
     private val currentUserId = SharePrefUtils.getCurrentUserId(ctx)
     private val _query = MutableStateFlow("")
-    val query = _query.asStateFlow()
 
     private val _users = MutableStateFlow<List<UserSearchResult>>(emptyList())
     val users = _users.asStateFlow()

@@ -46,8 +46,19 @@ class UserProfileViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isLoadMore = MutableLiveData(false)
+    val isLoadMore: LiveData<Boolean> = _isLoadMore
+
+    private var currentOffset = 0
+    private val limit = 10
+    private var hasMoreData = true
+
     fun loadUserProfile(userId: String, isRefresh: Boolean = false) {
         targetUserId = userId
+        if (isRefresh) {
+            currentOffset = 0
+            hasMoreData = true
+        }
         viewModelScope.launch(Dispatchers.IO) {
             if (isRefresh) _isRefreshing.postValue(true)
             else _isLoading.postValue(true)
@@ -56,7 +67,7 @@ class UserProfileViewModel @Inject constructor(
                 val userDeferred = async { profileRepoRemote.getUser(userId) }
                 val statsDeferred = async { profileRepoRemote.getUserStats(userId) }
                 val petsDeferred = async { profileRepoRemote.getPets(userId) }
-                val postsDeferred = async { profileRepoRemote.getPosts(userId) }
+                val postsDeferred = async { profileRepoRemote.getPosts(userId, 0, limit, currentUserId) }
                 val followDeferred =
                     async { homeRepository.checkFollowStatus(currentUserId, userId) }
 
@@ -73,6 +84,8 @@ class UserProfileViewModel @Inject constructor(
                 _user.postValue(finalUser)
                 _pets.postValue(petsDeferred.await())
                 _posts.postValue(postsDeferred.await())
+                currentOffset = postsDeferred.await().size
+                hasMoreData = postsDeferred.await().size >= limit
 
                 val followResult = followDeferred.await()
                 _isFollowing.postValue(followResult.getOrDefault(false))
@@ -85,6 +98,30 @@ class UserProfileViewModel @Inject constructor(
             }
         }
     }
+
+    fun loadMorePosts() {
+        if (_isLoadMore.value == true || !hasMoreData || targetUserId.isEmpty()) return
+
+        _isLoadMore.postValue(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val newPosts = profileRepoRemote.getPosts(targetUserId, currentOffset, limit, currentUserId)
+
+                val currentList = _posts.value ?: emptyList()
+                val updatedList = (currentList + newPosts).distinctBy { it.id }
+
+                _posts.postValue(updatedList)
+                currentOffset = updatedList.size
+                hasMoreData = newPosts.size >= limit
+
+            } catch (e: Exception) {
+                Log.e("UserProfileVM", "Load more error: ${e.message}")
+            } finally {
+                _isLoadMore.postValue(false)
+            }
+        }
+    }
+
 
     fun refreshProfile() {
         if (targetUserId.isNotEmpty()) {

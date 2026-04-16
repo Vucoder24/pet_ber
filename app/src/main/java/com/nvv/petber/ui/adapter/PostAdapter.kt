@@ -18,6 +18,7 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.PostMedia
 import com.nvv.petber.databinding.ItemPostBinding
+import com.nvv.petber.databinding.ItemPostLoadMoreShimmerBinding
 import com.nvv.petber.ui.activity.MediaViewerActivity
 import com.nvv.petber.ui.dialog.MediaFullscreenDialog
 import com.nvv.petber.utils.TimeUtils
@@ -36,37 +37,74 @@ class PostAdapter(
     private val onShareClick: (Post) -> Unit,
     private val onProfileClick: (Post) -> Unit,
     private val onMoreOption: (Post) -> Unit,
-    private val onLoadMore: () -> Unit
-) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback()) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val binding = ItemPostBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-        return PostViewHolder(binding)
+) : ListAdapter<PostAdapter.PostItem, RecyclerView.ViewHolder>(PostDiffCallback()) {
+    companion object {
+        private const val TYPE_ITEM = 0
+        private const val TYPE_LOADING = 1
+    }
+    sealed class PostItem {
+        data class Data(val post: Post) : PostItem()
+        object Loading : PostItem()
     }
 
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        if (position >= itemCount - 1) {
-            onLoadMore()
+    fun submitPostData(list: List<Post>?, isLoadingMore: Boolean) {
+        val items = mutableListOf<PostItem>()
+        list?.let {
+            items.addAll(it.map { post -> PostItem.Data(post) })
+        }
+        if (isLoadingMore) {
+            items.add(PostItem.Loading)
+        }
+        submitList(items)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is PostItem.Data -> TYPE_ITEM
+            is PostItem.Loading -> TYPE_LOADING
         }
     }
 
-    override fun onViewRecycled(holder: PostViewHolder) {
-        super.onViewRecycled(holder)
-        holder.detachPlayer()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            TYPE_ITEM -> {
+                val binding = ItemPostBinding.inflate(inflater, parent, false)
+                PostViewHolder(binding)
+            }
+            else -> {
+                val binding = ItemPostLoadMoreShimmerBinding.inflate(inflater, parent, false)
+                LoadingViewHolder(binding)
+            }
+        }
     }
 
-    override fun onViewDetachedFromWindow(holder: PostViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-        holder.pausePlayer()
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+        if (holder is PostViewHolder && item is PostItem.Data) {
+            holder.bind(item.post)
+        } else if (holder is LoadingViewHolder) {
+            holder.binding.shimmerLoadMore.startShimmer()
+        }
     }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is PostViewHolder) holder.detachPlayer()
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        if (holder is PostViewHolder) holder.pausePlayer()
+    }
+
+    inner class LoadingViewHolder(val binding: ItemPostLoadMoreShimmerBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     inner class PostViewHolder(private val binding: ItemPostBinding) :
         RecyclerView.ViewHolder(binding.root) {
         // UI Components
-
         private var currentVideoUrl: String? = null
 
         private val playerListener = object : Player.Listener {
@@ -275,24 +313,20 @@ class PostAdapter(
                     ivGrid3.visible()
                     ivGrid4.gone()
 
-                    // 👉 set constraint động
                     val params1 = ivGrid1.layoutParams as ConstraintLayout.LayoutParams
                     val params2 = ivGrid2.layoutParams as ConstraintLayout.LayoutParams
                     val params3 = ivGrid3.layoutParams as ConstraintLayout.LayoutParams
 
-                    // ivGrid1 chiếm full bên trái
                     params1.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                     params1.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                     params1.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                     params1.endToStart = ivGrid2.id
 
-                    // ivGrid2 (trên phải)
                     params2.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                     params2.startToEnd = ivGrid1.id
                     params2.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                     params2.bottomToTop = ivGrid3.id
 
-                    // ivGrid3 (dưới phải)
                     params3.topToBottom = ivGrid2.id
                     params3.startToEnd = ivGrid1.id
                     params3.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
@@ -344,8 +378,17 @@ class PostAdapter(
         exoPlayer.pause()
     }
 
-    private class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
-        override fun areItemsTheSame(oldItem: Post, newItem: Post) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Post, newItem: Post) = oldItem == newItem
+    private class PostDiffCallback : DiffUtil.ItemCallback<PostItem>() {
+        override fun areItemsTheSame(oldItem: PostItem, newItem: PostItem): Boolean {
+            return if (oldItem is PostItem.Data && newItem is PostItem.Data) {
+                oldItem.post.id == newItem.post.id
+            } else {
+                oldItem is PostItem.Loading && newItem is PostItem.Loading
+            }
+        }
+
+        override fun areContentsTheSame(oldItem: PostItem, newItem: PostItem): Boolean {
+            return oldItem == newItem
+        }
     }
 }

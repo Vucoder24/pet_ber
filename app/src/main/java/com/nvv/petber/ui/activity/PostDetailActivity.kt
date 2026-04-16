@@ -110,8 +110,7 @@ class PostDetailActivity : AppCompatActivity() {
                     val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)
                     bottomSheet.show(supportFragmentManager, "PostOptionsBottomSheet")
                 }
-            },
-            onLoadMore = {}
+            }
         )
 
         binding.rvPost.apply {
@@ -124,7 +123,10 @@ class PostDetailActivity : AppCompatActivity() {
 
     private fun observeData() {
         viewModel.post.observe(this){
-            adapter.submitList(it?.let { listOf(it) } ?: emptyList())
+            adapter.submitPostData(
+                list = it?.let { listOf(it) } ?: emptyList(),
+                isLoadingMore = false
+            )
         }
         viewModel.isLoading.observe(this){
                 binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE

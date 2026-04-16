@@ -52,7 +52,7 @@ class PetProfileViewModel @Inject constructor(
     val isLoadMore: StateFlow<Boolean> = _isLoadMore.asStateFlow()
 
     private var currentOffset = 0
-    private val limit = 10
+    private val limitPost = 10
     private var hasMoreData = true
     private val currentUserId = SharePrefUtils.getCurrentUserId(context)
 
@@ -123,7 +123,7 @@ class PetProfileViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val offsetToFetch = if (isRefresh) 0 else currentOffset
-                val newPosts = repository.getPetPosts(petId, offsetToFetch, limit, currentUserId)
+                val newPosts = repository.getPetPosts(petId, offsetToFetch, limitPost, currentUserId)
 
                 if (isRefresh) {
                     _posts.value = newPosts
@@ -134,7 +134,7 @@ class PetProfileViewModel @Inject constructor(
                     currentOffset = updated.size
                 }
 
-                hasMoreData = newPosts.size >= limit
+                hasMoreData = newPosts.size >= limitPost
             } catch (e: Exception) {
                 _error.value = e.message
             } finally {

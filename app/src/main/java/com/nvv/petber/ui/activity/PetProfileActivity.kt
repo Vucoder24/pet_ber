@@ -4,40 +4,39 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.databinding.ActivityPetProfileBinding
 import com.nvv.petber.ui.adapter.PostAdapter
+import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
+import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
+import com.nvv.petber.utils.PermissionUtils
+import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.loadAvatar
+import com.nvv.petber.utils.ext.showAvatarOptionDialog
+import com.nvv.petber.utils.ext.showCoverOptionDialog
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.PetProfileViewModel
+import com.nvv.petber.viewmodel.UpdatePetState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import androidx.core.net.toUri
-import androidx.media3.exoplayer.ExoPlayer
-import com.bumptech.glide.load.DecodeFormat
-import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
-import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
-import com.nvv.petber.utils.PermissionUtils
-import com.nvv.petber.utils.SharePrefUtils
-import com.nvv.petber.utils.ext.showAvatarOptionDialog
-import com.nvv.petber.utils.ext.showCoverOptionDialog
-import com.nvv.petber.viewmodel.UpdatePetState
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -193,8 +192,7 @@ class PetProfileActivity : AppCompatActivity() {
             onMoreOption = {
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
                 bottomSheet.show(supportFragmentManager, "PostOptionsBottomSheet")
-            },
-            onLoadMore = {}
+            }
         )
         binding.rvPetPosts.apply {
             layoutManager = LinearLayoutManager(this@PetProfileActivity)
@@ -334,6 +332,18 @@ class PetProfileActivity : AppCompatActivity() {
             }
             editPetLauncher.launch(intent)
         }
+
+        binding.dataContainer.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                val isBottomReached = scrollY >= (v.getChildAt(0).measuredHeight - v.measuredHeight - 200)
+
+                if (isBottomReached) {
+                    viewModel.petState.value?.id?.let { petId ->
+                        viewModel.loadPetPosts(petId, isRefresh = false)
+                    }
+                }
+            }
+        )
     }
 
     private fun viewMediaOnly(url: String?) {
@@ -384,8 +394,12 @@ class PetProfileActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.posts.collectLatest { posts ->
-                Log.d("PetProfileActivity", "$posts")
-                postAdapter.submitList(posts)
+                postAdapter.submitPostData(posts, viewModel.isLoadMore.value)
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.isLoadMore.collectLatest { isLoadMore ->
+                postAdapter.submitPostData(viewModel.posts.value, isLoadMore)
             }
         }
 
@@ -396,12 +410,6 @@ class PetProfileActivity : AppCompatActivity() {
                     if (isLoading && viewModel.petState.value == null) View.VISIBLE else View.GONE
                 binding.dataContainer.visibility =
                     if (isLoading && viewModel.petState.value == null) View.INVISIBLE else View.VISIBLE
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.isLoadMore.collectLatest { isLoadMore ->
-                binding.progressBarLoadMore.visibility = if (isLoadMore) View.VISIBLE else View.GONE
             }
         }
 

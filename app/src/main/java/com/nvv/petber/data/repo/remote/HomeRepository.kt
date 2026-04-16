@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
-
+@Serializable
+data class UserIdResponse(val user_id: String)
 
 class HomeRepository @Inject constructor(
     supabaseClient: SupabaseClient
@@ -24,26 +25,35 @@ class HomeRepository @Inject constructor(
     private val db = supabaseClient.postgrest
 
     // Fetch active stories (not expired), limited to followed users + self
-    suspend fun fetchStories(): Result<List<Story>> {
+    suspend fun fetchStories(page: Int = 0, userLimit: Int = 10): Result<List<Story>> {
         return try {
+            val offset = page * userLimit
+
+            val userIdsResponse = db.rpc(
+                function = "get_active_story_users",
+                parameters = mapOf("p_offset" to offset, "p_limit" to userLimit)
+            ).decodeList<UserIdResponse>()
+
+            val userIds = userIdsResponse.map { it.user_id }
+
+            if (userIds.isEmpty()) {
+                return Result.success(emptyList())
+            }
+
             val stories = db["stories"]
                 .select(
-                    columns = Columns.raw(
-                        "*, users(id, username, full_name, avatar_url)"
-                    )
+                    columns = Columns.raw("*, users(id, username, full_name, avatar_url)")
                 ) {
                     filter {
                         eq("is_expired", false)
+                        isIn("user_id", userIds)
                     }
                     order("created_at", Order.DESCENDING)
-                    limit(30)
                 }
                 .decodeList<Story>()
 
-            Log.d("HomeRepository", "Fetched $stories stories")
             Result.success(stories)
         } catch (e: Exception) {
-            Log.e("HomeRepository", "fetchStories error: ${e.message}")
             Result.failure(e)
         }
     }
@@ -52,7 +62,7 @@ class HomeRepository @Inject constructor(
     suspend fun fetchPosts(
         currentUserId: String,
         page: Int = 0,
-        pageSize: Int = 30,
+        pageSize: Int = 15,
     ): Result<List<Post>> {
         return try {
             val from = page * pageSize
