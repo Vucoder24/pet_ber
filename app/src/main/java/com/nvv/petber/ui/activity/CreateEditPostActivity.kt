@@ -1,5 +1,7 @@
 package com.nvv.petber.ui.activity
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -13,21 +15,45 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.nvv.petber.R
-import com.nvv.petber.databinding.ActivityCreatePostBinding
+import com.nvv.petber.data.model.Pet
+import com.nvv.petber.data.model.Post
+import com.nvv.petber.databinding.ActivityCreateEditPostBinding
 import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.ui.adapter.MediaPreviewAdapter
 import com.nvv.petber.ui.dialog.UploadProgressDialog
+import com.nvv.petber.ui.mention.MentionEditText
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.serialization.json.Json
+import androidx.core.net.toUri
+import com.nvv.petber.utils.getVideoDuration
+import kotlinx.serialization.encodeToString
 
 @AndroidEntryPoint
-class CreatePostActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityCreatePostBinding
+class CreateEditPostActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityCreateEditPostBinding
     private val viewModel: CreateContentViewModel by viewModels()
     private lateinit var uploadDialog: UploadProgressDialog
-    private val selectedMediaItems = mutableListOf<MediaItem>()
+    private val remoteMediaItems = mutableListOf<MediaItem>()
+    private val localMediaItems = mutableListOf<MediaItem>()
     private lateinit var adapterPreviewMedia: MediaPreviewAdapter
+    private var isEditMode = false
+
+    companion object {
+        const val EXTRA_POST_JSON = "extra_post_json"
+        const val IS_EDIT_MODE = "is_edit_mode"
+        const val EXTRA_EDIT_SUCCESS = "extra_edit_success"
+
+        fun startForEdit(context: Context, post: Post) {
+            val intent = Intent(context, CreateEditPostActivity::class.java).apply {
+                putExtra(IS_EDIT_MODE, true)
+                val postJson = Json.encodeToString(post)
+                putExtra(EXTRA_POST_JSON, postJson)
+            }
+            context.startActivity(intent)
+        }
+    }
 
     private val mediaPickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -43,11 +69,12 @@ class CreatePostActivity : AppCompatActivity() {
                     result.data?.getParcelableArrayListExtra(MediaPickerActivity.EXTRA_RESULT_MEDIAS)
                 }
 
-            items?.let {
-                selectedMediaItems.clear()
-                selectedMediaItems.addAll(it)
+            items?.let { newLocalItems ->
+                localMediaItems.clear()
+                localMediaItems.addAll(newLocalItems)
+
                 handleMediaVisibility()
-                adapterPreviewMedia.submitList(selectedMediaItems.toList())
+                adapterPreviewMedia.submitList(remoteMediaItems + localMediaItems)
             }
         }
     }
@@ -63,10 +90,24 @@ class CreatePostActivity : AppCompatActivity() {
         }
     }
 
+    private fun createChipListener(pet: Pet): (android.widget.CompoundButton, Boolean) -> Unit {
+        return { _, isChecked ->
+            if (isChecked) {
+                if (!binding.etCaption.hasMention(pet.id)) {
+                    binding.etCaption.insertMention(pet.id, pet.name)
+                    viewModel.togglePetTag(pet)
+                }
+            } else {
+                binding.etCaption.removeMention(pet.id)
+                viewModel.removePetTag(pet.id)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityCreatePostBinding.inflate(layoutInflater)
+        binding = ActivityCreateEditPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -85,13 +126,23 @@ class CreatePostActivity : AppCompatActivity() {
         adapterPreviewMedia = MediaPreviewAdapter(
             items = mutableListOf(),
             onRemove = { pos ->
-                selectedMediaItems.removeAt(pos)
+                val allItems = remoteMediaItems + localMediaItems
+                val removedItem = allItems[pos]
+
+                if (removedItem.isFromRemote) {
+                    removedItem.remoteId?.let { viewModel.markRemoteMediaAsDeleted(it) }
+                    remoteMediaItems.remove(removedItem)
+                } else {
+                    localMediaItems.remove(removedItem)
+                }
+
                 handleMediaVisibility()
-                adapterPreviewMedia.submitList(selectedMediaItems.toList())
+                adapterPreviewMedia.submitList(remoteMediaItems + localMediaItems)
             },
             onClick = { pos ->
+                val allItems = remoteMediaItems + localMediaItems
                 val intent = Intent(this, MediaPreviewActivity::class.java).apply {
-                    putExtra(MediaPreviewActivity.EXTRA_MEDIA, selectedMediaItems[pos])
+                    putExtra(MediaPreviewActivity.EXTRA_MEDIA, allItems[pos])
                 }
                 startActivity(intent)
             }
@@ -99,8 +150,54 @@ class CreatePostActivity : AppCompatActivity() {
         binding.rvMediaPreview.adapter = adapterPreviewMedia
 
         setupData()
+        checkEditMode()
         setupListeners()
         observeViewModel()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun checkEditMode() {
+        isEditMode = intent.getBooleanExtra(IS_EDIT_MODE, false)
+        if (isEditMode) {
+            binding.tvTitle.text = getString(R.string.edit_post)
+            binding.btnPost.setText(R.string.save_post)
+            binding.btnEditMedia.setText(R.string.add_media)
+            binding.btnPost.icon = null
+            val postJson = intent.getStringExtra(EXTRA_POST_JSON)
+            if (postJson != null) {
+                try {
+                    val post = Json.decodeFromString<Post>(postJson)
+                    viewModel.setEditMode(post)
+
+                    binding.etCaption.setText(post.caption)
+                    binding.etHashtags.setText(post.hashtags)
+
+                    post.postMedia?.forEach { remoteMedia ->
+                        val item = MediaItem(
+                            uri = remoteMedia.mediaUrl.toUri(),
+                            isVideo = remoteMedia.mediaType == "video",
+                            isFromRemote = true,
+                            remoteId = remoteMedia.id,
+                            remoteUrl = remoteMedia.mediaUrl,
+                        )
+                        if (remoteMedia.mediaType == "video") {
+                            getVideoDuration(this, remoteMedia.mediaUrl.toUri()) { duration ->
+                                item.duration = duration
+                                adapterPreviewMedia.notifyDataSetChanged()
+                            }
+                        }
+                        remoteMediaItems.add(item)
+                    }
+
+                    handleMediaVisibility()
+                    adapterPreviewMedia.submitList((remoteMediaItems + localMediaItems).toList())
+
+                } catch (_: Exception) {
+                    toast(R.string.error_data_post)
+                    finish()
+                }
+            }
+        }
     }
 
     private fun observeViewModel() {
@@ -119,7 +216,15 @@ class CreatePostActivity : AppCompatActivity() {
 
         viewModel.postSuccess.observe(this) { success ->
             if (success) {
-                toast(getString(R.string.story_posted))
+                if (viewModel.currentEditPostId != null) {
+                    val resultIntent = Intent().apply {
+                        putExtra(EXTRA_EDIT_SUCCESS, true)
+                    }
+                    setResult(RESULT_OK, resultIntent)
+                    toast(R.string.post_updated)
+                } else {
+                    toast(getString(R.string.post_created))
+                }
                 finish()
             }
         }
@@ -148,24 +253,30 @@ class CreatePostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (selectedMediaItems.isEmpty()) {
-                toast(getString(R.string.error_select_media))
-                return@setOnClickListener
-            }
-
             //call ViewModel
-            viewModel.createPost(
-                caption = caption, location = null, mediaUris = selectedMediaItems.map { it.uri },
+            viewModel.submitPost(
+                caption = caption,
+                location = null,
                 hashtags = hashtagsStr,
+                allCurrentMedia = remoteMediaItems + localMediaItems,
+                petIds = binding.etCaption.getMentions()
             )
         }
+
+        binding.etCaption.mentionRemovedListener =
+            object : MentionEditText.OnMentionRemovedListener {
+                override fun onMentionRemoved(petId: String) {
+                    viewModel.removePetTag(petId)
+                    unselectChip(petId)
+                }
+            }
 
         binding.btnEditMedia.setOnClickListener {
             val intent = Intent(this, MediaPickerActivity::class.java).apply {
                 putExtra(MediaPickerActivity.EXTRA_MODE, MediaPickerActivity.MODE_MULTI)
                 putParcelableArrayListExtra(
                     MediaPickerActivity.EXTRA_PRESELECTED,
-                    ArrayList(selectedMediaItems)
+                    ArrayList(localMediaItems)
                 )
             }
             mediaPickerLauncher.launch(intent)
@@ -177,15 +288,39 @@ class CreatePostActivity : AppCompatActivity() {
 
         viewModel.userPets.observe(this) { pets ->
             binding.chipGroupPets.removeAllViews()
+            val selectedIds = viewModel.selectedPetIds.value ?: emptySet()
             pets.forEach { pet ->
                 val chip = Chip(this).apply {
                     text = pet.name
                     isCheckable = true
-                    setOnClickListener {
-                        viewModel.togglePetTag(pet)
-                    }
+                    setOnCheckedChangeListener(null)
+                    isChecked = selectedIds.contains(pet.id)
                 }
+
+                chip.setOnCheckedChangeListener(createChipListener(pet))
+
                 binding.chipGroupPets.addView(chip)
+            }
+        }
+    }
+
+
+    private fun unselectChip(petId: String) {
+        val pets = viewModel.userPets.value ?: return
+
+        for (i in 0 until binding.chipGroupPets.childCount) {
+            val chip = binding.chipGroupPets.getChildAt(i) as Chip
+            val pet = pets[i]
+
+            if (pet.id == petId) {
+
+                chip.setOnCheckedChangeListener(null)
+
+                chip.isChecked = false
+
+                chip.setOnCheckedChangeListener(createChipListener(pet))
+
+                break
             }
         }
     }
@@ -222,7 +357,7 @@ class CreatePostActivity : AppCompatActivity() {
     }
 
     private fun handleMediaVisibility() {
-        if (selectedMediaItems.isNotEmpty()) {
+        if (remoteMediaItems.isNotEmpty() || localMediaItems.isNotEmpty()) {
             binding.rvMediaPreview.visibility = View.VISIBLE
             binding.btnAddMedia.visibility = View.GONE
             binding.btnEditMedia.visibility = View.VISIBLE

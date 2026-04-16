@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.nvv.petber.R
 import com.nvv.petber.databinding.FragmentCreateContentBinding
-import com.nvv.petber.ui.activity.CreatePostActivity
+import com.nvv.petber.ui.activity.CreateEditPostActivity
 import com.nvv.petber.ui.activity.CreateStoryActivity
 import com.nvv.petber.ui.activity.MediaPickerActivity
 import com.nvv.petber.ui.adapter.MediaItem
@@ -78,11 +78,11 @@ class CreateContentFragment : Fragment() {
         }
 
         binding.btnCreatePost.setOnClickListener {
-            startActivity(Intent(requireContext(), CreatePostActivity::class.java))
+            startActivity(Intent(requireContext(), CreateEditPostActivity::class.java))
         }
 
         binding.btnAddMedia.setOnClickListener {
-            startActivity(Intent(requireContext(), CreatePostActivity::class.java))
+            startActivity(Intent(requireContext(), CreateEditPostActivity::class.java))
         }
 
     }

@@ -1,6 +1,7 @@
 package com.nvv.petber.data.converter
 
 import androidx.room.TypeConverter
+import com.nvv.petber.data.model.CommentLike
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.PostLike
 import com.nvv.petber.data.model.PostMedia
@@ -34,4 +35,22 @@ class DataConverters {
 
     @TypeConverter
     fun toPostLikeList(value: String?): List<PostLike>? = value?.let { json.decodeFromString(it) }
+
+    @TypeConverter
+    fun fromCommentLikeList(value: List<CommentLike>?): String? {
+        return value?.let { Json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun toCommentLikeList(value: String?): List<CommentLike>? {
+        return value?.let { Json.decodeFromString(it) }
+    }
+
+    @TypeConverter
+    fun fromPetList(list: List<Pet>?): String? =
+        list?.let { json.encodeToString(it) }
+
+    @TypeConverter
+    fun toPetList(value: String?): List<Pet>? =
+        value?.let { json.decodeFromString(it) }
 }

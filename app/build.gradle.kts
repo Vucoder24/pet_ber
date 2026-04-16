@@ -130,5 +130,19 @@ dependencies {
     implementation("io.github.chaosleung:pinview:1.4.4")
     // extract color from image
     implementation("androidx.palette:palette-ktx:1.0.0")
-    //
+    // exoplayer
+    implementation("androidx.media3:media3-exoplayer:1.10.0")
+    implementation("androidx.media3:media3-ui:1.10.0")
+
+    // PhotoView
+    implementation("com.github.Baseflow:PhotoView:2.3.0")
+    // Gson 
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // emoji
+    implementation("com.vanniktech:emoji-google:0.15.0")
+    implementation("com.vanniktech:emoji:0.15.0")
+
+    // alert
+    implementation("com.github.tapadoo:alerter:7.2.4")
 }

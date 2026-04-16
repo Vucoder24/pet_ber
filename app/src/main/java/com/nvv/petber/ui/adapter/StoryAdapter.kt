@@ -15,6 +15,8 @@ import com.nvv.petber.utils.ext.loadAvatar
 class StoryAdapter(
     private val onStoryClick: (Story) -> Unit
 ) : ListAdapter<Story, StoryAdapter.StoryViewHolder>(StoryDiffCallback()) {
+    var originalStories: List<Story> = emptyList()
+        private set
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoryViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -24,6 +26,11 @@ class StoryAdapter(
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    override fun submitList(list: List<Story>?) {
+        originalStories = list ?: emptyList()
+        super.submitList(list?.distinctBy { it.userId })
     }
 
     inner class StoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

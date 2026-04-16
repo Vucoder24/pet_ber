@@ -10,11 +10,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.databinding.FragmentPetSearchBinding
+import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.adapter.SearchPetResultAdapter
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.SearchViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class PetSearchFragment : Fragment() {
     private var _binding: FragmentPetSearchBinding? = null
     private val binding get() = _binding!!
@@ -33,9 +36,18 @@ class PetSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = SearchPetResultAdapter { pet ->
-            // click pet item
-        }
+        adapter = SearchPetResultAdapter(
+            onClick = {
+                PetProfileActivity.start(requireContext(), it.pet)
+            },
+             onFollowClick = {
+                 sharedViewModel.toggleFollowPet(
+                     it.pet,
+                     it.isFollowing,
+                     requireContext()
+                 )
+             }
+        )
         binding.rvResults.adapter = adapter
         // observe search results
         viewLifecycleOwner.lifecycleScope.launch {
@@ -45,10 +57,17 @@ class PetSearchFragment : Fragment() {
                 }
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.errorEvent.collect { errorMessage ->
+                    requireContext().toast(errorMessage)
+                }
+            }
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }

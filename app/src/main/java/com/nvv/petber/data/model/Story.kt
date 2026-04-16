@@ -26,5 +26,17 @@ data class Story(
     val createdAt: String? = null,
 
     @SerialName("expires_at")
-    val expiresAt: String? = null
+    val expiresAt: String? = null,
+
+    @SerialName("is_expired")
+    val isExpired: Boolean = false
+)
+
+
+
+@Serializable
+data class UserStoryGroup(
+    val userId: String,
+    val user: User?,
+    val stories: List<Story>
 )

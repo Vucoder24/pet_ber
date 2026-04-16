@@ -21,4 +21,7 @@
     <color name="pet_text_secondary">#8C6F54</color>
     <color name="pet_primary">#FF9356</color>
     <color name="red_500">#D54945</color>
+    <color name="text_white">#E0E0E0</color>
+    <color name="gray_400">#888888</color>
+    <color name="unread_notification_bg">#FBF3E6</color>
 </resources>

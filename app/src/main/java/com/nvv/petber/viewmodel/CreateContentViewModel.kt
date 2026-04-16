@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.data.model.Pet
+import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.repo.remote.CreateContentRepository
+import com.nvv.petber.ui.adapter.MediaItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +18,8 @@ import javax.inject.Inject
 class CreateContentViewModel @Inject constructor(
     private val createContentRepository: CreateContentRepository
 ): ViewModel() {
-
+    var currentEditPostId: String? = null
+    private val deletedRemoteMediaIds = mutableListOf<String>()
     // Loading state
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
@@ -44,6 +47,18 @@ class CreateContentViewModel @Inject constructor(
     private val _selectedPetIds = MutableLiveData<MutableSet<String>>(mutableSetOf())
     val selectedPetIds: LiveData<MutableSet<String>> = _selectedPetIds
 
+    fun setEditMode(post: Post) {
+        currentEditPostId = post.id
+        post.petIds?.let { ids ->
+            _selectedPetIds.value = ids.toMutableSet()
+        }
+    }
+
+    fun markRemoteMediaAsDeleted(mediaId: String) {
+        if (!deletedRemoteMediaIds.contains(mediaId)) {
+            deletedRemoteMediaIds.add(mediaId)
+        }
+    }
     fun loadUserPets() {
         viewModelScope.launch {
             try {
@@ -61,7 +76,7 @@ class CreateContentViewModel @Inject constructor(
         if (current.contains(pet.id)) {
             current.remove(pet.id)
         } else {
-            current.add(pet.id!!)
+            current.add(pet.id)
         }
 
         _selectedPetIds.value = current
@@ -71,7 +86,8 @@ class CreateContentViewModel @Inject constructor(
         caption: String,
         location: String?,
         hashtags: String?,
-        mediaUris: List<Uri>
+        mediaUris: List<Uri>,
+        petIds: List<String>
     ) {
 
         _isLoading.value = true
@@ -81,14 +97,12 @@ class CreateContentViewModel @Inject constructor(
 
             try {
 
-                val petId = _selectedPetIds.value?.firstOrNull()
-
                 createContentRepository.createPost(
                     caption = caption,
                     hashtags = hashtags,
                     location = location,
                     mediaUris = mediaUris,
-                    petId = petId
+                    petIds = petIds
                 ).collect { progress ->
 
                     _uploadProgress.value = progress
@@ -140,12 +154,61 @@ class CreateContentViewModel @Inject constructor(
         }
     }
 
+    fun removePetTag(petId: String) {
+        val current = _selectedPetIds.value ?: mutableSetOf()
+        current.remove(petId)
+        _selectedPetIds.value = current
+    }
+
     fun clearError() {
         _error.value = null
     }
 
-    fun resetPostSuccess() {
-        _postSuccess.value = false
+    fun submitPost(
+        caption: String,
+        location: String?,
+        hashtags: String?,
+        allCurrentMedia: List<MediaItem>,
+        petIds: List<String>
+    ) {
+        _isLoading.value = true
+        _uploadProgress.value = 0
+
+        val newMediaUris = allCurrentMedia.filter { !it.isFromRemote }.map { it.uri }
+
+        viewModelScope.launch {
+            try {
+                val flow = if (currentEditPostId != null) {
+                    createContentRepository.updatePost(
+                        postId = currentEditPostId!!,
+                        caption = caption,
+                        hashtags = hashtags,
+                        newMediaUris = newMediaUris,
+                        deletedMediaIds = deletedRemoteMediaIds,
+                        petIds = petIds
+                    )
+                } else {
+                    createContentRepository.createPost(
+                        caption = caption,
+                        hashtags = hashtags,
+                        location = location,
+                        mediaUris = newMediaUris,
+                        petIds = petIds
+                    )
+                }
+
+                flow.collect { progress ->
+                    _uploadProgress.value = progress
+                    if (progress == 100) {
+                        _postSuccess.value = true
+                    }
+                }
+            } catch (e: Exception) {
+                _error.value = "Posting failed: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 
     fun resetStorySuccess() {

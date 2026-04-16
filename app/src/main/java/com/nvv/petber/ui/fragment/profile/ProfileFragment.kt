@@ -10,25 +10,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nvv.petber.R
 import com.nvv.petber.data.model.User
 import com.nvv.petber.databinding.FragmentProfileBinding
-import com.nvv.petber.ui.activity.CreatePetActivity
+import com.nvv.petber.ui.activity.CreateEditPetActivity
 import com.nvv.petber.ui.activity.CreateStoryActivity
 import com.nvv.petber.ui.activity.CropImageActivity
 import com.nvv.petber.ui.activity.EditProfileActivity
 import com.nvv.petber.ui.activity.MediaPickerActivity
 import com.nvv.petber.ui.activity.MediaPreviewActivity
+import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.activity.SettingsActivity
+import com.nvv.petber.ui.activity.ViewFollowsActivity
 import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.ui.adapter.PetProfileAdapter
 import com.nvv.petber.ui.adapter.PostAdapter
+import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
+import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
 import com.nvv.petber.utils.DateTimeUtils
 import com.nvv.petber.utils.PermissionUtils
 import com.nvv.petber.utils.ext.formatSocialCount
@@ -43,6 +49,7 @@ import com.nvv.petber.viewmodel.ProfileViewModel
 import com.nvv.petber.viewmodel.UpdateUserState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -55,6 +62,9 @@ class ProfileFragment : Fragment() {
 
     private var cropTarget: String? = null
     private var userData: User? = null
+
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
 
     private val cropLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -149,10 +159,26 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val systemBars =
+                insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, systemBars.top, 0, 0)
+            insets
+        }
         initView()
         setupListener()
         observerData()
         observerUiState()
+        setupFragmentResultListeners()
+    }
+
+    private fun setupFragmentResultListeners() {
+        childFragmentManager.setFragmentResultListener("refresh_key", viewLifecycleOwner) { _, bundle ->
+            val isUpdated = bundle.getBoolean("bundle_is_updated", false)
+            if (isUpdated) {
+                viewModel.refreshProfile(true)
+            }
+        }
     }
 
     private fun observerUiState() {
@@ -198,27 +224,40 @@ class ProfileFragment : Fragment() {
     private fun initView() {
         // init adapter
         historyPostAdapter = PostAdapter(
+            exoPlayer = exoPlayer,
             onLikeClick = { post ->
                 viewModel.toggleLike(post)
             },
             onCommentClick = { post ->
-
+                val bottomSheet = CommentBottomSheetFragment
+                    .newInstance(post.id, post.userId)
+                bottomSheet.show(childFragmentManager, "CommentBottomSheet")
             },
             onShareClick = { post ->
-
+                val link = "https://project-ilyyx.vercel.app/post/${post.id}"
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, link)
+                }
+                startActivity(Intent.createChooser(intent, getString(R.string.share_post)))
+                viewModel.incrementShareCount(post.id)
             },
             onProfileClick = { user ->
-
+                binding.dataContainer.smoothScrollTo(0, 0)
             },
             onLoadMore = { },
-            onSaveClick = {}
+            onMoreOption = { post ->
+                val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)
+                bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
+            }
         )
         petProfileAdapter = PetProfileAdapter(
+            isOwner = true,
             onClick = { pet ->
-
+                PetProfileActivity.start(requireContext(), pet)
             },
             onAddClick = {
-                val intent = Intent(requireContext(), CreatePetActivity::class.java)
+                val intent = Intent(requireContext(), CreateEditPetActivity::class.java)
                 createPetLauncher.launch(intent)
             }
         )
@@ -230,9 +269,35 @@ class ProfileFragment : Fragment() {
                 false
             )
         }
+
         binding.rvPosts.apply {
             adapter = historyPostAdapter
             layoutManager = LinearLayoutManager(requireContext())
+            isNestedScrollingEnabled = false
+        }
+
+        binding.dataContainer.setOnScrollChangeListener { _, _, _, _, _ ->
+            checkVideoVisibility()
+        }
+
+    }
+
+    private fun checkVideoVisibility() {
+        val scrollRect = android.graphics.Rect()
+        binding.dataContainer.getGlobalVisibleRect(scrollRect)
+
+        for (i in 0 until binding.rvPosts.childCount) {
+            val child = binding.rvPosts.getChildAt(i)
+            val viewHolder = binding.rvPosts.getChildViewHolder(child)
+
+            if (viewHolder is PostAdapter.PostViewHolder) {
+                val childRect = android.graphics.Rect()
+                child.getGlobalVisibleRect(childRect)
+
+                if (!android.graphics.Rect.intersects(scrollRect, childRect)) {
+                    viewHolder.pausePlayer()
+                }
+            }
         }
     }
 
@@ -270,13 +335,10 @@ class ProfileFragment : Fragment() {
             binding.tvFullName.text = if (!it.fullName.isNullOrEmpty()) it.fullName
             else requireContext().getString(R.string.petber_user)
 
-            binding.tvStats.text =
-                getString(
-                    R.string.user_stats,
-                    it.postCount.formatSocialCount(),
-                    it.followerCount.formatSocialCount(),
-                    it.followingCount.formatSocialCount()
-                )
+            binding.tvFriendsCount.text = it.friendsCount.formatSocialCount()
+            binding.tvPetFollowingCount.text = it.petFollowingCount.formatSocialCount()
+            binding.tvFollowerCount.text = it.followerCount.formatSocialCount()
+            binding.tvFollowingCount.text = it.followingCount.formatSocialCount()
 
             binding.tvUserName.text = "@${it.username}"
             binding.tvBio.text = if (!it.bio.isNullOrEmpty()) it.bio
@@ -419,7 +481,24 @@ class ProfileFragment : Fragment() {
             tvHobbies.setOnClickListener {
                 tvHobbies.maxLines = if (tvHobbies.maxLines == 1) Int.MAX_VALUE else 1
             }
+
+            itemPetFollowing.setOnClickListener { openFollowScreen(0) }
+            itemFollowers.setOnClickListener { openFollowScreen(1) }
+            itemFollowing.setOnClickListener { openFollowScreen(2) }
+            itemFriends.setOnClickListener { openFollowScreen(3) }
         }
+    }
+
+    private fun openFollowScreen(extraTab: Int) {
+        val user = userData ?: return
+        startActivity(
+            ViewFollowsActivity.newIntent(
+                requireContext(),
+                user.id,
+                extraTab,
+                user.username.toString()
+            )
+        )
     }
 
     private fun handleAddStoryClick() {
@@ -464,6 +543,11 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        if (::historyPostAdapter.isInitialized) {
+            historyPostAdapter.pauseAllPlayers()
+        }
+        binding.rvPosts.adapter = null
+        binding.dataContainer.setOnScrollChangeListener(null as NestedScrollView.OnScrollChangeListener?)
         _binding = null
     }
 }

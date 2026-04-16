@@ -13,6 +13,7 @@ import com.nvv.petber.data.model.Pet
 import com.nvv.petber.utils.ext.loadAvatar
 
 class PetProfileAdapter(
+    private val isOwner: Boolean,
     private val onAddClick: () -> Unit,
     private val onClick: (Pet) -> Unit
 ) : ListAdapter<PetProfileAdapter.Item, RecyclerView.ViewHolder>(ItemDiffCallback()) {
@@ -52,7 +53,10 @@ class PetProfileAdapter(
     }
 
     fun submitPets(pets: List<Pet>?) {
-        val list = mutableListOf<Item>(Item.Add)
+        val list = mutableListOf<Item>()
+        if (isOwner) {
+            list.add(Item.Add)
+        }
         pets?.let { list.addAll(it.map { pet -> Item.PetData(pet) }) }
         submitList(list)
     }

@@ -15,7 +15,7 @@ data class Post(
     val userId: String,
 
     @SerialName("pet_id")
-    val petId: String? = null,
+    val petIds: List<String>? = emptyList(),
 
     val caption: String? = null,
 
@@ -48,5 +48,7 @@ data class Post(
     @SerialName("updated_at")
     val updatedAt: String? = null,
 
-    var isLiked: Boolean = false
+    var isLiked: Boolean = false,
+
+    var taggedPets: List<Pet> = emptyList(),
 )

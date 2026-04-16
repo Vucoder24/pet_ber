@@ -44,9 +44,11 @@ data class User(
     @SerialName("updated_at")
     val updatedAt: String? = null,
 
-    val postCount: Long = 0,
+    val petFollowingCount: Long = 0,
 
     val followerCount: Long = 0,
 
-    val followingCount: Long = 0
+    val followingCount: Long = 0,
+
+    val friendsCount: Long = 0
 ): Parcelable

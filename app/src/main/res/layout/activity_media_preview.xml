@@ -35,6 +35,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/playerView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <ImageButton
         android:id="@+id/btn_back"
         android:layout_width="40dp"

@@ -143,6 +143,12 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun incrementShareCount(postId: String) {
+        viewModelScope.launch {
+            homeRepository.incrementShareCount(postId)
+        }
+    }
+
 }
 
 sealed class UpdateUserState {

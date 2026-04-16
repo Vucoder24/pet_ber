@@ -3,28 +3,40 @@ package com.nvv.petber.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.nvv.petber.R
+import com.nvv.petber.data.model.Notification
 import com.nvv.petber.databinding.ActivityMainBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
 import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.viewmodel.MainViewModel
+import com.tapadoo.alerter.Alerter
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.realtime.realtime
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-
+    private val mainViewModel: MainViewModel by viewModels()
     @Inject
     lateinit var supabaseClient: SupabaseClient
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
+    private lateinit var currentUserId: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +52,46 @@ class MainActivity : AppCompatActivity() {
             view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, 78)
             insets
         }
+        currentUserId = SharePrefUtils.getCurrentUserId(this)
 
         setupBottomNavigation()
         checkSession()
+        observeNotifications()
+    }
+    private fun observeNotifications() {
+        mainViewModel.startListeningRealtime(currentUserId)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.newNotificationEvent.collect { notification ->
+                    showTopBanner(notification)
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            try {
+                supabaseClient.realtime.connect()
+            } catch (_: Exception) {}
+        }
+    }
+
+    private fun showTopBanner(notification: Notification) {
+        Alerter.hide()
+        Alerter.create(this@MainActivity)
+            .setTitle(getString(R.string.new_notification))
+            .setText(notification.message ?: "PetBer has a new update for you")
+            .setIcon(R.drawable.ic_notification)
+            .setBackgroundColorRes(R.color.bg_btn)
+            .setDuration(5000)
+            .enableSwipeToDismiss()
+            .setOnClickListener {
+                // Xử lý khi user click vào banner (vd: navigate vào NotificationFragment)
+            }
+            .show()
     }
 
     private fun checkSession() {
@@ -64,6 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleLogout() {
+        mainViewModel.stopRealtime()
         SharePrefUtils.saveCurrentUserId(this, "")
 
         val intent = Intent(this, LoginActivity::class.java)
@@ -75,9 +125,31 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigation() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-
         val navController = navHostFragment.navController
 
-        binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            if (item.itemId == navController.currentDestination?.id) return@setOnItemSelectedListener false
+
+            val builder = NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setRestoreState(true)
+                .setPopUpTo(
+                    navController.graph.startDestinationId,
+                    inclusive = false,
+                    saveState = true
+                )
+
+            navController.navigate(item.itemId, null, builder.build())
+            true
+        }
+    }
+
+    fun selectProfileTab() {
+        binding.bottomNavigation.selectedItemId = R.id.navigation_profile
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlayer.release()
     }
 }
