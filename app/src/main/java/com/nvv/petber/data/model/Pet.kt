@@ -61,3 +61,24 @@ data class Pet(
     @SerialName("updated_at")
     val updatedAt: String? = null
 ): Parcelable
+
+@Serializable
+data class PetSearchResult(
+    val pet: Pet,
+    val isFollowing: Boolean
+)
+
+@Serializable
+data class PetFollowRecord(
+    @SerialName("id")
+    val id: String,
+
+    @SerialName("user_id")
+    val userId: String,
+
+    @SerialName("pet_id")
+    val petId: String,
+
+    @SerialName("created_at")
+    val createdAt: String? = null
+)

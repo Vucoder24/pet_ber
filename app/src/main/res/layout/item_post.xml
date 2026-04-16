@@ -9,10 +9,12 @@
     app:cardElevation="2dp">
 
     <LinearLayout
+        android:id="@+id/layoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/white"
+        android:animateLayoutChanges="true"
         android:padding="12dp">
 
         <RelativeLayout
@@ -248,7 +250,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="caption"
-            android:maxLines="2"
+            android:maxLines="3"
             android:ellipsize="end"
             android:textStyle="normal"
             android:fontFamily="@font/baloo2"

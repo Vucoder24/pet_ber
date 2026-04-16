@@ -6,12 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
-import com.nvv.petber.data.model.User
+import com.nvv.petber.data.repo.remote.UserSearchResult
 import com.nvv.petber.databinding.ItemUserSearchResultBinding
 import com.nvv.petber.utils.ext.loadAvatar
 
-class SearchUserResultAdapter(private val onClick: (User) -> Unit) :
-    ListAdapter<User, SearchUserResultAdapter.ViewHolder>(DiffCallback) {
+class SearchUserResultAdapter(
+    private val onClick: (UserSearchResult) -> Unit,
+    private val onFollowClick: (UserSearchResult) -> Unit
+) :
+    ListAdapter<UserSearchResult, SearchUserResultAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(val binding: ItemUserSearchResultBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -25,7 +28,8 @@ class SearchUserResultAdapter(private val onClick: (User) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
+        val result = getItem(position)
+        val item = result.user
         holder.binding.apply {
             tvName.text =
                 item.fullName ?: holder.itemView.context.getString(R.string.petber_user)
@@ -33,12 +37,27 @@ class SearchUserResultAdapter(private val onClick: (User) -> Unit) :
 
             ivAvatar.loadAvatar(item.avatarUrl)
 
-            root.setOnClickListener { onClick(item) }
+            if (result.isFollowing) {
+                btnFollow.text = holder.itemView.context.getString(R.string.unfollow)
+                btnFollow.setBackgroundColor(
+                    holder.itemView.context.resources.getColor(R.color.gray_light)
+                )
+            } else {
+                btnFollow.text = holder.itemView.context.getString(R.string.follow)
+                btnFollow.setBackgroundColor(
+                    holder.itemView.context.resources.getColor(R.color.bg_btn)
+                )
+            }
+
+            root.setOnClickListener { onClick(result) }
+            btnFollow.setOnClickListener { onFollowClick(result) }
         }
     }
 
-    object DiffCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(old: User, new: User) = old.id == new.id
-        override fun areContentsTheSame(old: User, new: User) = old == new
+    object DiffCallback : DiffUtil.ItemCallback<UserSearchResult>() {
+        override fun areItemsTheSame(old: UserSearchResult, new: UserSearchResult) =
+            old.user.id == new.user.id
+
+        override fun areContentsTheSame(old: UserSearchResult, new: UserSearchResult) = old == new
     }
 }

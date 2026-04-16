@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.databinding.FragmentPetSearchBinding
 import com.nvv.petber.ui.adapter.SearchPetResultAdapter
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,15 +35,31 @@ class PetSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = SearchPetResultAdapter { pet ->
-            // click pet item
-        }
+        adapter = SearchPetResultAdapter(
+            onClick = {
+
+            },
+             onFollowClick = {
+                 sharedViewModel.toggleFollowPet(
+                     it.pet,
+                     it.isFollowing,
+                     requireContext()
+                 )
+             }
+        )
         binding.rvResults.adapter = adapter
         // observe search results
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 sharedViewModel.pets.collect { list ->
                     adapter.submitList(list)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.errorEvent.collect { errorMessage ->
+                    requireContext().toast(errorMessage)
                 }
             }
         }

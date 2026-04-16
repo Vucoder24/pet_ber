@@ -10,7 +10,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.databinding.FragmentUserSearchBinding
+import com.nvv.petber.ui.activity.MainActivity
+import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.SearchUserResultAdapter
+import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,18 +38,47 @@ class UserSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = SearchUserResultAdapter { user ->
-            // click user item
-        }
-        binding.rvResults.adapter = adapter
+        initAndSetupListener()
+        observeSearchResults()
+
+    }
+
+    private fun observeSearchResults() {
         // observe search results
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.users.collect { list ->
                     adapter.submitList(list)
                 }
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorEvent.collect { errorMessage ->
+                    requireContext().toast(errorMessage)
+                }
+            }
+        }
+    }
+
+    private fun initAndSetupListener() {
+        adapter = SearchUserResultAdapter(
+            onClick = { userSearch ->
+                if (userSearch.user.id == SharePrefUtils.getCurrentUserId(requireContext())) {
+                    (requireActivity() as MainActivity?)?.selectProfileTab()
+                } else {
+                    UserProfileActivity.start(requireContext(), userSearch.user.id)
+                }
+            },
+            onFollowClick = { userSearch ->
+                viewModel.toggleFollow(
+                    userSearch.user,
+                    userSearch.isFollowing,
+                    requireContext()
+                )
+            }
+        )
+        binding.rvResults.adapter = adapter
     }
 
     override fun onDestroyView() {

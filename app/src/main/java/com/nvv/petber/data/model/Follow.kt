@@ -29,3 +29,18 @@ data class FollowUserUI(
     val user: User,
     var isFollowing: Boolean
 )
+
+@Serializable
+data class FollowRecord(
+    @SerialName("id")
+    val id: String? = null,
+
+    @SerialName("follower_id")
+    val followerId: String,
+
+    @SerialName("following_id")
+    val followingId: String,
+
+    @SerialName("created_at")
+    val createdAt: String? = null
+)
