@@ -8,6 +8,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import android.view.animation.OvershootInterpolator
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.annotation.OptIn
@@ -37,6 +40,7 @@ import com.nvv.petber.databinding.FragmentStoryUserBinding
 import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.TimeUtils
 import com.nvv.petber.utils.buildCacheDataSource
+import com.nvv.petber.utils.ext.formatSocialCount
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.loadMediaCoverWithExtremeGradient
@@ -44,11 +48,13 @@ import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.StoryNavigationEvent
 import com.nvv.petber.viewmodel.StoryUiState
 import com.nvv.petber.viewmodel.ViewStoryViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
+@AndroidEntryPoint
 class StoryUserFragment : Fragment() {
     private var _binding: FragmentStoryUserBinding? = null
     private val binding get() = _binding!!
@@ -88,8 +94,78 @@ class StoryUserFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializePlayer()
         setupUI()
+        setupReactions()
         observeViewModel()
         setupTouchListener()
+    }
+
+    private fun setupReactions() {
+        binding.btnReactPaw.setOnClickListener {
+            handleReaction(it, R.drawable.ic_react_paw, "paw")
+        }
+        binding.btnReactCat.setOnClickListener {
+            handleReaction(it, R.drawable.ic_react_cat, "cat")
+        }
+        binding.btnReactFish.setOnClickListener {
+            handleReaction(it, R.drawable.ic_react_fish, "fish")
+        }
+        binding.btnReactYarn.setOnClickListener {
+            handleReaction(it, R.drawable.ic_react_yarn, "yarn")
+        }
+
+        binding.btnShareStory.setOnClickListener {
+            // Xử lý logic share ở đây
+        }
+    }
+
+    private fun handleReaction(view: View, drawableRes: Int, reactionType: String) {
+        viewModel.reactToStory(reactionType)
+        view.animate()
+            .scaleX(0.7f).scaleY(0.7f)
+            .setDuration(100)
+            .withEndAction {
+                view.animate()
+                    .scaleX(1f).scaleY(1f)
+                    .setDuration(200)
+                    .setInterpolator(OvershootInterpolator(2f))
+                    .start()
+            }.start()
+
+        spawnFloatingIcon(view, drawableRes)
+    }
+
+    private fun spawnFloatingIcon(sourceView: View, drawableRes: Int) {
+        val floatingIcon = ImageView(requireContext()).apply {
+            setImageResource(drawableRes)
+            val sizePx = (52 * resources.displayMetrics.density).toInt()
+            layoutParams = FrameLayout.LayoutParams(sizePx, sizePx)
+        }
+
+        val location = IntArray(2)
+        sourceView.getLocationInWindow(location)
+
+        val startX = location[0].toFloat()
+        val startY = location[1].toFloat() - 50f
+
+        floatingIcon.x = startX
+        floatingIcon.y = startY
+
+        binding.flAnimationContainer.addView(floatingIcon)
+
+        val randomX = startX + (Math.random() * 200 - 100).toFloat()
+        val endY = startY - 300f - (Math.random() * 300).toFloat()
+        val durationFly = (800 + Math.random() * 400).toLong()
+
+        floatingIcon.animate()
+            .x(randomX)
+            .y(endY)
+            .alpha(0f)
+            .scaleX(1.5f).scaleY(1.5f)
+            .setDuration(durationFly)
+            .withEndAction {
+                binding.flAnimationContainer.removeView(floatingIcon)
+            }
+            .start()
     }
 
     @OptIn(UnstableApi::class)
@@ -104,18 +180,21 @@ class StoryUserFragment : Fragment() {
         binding.videoView.player = exoPlayer
 
         exoPlayer?.addListener(object : Player.Listener {
+            @SuppressLint("SwitchIntDef")
             override fun onPlaybackStateChanged(playbackState: Int) {
                 when (playbackState) {
                     Player.STATE_BUFFERING -> {
-                        showLoading()
+                        binding.pbLoading.visible()
                     }
 
                     Player.STATE_READY -> {
-                        hideLoading()
+                        binding.pbLoading.gone()
                         val duration = exoPlayer?.duration ?: 0L
                         if (duration > 0) {
                             viewModel.setVideoDurationAndStart(duration)
                             if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && !isHolding) {
+                                viewModel.onMediaReady()
+                                exoPlayer?.play()
                                 startVideoSync()
                             }
                         }
@@ -135,8 +214,11 @@ class StoryUserFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!isHolding) viewModel.resumeTimer()
-        if (binding.videoView.isVisible && !isHolding) {
+        val state = viewModel.uiState.value
+        if (!isHolding && state.isMediaReady) {
+            viewModel.resumeTimer()
+        }
+        if (binding.videoView.isVisible && !isHolding && state.isMediaReady) {
             exoPlayer?.play()
             startVideoSync()
         }
@@ -162,9 +244,7 @@ class StoryUserFragment : Fragment() {
 
     private fun hideLoading() {
         binding.pbLoading.gone()
-        if (!isHolding && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-            viewModel.resumeTimer()
-        }
+
     }
 
     private fun observeViewModel() {
@@ -202,7 +282,16 @@ class StoryUserFragment : Fragment() {
     }
 
     private fun handleUiState(state: StoryUiState) {
+
         val group = state.storyGroup ?: return
+
+        val counts = state.reactionSummary.counts
+        binding.apply {
+            pawCount.text = counts["paw"]?.toLong()?.formatSocialCount() ?: "0"
+            catCount.text = counts["cat"]?.toLong()?.formatSocialCount() ?: "0"
+            fishCount.text = counts["fish"]?.toLong()?.formatSocialCount() ?: "0"
+            yarnCount.text = counts["yarn"]?.toLong()?.formatSocialCount() ?: "0"
+        }
 
         if (progressBars.isEmpty() && group.stories.isNotEmpty()) {
             setupProgressBars(group.stories.size)
@@ -302,7 +391,10 @@ class StoryUserFragment : Fragment() {
                         target: com.bumptech.glide.request.target.Target<Drawable?>,
                         isFirstResource: Boolean
                     ): Boolean {
-                        hideLoading()
+                        viewModel.onMediaReady()
+                        if (!isHolding && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                            viewModel.resumeTimer()
+                        }
                         return false
                     }
 
@@ -314,6 +406,10 @@ class StoryUserFragment : Fragment() {
                         isFirstResource: Boolean
                     ): Boolean {
                         hideLoading()
+                        viewModel.onMediaReady()
+                        if (!isHolding && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                            viewModel.resumeTimer()
+                        }
                         return false
                     }
                 })
@@ -394,7 +490,9 @@ class StoryUserFragment : Fragment() {
 
                     isHolding = false
                     binding.groupUserInfo.visible()
-                    viewModel.resumeTimer()
+                    if (viewModel.uiState.value.isMediaReady) {
+                        viewModel.resumeTimer()
+                    }
 
                     if (binding.videoView.isVisible && exoPlayer?.playbackState == Player.STATE_READY) {
                         exoPlayer?.play()
@@ -433,7 +531,9 @@ class StoryUserFragment : Fragment() {
                 MotionEvent.ACTION_CANCEL -> {
                     isHolding = false
                     binding.groupUserInfo.visible()
-                    viewModel.resumeTimer()
+                    if (viewModel.uiState.value.isMediaReady) {
+                        viewModel.resumeTimer()
+                    }
                     if (binding.videoView.isVisible && exoPlayer?.playbackState == Player.STATE_READY) {
                         exoPlayer?.play()
                         startVideoSync()

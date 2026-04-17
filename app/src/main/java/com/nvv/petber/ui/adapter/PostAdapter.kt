@@ -163,7 +163,7 @@ class PostAdapter(
                 post.createdAt?.let {
                     tvTimeAgo.text = TimeUtils.formatTimeAgo(itemView.context, it)
                 }
-                btnLike.setImageResource(if (post.isLiked) R.drawable.ic_liked else R.drawable.ic_like)
+                icLike.setImageResource(if (post.isLiked) R.drawable.ic_liked else R.drawable.ic_like)
                 imgUser.loadAvatar(post.users?.avatarUrl)
 
                 caption.setOnClickListener {

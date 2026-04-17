@@ -48,11 +48,18 @@ class HomeRepository @Inject constructor(
                         eq("is_expired", false)
                         isIn("user_id", userIds)
                     }
-                    order("created_at", Order.DESCENDING)
                 }
                 .decodeList<Story>()
 
-            Result.success(stories)
+            val grouped = stories.groupBy { it.userId }
+
+            val sortedStories = userIds.flatMap { userId ->
+                grouped[userId]
+                    ?.sortedByDescending { it.createdAt }
+                    ?: emptyList()
+            }
+
+            Result.success(sortedStories)
         } catch (e: Exception) {
             Result.failure(e)
         }

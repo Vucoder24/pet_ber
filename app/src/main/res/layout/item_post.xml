@@ -1,4 +1,4 @@
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -42,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="Username"
                     android:textStyle="bold"
+                    android:textColor="@color/title_color"
                     android:fontFamily="@font/baloo2"
                     tools:ignore="HardcodedText" />
 
@@ -50,6 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="time"
+                    android:textColor="@color/pet_text_secondary"
                     android:textSize="12sp"
                     android:fontFamily="@font/baloo2"
                     tools:ignore="HardcodedText" />
@@ -252,6 +254,7 @@
             android:text="caption"
             android:maxLines="3"
             android:ellipsize="end"
+            android:textColor="@color/text_color"
             android:textStyle="normal"
             android:fontFamily="@font/baloo2"
             tools:ignore="HardcodedText" />
@@ -276,55 +279,96 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/btn_like"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_like" />
-
-            <TextView
-                android:id="@+id/tvLikeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:text="120"
-                android:fontFamily="@font/baloo2"
-                android:layout_marginEnd="16dp"
-                tools:ignore="HardcodedText" />
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="8dp"
+                tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck">
 
-            <ImageView
+                <ImageView
+                    android:id="@+id/ic_like"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_like"
+                    tools:ignore="ImageContrastCheck" />
+
+                <TextView
+                    android:id="@+id/tvLikeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/baloo2"
+                    android:text="0"
+                    android:textColor="@color/text_color"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/btn_cmt"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_cmt" />
-
-            <TextView
-                android:id="@+id/tvCmtCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="16dp"
-                android:text="25"
-                android:fontFamily="@font/baloo2"
-                tools:ignore="HardcodedText" />
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                tools:ignore="TouchTargetSizeCheck">
 
-            <ImageView
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_cmt" />
+
+                <TextView
+                    android:id="@+id/tvCmtCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/baloo2"
+                    android:text="0"
+                    android:textColor="@color/text_color"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/btn_share"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_share" />
-
-            <TextView
-                android:id="@+id/tvShareCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:text="0"
-                android:fontFamily="@font/baloo2"
-                tools:ignore="HardcodedText" />
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                tools:ignore="TouchTargetSizeCheck">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_share_story"
+                    app:tint="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvShareCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/baloo2"
+                    android:text="0"
+                    android:textColor="@color/text_color"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
 
         </LinearLayout>
 
