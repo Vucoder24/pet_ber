@@ -6,11 +6,13 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
+import com.nvv.petber.data.model.DiaryMonth
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.data.repo.remote.PetRepository
 import com.nvv.petber.data.repo.remote.ProfileRepositoryRemote
+import com.nvv.petber.utils.FilterPostUtils
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +52,8 @@ class PetProfileViewModel @Inject constructor(
 
     private val _isLoadMore = MutableStateFlow(false)
     val isLoadMore: StateFlow<Boolean> = _isLoadMore.asStateFlow()
+    private val _diaryPosts = MutableStateFlow<List<DiaryMonth>>(emptyList())
+    val diaryPosts: StateFlow<List<DiaryMonth>> = _diaryPosts.asStateFlow()
 
     private var currentOffset = 0
     private val limitPost = 10
@@ -60,6 +64,7 @@ class PetProfileViewModel @Inject constructor(
         _petState.value = pet
         _isOwner.value = isOwner
         loadPetPosts(pet.id, isRefresh = true)
+        loadDiaryPosts(pet.id)
     }
 
     fun fetchPetById(petId: String) {
@@ -71,6 +76,7 @@ class PetProfileViewModel @Inject constructor(
                     _petState.value = pet
                     checkOwnershipAndFollowStatus(pet)
                     loadPetPosts(petId, isRefresh = true)
+                    loadDiaryPosts(petId)
                 } else {
                     _error.value = "Pet information not found"
                     _isLoading.value = false
@@ -78,6 +84,19 @@ class PetProfileViewModel @Inject constructor(
             } catch (e: Exception) {
                 _error.value = e.message
                 _isLoading.value = false
+            }
+        }
+    }
+
+    private fun loadDiaryPosts(petId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val allPosts = petRepo.getAllPetDiaryPosts(petId)
+
+                val groupedData = FilterPostUtils.groupPostsByMonth(allPosts)
+                _diaryPosts.value = groupedData
+            } catch (_: Exception) {
+                // Handle error
             }
         }
     }

@@ -52,3 +52,9 @@ data class Post(
 
     var taggedPets: List<Pet> = emptyList(),
 )
+
+
+data class DiaryMonth(
+    val monthYear: String,
+    val posts: List<Post>
+)

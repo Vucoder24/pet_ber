@@ -15,17 +15,17 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
+import com.google.android.material.tabs.TabLayoutMediator
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.databinding.ActivityPetProfileBinding
-import com.nvv.petber.ui.adapter.PostAdapter
-import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
-import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
+import com.nvv.petber.ui.adapter.PetProfilePagerAdapter
 import com.nvv.petber.utils.PermissionUtils
 import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.utils.ext.autoHeight
 import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.showAvatarOptionDialog
 import com.nvv.petber.utils.ext.showCoverOptionDialog
@@ -46,8 +46,6 @@ class PetProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPetProfileBinding
     private val viewModel: PetProfileViewModel by viewModels()
-    private lateinit var postAdapter: PostAdapter
-
     private var pendingMediaAction: String = ""
     private var cropTarget: String? = null
     private var currentPet: Pet? = null
@@ -149,7 +147,7 @@ class PetProfileActivity : AppCompatActivity() {
             insets
         }
         currentUserId = SharePrefUtils.getCurrentUserId(this)
-        setupRecyclerView()
+        setupViewPager()
         setupIntentData()
         setupListeners()
         observeViewModel()
@@ -167,37 +165,25 @@ class PetProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRecyclerView() {
-        postAdapter = PostAdapter(
-            exoPlayer = exoPlayer,
-            onLikeClick = { post ->
-                viewModel.toggleLike(post)
-            },
-            onCommentClick = { post ->
-                val bottomSheet = CommentBottomSheetFragment.newInstance(post.id, post.userId)
-                bottomSheet.show(supportFragmentManager, "CommentBottomSheet")
-            },
-            onShareClick = { post ->
-                val link = "https://project-ilyyx.vercel.app/post/${post.id}"
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, link)
+    private fun setupViewPager() {
+        binding.viewPager.isUserInputEnabled = false
+        val pagerAdapter = PetProfilePagerAdapter(this)
+        binding.viewPager.adapter = pagerAdapter
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> getString(R.string.all_posts)
+                1 -> getString(R.string.pet_diary)
+                else -> ""
+            }
+        }.attach()
+        binding.viewPager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    binding.viewPager.autoHeight()
                 }
-                startActivity(Intent.createChooser(intent, getString(R.string.share_post)))
-                viewModel.incrementShareCount(post.id)
-            },
-            onProfileClick = {
-                UserProfileActivity.start(this, it.userId)
-            },
-            onMoreOption = {
-                val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
-                bottomSheet.show(supportFragmentManager, "PostOptionsBottomSheet")
             }
         )
-        binding.rvPetPosts.apply {
-            layoutManager = LinearLayoutManager(this@PetProfileActivity)
-             adapter = postAdapter
-        }
     }
 
     private fun setupIntentData() {
@@ -239,8 +225,10 @@ class PetProfileActivity : AppCompatActivity() {
                     val scrollHeight = v.measuredHeight
 
                     if (scrollY >= childHeight - scrollHeight - 100) {
-                        viewModel.petState.value?.id?.let { petId ->
-                            viewModel.loadPetPosts(petId)
+                        if (binding.viewPager.currentItem == 0) {
+                            viewModel.petState.value?.id?.let { petId ->
+                                viewModel.loadPetPosts(petId, isRefresh = false)
+                            }
                         }
                     }
                 }
@@ -393,17 +381,6 @@ class PetProfileActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.posts.collectLatest { posts ->
-                postAdapter.submitPostData(posts, viewModel.isLoadMore.value)
-            }
-        }
-        lifecycleScope.launch {
-            viewModel.isLoadMore.collectLatest { isLoadMore ->
-                postAdapter.submitPostData(viewModel.posts.value, isLoadMore)
-            }
-        }
-
-        lifecycleScope.launch {
             viewModel.isLoading.collectLatest { isLoading ->
                 binding.root.isRefreshing = isLoading
                 binding.shimmerView.visibility =
@@ -515,6 +492,5 @@ class PetProfileActivity : AppCompatActivity() {
         }
         coverPickerLauncher.launch(intent)
     }
-
 
 }

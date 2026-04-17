@@ -2,11 +2,16 @@ package com.nvv.petber.data.repo.remote
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.PetFollowRecord
+import com.nvv.petber.data.model.Post
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.storage.storage
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
+import io.github.jan.supabase.storage.storage
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import java.util.UUID
@@ -58,6 +63,21 @@ class PetRepository @Inject constructor(
 
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun getAllPetDiaryPosts(petId: String): List<Post> {
+        return try {
+            supabase.from("posts").select(columns = Columns.raw("*, post_media(*)")) {
+                filter {
+                    contains("pet_id", listOf(UUID.fromString(petId)))
+                    filter("deleted_at", FilterOperator.IS, null)
+                }
+                order("created_at", order = Order.DESCENDING)
+            }.decodeList<Post>()
+        } catch (e: Exception) {
+            Log.e("PetRepository", "Error fetching pet diary posts: ${e.message}")
+            emptyList()
         }
     }
 

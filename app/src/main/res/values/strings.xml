@@ -216,7 +216,7 @@
     <string name="value_neutered_no">Not Neutered</string>
     <string name="related_posts">Related Posts</string>
     <string name="please_login">Please log in</string>
-    <string name="update_pet_success">Update pet infomation success.</string>
+    <string name="update_pet_success">Update pet information success.</string>
     <string name="edit_pet_info">Edit Pet Information</string>
     <string name="save">Save</string>
     <string name="pet_following">Pet following</string>
@@ -236,6 +236,7 @@
     <string name="new_notification">New Notification</string>
     <string name="no_notifications_yet">No notifications yet!</string>
     <string name="dep_empty_notif">We\'ll notify you when there\'s a new interaction or news from your pet!</string>
+    <string name="pet_diary">Pet Diary</string>
 
 
     <string-array name="media_types">

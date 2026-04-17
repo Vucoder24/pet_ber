@@ -111,15 +111,15 @@
                                 android:id="@+id/btnFollow"
                                 android:layout_width="0dp"
                                 android:layout_height="48dp"
+                                android:layout_marginHorizontal="24dp"
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/bg_btn"
                                 android:fontFamily="@font/baloo2"
                                 android:text="@string/follow"
-                                android:layout_marginHorizontal="24dp"
-                                app:iconTint="@color/white"
-                                app:iconPadding="0dp"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
+                                app:iconPadding="0dp"
+                                app:iconTint="@color/white"
                                 tools:ignore="ButtonStyle,TouchTargetSizeCheck,TextContrastCheck,VisualLintButtonSize" />
 
                             <com.google.android.material.button.MaterialButton
@@ -305,31 +305,36 @@
                         tools:text="Disease prevention: Rabies vaccinated" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvPostsTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/baloo2"
-                    android:text="@string/related_posts"
-                    android:textColor="@color/title_color"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/itemHealthInfo" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvPetPosts"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="12dp"
-                    android:nestedScrollingEnabled="false"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@android:color/transparent"
+                    app:tabIndicatorColor="#FF9800"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabMode="fixed"
+                    app:tabRippleColor="@null"
+                    app:tabPadding="8dp"
+                    app:tabSelectedTextColor="#FF9800"
+                    app:tabTextAppearance="@style/CustomTabText"
+                    app:tabTextColor="@color/text_tab_color"
+                    app:tabBackground="@drawable/bg_tab_item"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvPostsTitle" />
+                    app:layout_constraintTop_toBottomOf="@id/itemHealthInfo"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tabLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
