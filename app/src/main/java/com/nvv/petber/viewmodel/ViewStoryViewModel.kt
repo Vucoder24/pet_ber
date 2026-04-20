@@ -3,6 +3,7 @@ package com.nvv.petber.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nvv.petber.data.model.GroupedStoryReaction
 import com.nvv.petber.data.model.ReactionSummary
 import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.data.repo.remote.StoryRepository
@@ -63,7 +64,7 @@ class ViewStoryViewModel @Inject constructor(
                 reactionSummary = ReactionSummary()
             )
         }
-        fetchReactions(story.id)
+        fetchReactions(story.id, story.userId)
     }
 
     fun onMediaReady() {
@@ -76,44 +77,45 @@ class ViewStoryViewModel @Inject constructor(
         }
     }
 
-    private fun fetchReactions(storyId: String) {
+    private fun fetchReactions(storyId: String, userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                if (userId == currentUserId) {
+                    val details = storyRepository.getStoryReactionDetails(storyId)
 
-                val rawCounts = storyRepository.getReactionCounts(storyId)
-                val myReactions = storyRepository.getMyRecentReactions(storyId, currentUserId)
+                    val grouped = details.groupBy { it.userId }.map { entry ->
+                        GroupedStoryReaction(
+                            user = entry.value.firstOrNull()?.user,
+                            reactions = entry.value.map { it.reactionType }
+                        )
+                    }
 
-                val countMap = mutableMapOf("paw" to 0, "cat" to 0, "fish" to 0, "yarn" to 0)
-                rawCounts.forEach { countMap[it.reactionType] = it.totalCount }
+                    val countMap = mutableMapOf("paw" to 0, "cat" to 0, "fish" to 0, "yarn" to 0)
+                    details.forEach { detail ->
+                        val type = detail.reactionType
+                        countMap[type] = (countMap[type] ?: 0) + 1
+                    }
 
-                _uiState.update {
-                    it.copy(reactionSummary = ReactionSummary(countMap, myReactions))
+                    _uiState.update {
+                        it.copy(
+                            reactionSummary = ReactionSummary(
+                                counts = countMap,
+                                details = details,
+                                groupedDetails = grouped
+                            )
+                        )
+                    }
                 }
-            } catch (_: Exception) {
-                // Xử lý lỗi nếu cần
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
+
     fun reactToStory(reactionType: String) {
         val state = _uiState.value
         val currentStory = state.storyGroup?.stories?.getOrNull(state.currentIndex) ?: return
-        val currentSummary = state.reactionSummary
-
-        val newMyReactions = currentSummary.myRecentReactions.toMutableList()
-        val newCounts = currentSummary.counts.toMutableMap()
-
-        newMyReactions.add(reactionType)
-        newCounts[reactionType] = (newCounts[reactionType] ?: 0) + 1
-
-        if (newMyReactions.size > 5) {
-            val removedReaction = newMyReactions.removeAt(0)
-            newCounts[removedReaction] = maxOf(0, (newCounts[removedReaction] ?: 0) - 1)
-        }
-
-        _uiState.update {
-            it.copy(reactionSummary = ReactionSummary(newCounts, newMyReactions))
-        }
 
         viewModelScope.launch(Dispatchers.IO) {
             try {

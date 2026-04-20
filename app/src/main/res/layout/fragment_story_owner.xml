@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".ui.view_story.fragment.StoryUserFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.view_story.fragment.StoryOwnerFragment">
 
     <View
         android:id="@+id/story_background"
@@ -38,9 +38,7 @@
         android:id="@+id/vTouchOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false"
-        android:focusable="false"
-        android:background="@android:color/transparent"/>
+        android:elevation="10dp" />
 
     <LinearLayout
         android:id="@+id/llProgressContainer"
@@ -74,10 +72,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:ellipsize="end"
         android:fontFamily="@font/baloo2"
-        android:maxLines="1"
-        android:textColor="@color/text_white"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
@@ -89,10 +85,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:fontFamily="@font/baloo2"
-        android:textColor="@color/text_white"
-        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
         app:layout_constraintBaseline_toBaselineOf="@id/tvFullName"
         app:layout_constraintStart_toEndOf="@+id/tvFullName" />
 
@@ -101,36 +96,28 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="16dp"
+        android:importantForAccessibility="no"
         android:padding="4dp"
         android:src="@drawable/ic_close"
         app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/ivAvatar"
-        app:tint="@color/text_white"
-        tools:ignore="ContentDescription,ImageContrastCheck" />
+        app:tint="@android:color/white" />
 
     <ProgressBar
         android:id="@+id/pbLoading"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:elevation="11dp"
-        android:indeterminateTint="@color/gray_light"
+        android:indeterminateTint="@android:color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/flAnimationContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:elevation="12dp"
-        android:focusable="false" />
-
     <LinearLayout
-        android:id="@+id/llReactionBar"
+        android:id="@+id/llOwnerReactionBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -138,97 +125,35 @@
         android:elevation="12dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
-            android:id="@+id/btnReactPaw"
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_react_paw" />
+
+        <TextView
+            android:id="@+id/tvReactionCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingHorizontal="10dp"
-            tools:ignore="UseCompoundDrawables">
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/count_emotions"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_react_paw" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btnReactCat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingHorizontal="10dp"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_react_cat" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btnReactFish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingHorizontal="10dp"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_react_fish" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btnReactYarn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingHorizontal="10dp"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_react_yarn" />
-
-        </LinearLayout>
-
-<!--        <View-->
-<!--            android:layout_width="1dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:layout_marginHorizontal="8dp"-->
-<!--            android:background="#4DFFFFFF" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/btnShareStory"-->
-<!--            android:layout_width="42dp"-->
-<!--            android:layout_height="42dp"-->
-<!--            android:layout_marginStart="6dp"-->
-<!--            android:importantForAccessibility="no"-->
-<!--            android:padding="2dp"-->
-<!--            android:src="@drawable/ic_share_story"-->
-<!--            app:tint="@color/pet_stroke" />-->
-
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_arrow_up"
+            app:tint="@android:color/white" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

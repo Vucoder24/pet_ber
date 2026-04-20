@@ -55,10 +55,13 @@ class ProfileRepositoryRemote @Inject constructor(
                 .select(
                     Columns.raw(
                         """*, users(*), post_media(*), 
-                        |post_likes(*).filter(user_id.eq.$userId)""".trimMargin()
+                        post_likes(*)""".trimMargin()
                     )
                 ) {
-                    filter { eq("user_id", userId) }
+                    filter {
+                        eq("user_id", userId)
+                        eq("post_likes.user_id", userId)
+                    }
                 }
                 .decodeList<Post>()
 
@@ -86,16 +89,18 @@ class ProfileRepositoryRemote @Inject constructor(
         currentUserId: String
     ): List<Post> {
         return try {
-            val likeFilter = ".filter(user_id.eq.$currentUserId)"
 
             val posts = supabase.from("posts")
                 .select(
                     Columns.raw(
                         """*, users(*), post_media(*), 
-                    |post_likes(*)$likeFilter""".trimMargin()
+                    post_likes(*)""".trimMargin()
                     )
                 ) {
-                    filter { eq("user_id", userId) }
+                    filter {
+                        eq("user_id", userId)
+                        eq("post_likes.user_id", currentUserId)
+                    }
                     order("created_at", Order.DESCENDING)
                     range(offset.toLong(), (offset + limit - 1).toLong())
                 }

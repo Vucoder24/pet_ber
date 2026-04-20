@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.Notification
 import com.nvv.petber.databinding.ItemNotifLoadMoreShimmerBinding
 import com.nvv.petber.databinding.ItemNotificationBinding
+import com.nvv.petber.utils.NotificationHelper
 import com.nvv.petber.utils.TimeUtils
 import com.nvv.petber.utils.ext.loadAvatar
 
@@ -71,7 +73,14 @@ class NotificationAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(notification: Notification) {
-            binding.tvMessage.text = notification.message ?: "You have a new announcement"
+            val context = binding.root.context
+
+            val messageText = NotificationHelper.getMessageText(context, notification)
+            binding.tvMessage.text = HtmlCompat.fromHtml(
+                messageText,
+                HtmlCompat.FROM_HTML_MODE_COMPACT
+            )
+
             notification.createdAt?.let {
                 binding.tvTime.text = TimeUtils.formatTimeAgo(binding.root.context, it)
             }
@@ -85,7 +94,7 @@ class NotificationAdapter(
                     ContextCompat.getDrawable(binding.root.context, R.color.unread_notification_bg)
             }
 
-            binding.ivAvatar.loadAvatar(notification.avatarUrl)
+            binding.ivAvatar.loadAvatar(notification.avatarSenderUrl)
 
             binding.root.setOnClickListener {
                 onClick(notification)

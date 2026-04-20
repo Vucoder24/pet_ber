@@ -1,5 +1,6 @@
 package com.nvv.petber.ui.fragment.notification
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.nvv.petber.R
 import com.nvv.petber.databinding.FragmentNotificationBinding
+import com.nvv.petber.ui.activity.MainActivity
+import com.nvv.petber.ui.activity.PetProfileActivity
+import com.nvv.petber.ui.activity.PostDetailActivity
+import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.NotificationAdapter
+import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.visible
@@ -50,7 +57,36 @@ class NotificationFragment : Fragment() {
 
     private fun setupRecyclerView() {
         notificationAdapter = NotificationAdapter(
-            onClick = {},
+            onClick = {notification ->
+                if (!notification.isRead) {
+                    mainViewModel.markAsRead(notification.id)
+                }
+
+                when (notification.type) {
+                    "post_like", "comment", "comment_reply", "comment_like" -> {
+                        notification.postId?.let { postId ->
+                             val intent = Intent(requireContext(), PostDetailActivity::class.java)
+                             intent.putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
+                             startActivity(intent)
+                        }
+                    }
+                    "story_reaction" -> {
+                        notification.storyId?.let { storyId ->
+                            ViewStoryActivity.startWithId(requireContext(), storyId)
+                        }
+                    }
+                    "user_follow" -> {
+                        notification.senderId?.let { senderId ->
+                            UserProfileActivity.start(requireContext(), senderId)
+                        }
+                    }
+                    "pet_follow" -> {
+                        notification.petId?.let { petId ->
+                             PetProfileActivity.start(requireContext(), petId)
+                        }
+                    }
+                }
+            },
             onMoreClick = {
 
             }
@@ -103,6 +139,9 @@ class NotificationFragment : Fragment() {
                         notificationAdapter.submitList(list)
                         updateUiState()
                         binding.root.isRefreshing = false
+                        if (!mainViewModel.isLoading.value && list.isNotEmpty()) {
+                            hideNotificationsBadge()
+                        }
                     }
                 }
             }
@@ -133,6 +172,12 @@ class NotificationFragment : Fragment() {
                 binding.layoutEmpty.root.gone()
             }
         }
+    }
+
+    private fun hideNotificationsBadge(){
+        val now = java.time.Instant.now().toString()
+        SharePrefUtils.saveLastSeenNotificationTime(requireContext(), now)
+        (activity as? MainActivity)?.hideBadge(R.id.navigation_notifications)
     }
 
     override fun onDestroyView() {

@@ -22,4 +22,14 @@ object SharePrefUtils {
         val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         pref.edit { clear() }
     }
+
+    fun saveLastSeenNotificationTime(context: Context, time: String) {
+        val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        prefs.edit { putString("last_seen_notification", time) }
+    }
+
+    fun getLastSeenNotificationTime(context: Context): String {
+        val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        return prefs.getString("last_seen_notification", "1970-01-01T00:00:00Z")!!
+    }
 }

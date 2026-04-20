@@ -17,13 +17,19 @@ data class Notification(
     @SerialName("sender_id")
     val senderId: String? = null,
 
-    @SerialName("avatar_url")
-    val avatarUrl: String? = null,
+    @SerialName("name_sender")
+    val nameSender: String? = null,
+
+    @SerialName("avatar_sender_url")
+    val avatarSenderUrl: String? = null,
 
     val type: String? = null,
 
     @SerialName("post_id")
     val postId: String? = null,
+
+    @SerialName("story_id")
+    val storyId: String? = null,
 
     @SerialName("comment_id")
     val commentId: String? = null,

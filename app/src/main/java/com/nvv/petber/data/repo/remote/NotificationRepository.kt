@@ -31,7 +31,7 @@ class NotificationRepository @Inject constructor(
         val flow = channel!!
             .postgresChangeFlow<PostgresAction.Insert>(schema = "public") {
                 table = "notifications"
-                 filter("user_id", FilterOperator.EQ, userId)
+                filter("user_id", FilterOperator.EQ, userId)
             }
             .map {
                 it.decodeRecord<Notification>()
@@ -54,8 +54,28 @@ class NotificationRepository @Inject constructor(
             }.decodeList<Notification>()
     }
 
+    suspend fun getNewNotificationCount(userId: String, lastSeen: String): Int {
+        return supabase.from("notifications")
+            .select {
+                filter {
+                    eq("user_id", userId)
+                    gt("created_at", lastSeen)
+                }
+            }
+            .decodeList<Notification>()
+            .size
+    }
+
+
     suspend fun disconnect() {
         channel?.unsubscribe()
         channel = null
+    }
+
+    suspend fun markAsRead(notificationId: String) {
+        supabase.from("notifications")
+            .update(mapOf("is_read" to true)) {
+                filter { eq("id", notificationId) }
+            }
     }
 }

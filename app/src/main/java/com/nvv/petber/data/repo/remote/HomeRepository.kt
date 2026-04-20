@@ -82,12 +82,15 @@ class HomeRepository @Inject constructor(
                     *,
                     users(id, username, full_name, avatar_url),
                     post_media(id, post_id, media_url, media_type),
-                    post_likes(*).filter(user_id.eq.$currentUserId)
+                    post_likes(*)
                     """.trimIndent()
                     )
                 ) {
                     order("created_at", Order.DESCENDING)
                     range(from.toLong(), to.toLong())
+                    filter {
+                        eq("post_likes.user_id", currentUserId)
+                    }
                 }
                 .decodeList<Post>().map {
                     it.apply { isLiked = !postLikes.isNullOrEmpty() }
@@ -101,7 +104,6 @@ class HomeRepository @Inject constructor(
 
             // 3. Map dữ liệu
             posts.forEach { post ->
-                post.isLiked = !post.postLikes.isNullOrEmpty()
                 post.taggedPets = petsList.filter { pet -> post.petIds?.contains(pet.id) == true }
             }
 
@@ -158,12 +160,13 @@ class HomeRepository @Inject constructor(
                     *,
                     users(id, username, full_name, avatar_url),
                     post_media(id, post_id, media_url, media_type),
-                    post_likes(*).filter(user_id.eq.$currentUserId)
+                    post_likes(*)
                     """.trimIndent()
                     )
                 ) {
                     filter {
                         eq("id", postId)
+                        eq("post_likes.user_id", currentUserId)
                     }
                 }
                 .decodeSingle<Post>()
@@ -175,8 +178,6 @@ class HomeRepository @Inject constructor(
 
             post.isLiked = !post.postLikes.isNullOrEmpty()
             post.taggedPets = petsList
-
-            post.isLiked = !post.postLikes.isNullOrEmpty()
 
             Result.success(post)
         } catch (e: Exception) {

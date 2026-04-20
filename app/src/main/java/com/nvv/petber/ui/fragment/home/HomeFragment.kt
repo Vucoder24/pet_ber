@@ -48,6 +48,7 @@ class HomeFragment : Fragment() {
     private lateinit var storyAdapter: StoryAdapter
     private lateinit var postAdapter: PostAdapter
     private var scrollListener: RecyclerView.OnScrollListener? = null
+
     @Inject
     lateinit var exoPlayer: ExoPlayer
 
@@ -72,7 +73,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupFragmentResultListeners() {
-        childFragmentManager.setFragmentResultListener("refresh_key", viewLifecycleOwner) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(
+            "refresh_key",
+            viewLifecycleOwner
+        ) { _, bundle ->
             val isUpdated = bundle.getBoolean("bundle_is_updated", false)
             if (isUpdated) {
                 viewModel.refreshData()
@@ -115,14 +119,11 @@ class HomeFragment : Fragment() {
 
                 val initialPosition = groupedStories.indexOfFirst { it.userId == story.userId }
 
-                val intent = Intent(requireContext(), ViewStoryActivity::class.java).apply {
-                    putExtra(
-                        ViewStoryActivity.EXTRA_STORY_GROUPS,
-                        Json.encodeToString(groupedStories)
-                    )
-                    putExtra(ViewStoryActivity.EXTRA_INITIAL_POSITION, initialPosition)
-                }
-                startActivity(intent)
+                ViewStoryActivity.startWithData(
+                    requireContext(),
+                    Json.encodeToString(groupedStories),
+                    initialPosition
+                )
             }
         )
 
@@ -146,9 +147,9 @@ class HomeFragment : Fragment() {
                 viewModel.incrementShareCount(it.id)
             },
             onProfileClick = {
-                if (it.userId == SharePrefUtils.getCurrentUserId(requireContext())){
+                if (it.userId == SharePrefUtils.getCurrentUserId(requireContext())) {
                     (activity as? MainActivity)?.selectProfileTab()
-                }else{
+                } else {
                     UserProfileActivity.start(requireContext(), it.userId)
                 }
             },
@@ -181,7 +182,8 @@ class HomeFragment : Fragment() {
                     super.onScrolled(recyclerView, dx, dy)
 
                     if (dy > 0) {
-                        val layoutManager = recyclerView.layoutManager as? LinearLayoutManager ?: return
+                        val layoutManager =
+                            recyclerView.layoutManager as? LinearLayoutManager ?: return
                         val visibleItemCount = layoutManager.childCount
                         val totalItemCount = layoutManager.itemCount
                         val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()

@@ -8,9 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
-import android.view.animation.OvershootInterpolator
-import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.annotation.OptIn
@@ -36,8 +33,9 @@ import com.bumptech.glide.request.RequestListener
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Story
 import com.nvv.petber.data.model.UserStoryGroup
-import com.nvv.petber.databinding.FragmentStoryUserBinding
+import com.nvv.petber.databinding.FragmentStoryOwnerBinding
 import com.nvv.petber.ui.activity.UserProfileActivity
+import com.nvv.petber.ui.dialog.StoryReactionsBottomSheet
 import com.nvv.petber.ui.view_story.IStoryPage
 import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.TimeUtils
@@ -56,8 +54,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 @AndroidEntryPoint
-class StoryUserFragment : Fragment(), IStoryPage {
-    private var _binding: FragmentStoryUserBinding? = null
+class StoryOwnerFragment : Fragment(), IStoryPage {
+    private var _binding: FragmentStoryOwnerBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ViewStoryViewModel by viewModels()
     private val progressBars = mutableListOf<ProgressBar>()
@@ -71,7 +69,7 @@ class StoryUserFragment : Fragment(), IStoryPage {
 
     companion object {
         private const val ARG_STORY_GROUP = "arg_story_group"
-        fun newInstance(jsonGroup: String) = StoryUserFragment().apply {
+        fun newInstance(jsonGroup: String) = StoryOwnerFragment().apply {
             arguments = Bundle().apply { putString(ARG_STORY_GROUP, jsonGroup) }
         }
     }
@@ -85,9 +83,11 @@ class StoryUserFragment : Fragment(), IStoryPage {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentStoryUserBinding.inflate(inflater, container, false)
+        _binding = FragmentStoryOwnerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -95,107 +95,23 @@ class StoryUserFragment : Fragment(), IStoryPage {
         super.onViewCreated(view, savedInstanceState)
         initializePlayer()
         setupUI()
-        setupReactions()
         observeViewModel()
         setupTouchListener()
     }
 
-    private fun setupReactions() {
-        binding.btnReactPaw.setOnClickListener {
-            handleReaction(it, R.drawable.ic_react_paw, "paw")
-        }
-        binding.btnReactCat.setOnClickListener {
-            handleReaction(it, R.drawable.ic_react_cat, "cat")
-        }
-        binding.btnReactFish.setOnClickListener {
-            handleReaction(it, R.drawable.ic_react_fish, "fish")
-        }
-        binding.btnReactYarn.setOnClickListener {
-            handleReaction(it, R.drawable.ic_react_yarn, "yarn")
-        }
-    }
-
-    private fun handleReaction(view: View, drawableRes: Int, reactionType: String) {
-        viewModel.pauseTimer()
-        if (binding.videoView.isVisible) {
-            exoPlayer?.pause()
-        }
-        viewModel.reactToStory(reactionType)
-        view.animate()
-            .scaleX(0.7f).scaleY(0.7f)
-            .setDuration(100)
-            .withEndAction {
-                view.animate()
-                    .scaleX(1f).scaleY(1f)
-                    .setDuration(200)
-                    .setInterpolator(OvershootInterpolator(2f))
-                    .start()
-            }.start()
-
-        spawnFloatingIcon(view, drawableRes)
-    }
-
-    private fun spawnFloatingIcon(sourceView: View, drawableRes: Int) {
-        val floatingIcon = ImageView(requireContext()).apply {
-            setImageResource(drawableRes)
-            val sizePx = (52 * resources.displayMetrics.density).toInt()
-            layoutParams = FrameLayout.LayoutParams(sizePx, sizePx)
-        }
-
-        val location = IntArray(2)
-        sourceView.getLocationInWindow(location)
-
-        val startX = location[0].toFloat()
-        val startY = location[1].toFloat() - 50f
-
-        floatingIcon.x = startX
-        floatingIcon.y = startY
-
-        binding.flAnimationContainer.addView(floatingIcon)
-
-        val randomX = startX + (Math.random() * 200 - 100).toFloat()
-        val endY = startY - 300f - (Math.random() * 300).toFloat()
-        val durationFly = (800 + Math.random() * 400).toLong()
-
-        floatingIcon.animate()
-            .x(randomX)
-            .y(endY)
-            .alpha(0f)
-            .scaleX(1.5f).scaleY(1.5f)
-            .setDuration(durationFly)
-            .withEndAction {
-                binding.flAnimationContainer.removeView(floatingIcon)
-                if (viewModel.uiState.value.isMediaReady) {
-                    viewModel.resumeTimer()
-                }
-
-                if (binding.videoView.isVisible) {
-                    exoPlayer?.play()
-                    startVideoSync()
-                }
-            }
-            .start()
-    }
-
     @OptIn(UnstableApi::class)
     private fun initializePlayer() {
-        val mediaSourceFactory = DefaultMediaSourceFactory(
-            buildCacheDataSource(requireContext())
-        )
-
-        exoPlayer = ExoPlayer.Builder(requireContext())
-            .setMediaSourceFactory(mediaSourceFactory)
-            .build()
+        val mediaSourceFactory =
+            DefaultMediaSourceFactory(buildCacheDataSource(requireContext()))
+        exoPlayer =
+            ExoPlayer.Builder(requireContext()).setMediaSourceFactory(mediaSourceFactory).build()
         binding.videoView.player = exoPlayer
 
         exoPlayer?.addListener(object : Player.Listener {
             @SuppressLint("SwitchIntDef")
             override fun onPlaybackStateChanged(playbackState: Int) {
                 when (playbackState) {
-                    Player.STATE_BUFFERING -> {
-                        binding.pbLoading.visible()
-                    }
-
+                    Player.STATE_BUFFERING -> binding.pbLoading.visible()
                     Player.STATE_READY -> {
                         binding.pbLoading.gone()
                         val duration = exoPlayer?.duration ?: 0L
@@ -209,9 +125,7 @@ class StoryUserFragment : Fragment(), IStoryPage {
                         }
                     }
 
-                    Player.STATE_ENDED -> {
-                        viewModel.nextStory()
-                    }
+                    Player.STATE_ENDED -> viewModel.nextStory()
                 }
             }
 
@@ -224,9 +138,7 @@ class StoryUserFragment : Fragment(), IStoryPage {
     override fun onResume() {
         super.onResume()
         val state = viewModel.uiState.value
-        if (!isHolding && state.isMediaReady) {
-            viewModel.resumeTimer()
-        }
+        if (!isHolding && state.isMediaReady) viewModel.resumeTimer()
         if (binding.videoView.isVisible && !isHolding && state.isMediaReady) {
             exoPlayer?.play()
             startVideoSync()
@@ -244,6 +156,29 @@ class StoryUserFragment : Fragment(), IStoryPage {
         binding.btnClose.setOnClickListener {
             requireActivity().finish()
         }
+
+        binding.llOwnerReactionBar.setOnClickListener {
+            val state = viewModel.uiState.value
+            val currentStory = state.storyGroup?.stories?.getOrNull(state.currentIndex)
+
+            currentStory?.id?.let { storyId ->
+                isHolding = true
+                viewModel.pauseTimer()
+                if (binding.videoView.isVisible) exoPlayer?.pause()
+                stopVideoSync()
+
+                val bottomSheet = StoryReactionsBottomSheet.newInstance()
+                bottomSheet.onDismissCallback = {
+                    isHolding = false
+                    if (viewModel.uiState.value.isMediaReady) viewModel.resumeTimer()
+                    if (binding.videoView.isVisible) {
+                        exoPlayer?.play(); startVideoSync()
+                    }
+                }
+
+                bottomSheet.show(childFragmentManager, "ReactionList")
+            }
+        }
         binding.ivAvatar.setOnClickListener {
             openProfile()
         }
@@ -258,35 +193,15 @@ class StoryUserFragment : Fragment(), IStoryPage {
         UserProfileActivity.start(requireContext(), user.id)
     }
 
-    private fun showLoading() {
-        binding.pbLoading.visible()
-        viewModel.pauseTimer()
-    }
-
-    private fun hideLoading() {
-        binding.pbLoading.gone()
-
-    }
-
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.uiState.collect { state ->
-                        handleUiState(state)
-                    }
-                }
+                launch { viewModel.uiState.collect { state -> handleUiState(state) } }
                 launch {
                     viewModel.navigationEvent.collect { event ->
                         when (event) {
-                            StoryNavigationEvent.NEXT_USER -> {
-                                (requireActivity() as? ViewStoryActivity)?.moveToNextUser()
-                            }
-
-                            StoryNavigationEvent.PREV_USER -> {
-                                (requireActivity() as? ViewStoryActivity)?.moveToPreviousUser()
-                            }
-
+                            StoryNavigationEvent.NEXT_USER -> (requireActivity() as? ViewStoryActivity)?.moveToNextUser()
+                            StoryNavigationEvent.PREV_USER -> (requireActivity() as? ViewStoryActivity)?.moveToPreviousUser()
                             StoryNavigationEvent.RESTART_CURRENT_STORY -> {
                                 if (binding.videoView.isVisible) {
                                     exoPlayer?.seekTo(0L)
@@ -302,41 +217,12 @@ class StoryUserFragment : Fragment(), IStoryPage {
         }
     }
 
-    private fun handleUiState(state: StoryUiState) {
-
-        val group = state.storyGroup ?: return
-
-        if (progressBars.isEmpty() && group.stories.isNotEmpty()) {
-            setupProgressBars(group.stories.size)
-            binding.tvFullName.text = group.user?.fullName ?: getString(R.string.petber_user)
-            binding.ivAvatar.loadAvatar(group.user?.avatarUrl)
-        }
-
-        // Load new content if index changes
-        if (state.currentIndex != lastRenderedIndex) {
-            lastRenderedIndex = state.currentIndex
-            loadMediaContent(group.stories[state.currentIndex])
-            // preload content
-            preloadNextMedia(group, state.currentIndex)
-        }
-
-        // Update progress bar status
-        updateProgressBars(state)
-
-        // update UI pause
-        if (isHolding) {
-            binding.groupUserInfo.gone()
-        } else {
-            binding.groupUserInfo.visible()
-        }
-    }
-
     private fun isTouchOnUI(event: MotionEvent): Boolean {
         val views = listOf(
             binding.ivAvatar,
             binding.tvFullName,
             binding.btnClose,
-            binding.llReactionBar
+            binding.llOwnerReactionBar
         )
 
         return views.any { view ->
@@ -346,13 +232,43 @@ class StoryUserFragment : Fragment(), IStoryPage {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun handleUiState(state: StoryUiState) {
+        val group = state.storyGroup ?: return
+
+        val totalReactions = state.reactionSummary.counts.values.sum()
+        binding.tvReactionCount.text =
+            requireContext().getString(R.string.count_emotions, totalReactions)
+
+        // 2. Setup Progress Bars
+        if (progressBars.isEmpty() && group.stories.isNotEmpty()) {
+            setupProgressBars(group.stories.size)
+            binding.tvFullName.text = group.user?.fullName ?: getString(R.string.petber_user)
+            binding.ivAvatar.loadAvatar(group.user?.avatarUrl)
+        }
+
+        // 3. Load nội dung mới nếu đổi Index
+        if (state.currentIndex != lastRenderedIndex) {
+            lastRenderedIndex = state.currentIndex
+            loadMediaContent(group.stories[state.currentIndex])
+        }
+
+        updateProgressBars(state)
+
+        if (isHolding) {
+            binding.groupUserInfo.gone()
+            binding.llOwnerReactionBar.gone()
+        } else {
+            binding.groupUserInfo.visible()
+            binding.llOwnerReactionBar.visible()
+        }
+    }
+
     private fun setupProgressBars(count: Int) {
         binding.llProgressContainer.removeAllViews()
         progressBars.clear()
-        val layoutParams =
-            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f).apply {
-                setMargins(4, 0, 4, 0)
-            }
+        val layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
+            .apply { setMargins(4, 0, 4, 0) }
         for (i in 0 until count) {
             val pb = ProgressBar(
                 requireContext(),
@@ -371,11 +287,8 @@ class StoryUserFragment : Fragment(), IStoryPage {
     }
 
     private fun loadMediaContent(story: Story) {
-        story.createdAt?.let {
-            binding.tvTime.text = TimeUtils.formatTimeAgo(requireContext(), it)
-        }
+        story.createdAt?.let { binding.tvTime.text = TimeUtils.formatTimeAgo(requireContext(), it) }
         val isVideo = story.mediaType.contains("video", ignoreCase = true)
-
         val uri = story.mediaUrl.toUri()
 
         binding.ivMedia.loadMediaCoverWithExtremeGradient(
@@ -388,31 +301,21 @@ class StoryUserFragment : Fragment(), IStoryPage {
 
         exoPlayer?.stop()
         stopVideoSync()
-        showLoading()
+        binding.pbLoading.visible()
+        viewModel.pauseTimer()
 
-        if (story.mediaType.contains("video", ignoreCase = true)) {
+        if (isVideo) {
             binding.ivMedia.gone()
             binding.videoView.visible()
-
-            val mediaItem = MediaItem.fromUri(story.mediaUrl)
-            exoPlayer?.setMediaItem(mediaItem)
+            exoPlayer?.setMediaItem(MediaItem.fromUri(story.mediaUrl))
             exoPlayer?.prepare()
-
-            // Only play video if this Fragment is visible on screen
-            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && !isHolding) {
-                exoPlayer?.play()
-            }
-
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && !isHolding) exoPlayer?.play()
         } else {
             binding.videoView.gone()
             binding.ivMedia.visible()
-
-            Glide.with(this)
-                .load(story.mediaUrl)
-                .override(600, 600)
+            Glide.with(this).load(story.mediaUrl).override(600, 600)
                 .format(DecodeFormat.PREFER_RGB_565)
                 .listener(object : RequestListener<Drawable> {
-
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
@@ -420,9 +323,7 @@ class StoryUserFragment : Fragment(), IStoryPage {
                         isFirstResource: Boolean
                     ): Boolean {
                         viewModel.onMediaReady()
-                        if (!isHolding && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-                            viewModel.resumeTimer()
-                        }
+                        if (!isHolding && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) viewModel.resumeTimer()
                         return false
                     }
 
@@ -433,15 +334,12 @@ class StoryUserFragment : Fragment(), IStoryPage {
                         dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
-                        hideLoading()
+                        binding.pbLoading.gone()
                         viewModel.onMediaReady()
-                        if (!isHolding && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-                            viewModel.resumeTimer()
-                        }
+                        if (!isHolding && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) viewModel.resumeTimer()
                         return false
                     }
-                })
-                .into(binding.ivMedia)
+                }).into(binding.ivMedia)
         }
     }
 
@@ -449,30 +347,11 @@ class StoryUserFragment : Fragment(), IStoryPage {
         if (progressBars.isEmpty() || state.currentDuration == 0L) return
         for (i in progressBars.indices) {
             when {
-                i < state.currentIndex -> {
-                    progressBars[i].progress = 10000
-                }
+                i < state.currentIndex -> progressBars[i].progress = 10000
+                i == state.currentIndex -> progressBars[i].progress =
+                    ((state.currentProgress.toFloat() / state.currentDuration) * 10000).toInt()
 
-                i == state.currentIndex -> {
-                    progressBars[i].progress =
-                        ((state.currentProgress.toFloat() / state.currentDuration) * 10000).toInt()
-                }
-
-                else -> {
-                    progressBars[i].progress = 0
-                }
-            }
-        }
-    }
-
-    private fun preloadNextMedia(group: UserStoryGroup, currentIndex: Int) {
-        val nextIndex = currentIndex + 1
-        if (nextIndex < group.stories.size) {
-            val nextStory = group.stories[nextIndex]
-            if (!nextStory.mediaType.contains("video", ignoreCase = true)) {
-                Glide.with(requireContext().applicationContext)
-                    .load(nextStory.mediaUrl)
-                    .preload()
+                else -> progressBars[i].progress = 0
             }
         }
     }
@@ -494,7 +373,6 @@ class StoryUserFragment : Fragment(), IStoryPage {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupTouchListener() {
         val swipeThreshold = ViewConfiguration.get(requireContext()).scaledTouchSlop * 3
-
         binding.vTouchOverlay.setOnTouchListener { v, event ->
             if (isTouchOnUI(event)) return@setOnTouchListener false
             when (event.actionMasked) {
@@ -505,64 +383,48 @@ class StoryUserFragment : Fragment(), IStoryPage {
 
                     isHolding = true
                     binding.groupUserInfo.gone()
+                    binding.llOwnerReactionBar.gone()
                     viewModel.pauseTimer()
                     if (binding.videoView.isVisible) exoPlayer?.pause()
                     true
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    val upX = event.x
-                    val upY = event.y
-                    val dx = upX - downX
-                    val dy = upY - downY
+                    val dx = event.x - downX
+                    val dy = event.y - downY
                     val duration = System.currentTimeMillis() - downTime
 
                     isHolding = false
                     binding.groupUserInfo.visible()
-                    if (viewModel.uiState.value.isMediaReady) {
-                        viewModel.resumeTimer()
-                    }
+                    binding.llOwnerReactionBar.visible()
+                    if (viewModel.uiState.value.isMediaReady) viewModel.resumeTimer()
 
                     if (binding.videoView.isVisible && exoPlayer?.playbackState == Player.STATE_READY) {
                         exoPlayer?.play()
                         startVideoSync()
                     }
 
-                    val isSwipe = kotlin.math.abs(dx) > swipeThreshold &&
-                            kotlin.math.abs(dx) > kotlin.math.abs(dy)
-
+                    val isSwipe =
+                        kotlin.math.abs(dx) > swipeThreshold && kotlin.math.abs(dx) > kotlin.math.abs(
+                            dy
+                        )
                     if (isSwipe) {
                         if (dx > 0) {
-                            if (viewModel.uiState.value.currentIndex == 0) {
-                                viewModel.replayCurrentStory()
-                            } else {
-                                viewModel.previousStory()
-                            }
-                        } else {
-                            viewModel.nextStory()
-                        }
+                            if (viewModel.uiState.value.currentIndex == 0) viewModel.replayCurrentStory() else viewModel.previousStory()
+                        } else viewModel.nextStory()
                     } else if (duration < 200) {
-                        // tap ngắn
-                        if (upX < v.width * 0.3f) {
-                            if (viewModel.uiState.value.currentIndex == 0) {
-                                viewModel.replayCurrentStory()
-                            } else {
-                                viewModel.previousStory()
-                            }
-                        } else {
-                            viewModel.nextStory()
-                        }
+                        if (event.x < v.width * 0.3f) {
+                            if (viewModel.uiState.value.currentIndex == 0) viewModel.replayCurrentStory() else viewModel.previousStory()
+                        } else viewModel.nextStory()
                     }
-
                     true
                 }
 
                 MotionEvent.ACTION_CANCEL -> {
                     isHolding = false
                     binding.groupUserInfo.visible()
-                    if (viewModel.uiState.value.isMediaReady) {
-                        viewModel.resumeTimer()
-                    }
+                    binding.llOwnerReactionBar.visible()
+                    if (viewModel.uiState.value.isMediaReady) viewModel.resumeTimer()
                     if (binding.videoView.isVisible && exoPlayer?.playbackState == Player.STATE_READY) {
                         exoPlayer?.play()
                         startVideoSync()
@@ -577,7 +439,6 @@ class StoryUserFragment : Fragment(), IStoryPage {
 
     override fun onUserSwipedTo() {
         viewModel.replayCurrentStory()
-
         if (binding.videoView.isVisible) {
             exoPlayer?.seekTo(0L)
             exoPlayer?.playWhenReady = true
@@ -588,7 +449,6 @@ class StoryUserFragment : Fragment(), IStoryPage {
 
     override fun onFragmentActive() {
         viewModel.replayCurrentStory()
-
         if (binding.videoView.isVisible) {
             exoPlayer?.seekTo(0)
             exoPlayer?.play()
@@ -601,7 +461,6 @@ class StoryUserFragment : Fragment(), IStoryPage {
         exoPlayer?.pause()
         stopVideoSync()
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
