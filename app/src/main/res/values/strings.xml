@@ -261,6 +261,10 @@
     <string name="list_of_saved_posts">List of Saved Posts</string>
     <string name="recently_deleted_posts">Recently Deleted Posts</string>
     <string name="error_connection_internet">You\'re offline, check the network connection again!</string>
+    <string name="move_post_to_trash">Move posts to trash</string>
+    <string name="dep_soft_delete_post">Your post will be permanently deleted after 30 days</string>
+    <string name="moved_post_trash">Moved post to trash</string>
+    <string name="softdelete_post_fail">The post can\'t be deleted, please try again</string>
 
 
     <string-array name="media_types">

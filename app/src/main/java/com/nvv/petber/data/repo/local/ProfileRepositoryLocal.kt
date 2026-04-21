@@ -20,6 +20,9 @@ class ProfileRepositoryLocal @Inject constructor(
     fun getLocalPets(id: String) = profileDao.getPets(id)
     fun getLocalPosts(id: String) = profileDao.getPosts(id)
 
+    suspend fun deletePostById(postId: String) {
+        profileDao.deletePostById(postId)
+    }
     suspend fun updatePost(post: Post) {
         profileDao.updatePost(post)
     }

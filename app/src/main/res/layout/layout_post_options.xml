@@ -271,5 +271,49 @@
                     tools:ignore="TextContrastCheck" />
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnSoftDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_trash"
+                app:tint="#B8322F" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/move_post_to_trash"
+                    android:textColor="#B8322F"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/baloo2"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dep_soft_delete_post"
+                    android:textColor="#E57373"
+                    android:textSize="16sp"
+                    android:layout_marginTop="-4dp"
+                    android:fontFamily="@font/baloo2"
+                    tools:ignore="TextContrastCheck" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

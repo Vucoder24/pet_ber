@@ -88,6 +88,16 @@ class PetProfileViewModel @Inject constructor(
         }
     }
 
+    fun removePostById(postId: String) {
+        _posts.value = _posts.value.filterNot { it.id == postId }
+
+        _diaryPosts.value = _diaryPosts.value.map { month ->
+            month.copy(
+                posts = month.posts.filterNot { it.id == postId }
+            )
+        }.filter { it.posts.isNotEmpty() }
+    }
+
     private fun loadDiaryPosts(petId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {

@@ -9,6 +9,7 @@ import io.github.jan.supabase.annotations.SupabaseExperimental
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.postgrest.rpc
 import io.github.jan.supabase.realtime.selectAsFlow
 import kotlinx.coroutines.flow.Flow
@@ -90,6 +91,7 @@ class HomeRepository @Inject constructor(
                     order("created_at", Order.DESCENDING)
                     range(from.toLong(), to.toLong())
                     filter {
+                        filter("deleted_at", FilterOperator.IS, null)
                         eq("post_likes.user_id", currentUserId)
                     }
                 }
@@ -166,6 +168,7 @@ class HomeRepository @Inject constructor(
                 ) {
                     filter {
                         eq("id", postId)
+                        filter("deleted_at", FilterOperator.IS, null)
                         eq("post_likes.user_id", currentUserId)
                     }
                 }
@@ -222,7 +225,7 @@ class HomeRepository @Inject constructor(
                 .select(
                     columns = Columns.raw(
                         """post_id,
-                                posts(
+                                posts!inner(
                                     *,
                                     users(id, username, full_name, avatar_url),
                                     post_media(id, post_id, media_url, media_type),
@@ -232,6 +235,7 @@ class HomeRepository @Inject constructor(
                 ) {
                     filter {
                         eq("user_id", userId)
+                        filter("deleted_at", FilterOperator.IS, null)
                         eq("posts.post_likes.user_id", userId)
                     }
                     order("created_at", Order.DESCENDING)
@@ -329,6 +333,21 @@ class HomeRepository @Inject constructor(
             Result.success(!isCurrentlyFollowing)
         } catch (e: Exception) {
             Log.e("HomeRepository", "toggleFollowUser error: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+    suspend fun softDeletePost(postId: String): Result<Unit> {
+        return try {
+            val currentTime = java.time.Instant.now().toString()
+            db["posts"].update(mapOf("deleted_at" to currentTime)) {
+                filter {
+                    eq("id", postId)
+                }
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("HomeRepository", "softDeletePost error: ${e.message}")
             Result.failure(e)
         }
     }

@@ -163,6 +163,15 @@ class PetProfileActivity : AppCompatActivity() {
                 }
             }
         }
+        supportFragmentManager.setFragmentResultListener(
+            "post_deleted_key",
+            this
+        ) { _, bundle ->
+            val deletedPostId = bundle.getString("bundle_post_id")
+            if (deletedPostId != null) {
+                viewModel.removePostById(deletedPostId)
+            }
+        }
     }
 
     private fun setupViewPager() {

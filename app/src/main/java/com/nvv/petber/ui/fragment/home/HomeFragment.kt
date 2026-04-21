@@ -83,6 +83,17 @@ class HomeFragment : Fragment() {
                 viewModel.refreshData()
             }
         }
+
+        childFragmentManager.setFragmentResultListener(
+            "post_deleted_key",
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val deletedPostId = bundle.getString("bundle_post_id")
+            if (deletedPostId != null) {
+                viewModel.removePostById(deletedPostId)
+            }
+        }
+
     }
 
     private fun observeEventBus() {

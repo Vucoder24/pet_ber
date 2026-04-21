@@ -199,4 +199,14 @@ class HomeViewModel @Inject constructor(
             homeRepository.incrementShareCount(postId)
         }
     }
+
+    fun removePostById(postId: String) {
+        val currentList = _uiState.value.posts
+
+        val updatedList = currentList.filterNot { it.id == postId }
+
+        _uiState.value = _uiState.value.copy(
+            posts = updatedList
+        )
+    }
 }
