@@ -1,15 +1,16 @@
 package com.nvv.petber.ui.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.CompoundButton
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,14 +22,11 @@ import com.nvv.petber.databinding.ActivityCreateEditPostBinding
 import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.ui.adapter.MediaPreviewAdapter
 import com.nvv.petber.ui.dialog.UploadProgressDialog
-import com.nvv.petber.ui.mention.MentionEditText
 import com.nvv.petber.utils.ext.toast
+import com.nvv.petber.utils.getVideoDuration
 import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
-import androidx.core.net.toUri
-import com.nvv.petber.utils.getVideoDuration
-import kotlinx.serialization.encodeToString
 
 @AndroidEntryPoint
 class CreateEditPostActivity : AppCompatActivity() {
@@ -44,15 +42,6 @@ class CreateEditPostActivity : AppCompatActivity() {
         const val EXTRA_POST_JSON = "extra_post_json"
         const val IS_EDIT_MODE = "is_edit_mode"
         const val EXTRA_EDIT_SUCCESS = "extra_edit_success"
-
-        fun startForEdit(context: Context, post: Post) {
-            val intent = Intent(context, CreateEditPostActivity::class.java).apply {
-                putExtra(IS_EDIT_MODE, true)
-                val postJson = Json.encodeToString(post)
-                putExtra(EXTRA_POST_JSON, postJson)
-            }
-            context.startActivity(intent)
-        }
     }
 
     private val mediaPickerLauncher = registerForActivityResult(
@@ -90,15 +79,11 @@ class CreateEditPostActivity : AppCompatActivity() {
         }
     }
 
-    private fun createChipListener(pet: Pet): (android.widget.CompoundButton, Boolean) -> Unit {
+    private fun createChipListener(pet: Pet): (CompoundButton, Boolean) -> Unit {
         return { _, isChecked ->
             if (isChecked) {
-                if (!binding.etCaption.hasMention(pet.id)) {
-                    binding.etCaption.insertMention(pet.id, pet.name)
-                    viewModel.togglePetTag(pet)
-                }
+                viewModel.addPetTag(pet)
             } else {
-                binding.etCaption.removeMention(pet.id)
                 viewModel.removePetTag(pet.id)
             }
         }
@@ -119,6 +104,7 @@ class CreateEditPostActivity : AppCompatActivity() {
             )
             insets
         }
+        binding.btnClose.bringToFront()
         // init dialog
         uploadDialog = UploadProgressDialog(this)
         binding.rvMediaPreview.layoutManager =
@@ -210,6 +196,13 @@ class CreateEditPostActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.isLoadingPets.observe(this){
+            binding.layoutLoadingBlock.visibility =
+                if (it) View.VISIBLE else View.GONE
+
+            binding.btnPost.isEnabled = !it
+        }
+
         viewModel.uploadProgress.observe(this) { progress ->
             uploadDialog.updateProgress(progress)
         }
@@ -259,17 +252,10 @@ class CreateEditPostActivity : AppCompatActivity() {
                 location = null,
                 hashtags = hashtagsStr,
                 allCurrentMedia = remoteMediaItems + localMediaItems,
-                petIds = binding.etCaption.getMentions()
+                petIds = viewModel.selectedPetIds.value?.toList() ?: emptyList()
             )
         }
 
-        binding.etCaption.mentionRemovedListener =
-            object : MentionEditText.OnMentionRemovedListener {
-                override fun onMentionRemoved(petId: String) {
-                    viewModel.removePetTag(petId)
-                    unselectChip(petId)
-                }
-            }
 
         binding.btnEditMedia.setOnClickListener {
             val intent = Intent(this, MediaPickerActivity::class.java).apply {
@@ -288,42 +274,49 @@ class CreateEditPostActivity : AppCompatActivity() {
 
         viewModel.userPets.observe(this) { pets ->
             binding.chipGroupPets.removeAllViews()
+            val addChip = layoutInflater.inflate(
+                R.layout.item_pet_chip,
+                binding.chipGroupPets,
+                false
+            ) as Chip
+
+            addChip.apply {
+                text = getString(R.string.add_pet_tag)
+                isCheckable = false
+                setTextColor(getColor(R.color.pet_accent))
+                setOnClickListener {
+                    startActivity(
+                        Intent(
+                            this@CreateEditPostActivity,
+                            CreateEditPetActivity::class.java
+                        )
+                    )
+                }
+            }
+
+            binding.chipGroupPets.addView(addChip)
+
             val selectedIds = viewModel.selectedPetIds.value ?: emptySet()
+
             pets.forEach { pet ->
-                val chip = Chip(this).apply {
+                val chip = layoutInflater.inflate(
+                    R.layout.item_pet_chip,
+                    binding.chipGroupPets,
+                    false
+                ) as Chip
+
+                chip.apply {
                     text = pet.name
                     isCheckable = true
                     setOnCheckedChangeListener(null)
                     isChecked = selectedIds.contains(pet.id)
+                    setOnCheckedChangeListener(createChipListener(pet))
                 }
-
-                chip.setOnCheckedChangeListener(createChipListener(pet))
-
                 binding.chipGroupPets.addView(chip)
             }
         }
     }
 
-
-    private fun unselectChip(petId: String) {
-        val pets = viewModel.userPets.value ?: return
-
-        for (i in 0 until binding.chipGroupPets.childCount) {
-            val chip = binding.chipGroupPets.getChildAt(i) as Chip
-            val pet = pets[i]
-
-            if (pet.id == petId) {
-
-                chip.setOnCheckedChangeListener(null)
-
-                chip.isChecked = false
-
-                chip.setOnCheckedChangeListener(createChipListener(pet))
-
-                break
-            }
-        }
-    }
 
     private fun checkAndRequestPermissions() {
         val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

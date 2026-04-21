@@ -48,7 +48,7 @@ class CommentViewModel @Inject constructor(
             if (parentId != null) _uiState.value.expandedIds + parentId else _uiState.value.expandedIds
         _uiState.value = _uiState.value.copy(expandedIds = newExpandedIds)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.addComment(postId, userId, content, parentId)
                 .onSuccess {
                     _uiState.value = _uiState.value.copy(
@@ -65,7 +65,7 @@ class CommentViewModel @Inject constructor(
     }
 
     fun toggleLike(comment: Comment, currentUserId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             // Optimistic Update
             val updatedComments = _uiState.value.rawComments.map {
                 if (it.id == comment.id) {

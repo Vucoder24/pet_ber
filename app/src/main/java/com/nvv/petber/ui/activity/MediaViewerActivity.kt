@@ -55,6 +55,7 @@ class MediaViewerActivity : AppCompatActivity() {
         binding.viewPagerMedia.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                (binding.viewPagerMedia.adapter as? MediaPagerAdapter)?.pauseAllExcept(position)
             }
         })
     }

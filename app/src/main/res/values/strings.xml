@@ -23,7 +23,6 @@
     <string name="create">Create</string>
     <string name="notifications">Notifications</string>
     <string name="profile">Profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
@@ -34,7 +33,7 @@
     <string name="pets">Pets</string>
     <string name="hashtags">Hashtags</string>
     <string name="user_name">Username</string>
-    <string name="petber_user">Petber User</string>
+    <string name="petber_user">PetBer User</string>
     <string name="images_videos">Images / Videos</string>
     <string name="sub_title_story">Share your pet\'s 24-hour moments</string>
     <string name="story">Story</string>
@@ -216,7 +215,7 @@
     <string name="value_neutered_no">Not Neutered</string>
     <string name="related_posts">Related Posts</string>
     <string name="please_login">Please log in</string>
-    <string name="update_pet_success">Update pet infomation success.</string>
+    <string name="update_pet_success">Update pet information success.</string>
     <string name="edit_pet_info">Edit Pet Information</string>
     <string name="save">Save</string>
     <string name="pet_following">Pet following</string>
@@ -236,6 +235,28 @@
     <string name="new_notification">New Notification</string>
     <string name="no_notifications_yet">No notifications yet!</string>
     <string name="dep_empty_notif">We\'ll notify you when there\'s a new interaction or news from your pet!</string>
+    <string name="pet_diary">Pet Diary</string>
+    <string name="new_notifications">You have a new notification</string>
+    <string name="notif_type_post_like"><b>%1$s</b> liked your post.</string>
+    <string name="n_new_notifications">You have a new %1$d notification</string>
+    <string name="notif_type_comment"><b>%1$s</b> commented on your post.</string>
+    <string name="notif_type_comment_reply"><b>%1$s</b> replied to your comment.</string>
+    <string name="notif_type_comment_like"><b>%1$s</b> liked your comment.</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b> reacted %2$s to your story.</string>
+    <string name="notif_type_user_follow"><b>%1$s</b> started following you.</string>
+    <string name="notif_type_pet_follow"><b>%1$s</b> started following your pet.</string>
+    <string name="story_unavailable">This story is no longer available or has expired.</string>
+    <string name="something_went_wrong">An error has occurred. Please try again later.</string>
+    <string name="list_of_emotional_responses">List of emotional responses</string>
+    <string name="no_emotions_yet">There are no emotions yet.</string>
+    <string name="count_emotions">%1$d Emotions</string>
+    <string name="no_post_yet">No post yet</string>
+    <string name="publish_your_first_post">Publish your first post</string>
+    <string name="new_post">New post</string>
+    <string name="what_is_the_boss_doing_today">What is the boss doing today? 🐾</string>
+    <string name="share_the_boss_s_adorable_moment">Share the boss\'s adorable moment</string>
+    <string name="capture_a_memory_of_today_s_boss">Capture a memory of today\'s boss</string>
+    <string name="add_pet_tag">Add pet +</string>
 
 
     <string-array name="media_types">

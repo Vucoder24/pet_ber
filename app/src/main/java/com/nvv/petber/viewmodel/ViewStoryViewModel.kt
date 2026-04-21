@@ -1,9 +1,16 @@
 package com.nvv.petber.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nvv.petber.data.model.GroupedStoryReaction
+import com.nvv.petber.data.model.ReactionSummary
 import com.nvv.petber.data.model.UserStoryGroup
+import com.nvv.petber.data.repo.remote.StoryRepository
+import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,7 +24,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewStoryViewModel @Inject constructor() : ViewModel() {
+class ViewStoryViewModel @Inject constructor(
+    private val storyRepository: StoryRepository,
+    @ApplicationContext context: Context
+) : ViewModel() {
+
+    private val currentUserId = SharePrefUtils.getCurrentUserId(context)
     private val _uiState = MutableStateFlow(StoryUiState())
     val uiState: StateFlow<StoryUiState> = _uiState.asStateFlow()
 
@@ -46,12 +58,70 @@ class ViewStoryViewModel @Inject constructor() : ViewModel() {
             it.copy(
                 currentIndex = index,
                 currentProgress = 0L,
+                isPaused = true,
+                isMediaReady = false,
                 currentDuration = duration,
+                reactionSummary = ReactionSummary()
             )
         }
+        fetchReactions(story.id, story.userId)
+    }
 
+    fun onMediaReady() {
+        _uiState.update { it.copy(isMediaReady = true) }
+        val state = _uiState.value
+        val story = state.storyGroup?.stories?.getOrNull(state.currentIndex)
+        val isVideo = story?.mediaType?.contains("video", ignoreCase = true) == true
         if (!isVideo) {
             startImageTimer()
+        }
+    }
+
+    private fun fetchReactions(storyId: String, userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (userId == currentUserId) {
+                    val details = storyRepository.getStoryReactionDetails(storyId)
+
+                    val grouped = details.groupBy { it.userId }.map { entry ->
+                        GroupedStoryReaction(
+                            user = entry.value.firstOrNull()?.user,
+                            reactions = entry.value.map { it.reactionType }
+                        )
+                    }
+
+                    val countMap = mutableMapOf("paw" to 0, "cat" to 0, "fish" to 0, "yarn" to 0)
+                    details.forEach { detail ->
+                        val type = detail.reactionType
+                        countMap[type] = (countMap[type] ?: 0) + 1
+                    }
+
+                    _uiState.update {
+                        it.copy(
+                            reactionSummary = ReactionSummary(
+                                counts = countMap,
+                                details = details,
+                                groupedDetails = grouped
+                            )
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    fun reactToStory(reactionType: String) {
+        val state = _uiState.value
+        val currentStory = state.storyGroup?.stories?.getOrNull(state.currentIndex) ?: return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                storyRepository.sendReaction(currentStory.id, currentUserId, reactionType)
+            } catch (_: Exception) {
+            }
         }
     }
 
@@ -129,16 +199,21 @@ class ViewStoryViewModel @Inject constructor() : ViewModel() {
 
     fun replayCurrentStory() {
         timerJob?.cancel()
-        _uiState.update { it.copy(currentProgress = 0L) }
-
         val state = _uiState.value
         val story = state.storyGroup?.stories?.getOrNull(state.currentIndex)
         val isVideo = story?.mediaType?.contains("video", ignoreCase = true) == true
 
-        if (!isVideo) {
-            startImageTimer()
+        _uiState.update {
+            it.copy(
+                currentProgress = 0L,
+                isMediaReady = !isVideo,
+                isPaused = true
+            )
         }
 
+        if (!isVideo) {
+            resumeTimer()
+        }
         viewModelScope.launch {
             _navigationEvent.emit(StoryNavigationEvent.RESTART_CURRENT_STORY)
         }
@@ -150,7 +225,9 @@ data class StoryUiState(
     val currentIndex: Int = 0,
     val currentProgress: Long = 0L,
     val currentDuration: Long = 5000L,
-    val isPaused: Boolean = true
+    val isPaused: Boolean = true,
+    val isMediaReady: Boolean = false,
+    val reactionSummary: ReactionSummary = ReactionSummary()
 )
 
 enum class StoryNavigationEvent {

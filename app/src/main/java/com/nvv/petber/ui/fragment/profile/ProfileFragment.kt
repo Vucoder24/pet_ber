@@ -245,10 +245,12 @@ class ProfileFragment : Fragment() {
             onProfileClick = { user ->
                 binding.dataContainer.smoothScrollTo(0, 0)
             },
-            onLoadMore = { },
             onMoreOption = { post ->
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)
                 bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
+            },
+            onTaggedPetClick = { pet ->
+                PetProfileActivity.start(requireContext(), pet)
             }
         )
         petProfileAdapter = PetProfileAdapter(
@@ -315,7 +317,7 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.posts.observe(viewLifecycleOwner) {
-            historyPostAdapter.submitList(it)
+            historyPostAdapter.submitPostData(it, false)
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->

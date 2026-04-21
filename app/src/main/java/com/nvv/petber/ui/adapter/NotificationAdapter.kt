@@ -5,37 +5,82 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Notification
+import com.nvv.petber.databinding.ItemNotifLoadMoreShimmerBinding
 import com.nvv.petber.databinding.ItemNotificationBinding
+import com.nvv.petber.utils.NotificationHelper
 import com.nvv.petber.utils.TimeUtils
 import com.nvv.petber.utils.ext.loadAvatar
 
 class NotificationAdapter(
     private val onClick: (Notification) -> Unit,
     private val onMoreClick: (Notification) -> Unit
-) : ListAdapter<Notification, NotificationAdapter.NotificationViewHolder>(NotificationDiffCallback()) {
+) : ListAdapter<Notification, RecyclerView.ViewHolder>(NotificationDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationViewHolder {
-        val binding = ItemNotificationBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-        return NotificationViewHolder(binding)
+    companion object {
+        private const val TYPE_ITEM = 0
+        private const val TYPE_LOADING = 1
+    }
+    var isLoadMore = false
+        set(value) {
+            if (field != value) {
+                field = value
+                if (value) {
+                    notifyItemInserted(currentList.size)
+                } else {
+                    notifyItemRemoved(currentList.size)
+                }
+            }
+        }
+
+    override fun getItemCount(): Int {
+        return currentList.size + (if (isLoadMore) 1 else 0)
     }
 
-    override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun getItemViewType(position: Int): Int {
+        return if (isLoadMore && position == currentList.size) {
+            TYPE_LOADING
+        } else {
+            TYPE_ITEM
+        }
+    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            TYPE_ITEM -> {
+                val binding = ItemNotificationBinding.inflate(inflater, parent, false)
+                NotificationViewHolder(binding)
+            }
+            else -> {
+                val binding = ItemNotifLoadMoreShimmerBinding.inflate(inflater, parent, false)
+                LoadingViewHolder(binding)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is NotificationViewHolder) {
+            holder.bind(getItem(position))
+        }
     }
 
     inner class NotificationViewHolder(private val binding: ItemNotificationBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(notification: Notification) {
-            // 1. Gán nội dung
-            binding.tvMessage.text = notification.message ?: "You have a new announcement"
+            val context = binding.root.context
+
+            val messageText = NotificationHelper.getMessageText(context, notification)
+            binding.tvMessage.text = HtmlCompat.fromHtml(
+                messageText,
+                HtmlCompat.FROM_HTML_MODE_COMPACT
+            )
+
             notification.createdAt?.let {
                 binding.tvTime.text = TimeUtils.formatTimeAgo(binding.root.context, it)
             }
@@ -49,7 +94,7 @@ class NotificationAdapter(
                     ContextCompat.getDrawable(binding.root.context, R.color.unread_notification_bg)
             }
 
-            binding.ivAvatar.loadAvatar(notification.avatarUrl)
+            binding.ivAvatar.loadAvatar(notification.avatarSenderUrl)
 
             binding.root.setOnClickListener {
                 onClick(notification)
@@ -58,6 +103,12 @@ class NotificationAdapter(
             binding.ivMore.setOnClickListener {
                 onMoreClick(notification)
             }
+        }
+    }
+    inner class LoadingViewHolder(val binding: ItemNotifLoadMoreShimmerBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.shimmerLoadMore.startShimmer()
         }
     }
 }

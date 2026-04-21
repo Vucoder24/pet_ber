@@ -52,7 +52,7 @@ class PostDetailViewModel @Inject constructor(
         )
         _post.value = updatedPost
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             homeRepository.toggleLike(currentPost.id, currentUserId, currentPost.isLiked)
                 .onFailure {
                     _post.value = currentPost
@@ -63,7 +63,7 @@ class PostDetailViewModel @Inject constructor(
 
     fun incrementShareCount() {
         val currentPost = _post.value ?: return
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             homeRepository.incrementShareCount(currentPost.id)
         }
     }

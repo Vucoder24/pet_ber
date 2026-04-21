@@ -1,8 +1,10 @@
 package com.nvv.petber.data.repo.remote
 
 import com.nvv.petber.data.model.Notification
+import com.nvv.petber.utils.NotificationGrouper
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.realtime.PostgresAction
 import io.github.jan.supabase.realtime.RealtimeChannel
@@ -30,7 +32,7 @@ class NotificationRepository @Inject constructor(
         val flow = channel!!
             .postgresChangeFlow<PostgresAction.Insert>(schema = "public") {
                 table = "notifications"
-                 filter("user_id", FilterOperator.EQ, userId)
+                filter("user_id", FilterOperator.EQ, userId)
             }
             .map {
                 it.decodeRecord<Notification>()
@@ -41,16 +43,41 @@ class NotificationRepository @Inject constructor(
         }
     }
 
-    suspend fun getNotifications(userId: String): List<Notification> {
-        return supabase.from("notifications")
+    suspend fun getNotifications(userId: String, page: Int, limit: Int = 15): List<Notification> {
+        val from = (page - 1) * limit
+        val to = from + limit - 1
+
+        val rawData = supabase.from("notifications")
             .select {
                 filter { eq("user_id", userId) }
-                order("created_at", order = io.github.jan.supabase.postgrest.query.Order.DESCENDING)
+                order("created_at", order = Order.DESCENDING)
+                range(from.toLong(), to.toLong())
             }.decodeList<Notification>()
+        return NotificationGrouper.group(rawData)
     }
+
+    suspend fun getNewNotificationCount(userId: String, lastSeen: String): Int {
+        return supabase.from("notifications")
+            .select {
+                filter {
+                    eq("user_id", userId)
+                    gt("created_at", lastSeen)
+                }
+            }
+            .decodeList<Notification>()
+            .size
+    }
+
 
     suspend fun disconnect() {
         channel?.unsubscribe()
         channel = null
+    }
+
+    suspend fun markAsRead(notificationId: String) {
+        supabase.from("notifications")
+            .update(mapOf("is_read" to true)) {
+                filter { eq("id", notificationId) }
+            }
     }
 }

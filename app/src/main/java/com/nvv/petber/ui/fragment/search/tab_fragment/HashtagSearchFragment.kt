@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.databinding.FragmentHashtagSearchBinding
+import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
@@ -70,11 +71,12 @@ class HashtagSearchFragment : Fragment() {
             onProfileClick = { post ->
                 UserProfileActivity.start(requireContext(), post.userId)
             },
-            onLoadMore = {
-            },
             onMoreOption = {
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
                 bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
+            },
+            onTaggedPetClick = { pet ->
+                PetProfileActivity.start(requireContext(), pet)
             }
         )
         val linearLayoutManager = LinearLayoutManager(requireContext())
@@ -93,8 +95,9 @@ class HashtagSearchFragment : Fragment() {
                 },
                 onPreloadItem = { index ->
                     val currentList = adapterResults.currentList
-                    if (index < currentList.size) {
-                        currentList.getOrNull(index)?.postMedia?.firstOrNull()?.mediaUrl?.let { url ->
+                    val item = currentList.getOrNull(index)
+                    if (item is PostAdapter.PostItem.Data) {
+                        item.post.postMedia?.firstOrNull()?.mediaUrl?.let { url ->
                             com.bumptech.glide.Glide.with(requireContext())
                                 .load(url)
                                 .preload()
@@ -108,7 +111,11 @@ class HashtagSearchFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.posts.collect { list ->
-                    adapterResults.submitList(list)
+                    adapterResults.submitPostData(
+                        list = list,
+                        isLoadingMore = false,
+                        showCreatePost = false
+                    )
                 }
             }
         }

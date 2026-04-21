@@ -47,4 +47,14 @@
         <item name="endIconTint">@color/pet_accent</item>
     </style>
 
+    <style name="PetTagChip" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="android:fontFamily">@font/baloo2</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="chipBackgroundColor">@color/chip_pet_bg</item>
+        <item name="chipStrokeColor">@color/chip_pet_stroke</item>
+        <item name="chipStrokeWidth">2dp</item>
+        <item name="android:textColor">@color/chip_pet_text</item>
+        <item name="fontFamily">@font/baloo2</item>
+    </style>
+
 </resources>

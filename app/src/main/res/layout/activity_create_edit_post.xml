@@ -103,7 +103,7 @@
                 app:drawableEndCompat="@drawable/ic_edit"
                 app:drawableTint="#FF7043" />
 
-            <com.nvv.petber.ui.mention.MentionEditText
+            <EditText
                 android:id="@+id/et_caption"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
@@ -135,17 +135,6 @@
                 android:layout_marginBottom="8dp"
                 app:chipSpacingHorizontal="7dp">
 
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pet1"
-                    android:fontFamily="@font/baloo2"
-                    app:chipBackgroundColor="#F5EFE1"
-                    app:closeIconVisible="false"
-                    app:chipCornerRadius="20dp"
-                    app:chipStrokeWidth="0dp"
-                    tools:ignore="HardcodedText" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -195,5 +184,22 @@
         tools:ignore="TextContrastCheck,VisualLintButtonSize"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <FrameLayout
+        android:id="@+id/layout_loading_block"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#66000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <ProgressBar
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

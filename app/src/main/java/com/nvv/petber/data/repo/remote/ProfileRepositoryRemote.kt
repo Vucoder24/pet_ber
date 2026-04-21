@@ -55,10 +55,13 @@ class ProfileRepositoryRemote @Inject constructor(
                 .select(
                     Columns.raw(
                         """*, users(*), post_media(*), 
-                        |post_likes(*).filter(user_id.eq.$userId)""".trimMargin()
+                        post_likes(*)""".trimMargin()
                     )
                 ) {
-                    filter { eq("user_id", userId) }
+                    filter {
+                        eq("user_id", userId)
+                        eq("post_likes.user_id", userId)
+                    }
                 }
                 .decodeList<Post>()
 
@@ -73,7 +76,49 @@ class ProfileRepositoryRemote @Inject constructor(
                     taggedPets = petsList.filter { pet -> petIds?.contains(pet.id) == true }
                 }
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Log.e("ProfileRepo", "Error getPosts: ${e.message}")
+            emptyList()
+        }
+    }
+
+    suspend fun getPosts(
+        userId: String,
+        offset: Int,
+        limit: Int = 10,
+        currentUserId: String
+    ): List<Post> {
+        return try {
+
+            val posts = supabase.from("posts")
+                .select(
+                    Columns.raw(
+                        """*, users(*), post_media(*), 
+                    post_likes(*)""".trimMargin()
+                    )
+                ) {
+                    filter {
+                        eq("user_id", userId)
+                        eq("post_likes.user_id", currentUserId)
+                    }
+                    order("created_at", Order.DESCENDING)
+                    range(offset.toLong(), (offset + limit - 1).toLong())
+                }
+                .decodeList<Post>()
+
+            val allPetIds = posts.flatMap { it.petIds ?: emptyList() }.distinct()
+            val petsList = if (allPetIds.isNotEmpty()) {
+                supabase.from("pets").select { filter { isIn("id", allPetIds) } }.decodeList<Pet>()
+            } else emptyList()
+
+            posts.map { post ->
+                post.apply {
+                    isLiked = !postLikes.isNullOrEmpty()
+                    taggedPets = petsList.filter { pet -> petIds?.contains(pet.id) == true }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("ProfileRepo", "Error getPosts: ${e.message}")
             emptyList()
         }
     }
@@ -276,7 +321,7 @@ class ProfileRepositoryRemote @Inject constructor(
         }
     }
 
-    suspend fun     getPetById(petId: String): Pet? {
+    suspend fun getPetById(petId: String): Pet? {
         return try {
             supabase.from("pets")
                 .select {

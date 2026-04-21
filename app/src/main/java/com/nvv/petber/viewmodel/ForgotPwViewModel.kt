@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
 import com.nvv.petber.data.repo.remote.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,7 +25,7 @@ sealed class ForgotPasswordState {
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val context: Context
+    @ApplicationContext val context: Context
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ForgotPasswordState>(ForgotPasswordState.Idle)
@@ -31,7 +33,7 @@ class ForgotPasswordViewModel @Inject constructor(
 
     fun sendOtp(email: String) {
         _state.value = ForgotPasswordState.Loading
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             authRepository.sendResetPasswordOtp(email)
                 .onSuccess {
                     _state.value = ForgotPasswordState.OtpSent(email)
@@ -46,7 +48,7 @@ class ForgotPasswordViewModel @Inject constructor(
 
     fun verifyOtp(email: String, otp: String) {
         _state.value = ForgotPasswordState.Loading
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             authRepository.verifyResetPasswordOtp(email, otp)
                 .onSuccess {
                     _state.value = ForgotPasswordState.OtpVerified(email)
@@ -61,7 +63,7 @@ class ForgotPasswordViewModel @Inject constructor(
 
     fun updatePassword(newPassword: String) {
         _state.value = ForgotPasswordState.Loading
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             authRepository.updatePassword(newPassword)
                 .onSuccess {
                     _state.value = ForgotPasswordState.PasswordUpdated

@@ -111,7 +111,11 @@ class PostDetailActivity : AppCompatActivity() {
                     bottomSheet.show(supportFragmentManager, "PostOptionsBottomSheet")
                 }
             },
-            onLoadMore = {}
+            onTaggedPetClick = { pet ->
+                requireLogin {
+                    PetProfileActivity.start(this, pet)
+                }
+            }
         )
 
         binding.rvPost.apply {
@@ -124,7 +128,10 @@ class PostDetailActivity : AppCompatActivity() {
 
     private fun observeData() {
         viewModel.post.observe(this){
-            adapter.submitList(it?.let { listOf(it) } ?: emptyList())
+            adapter.submitPostData(
+                list = it?.let { listOf(it) } ?: emptyList(),
+                isLoadingMore = false
+            )
         }
         viewModel.isLoading.observe(this){
                 binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
@@ -142,6 +149,11 @@ class PostDetailActivity : AppCompatActivity() {
         }
         startActivity(Intent.createChooser(intent, getString(R.string.share_post)))
         viewModel.incrementShareCount()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlayer.release()
     }
 
     companion object {

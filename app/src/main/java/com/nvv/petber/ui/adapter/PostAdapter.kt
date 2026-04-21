@@ -2,22 +2,25 @@ package com.nvv.petber.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
 import com.nvv.petber.R
+import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.PostMedia
+import com.nvv.petber.databinding.ItemCreatePostBinding
 import com.nvv.petber.databinding.ItemPostBinding
+import com.nvv.petber.databinding.ItemPostLoadMoreShimmerBinding
+import com.nvv.petber.ui.activity.CreateEditPostActivity
 import com.nvv.petber.ui.activity.MediaViewerActivity
 import com.nvv.petber.ui.dialog.MediaFullscreenDialog
 import com.nvv.petber.utils.TimeUtils
@@ -36,37 +39,107 @@ class PostAdapter(
     private val onShareClick: (Post) -> Unit,
     private val onProfileClick: (Post) -> Unit,
     private val onMoreOption: (Post) -> Unit,
-    private val onLoadMore: () -> Unit
-) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback()) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val binding = ItemPostBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-        return PostViewHolder(binding)
+    private val onTaggedPetClick: (Pet) -> Unit,
+) : ListAdapter<PostAdapter.PostItem, RecyclerView.ViewHolder>(PostDiffCallback()) {
+    companion object {
+        private const val TYPE_ITEM = 0
+        private const val TYPE_LOADING = 1
+        private const val TYPE_CREATE = 3
     }
 
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        if (position >= itemCount - 1) {
-            onLoadMore()
+    sealed class PostItem {
+        data class Data(val post: Post) : PostItem()
+        object Loading : PostItem()
+        object CreatePost : PostItem()
+    }
+
+    fun submitPostData(list: List<Post>?, isLoadingMore: Boolean, showCreatePost: Boolean = true) {
+        val items = mutableListOf<PostItem>()
+
+        if (showCreatePost) {
+            items.add(PostItem.CreatePost)
+        }
+
+        list?.let {
+            items.addAll(it.map { post -> PostItem.Data(post) })
+        }
+
+        if (isLoadingMore && !list.isNullOrEmpty()) {
+            items.add(PostItem.Loading)
+        }
+        submitList(items)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is PostItem.Data -> TYPE_ITEM
+            is PostItem.Loading -> TYPE_LOADING
+            is PostItem.CreatePost -> TYPE_CREATE
         }
     }
 
-    override fun onViewRecycled(holder: PostViewHolder) {
-        super.onViewRecycled(holder)
-        holder.detachPlayer()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            TYPE_ITEM -> {
+                val binding = ItemPostBinding.inflate(inflater, parent, false)
+                PostViewHolder(binding)
+            }
+
+            TYPE_LOADING -> {
+                val binding = ItemPostLoadMoreShimmerBinding.inflate(inflater, parent, false)
+                LoadingViewHolder(binding)
+            }
+
+            else -> {
+                val binding = ItemCreatePostBinding.inflate(inflater, parent, false)
+                CreatePostViewHolder(binding)
+            }
+        }
     }
 
-    override fun onViewDetachedFromWindow(holder: PostViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-        holder.pausePlayer()
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+        when {
+            holder is PostViewHolder && item is PostItem.Data -> {
+                holder.bind(item.post)
+            }
+
+            holder is LoadingViewHolder -> {
+                holder.binding.shimmerLoadMore.startShimmer()
+            }
+
+            holder is CreatePostViewHolder -> {
+                holder.binding.root.setOnClickListener {
+                    val context = holder.itemView.context
+                    context.startActivity(
+                        Intent(context, CreateEditPostActivity::class.java)
+                    )
+                }
+            }
+        }
     }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is PostViewHolder) holder.detachPlayer()
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        if (holder is PostViewHolder) holder.pausePlayer()
+    }
+
+    inner class CreatePostViewHolder(val binding: ItemCreatePostBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
+    inner class LoadingViewHolder(val binding: ItemPostLoadMoreShimmerBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     inner class PostViewHolder(private val binding: ItemPostBinding) :
         RecyclerView.ViewHolder(binding.root) {
         // UI Components
-
         private var currentVideoUrl: String? = null
 
         private val playerListener = object : Player.Listener {
@@ -117,7 +190,21 @@ class PostAdapter(
                 caption.visibility =
                     if (post.caption?.isNotEmpty() == true) View.VISIBLE else View.GONE
 
-
+                // Tagged Pets
+                val taggedPets = post.taggedPets
+                if (taggedPets.isEmpty()) {
+                    binding.scrollTaggedPets.gone()
+                } else {
+                    binding.scrollTaggedPets.visible()
+                    binding.layoutTaggedPets.removeAllViews()
+                    taggedPets.forEach { pet ->
+                        val petView = LayoutInflater.from(itemView.context)
+                            .inflate(R.layout.item_tagged_pet, binding.layoutTaggedPets, false)
+                        petView.findViewById<ShapeableImageView>(R.id.imgPetAvatar).loadAvatar(pet.avatarUrl)
+                        petView.setOnClickListener { onTaggedPetClick(pet) }
+                        binding.layoutTaggedPets.addView(petView)
+                    }
+                }
 
                 if (post.hashtags.isNullOrEmpty()) hashtags.gone() else {
                     hashtags.text = post.hashtags; hashtags.visible()
@@ -125,17 +212,12 @@ class PostAdapter(
                 post.createdAt?.let {
                     tvTimeAgo.text = TimeUtils.formatTimeAgo(itemView.context, it)
                 }
-                btnLike.setImageResource(if (post.isLiked) R.drawable.ic_liked else R.drawable.ic_like)
+                icLike.setImageResource(if (post.isLiked) R.drawable.ic_liked else R.drawable.ic_like)
                 imgUser.loadAvatar(post.users?.avatarUrl)
 
                 caption.setOnClickListener {
-                    TransitionManager.beginDelayedTransition(binding.layoutContainer as ViewGroup)
-
-                    if (binding.caption.maxLines == 3) {
-                        binding.caption.maxLines = Int.MAX_VALUE
-                    } else {
-                        binding.caption.maxLines = 3
-                    }
+                    binding.caption.maxLines =
+                        if (binding.caption.maxLines == 3) Int.MAX_VALUE else 3
                 }
 
                 // Media Reset & Logic
@@ -184,6 +266,9 @@ class PostAdapter(
                 layoutMediaGrid.gone()
                 pbLoadingSingle.gone()
                 playerViewSingle.player = null
+                listOf(icPlay1, icPlay2, icPlay3, icPlay4).forEach {
+                    it.gone()
+                }
             }
         }
 
@@ -259,73 +344,48 @@ class PostAdapter(
         @SuppressLint("SetTextI18n")
         private fun setupMediaGrid(mediaList: List<PostMedia>) {
             binding.apply {
-                val views = listOf(ivGrid1, ivGrid2, ivGrid3, ivGrid4)
-                val playIcons = listOf(icPlay1, icPlay2, icPlay3, icPlay4)
 
-                views.forEach { it.gone() }
-                playIcons.forEach { it.gone() }
-                overlayMore.gone()
+                val images = listOf(ivGrid1, ivGrid2, ivGrid3, ivGrid4)
+                val plays = listOf(icPlay1, icPlay2, icPlay3, icPlay4)
+                val grids = listOf(
+                    grid1, grid2, grid3, grid4
+                )
+
+                grids.forEach { it.visibility = View.GONE }
+                plays.forEach { it.visibility = View.GONE }
+                overlayMore.visibility = View.GONE
 
                 val size = mediaList.size
-
-                if (size == 3) {
-                    // show 3 view
-                    ivGrid1.visible()
-                    ivGrid2.visible()
-                    ivGrid3.visible()
-                    ivGrid4.gone()
-
-                    // 👉 set constraint động
-                    val params1 = ivGrid1.layoutParams as ConstraintLayout.LayoutParams
-                    val params2 = ivGrid2.layoutParams as ConstraintLayout.LayoutParams
-                    val params3 = ivGrid3.layoutParams as ConstraintLayout.LayoutParams
-
-                    // ivGrid1 chiếm full bên trái
-                    params1.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                    params1.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-                    params1.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-                    params1.endToStart = ivGrid2.id
-
-                    // ivGrid2 (trên phải)
-                    params2.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                    params2.startToEnd = ivGrid1.id
-                    params2.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-                    params2.bottomToTop = ivGrid3.id
-
-                    // ivGrid3 (dưới phải)
-                    params3.topToBottom = ivGrid2.id
-                    params3.startToEnd = ivGrid1.id
-                    params3.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-                    params3.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-
-                    ivGrid1.layoutParams = params1
-                    ivGrid2.layoutParams = params2
-                    ivGrid3.layoutParams = params3
-
-                } else {
-                    // default (1,2,4+)
-                    val displayCount = minOf(size, 4)
-                    for (i in 0 until displayCount) {
-                        views[i].visible()
-                    }
-                }
-
-                // bind data chung
                 val displayCount = minOf(size, 4)
-                for (i in 0 until displayCount) {
-                    views[i].loadImage(mediaList[i].mediaUrl)
 
-                    if (mediaList[i].mediaType.lowercase().contains("video")) {
-                        playIcons[i].visible()
+                layoutMediaGrid.visibility = View.VISIBLE
+
+                for (i in 0 until displayCount) {
+                    grids[i].visibility = View.VISIBLE
+                }
+
+                // bind data
+                mediaList.take(4).forEachIndexed { index, media ->
+
+                    val imageView = images[index]
+                    val playView = plays[index]
+
+                    imageView.loadImage(media.mediaUrl)
+
+                    playView.visibility = View.GONE
+
+                    if (media.mediaType.contains("video", true)) {
+                        playView.visibility = View.VISIBLE
                     }
 
-                    views[i].setOnClickListener {
-                        openMediaViewer(mediaList, i)
+                    imageView.setOnClickListener {
+                        openMediaViewer(mediaList, index)
                     }
                 }
 
+                // overlay more
                 if (size > 4) {
-                    overlayMore.visible()
+                    overlayMore.visibility = View.VISIBLE
                     tvMoreCount.text = "+${size - 4}"
                 }
             }
@@ -344,8 +404,17 @@ class PostAdapter(
         exoPlayer.pause()
     }
 
-    private class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
-        override fun areItemsTheSame(oldItem: Post, newItem: Post) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Post, newItem: Post) = oldItem == newItem
+    private class PostDiffCallback : DiffUtil.ItemCallback<PostItem>() {
+        override fun areItemsTheSame(oldItem: PostItem, newItem: PostItem): Boolean {
+            return if (oldItem is PostItem.Data && newItem is PostItem.Data) {
+                oldItem.post.id == newItem.post.id
+            } else {
+                oldItem is PostItem.Loading && newItem is PostItem.Loading
+            }
+        }
+
+        override fun areContentsTheSame(oldItem: PostItem, newItem: PostItem): Boolean {
+            return oldItem == newItem
+        }
     }
 }

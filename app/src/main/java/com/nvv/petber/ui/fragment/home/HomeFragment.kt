@@ -18,6 +18,7 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.FragmentHomeBinding
 import com.nvv.petber.ui.activity.MainActivity
+import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.adapter.StoryAdapter
@@ -48,6 +49,7 @@ class HomeFragment : Fragment() {
     private lateinit var storyAdapter: StoryAdapter
     private lateinit var postAdapter: PostAdapter
     private var scrollListener: RecyclerView.OnScrollListener? = null
+
     @Inject
     lateinit var exoPlayer: ExoPlayer
 
@@ -72,7 +74,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupFragmentResultListeners() {
-        childFragmentManager.setFragmentResultListener("refresh_key", viewLifecycleOwner) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(
+            "refresh_key",
+            viewLifecycleOwner
+        ) { _, bundle ->
             val isUpdated = bundle.getBoolean("bundle_is_updated", false)
             if (isUpdated) {
                 viewModel.refreshData()
@@ -115,14 +120,11 @@ class HomeFragment : Fragment() {
 
                 val initialPosition = groupedStories.indexOfFirst { it.userId == story.userId }
 
-                val intent = Intent(requireContext(), ViewStoryActivity::class.java).apply {
-                    putExtra(
-                        ViewStoryActivity.EXTRA_STORY_GROUPS,
-                        Json.encodeToString(groupedStories)
-                    )
-                    putExtra(ViewStoryActivity.EXTRA_INITIAL_POSITION, initialPosition)
-                }
-                startActivity(intent)
+                ViewStoryActivity.startWithData(
+                    requireContext(),
+                    Json.encodeToString(groupedStories),
+                    initialPosition
+                )
             }
         )
 
@@ -146,24 +148,29 @@ class HomeFragment : Fragment() {
                 viewModel.incrementShareCount(it.id)
             },
             onProfileClick = {
-                if (it.userId == SharePrefUtils.getCurrentUserId(requireContext())){
+                if (it.userId == SharePrefUtils.getCurrentUserId(requireContext())) {
                     (activity as? MainActivity)?.selectProfileTab()
-                }else{
+                } else {
                     UserProfileActivity.start(requireContext(), it.userId)
                 }
             },
-            onLoadMore = { viewModel.loadPosts(refresh = false) },
             onMoreOption = {
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
                 bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
+            },
+            onTaggedPetClick = { pet ->
+                PetProfileActivity.start(requireContext(), pet)
             }
-
         )
     }
 
     private fun setupRecyclerView() {
+        val storyRowAdapter = StoryRowAdapter(storyAdapter) {
+            viewModel.loadStories(refresh = false)
+        }
+
         val concatAdapter = ConcatAdapter(
-            StoryRowAdapter(storyAdapter),
+            storyRowAdapter,
             postAdapter
         )
 
@@ -172,6 +179,25 @@ class HomeFragment : Fragment() {
             layoutManager = linearLayoutManager
             adapter = concatAdapter
             setHasFixedSize(false)
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (dy > 0) {
+                        val layoutManager =
+                            recyclerView.layoutManager as? LinearLayoutManager ?: return
+                        val visibleItemCount = layoutManager.childCount
+                        val totalItemCount = layoutManager.itemCount
+                        val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                            viewModel.loadPosts(refresh = false)
+                        }
+                    }
+                }
+            })
+
 
             scrollListener = addFeedScrollListener(
                 layoutManager = linearLayoutManager,
@@ -184,8 +210,9 @@ class HomeFragment : Fragment() {
                 },
                 onPreloadItem = { index ->
                     val currentList = postAdapter.currentList
-                    if (index < currentList.size) {
-                        currentList.getOrNull(index)?.postMedia?.firstOrNull()?.mediaUrl?.let { url ->
+                    val item = currentList.getOrNull(index)
+                    if (item is PostAdapter.PostItem.Data) {
+                        item.post.postMedia?.firstOrNull()?.mediaUrl?.let { url ->
                             com.bumptech.glide.Glide.with(requireContext())
                                 .load(url)
                                 .preload()
@@ -202,10 +229,10 @@ class HomeFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     // Stories
-                    storyAdapter.submitList(state.stories)
+                    storyAdapter.submitStoryData(state.stories, state.isLoadingMoreStories)
 
                     // Posts
-                    postAdapter.submitList(state.posts)
+                    postAdapter.submitPostData(state.posts, state.isLoadingMore)
 
                     // init Loading
                     if (state.isInitialLoading) {

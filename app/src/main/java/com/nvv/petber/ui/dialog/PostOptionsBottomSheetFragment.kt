@@ -88,13 +88,11 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
                 binding.btnHide.gone()
                 binding.btnFollow.gone()
                 binding.btnEditPost.visible()
-                binding.btnEditPrivacy.visible()
             } else {
                 binding.btnBlock.visible()
                 binding.btnHide.visible()
                 binding.btnFollow.visible()
                 binding.btnEditPost.gone()
-                binding.btnEditPrivacy.gone()
             }
 
             binding.tvFollow.text = getString(
@@ -126,7 +124,6 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
                 editPostLauncher.launch(intent)
             }
 
-            binding.btnEditPrivacy.setOnClickListener { }
 
             binding.btnBlock.setOnClickListener { viewModel.blockUser(p.userId) }
         }

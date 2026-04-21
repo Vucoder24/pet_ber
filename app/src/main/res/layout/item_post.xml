@@ -3,18 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp"
     android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="#F0EDED"
+    app:cardBackgroundColor="#FFF3E0"
+    app:cardCornerRadius="16dp"
     app:cardElevation="2dp">
 
     <LinearLayout
         android:id="@+id/layoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="@color/white"
-        android:animateLayoutChanges="true"
+        android:orientation="vertical"
         android:padding="12dp">
 
         <RelativeLayout
@@ -32,26 +31,28 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginStart="10dp"
                 android:layout_toEndOf="@id/imgUser"
-                android:layout_marginStart="10dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username"
-                    android:textStyle="bold"
                     android:fontFamily="@font/baloo2"
+                    android:text="Username"
+                    android:textColor="@color/title_color"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tvTimeAgo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="time"
-                    android:textSize="12sp"
                     android:fontFamily="@font/baloo2"
+                    android:text="time"
+                    android:textColor="@color/pet_text_secondary"
+                    android:textSize="12sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -83,9 +84,9 @@
                 android:id="@+id/playerViewSingle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:use_controller="false"
+                android:visibility="gone"
                 app:resize_mode="zoom"
-                android:visibility="gone" />
+                app:use_controller="false" />
 
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -93,127 +94,134 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/Rounded12"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:shapeAppearanceOverlay="@style/Rounded12" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutMediaGrid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                android:background="@drawable/bg_rounded_12">
+                android:visibility="gone">
 
-                <ImageView
-                    android:id="@+id/ivGrid1"
+                <!-- GRID 1 -->
+                <FrameLayout
+                    android:id="@+id/grid1"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toTopOf="@+id/ivGrid3"
-                    app:layout_constraintEnd_toStartOf="@+id/ivGrid2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/grid3"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toStartOf="@id/grid2">
 
-                <ImageView
-                    android:id="@+id/ivGrid2"
+                    <ImageView
+                        android:id="@+id/ivGrid1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"/>
+
+                    <ImageView
+                        android:id="@+id/icPlay1"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@android:drawable/ic_media_play"
+                        android:visibility="gone"/>
+                </FrameLayout>
+
+                <!-- GRID 2 -->
+                <FrameLayout
+                    android:id="@+id/grid2"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toTopOf="@+id/ivGrid4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ivGrid1"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/grid4"
+                    app:layout_constraintStart_toEndOf="@id/grid1"
+                    app:layout_constraintEnd_toEndOf="parent">
 
-                <ImageView
-                    android:id="@+id/ivGrid3"
+                    <ImageView
+                        android:id="@+id/ivGrid2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"/>
+
+                    <ImageView
+                        android:id="@+id/icPlay2"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@android:drawable/ic_media_play"
+                        android:visibility="gone"/>
+                </FrameLayout>
+
+                <!-- GRID 3 -->
+                <FrameLayout
+                    android:id="@+id/grid3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="1dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toBottomOf="@id/grid1"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/ivGrid4"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ivGrid1" />
+                    app:layout_constraintEnd_toStartOf="@id/grid4">
 
-                <ImageView
-                    android:id="@+id/ivGrid4"
+                    <ImageView
+                        android:id="@+id/ivGrid3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"/>
+
+                    <ImageView
+                        android:id="@+id/icPlay3"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@android:drawable/ic_media_play"
+                        android:visibility="gone"/>
+                </FrameLayout>
+
+                <!-- GRID 4 -->
+                <FrameLayout
+                    android:id="@+id/grid4"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="1dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toBottomOf="@id/grid2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ivGrid3"
-                    app:layout_constraintTop_toBottomOf="@+id/ivGrid2" />
+                    app:layout_constraintStart_toEndOf="@id/grid3"
+                    app:layout_constraintEnd_toEndOf="parent">
 
-                <ImageView
-                    android:id="@+id/icPlay1"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_media_play"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivGrid1"
-                    app:layout_constraintEnd_toEndOf="@+id/ivGrid1"
-                    app:layout_constraintStart_toStartOf="@+id/ivGrid1"
-                    app:layout_constraintTop_toTopOf="@+id/ivGrid1" />
+                    <ImageView
+                        android:id="@+id/ivGrid4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"/>
 
-                <ImageView
-                    android:id="@+id/icPlay2"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_media_play"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivGrid2"
-                    app:layout_constraintEnd_toEndOf="@+id/ivGrid2"
-                    app:layout_constraintStart_toStartOf="@+id/ivGrid2"
-                    app:layout_constraintTop_toTopOf="@+id/ivGrid2" />
+                    <ImageView
+                        android:id="@+id/icPlay4"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@android:drawable/ic_media_play"
+                        android:visibility="gone"/>
+                </FrameLayout>
 
-                <ImageView
-                    android:id="@+id/icPlay3"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_media_play"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivGrid3"
-                    app:layout_constraintEnd_toEndOf="@+id/ivGrid3"
-                    app:layout_constraintStart_toStartOf="@+id/ivGrid3"
-                    app:layout_constraintTop_toTopOf="@+id/ivGrid3" />
-
-                <ImageView
-                    android:id="@+id/icPlay4"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_media_play"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivGrid4"
-                    app:layout_constraintEnd_toEndOf="@+id/ivGrid4"
-                    app:layout_constraintStart_toStartOf="@+id/ivGrid4"
-                    app:layout_constraintTop_toTopOf="@+id/ivGrid4" />
-
-
+                <!-- OVERLAY MORE -->
                 <FrameLayout
                     android:id="@+id/overlayMore"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="#80000000"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/ivGrid4"
-                    app:layout_constraintEnd_toEndOf="@id/ivGrid4"
-                    app:layout_constraintStart_toStartOf="@id/ivGrid4"
-                    app:layout_constraintTop_toTopOf="@id/ivGrid4">
+                    app:layout_constraintBottom_toBottomOf="@id/grid4"
+                    app:layout_constraintEnd_toEndOf="@id/grid4"
+                    app:layout_constraintStart_toStartOf="@id/grid4"
+                    app:layout_constraintTop_toTopOf="@id/grid4">
 
                     <TextView
                         android:id="@+id/tvMoreCount"
@@ -222,9 +230,11 @@
                         android:layout_gravity="center"
                         android:textColor="@android:color/white"
                         android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
                 </FrameLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <ProgressBar
                 android:id="@+id/pbLoadingSingle"
                 android:layout_width="40dp"
@@ -238,8 +248,8 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_play_btn"
                 android:importantForAccessibility="no"
+                android:src="@drawable/ic_play_btn"
                 android:visibility="gone"
                 app:tint="@color/white" />
         </com.google.android.material.card.MaterialCardView>
@@ -249,22 +259,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="caption"
-            android:maxLines="3"
             android:ellipsize="end"
-            android:textStyle="normal"
             android:fontFamily="@font/baloo2"
+            android:maxLines="3"
+            android:text="caption"
+            android:textColor="@color/text_color"
+            android:textStyle="normal"
             tools:ignore="HardcodedText" />
+
+        <HorizontalScrollView
+            android:id="@+id/scrollTaggedPets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/layoutTaggedPets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="4dp"
+                android:gravity="center_vertical"/>
+
+        </HorizontalScrollView>
 
         <TextView
             android:id="@+id/hashtags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:fontFamily="@font/baloo2"
-            android:text="@string/hashtags"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:fontFamily="@font/baloo2"
+            android:maxLines="1"
+            android:text="@string/hashtags"
             android:textColor="@color/text_orange"
             android:textStyle="bold"
             tools:ignore="HardcodedText,TextContrastCheck" />
@@ -276,55 +305,96 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/btn_like"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_like" />
-
-            <TextView
-                android:id="@+id/tvLikeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:text="120"
-                android:fontFamily="@font/baloo2"
-                android:layout_marginEnd="16dp"
-                tools:ignore="HardcodedText" />
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="8dp"
+                tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck">
 
-            <ImageView
+                <ImageView
+                    android:id="@+id/ic_like"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_like"
+                    tools:ignore="ImageContrastCheck" />
+
+                <TextView
+                    android:id="@+id/tvLikeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/baloo2"
+                    android:text="0"
+                    android:textColor="@color/text_color"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/btn_cmt"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_cmt" />
-
-            <TextView
-                android:id="@+id/tvCmtCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="16dp"
-                android:text="25"
-                android:fontFamily="@font/baloo2"
-                tools:ignore="HardcodedText" />
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                tools:ignore="TouchTargetSizeCheck">
 
-            <ImageView
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_cmt" />
+
+                <TextView
+                    android:id="@+id/tvCmtCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/baloo2"
+                    android:text="0"
+                    android:textColor="@color/text_color"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/btn_share"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_share" />
-
-            <TextView
-                android:id="@+id/tvShareCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:text="0"
-                android:fontFamily="@font/baloo2"
-                tools:ignore="HardcodedText" />
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                tools:ignore="TouchTargetSizeCheck">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_share_story"
+                    app:tint="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/tvShareCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/baloo2"
+                    android:text="0"
+                    android:textColor="@color/text_color"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
 
         </LinearLayout>
 

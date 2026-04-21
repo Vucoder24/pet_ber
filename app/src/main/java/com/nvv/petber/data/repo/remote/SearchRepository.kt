@@ -136,7 +136,7 @@ class SearchRepository @Inject constructor(
         return try {
             val posts = db["posts"].select(
                 Columns.raw("*, users(*), post_media(*), " +
-                        "post_likes(*).filter(user_id.eq.$currentUserId)"
+                        "post_likes(*)"
                 )) {
                 filter {
                     neq("user_id", currentUserId)
@@ -144,6 +144,7 @@ class SearchRepository @Inject constructor(
                     if (query.isNotEmpty())  {
                         ilike("hashtags", rawQuery)
                     }
+                    eq("post_likes.user_id", currentUserId)
                 }
                 limit(15)
             }.decodeList<Post>()

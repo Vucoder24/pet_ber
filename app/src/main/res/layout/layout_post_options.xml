@@ -160,32 +160,32 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/btnEditPrivacy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingVertical="4dp"
-            android:paddingHorizontal="16dp"
-            android:background="?attr/selectableItemBackground"
-            tools:ignore="UseCompoundDrawables">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/btnEditPrivacy"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:paddingHorizontal="16dp"-->
+<!--            android:background="?attr/selectableItemBackground"-->
+<!--            tools:ignore="UseCompoundDrawables">-->
 
-            <ImageView
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:layout_marginVertical="4dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_globe" />
+<!--            <ImageView-->
+<!--                android:layout_width="26dp"-->
+<!--                android:layout_height="26dp"-->
+<!--                android:layout_marginVertical="4dp"-->
+<!--                android:importantForAccessibility="no"-->
+<!--                android:src="@drawable/ic_globe" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:fontFamily="@font/baloo2"
-                android:text="@string/edit_privacy"
-                android:textColor="@color/text_brown"
-                android:textSize="18sp" />
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="12dp"-->
+<!--                android:fontFamily="@font/baloo2"-->
+<!--                android:text="@string/edit_privacy"-->
+<!--                android:textColor="@color/text_brown"-->
+<!--                android:textSize="18sp" />-->
+<!--        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/btnHide"
