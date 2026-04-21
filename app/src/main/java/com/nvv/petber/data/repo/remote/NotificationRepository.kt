@@ -1,6 +1,7 @@
 package com.nvv.petber.data.repo.remote
 
 import com.nvv.petber.data.model.Notification
+import com.nvv.petber.utils.NotificationGrouper
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Order
@@ -46,12 +47,13 @@ class NotificationRepository @Inject constructor(
         val from = (page - 1) * limit
         val to = from + limit - 1
 
-        return supabase.from("notifications")
+        val rawData = supabase.from("notifications")
             .select {
                 filter { eq("user_id", userId) }
                 order("created_at", order = Order.DESCENDING)
                 range(from.toLong(), to.toLong())
             }.decodeList<Notification>()
+        return NotificationGrouper.group(rawData)
     }
 
     suspend fun getNewNotificationCount(userId: String, lastSeen: String): Int {

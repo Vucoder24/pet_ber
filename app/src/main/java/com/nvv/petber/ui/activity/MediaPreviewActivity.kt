@@ -46,7 +46,7 @@ class MediaPreviewActivity : AppCompatActivity() {
                 exoPlayer.prepare()
                 exoPlayer.play()
 
-                // 👉 lấy duration
+                // get duration
                 exoPlayer.addListener(object : Player.Listener {
                     override fun onPlaybackStateChanged(state: Int) {
                         if (state == Player.STATE_READY) {
@@ -80,6 +80,7 @@ class MediaPreviewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        exoPlayer.release()
         binding.playerView.player = null
     }
 

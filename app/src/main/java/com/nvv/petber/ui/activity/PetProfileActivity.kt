@@ -493,4 +493,8 @@ class PetProfileActivity : AppCompatActivity() {
         coverPickerLauncher.launch(intent)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlayer.release()
+    }
 }

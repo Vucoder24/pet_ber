@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.graphics.get
 import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 @SuppressLint("CheckResult")
 fun ImageView.loadImage(
@@ -33,6 +34,7 @@ fun ImageView.loadImage(
         .placeholder(placeholder)
         .error(placeholder)
         .override(600, 600)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .format(DecodeFormat.PREFER_RGB_565)
 
     if (centerCrop) request.centerCrop()
@@ -46,14 +48,18 @@ fun ImageView.loadImageUri(
     @DrawableRes placeholder: Int = R.color.colorImagePlaceholder,
     centerCrop: Boolean = true
 ) {
-    val request = Glide.with(context)
+    Glide.with(context)
         .load(uri)
         .placeholder(placeholder)
         .error(placeholder)
-
-    if (centerCrop) request.centerCrop()
-
-    request.into(this)
+        .override(600, 600)
+        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+        .format(DecodeFormat.PREFER_RGB_565)
+        .dontAnimate()
+        .apply {
+            if (centerCrop) centerCrop()
+        }
+        .into(this)
 }
 
 fun ImageView.loadAvatar(
@@ -64,6 +70,9 @@ fun ImageView.loadAvatar(
         .load(url)
         .placeholder(placeholder)
         .error(placeholder)
+        .override(120, 120)
+        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+        .dontAnimate()
         .transform(CircleCrop())
         .into(this)
 }

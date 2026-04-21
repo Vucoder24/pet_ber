@@ -146,6 +146,11 @@ class PostDetailActivity : AppCompatActivity() {
         viewModel.incrementShareCount()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlayer.release()
+    }
+
     companion object {
         const val EXTRA_POST_ID = "postId"
     }

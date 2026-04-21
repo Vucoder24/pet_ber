@@ -12,7 +12,6 @@
         android:id="@+id/layoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
         android:background="@color/white"
         android:orientation="vertical"
         android:padding="12dp">
@@ -102,120 +101,127 @@
                 android:id="@+id/layoutMediaGrid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_rounded_12"
                 android:visibility="gone">
 
-                <ImageView
-                    android:id="@+id/ivGrid1"
+                <!-- GRID 1 -->
+                <FrameLayout
+                    android:id="@+id/grid1"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toTopOf="@+id/ivGrid3"
-                    app:layout_constraintEnd_toStartOf="@+id/ivGrid2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/grid3"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toStartOf="@id/grid2">
 
-                <ImageView
-                    android:id="@+id/ivGrid2"
+                    <ImageView
+                        android:id="@+id/ivGrid1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"/>
+
+                    <ImageView
+                        android:id="@+id/icPlay1"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@android:drawable/ic_media_play"
+                        android:visibility="gone"/>
+                </FrameLayout>
+
+                <!-- GRID 2 -->
+                <FrameLayout
+                    android:id="@+id/grid2"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toTopOf="@+id/ivGrid4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ivGrid1"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/grid4"
+                    app:layout_constraintStart_toEndOf="@id/grid1"
+                    app:layout_constraintEnd_toEndOf="parent">
 
-                <ImageView
-                    android:id="@+id/ivGrid3"
+                    <ImageView
+                        android:id="@+id/ivGrid2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"/>
+
+                    <ImageView
+                        android:id="@+id/icPlay2"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@android:drawable/ic_media_play"
+                        android:visibility="gone"/>
+                </FrameLayout>
+
+                <!-- GRID 3 -->
+                <FrameLayout
+                    android:id="@+id/grid3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="1dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toBottomOf="@id/grid1"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/ivGrid4"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ivGrid1" />
+                    app:layout_constraintEnd_toStartOf="@id/grid4">
 
-                <ImageView
-                    android:id="@+id/ivGrid4"
+                    <ImageView
+                        android:id="@+id/ivGrid3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"/>
+
+                    <ImageView
+                        android:id="@+id/icPlay3"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@android:drawable/ic_media_play"
+                        android:visibility="gone"/>
+                </FrameLayout>
+
+                <!-- GRID 4 -->
+                <FrameLayout
+                    android:id="@+id/grid4"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="1dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toBottomOf="@id/grid2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ivGrid3"
-                    app:layout_constraintTop_toBottomOf="@+id/ivGrid2" />
+                    app:layout_constraintStart_toEndOf="@id/grid3"
+                    app:layout_constraintEnd_toEndOf="parent">
 
-                <ImageView
-                    android:id="@+id/icPlay1"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_media_play"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivGrid1"
-                    app:layout_constraintEnd_toEndOf="@+id/ivGrid1"
-                    app:layout_constraintStart_toStartOf="@+id/ivGrid1"
-                    app:layout_constraintTop_toTopOf="@+id/ivGrid1" />
+                    <ImageView
+                        android:id="@+id/ivGrid4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"/>
 
-                <ImageView
-                    android:id="@+id/icPlay2"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_media_play"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivGrid2"
-                    app:layout_constraintEnd_toEndOf="@+id/ivGrid2"
-                    app:layout_constraintStart_toStartOf="@+id/ivGrid2"
-                    app:layout_constraintTop_toTopOf="@+id/ivGrid2" />
+                    <ImageView
+                        android:id="@+id/icPlay4"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@android:drawable/ic_media_play"
+                        android:visibility="gone"/>
+                </FrameLayout>
 
-                <ImageView
-                    android:id="@+id/icPlay3"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_media_play"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivGrid3"
-                    app:layout_constraintEnd_toEndOf="@+id/ivGrid3"
-                    app:layout_constraintStart_toStartOf="@+id/ivGrid3"
-                    app:layout_constraintTop_toTopOf="@+id/ivGrid3" />
-
-                <ImageView
-                    android:id="@+id/icPlay4"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_media_play"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivGrid4"
-                    app:layout_constraintEnd_toEndOf="@+id/ivGrid4"
-                    app:layout_constraintStart_toStartOf="@+id/ivGrid4"
-                    app:layout_constraintTop_toTopOf="@+id/ivGrid4" />
-
-
+                <!-- OVERLAY MORE -->
                 <FrameLayout
                     android:id="@+id/overlayMore"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="#80000000"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/ivGrid4"
-                    app:layout_constraintEnd_toEndOf="@id/ivGrid4"
-                    app:layout_constraintStart_toStartOf="@id/ivGrid4"
-                    app:layout_constraintTop_toTopOf="@id/ivGrid4">
+                    app:layout_constraintBottom_toBottomOf="@id/grid4"
+                    app:layout_constraintEnd_toEndOf="@id/grid4"
+                    app:layout_constraintStart_toStartOf="@id/grid4"
+                    app:layout_constraintTop_toTopOf="@id/grid4">
 
                     <TextView
                         android:id="@+id/tvMoreCount"
@@ -224,8 +230,9 @@
                         android:layout_gravity="center"
                         android:textColor="@android:color/white"
                         android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
                 </FrameLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ProgressBar

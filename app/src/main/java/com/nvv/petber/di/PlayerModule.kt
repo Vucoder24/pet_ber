@@ -8,19 +8,17 @@ import androidx.media3.exoplayer.ExoPlayer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ActivityContext
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityComponent::class)
 object PlayerModule {
 
     @OptIn(UnstableApi::class)
     @Provides
-    @Singleton
     fun provideExoPlayer(
-        @ApplicationContext context: Context
+        @ActivityContext context: Context
     ): ExoPlayer {
 
         val loadControl = DefaultLoadControl.Builder()

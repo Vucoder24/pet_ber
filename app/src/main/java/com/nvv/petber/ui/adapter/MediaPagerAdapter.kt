@@ -16,7 +16,7 @@ import com.nvv.petber.data.model.PostMedia
 class MediaPagerAdapter(
     private val mediaList: List<PostMedia>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val activePlayers = mutableListOf<ExoPlayer>()
+    private val activePlayers = mutableMapOf<Int, ExoPlayer>()
 
     private val VIEW_TYPE_IMAGE = 1
     private val VIEW_TYPE_VIDEO = 2
@@ -45,14 +45,14 @@ class MediaPagerAdapter(
         if (holder is ImageViewHolder) {
             holder.bind(media.mediaUrl)
         } else if (holder is VideoViewHolder) {
-            holder.bind(media.mediaUrl)
+            holder.bind(media.mediaUrl, position)
         }
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
         if (holder is VideoViewHolder) {
-            holder.releasePlayer()
+            holder.releasePlayer(holder.bindingAdapterPosition)
         }
     }
 
@@ -71,31 +71,37 @@ class MediaPagerAdapter(
         private val playerView: PlayerView = itemView.findViewById(R.id.playerViewFull)
         private var exoPlayer: ExoPlayer? = null
 
-        fun bind(url: String) {
+        fun bind(url: String, position: Int) {
             exoPlayer = ExoPlayer.Builder(itemView.context).build().apply {
                 setMediaItem(MediaItem.fromUri(url))
                 prepare()
                 playWhenReady = true
             }
             playerView.player = exoPlayer
-            exoPlayer?.let { activePlayers.add(it) }
+            activePlayers[position] = exoPlayer!!
         }
 
-        fun releasePlayer() {
+        fun releasePlayer(position: Int) {
             exoPlayer?.let {
-                activePlayers.remove(it)
+                activePlayers.remove(position)
                 it.release()
             }
             exoPlayer = null
             playerView.player = null
         }
     }
+    fun pauseAllExcept(currentPosition: Int) {
+        activePlayers.forEach { (pos, player) ->
+            if (pos != currentPosition) player.pause()
+        }
+    }
+
     fun pauseAll() {
-        activePlayers.forEach { it.pause() }
+        activePlayers.values.forEach { it.pause() }
     }
 
     fun releaseAll() {
-        activePlayers.forEach { it.release() }
+        activePlayers.values.forEach { it.release() }
         activePlayers.clear()
     }
 }
