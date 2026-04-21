@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
+
 @Serializable
 data class UserIdResponse(val user_id: String)
 
@@ -96,7 +97,6 @@ class HomeRepository @Inject constructor(
                     it.apply { isLiked = !postLikes.isNullOrEmpty() }
                 }
 
-            // 2. Lấy danh sách Pet liên quan
             val allPetIds = posts.flatMap { it.petIds ?: emptyList() }.distinct()
             val petsList = if (allPetIds.isNotEmpty()) {
                 db["pets"].select { filter { isIn("id", allPetIds) } }.decodeList<Pet>()
@@ -209,15 +209,41 @@ class HomeRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchSavedPosts(userId: String): Result<List<Post>> {
+    suspend fun fetchSavedPosts(
+        userId: String,
+        page: Int = 0,
+        pageSize: Int = 10
+    ): Result<List<Post>> {
         return try {
+            val from = page * pageSize
+            val to = from + pageSize - 1
+
             val response = db["saved_posts"]
-                .select(columns = Columns.raw("post_id, posts(*)")) {
-                    filter { eq("user_id", userId) }
+                .select(
+                    columns = Columns.raw(
+                        """post_id,
+                                posts(
+                                    *,
+                                    users(id, username, full_name, avatar_url),
+                                    post_media(id, post_id, media_url, media_type),
+                                    post_likes(*)
+                                )""".trimIndent()
+                    )
+                ) {
+                    filter {
+                        eq("user_id", userId)
+                        eq("posts.post_likes.user_id", userId)
+                    }
+                    order("created_at", Order.DESCENDING)
+                    range(from.toLong(), to.toLong())
                 }
                 .decodeList<SavedPostResponse>()
 
-            val posts = response.map { it.post }
+            val posts = response.map {
+                it.post.apply {
+                    isLiked = !postLikes.isNullOrEmpty()
+                }
+            }
 
             val allPetIds = posts.flatMap { it.petIds ?: emptyList() }.distinct()
             val petsList = if (allPetIds.isNotEmpty()) {
@@ -228,8 +254,9 @@ class HomeRepository @Inject constructor(
                 post.taggedPets = petsList.filter { pet -> post.petIds?.contains(pet.id) == true }
             }
 
-            Result.success(response.map { it.post })
+            Result.success(posts)
         } catch (e: Exception) {
+            Log.e("HomeRepository", "fetchSavedPosts error: ${e.message}")
             Result.failure(e)
         }
     }

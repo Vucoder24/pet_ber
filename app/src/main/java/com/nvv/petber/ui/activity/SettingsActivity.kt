@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivitySettingsBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.showLogoutConfirmDialog
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.SettingsViewModel
@@ -20,6 +21,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
 
     private val viewModel: SettingsViewModel by viewModels()
+    private lateinit var currentUserId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,7 @@ class SettingsActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        currentUserId = SharePrefUtils.getCurrentUserId(this)
 
         setupListeners()
     }
@@ -38,10 +41,10 @@ class SettingsActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.apply {
             btnPostSaved.setOnClickListener {
-
+                ViewPostSavedActivity.start(this@SettingsActivity, currentUserId)
             }
 
-            btnStorySaved.setOnClickListener {
+            btnStoryDeleted.setOnClickListener {
 
             }
 

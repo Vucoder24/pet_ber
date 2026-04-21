@@ -4,6 +4,7 @@ import android.content.Context
 import com.nvv.petber.BuildConfig
 import com.nvv.petber.data.repo.remote.AuthRepository
 import com.nvv.petber.data.repo.remote.HomeRepository
+import com.nvv.petber.utils.NetworkErrorPlugin
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +27,7 @@ object AppModule {
     @OptIn(SupabaseInternal::class)
     @Provides
     @Singleton
-    fun provideSupabaseClient(): SupabaseClient {
+    fun provideSupabaseClient(@ApplicationContext context: Context): SupabaseClient {
         return createSupabaseClient(
             supabaseKey = BuildConfig.SUPABASE_KEY,
             supabaseUrl = BuildConfig.SUPABASE_URL
@@ -40,6 +41,9 @@ object AppModule {
                     requestTimeoutMillis = 30_000
                     connectTimeoutMillis = 30_000
                     socketTimeoutMillis = 30_000
+                }
+                install(NetworkErrorPlugin) {
+                    this.context = context
                 }
             }
         }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:orientation="vertical"
@@ -12,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="40dp"
@@ -40,10 +42,11 @@
 
 
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:background="@color/gray_light"/>
+        android:background="@color/gray_light" />
 
     <LinearLayout
         android:id="@+id/btnPostSaved"
@@ -63,6 +66,7 @@
             android:contentDescription="icon"
             android:padding="8dp"
             android:src="@drawable/ic_poster"
+            app:tint="@color/title_color"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -72,7 +76,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/baloo2"
             android:text="@string/post_saved"
-            android:textColor="@color/text_brown"
+            android:textColor="@color/text_color"
             android:textStyle="bold"
             android:textSize="18sp" />
 
@@ -84,7 +88,7 @@
         android:background="@color/gray_light"/>
 
     <LinearLayout
-        android:id="@+id/btnStorySaved"
+        android:id="@+id/btnStoryDeleted"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -100,7 +104,8 @@
             android:layout_height="48dp"
             android:contentDescription="icon"
             android:padding="8dp"
-            android:src="@drawable/ic_add_story"
+            app:tint="@color/title_color"
+            android:src="@drawable/ic_deleted_post"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -109,8 +114,8 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:fontFamily="@font/baloo2"
-            android:text="@string/story_saved"
-            android:textColor="#000000"
+            android:text="@string/recently_deleted_posts"
+            android:textColor="@color/text_color"
             android:textStyle="bold"
             android:textSize="18sp" />
 
@@ -138,6 +143,7 @@
             android:layout_height="48dp"
             android:contentDescription="icon"
             android:padding="8dp"
+            app:tint="@color/title_color"
             android:src="@drawable/ic_language"
             tools:ignore="HardcodedText" />
 
@@ -148,7 +154,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/baloo2"
             android:text="@string/language"
-            android:textColor="#000000"
+            android:textColor="@color/text_color"
             android:textStyle="bold"
             android:textSize="18sp" />
 

@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBer">
         <activity
+            android:name=".ui.activity.ViewPostSavedActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.UserProfileActivity"
             android:exported="false" />
         <activity

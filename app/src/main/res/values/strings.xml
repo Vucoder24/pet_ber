@@ -257,6 +257,10 @@
     <string name="share_the_boss_s_adorable_moment">Share the boss\'s adorable moment</string>
     <string name="capture_a_memory_of_today_s_boss">Capture a memory of today\'s boss</string>
     <string name="add_pet_tag">Add pet +</string>
+    <string name="no_saved_posts_yet">No saved posts yet</string>
+    <string name="list_of_saved_posts">List of Saved Posts</string>
+    <string name="recently_deleted_posts">Recently Deleted Posts</string>
+    <string name="error_connection_internet">You\'re offline, check the network connection again!</string>
 
 
     <string-array name="media_types">
