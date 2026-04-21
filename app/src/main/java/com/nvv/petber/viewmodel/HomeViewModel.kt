@@ -98,7 +98,7 @@ class HomeViewModel @Inject constructor(
     fun loadPosts(refresh: Boolean = false) {
         if (_uiState.value.isLoadingPosts || _uiState.value.isLoadingMore || _uiState.value.isRefreshing) return
         if (!refresh && !_uiState.value.hasMorePost) return
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val page = if (refresh) 0 else _uiState.value.currentPage
 
             if (refresh) {
@@ -158,7 +158,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun toggleLike(post: Post) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 // Optimistic update
                 val updatedPosts = _uiState.value.posts.map { p ->
@@ -195,7 +195,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun incrementShareCount(postId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             homeRepository.incrementShareCount(postId)
         }
     }

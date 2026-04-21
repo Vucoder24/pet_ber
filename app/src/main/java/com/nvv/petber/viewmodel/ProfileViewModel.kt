@@ -144,7 +144,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun incrementShareCount(postId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             homeRepository.incrementShareCount(postId)
         }
     }

@@ -11,6 +11,7 @@ import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.repo.remote.CreateContentRepository
 import com.nvv.petber.ui.adapter.MediaItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -60,7 +61,7 @@ class CreateContentViewModel @Inject constructor(
         }
     }
     fun loadUserPets() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val pets = createContentRepository.getUserPets()
                 _userPets.value = pets
@@ -93,7 +94,7 @@ class CreateContentViewModel @Inject constructor(
         _isLoading.value = true
         _uploadProgress.value = 0
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
             try {
 
@@ -128,7 +129,7 @@ class CreateContentViewModel @Inject constructor(
         _isLoading.value = true
         _uploadProgress.value = 0
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
             try {
 
@@ -176,7 +177,7 @@ class CreateContentViewModel @Inject constructor(
 
         val newMediaUris = allCurrentMedia.filter { !it.isFromRemote }.map { it.uri }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val flow = if (currentEditPostId != null) {
                     createContentRepository.updatePost(

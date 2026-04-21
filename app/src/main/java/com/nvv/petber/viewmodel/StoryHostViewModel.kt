@@ -8,6 +8,7 @@ import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.data.repo.remote.StoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -35,7 +36,7 @@ class StoryHostViewModel @Inject constructor(
     }
 
     fun loadFromApi(storyId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = StoryHostState.Loading
             try {
                 val result = repository.getStoryGroupByStoryId(storyId)

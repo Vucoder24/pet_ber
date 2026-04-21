@@ -8,21 +8,81 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.data.model.DiaryMonth
 import com.nvv.petber.data.model.Post
+import com.nvv.petber.databinding.ItemDiaryCreateBinding
 import com.nvv.petber.databinding.ItemDiaryMonthBinding
 
 class PetDiaryAdapter(
-    private val onViewPostClick: (Post) -> Unit
+    private val onViewPostClick: (Post) -> Unit,
+    private val onCreatePostClick:() -> Unit
 ) :
-    ListAdapter<DiaryMonth, PetDiaryAdapter.DiaryViewHolder>(DiaryDiffCallback()) {
+    ListAdapter<PetDiaryAdapter.DiaryItem, RecyclerView.ViewHolder>(DiaryDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryViewHolder {
-        val binding =
-            ItemDiaryMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DiaryViewHolder(binding)
+
+    companion object {
+        private const val TYPE_CREATE = 0
+        private const val TYPE_MONTH = 1
+    }
+    sealed class DiaryItem {
+        data class Month(val data: DiaryMonth) : DiaryItem()
+        object CreatePost : DiaryItem()
     }
 
-    override fun onBindViewHolder(holder: DiaryViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    fun submitData(list: List<DiaryMonth>?) {
+        val items = mutableListOf<DiaryItem>()
+
+        items.add(DiaryItem.CreatePost)
+
+        list?.let {
+            items.addAll(it.map { month -> DiaryItem.Month(month) })
+        }
+
+        submitList(items)
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            TYPE_CREATE -> {
+                val binding = ItemDiaryCreateBinding.inflate(inflater, parent, false)
+                CreatePostViewHolder(binding)
+            }
+
+            else -> {
+                val binding = ItemDiaryMonthBinding.inflate(inflater, parent, false)
+                DiaryViewHolder(binding)
+            }
+        }
+    }
+    inner class CreatePostViewHolder(
+        val binding: ItemDiaryCreateBinding
+    ) : RecyclerView.ViewHolder(binding.root)
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is DiaryItem.CreatePost -> TYPE_CREATE
+            is DiaryItem.Month -> TYPE_MONTH
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int
+    ) {
+        when (val item = getItem(position)) {
+
+            is DiaryItem.CreatePost -> {
+                (holder as CreatePostViewHolder).binding.root.setOnClickListener {
+                    onCreatePostClick()
+                }
+            }
+
+            is DiaryItem.Month -> {
+                (holder as DiaryViewHolder).bind(item.data)
+            }
+        }
     }
 
     inner class DiaryViewHolder(private val binding: ItemDiaryMonthBinding) :
@@ -40,21 +100,44 @@ class PetDiaryAdapter(
                     false
                 )
                 adapter = innerAdapter
+                setHasFixedSize(true)
+                itemAnimator = null
             }
         }
 
         fun bind(item: DiaryMonth) {
             binding.tvMonthYear.text = item.monthYear
-            innerAdapter.submitList(item.posts)
+
+            if (item.posts.isEmpty()) {
+                innerAdapter.submitList(emptyList())
+            } else {
+                innerAdapter.submitList(item.posts)
+            }
         }
     }
 
-    class DiaryDiffCallback : DiffUtil.ItemCallback<DiaryMonth>() {
-        override fun areItemsTheSame(oldItem: DiaryMonth, newItem: DiaryMonth): Boolean =
-            oldItem.monthYear == newItem.monthYear
+    class DiaryDiffCallback : DiffUtil.ItemCallback<DiaryItem>() {
 
-        override fun areContentsTheSame(oldItem: DiaryMonth, newItem: DiaryMonth): Boolean =
-            oldItem == newItem
+        override fun areItemsTheSame(
+            oldItem: DiaryItem,
+            newItem: DiaryItem
+        ): Boolean {
+            return when {
+                oldItem is DiaryItem.CreatePost &&
+                        newItem is DiaryItem.CreatePost -> true
+
+                oldItem is DiaryItem.Month &&
+                        newItem is DiaryItem.Month ->
+                    oldItem.data.monthYear == newItem.data.monthYear
+
+                else -> false
+            }
+        }
+
+        override fun areContentsTheSame(
+            oldItem: DiaryItem,
+            newItem: DiaryItem
+        ): Boolean = oldItem == newItem
     }
 }
 

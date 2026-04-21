@@ -107,7 +107,11 @@ class HashtagSearchFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.posts.collect { list ->
-                    adapterResults.submitPostData(list, false)
+                    adapterResults.submitPostData(
+                        list = list,
+                        isLoadingMore = false,
+                        showCreatePost = false
+                    )
                 }
             }
         }

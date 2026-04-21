@@ -139,7 +139,7 @@ class PetProfileViewModel @Inject constructor(
             _isLoadMore.value = true
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val offsetToFetch = if (isRefresh) 0 else currentOffset
                 val newPosts = repository.getPetPosts(petId, offsetToFetch, limitPost, currentUserId)
@@ -219,7 +219,7 @@ class PetProfileViewModel @Inject constructor(
     }
 
     fun incrementShareCount(postId: String) {
-        viewModelScope.launch { homeRepository.incrementShareCount(postId) }
+        viewModelScope.launch(Dispatchers.IO) { homeRepository.incrementShareCount(postId) }
     }
 
     fun resetUiState() {

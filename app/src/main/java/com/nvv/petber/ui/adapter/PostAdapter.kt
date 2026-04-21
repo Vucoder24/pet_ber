@@ -17,8 +17,10 @@ import com.google.gson.Gson
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.PostMedia
+import com.nvv.petber.databinding.ItemCreatePostBinding
 import com.nvv.petber.databinding.ItemPostBinding
 import com.nvv.petber.databinding.ItemPostLoadMoreShimmerBinding
+import com.nvv.petber.ui.activity.CreateEditPostActivity
 import com.nvv.petber.ui.activity.MediaViewerActivity
 import com.nvv.petber.ui.dialog.MediaFullscreenDialog
 import com.nvv.petber.utils.TimeUtils
@@ -41,18 +43,26 @@ class PostAdapter(
     companion object {
         private const val TYPE_ITEM = 0
         private const val TYPE_LOADING = 1
+        private const val TYPE_CREATE = 3
     }
     sealed class PostItem {
         data class Data(val post: Post) : PostItem()
         object Loading : PostItem()
+        object CreatePost : PostItem()
     }
 
-    fun submitPostData(list: List<Post>?, isLoadingMore: Boolean) {
+    fun submitPostData(list: List<Post>?, isLoadingMore: Boolean, showCreatePost: Boolean = true) {
         val items = mutableListOf<PostItem>()
+
+        if (showCreatePost) {
+            items.add(PostItem.CreatePost)
+        }
+
         list?.let {
             items.addAll(it.map { post -> PostItem.Data(post) })
         }
-        if (isLoadingMore) {
+
+        if (isLoadingMore && !list.isNullOrEmpty()) {
             items.add(PostItem.Loading)
         }
         submitList(items)
@@ -62,6 +72,7 @@ class PostAdapter(
         return when (getItem(position)) {
             is PostItem.Data -> TYPE_ITEM
             is PostItem.Loading -> TYPE_LOADING
+            is PostItem.CreatePost -> TYPE_CREATE
         }
     }
 
@@ -73,19 +84,36 @@ class PostAdapter(
                 val binding = ItemPostBinding.inflate(inflater, parent, false)
                 PostViewHolder(binding)
             }
-            else -> {
+            TYPE_LOADING -> {
                 val binding = ItemPostLoadMoreShimmerBinding.inflate(inflater, parent, false)
                 LoadingViewHolder(binding)
+            }
+            else -> {
+                val binding = ItemCreatePostBinding.inflate(inflater, parent, false)
+                CreatePostViewHolder(binding)
             }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        if (holder is PostViewHolder && item is PostItem.Data) {
-            holder.bind(item.post)
-        } else if (holder is LoadingViewHolder) {
-            holder.binding.shimmerLoadMore.startShimmer()
+        when {
+            holder is PostViewHolder && item is PostItem.Data -> {
+                holder.bind(item.post)
+            }
+
+            holder is LoadingViewHolder -> {
+                holder.binding.shimmerLoadMore.startShimmer()
+            }
+
+            holder is CreatePostViewHolder -> {
+                holder.binding.root.setOnClickListener {
+                    val context = holder.itemView.context
+                    context.startActivity(
+                        Intent(context, CreateEditPostActivity::class.java)
+                    )
+                }
+            }
         }
     }
 
@@ -98,6 +126,9 @@ class PostAdapter(
         super.onViewDetachedFromWindow(holder)
         if (holder is PostViewHolder) holder.pausePlayer()
     }
+
+    inner class CreatePostViewHolder(val binding: ItemCreatePostBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     inner class LoadingViewHolder(val binding: ItemPostLoadMoreShimmerBinding) :
         RecyclerView.ViewHolder(binding.root)

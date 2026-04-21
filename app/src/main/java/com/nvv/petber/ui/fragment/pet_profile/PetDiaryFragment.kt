@@ -2,7 +2,6 @@ package com.nvv.petber.ui.fragment.pet_profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,8 @@ class PetDiaryFragment : Fragment() {
                     putExtra(PostDetailActivity.EXTRA_POST_ID, post.id)
                 }
                 startActivity(intent)
-            }
+            },
+            onCreatePostClick = {}
         )
         binding.rvDailyPet.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -47,8 +47,7 @@ class PetDiaryFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.diaryPosts.collectLatest { diaryList ->
-                Log.d("PetDiaryFragment", "Received diary posts: ${diaryList.size} months")
-                diaryAdapter.submitList(diaryList)
+                diaryAdapter.submitData(diaryList)
             }
         }
 

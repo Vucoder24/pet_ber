@@ -250,6 +250,12 @@
     <string name="list_of_emotional_responses">List of emotional responses</string>
     <string name="no_emotions_yet">There are no emotions yet.</string>
     <string name="count_emotions">%1$d Emotions</string>
+    <string name="no_post_yet">No post yet</string>
+    <string name="publish_your_first_post">Publish your first post</string>
+    <string name="new_post">New post</string>
+    <string name="what_is_the_boss_doing_today">What is the boss doing today? 🐾</string>
+    <string name="share_the_boss_s_adorable_moment">Share the boss\'s adorable moment</string>
+    <string name="capture_a_memory_of_today_s_boss">Capture a memory of today\'s boss</string>
 
 
     <string-array name="media_types">

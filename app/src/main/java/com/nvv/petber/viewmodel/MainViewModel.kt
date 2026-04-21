@@ -50,7 +50,7 @@ class MainViewModel @Inject constructor(
 
     fun fetchNotifications(userId: String, isRefresh: Boolean = false) {
         if (_isLoading.value || _isLoadMore.value || (isLastPage && !isRefresh)) return
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (isRefresh) {
                 currentPage = 1
                 isLastPage = false
@@ -102,7 +102,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun fetchNewCount(userId: String, lastSeen: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val count = repository.getNewNotificationCount(userId, lastSeen)
                 _unreadCount.value = count
@@ -116,17 +116,19 @@ class MainViewModel @Inject constructor(
         if (isListening) return
         isListening = true
 
-        viewModelScope.launch {
-            repository.setupChannel(userId)
-            repository.listenToNewNotifications(userId)
-                .collect { notif ->
-                    mergeNotifications(listOf(notif), isRefresh = false)
-                    if (!notif.isRead) {
-                        _unreadCount.value += 1
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.setupChannel(userId)
+                repository.listenToNewNotifications(userId)
+                    .collect { notif ->
+                        mergeNotifications(listOf(notif), isRefresh = false)
+                        if (!notif.isRead) {
+                            _unreadCount.value += 1
+                        }
+                        _newNotificationEvent.emit(notif)
+                        handleDebounce()
                     }
-                    _newNotificationEvent.emit(notif)
-                    handleDebounce()
-                }
+            }catch (_: Exception){}
         }
     }
 

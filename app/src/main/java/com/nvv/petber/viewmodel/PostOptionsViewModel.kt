@@ -105,7 +105,7 @@ class PostOptionsViewModel @Inject constructor(
     }
 
     fun blockUser(targetUserId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             // homeRepository.blockUser(currentUserId, targetUserId)
             _actionState.value = ActionState.Success(context.getString(R.string.blocked_user))
         }
@@ -116,7 +116,7 @@ class PostOptionsViewModel @Inject constructor(
     }
 
     fun incrementShareCount(postId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             homeRepository.incrementShareCount(postId)
         }
     }

@@ -1,20 +1,20 @@
-    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp"
     android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="#F0EDED"
+    app:cardBackgroundColor="#FFF3E0"
+    app:cardCornerRadius="16dp"
     app:cardElevation="2dp">
 
     <LinearLayout
         android:id="@+id/layoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white"
         android:animateLayoutChanges="true"
+        android:background="@color/white"
+        android:orientation="vertical"
         android:padding="12dp">
 
         <RelativeLayout
@@ -32,28 +32,28 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginStart="10dp"
                 android:layout_toEndOf="@id/imgUser"
-                android:layout_marginStart="10dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username"
-                    android:textStyle="bold"
-                    android:textColor="@color/title_color"
                     android:fontFamily="@font/baloo2"
+                    android:text="Username"
+                    android:textColor="@color/title_color"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tvTimeAgo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
                     android:text="time"
                     android:textColor="@color/pet_text_secondary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/baloo2"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -85,9 +85,9 @@
                 android:id="@+id/playerViewSingle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:use_controller="false"
+                android:visibility="gone"
                 app:resize_mode="zoom"
-                android:visibility="gone" />
+                app:use_controller="false" />
 
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -95,15 +95,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/Rounded12"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:shapeAppearanceOverlay="@style/Rounded12" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutMediaGrid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                android:background="@drawable/bg_rounded_12">
+                android:background="@drawable/bg_rounded_12"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/ivGrid1"
@@ -227,6 +227,7 @@
                         android:textStyle="bold" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <ProgressBar
                 android:id="@+id/pbLoadingSingle"
                 android:layout_width="40dp"
@@ -240,8 +241,8 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_play_btn"
                 android:importantForAccessibility="no"
+                android:src="@drawable/ic_play_btn"
                 android:visibility="gone"
                 app:tint="@color/white" />
         </com.google.android.material.card.MaterialCardView>
@@ -251,12 +252,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="caption"
-            android:maxLines="3"
             android:ellipsize="end"
+            android:fontFamily="@font/baloo2"
+            android:maxLines="3"
+            android:text="caption"
             android:textColor="@color/text_color"
             android:textStyle="normal"
-            android:fontFamily="@font/baloo2"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -264,10 +265,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:fontFamily="@font/baloo2"
-            android:text="@string/hashtags"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:fontFamily="@font/baloo2"
+            android:maxLines="1"
+            android:text="@string/hashtags"
             android:textColor="@color/text_orange"
             android:textStyle="bold"
             tools:ignore="HardcodedText,TextContrastCheck" />
