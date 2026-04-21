@@ -256,6 +256,7 @@
     <string name="what_is_the_boss_doing_today">What is the boss doing today? 🐾</string>
     <string name="share_the_boss_s_adorable_moment">Share the boss\'s adorable moment</string>
     <string name="capture_a_memory_of_today_s_boss">Capture a memory of today\'s boss</string>
+    <string name="add_pet_tag">Add pet +</string>
 
 
     <string-array name="media_types">

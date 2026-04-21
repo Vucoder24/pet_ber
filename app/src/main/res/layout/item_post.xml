@@ -267,6 +267,24 @@
             android:textStyle="normal"
             tools:ignore="HardcodedText" />
 
+        <HorizontalScrollView
+            android:id="@+id/scrollTaggedPets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/layoutTaggedPets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="4dp"
+                android:gravity="center_vertical"/>
+
+        </HorizontalScrollView>
+
         <TextView
             android:id="@+id/hashtags"
             android:layout_width="match_parent"

@@ -18,9 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateContentViewModel @Inject constructor(
     private val createContentRepository: CreateContentRepository
-): ViewModel() {
+) : ViewModel() {
     var currentEditPostId: String? = null
     private val deletedRemoteMediaIds = mutableListOf<String>()
+
     // Loading state
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
@@ -47,6 +48,8 @@ class CreateContentViewModel @Inject constructor(
     // Selected pet IDs
     private val _selectedPetIds = MutableLiveData<MutableSet<String>>(mutableSetOf())
     val selectedPetIds: LiveData<MutableSet<String>> = _selectedPetIds
+    private val _isLoadingPets = MutableLiveData(false)
+    val isLoadingPets: LiveData<Boolean> = _isLoadingPets
 
     fun setEditMode(post: Post) {
         currentEditPostId = post.id
@@ -60,68 +63,24 @@ class CreateContentViewModel @Inject constructor(
             deletedRemoteMediaIds.add(mediaId)
         }
     }
+
     fun loadUserPets() {
         viewModelScope.launch(Dispatchers.IO) {
+            _isLoadingPets.postValue(true)
             try {
                 val pets = createContentRepository.getUserPets()
-                _userPets.value = pets
+                _userPets.postValue(pets)
             } catch (_: Exception) {
-                // Ignore if user has no pets
-            }
-        }
-    }
-
-    fun togglePetTag(pet: Pet) {
-        val current = _selectedPetIds.value ?: mutableSetOf()
-
-        if (current.contains(pet.id)) {
-            current.remove(pet.id)
-        } else {
-            current.add(pet.id)
-        }
-
-        _selectedPetIds.value = current
-    }
-
-    fun createPost(
-        caption: String,
-        location: String?,
-        hashtags: String?,
-        mediaUris: List<Uri>,
-        petIds: List<String>
-    ) {
-
-        _isLoading.value = true
-        _uploadProgress.value = 0
-
-        viewModelScope.launch(Dispatchers.IO) {
-
-            try {
-
-                createContentRepository.createPost(
-                    caption = caption,
-                    hashtags = hashtags,
-                    location = location,
-                    mediaUris = mediaUris,
-                    petIds = petIds
-                ).collect { progress ->
-
-                    _uploadProgress.value = progress
-
-                    if (progress == 100) {
-                        _postSuccess.value = true
-                    }
-                }
-
-            } catch (e: Exception) {
-
-                _error.value = "Posting failed: ${e.localizedMessage}"
-
             } finally {
-
-                _isLoading.value = false
+                _isLoadingPets.postValue(false)
             }
         }
+    }
+
+    fun addPetTag(pet: Pet) {
+        val current = _selectedPetIds.value ?: mutableSetOf()
+        current.add(pet.id)
+        _selectedPetIds.value = current
     }
 
     fun createStory(mediaUri: Uri) {

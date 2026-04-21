@@ -18,6 +18,7 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.FragmentHomeBinding
 import com.nvv.petber.ui.activity.MainActivity
+import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.adapter.StoryAdapter
@@ -156,8 +157,10 @@ class HomeFragment : Fragment() {
             onMoreOption = {
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
                 bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
+            },
+            onTaggedPetClick = { pet ->
+                PetProfileActivity.start(requireContext(), pet)
             }
-
         )
     }
 

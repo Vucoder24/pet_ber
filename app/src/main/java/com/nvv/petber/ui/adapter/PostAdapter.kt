@@ -11,8 +11,10 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
 import com.nvv.petber.R
+import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.PostMedia
 import com.nvv.petber.databinding.ItemCreatePostBinding
@@ -37,6 +39,7 @@ class PostAdapter(
     private val onShareClick: (Post) -> Unit,
     private val onProfileClick: (Post) -> Unit,
     private val onMoreOption: (Post) -> Unit,
+    private val onTaggedPetClick: (Pet) -> Unit,
 ) : ListAdapter<PostAdapter.PostItem, RecyclerView.ViewHolder>(PostDiffCallback()) {
     companion object {
         private const val TYPE_ITEM = 0
@@ -187,7 +190,21 @@ class PostAdapter(
                 caption.visibility =
                     if (post.caption?.isNotEmpty() == true) View.VISIBLE else View.GONE
 
-
+                // Tagged Pets
+                val taggedPets = post.taggedPets
+                if (taggedPets.isEmpty()) {
+                    binding.scrollTaggedPets.gone()
+                } else {
+                    binding.scrollTaggedPets.visible()
+                    binding.layoutTaggedPets.removeAllViews()
+                    taggedPets.forEach { pet ->
+                        val petView = LayoutInflater.from(itemView.context)
+                            .inflate(R.layout.item_tagged_pet, binding.layoutTaggedPets, false)
+                        petView.findViewById<ShapeableImageView>(R.id.imgPetAvatar).loadAvatar(pet.avatarUrl)
+                        petView.setOnClickListener { onTaggedPetClick(pet) }
+                        binding.layoutTaggedPets.addView(petView)
+                    }
+                }
 
                 if (post.hashtags.isNullOrEmpty()) hashtags.gone() else {
                     hashtags.text = post.hashtags; hashtags.visible()
@@ -343,7 +360,6 @@ class PostAdapter(
 
                 layoutMediaGrid.visibility = View.VISIBLE
 
-                // show grid cần thiết
                 for (i in 0 until displayCount) {
                     grids[i].visibility = View.VISIBLE
                 }
@@ -356,7 +372,6 @@ class PostAdapter(
 
                     imageView.loadImage(media.mediaUrl)
 
-                    // reset tránh recycle bug
                     playView.visibility = View.GONE
 
                     if (media.mediaType.contains("video", true)) {

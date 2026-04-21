@@ -12,6 +12,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nvv.petber.R
 import com.nvv.petber.databinding.FragmentAllPetPostsBinding
+import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
@@ -68,6 +69,9 @@ class AllPetPostsFragment : Fragment() {
             onMoreOption = {
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
                 bottomSheet.show(parentFragmentManager, "PostOptionsBottomSheet")
+            },
+            onTaggedPetClick = { pet ->
+                PetProfileActivity.start(requireContext(), pet)
             }
         )
         binding.rvAllPosts.apply {

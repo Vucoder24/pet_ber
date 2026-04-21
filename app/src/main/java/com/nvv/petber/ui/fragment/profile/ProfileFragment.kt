@@ -248,6 +248,9 @@ class ProfileFragment : Fragment() {
             onMoreOption = { post ->
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)
                 bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
+            },
+            onTaggedPetClick = { pet ->
+                PetProfileActivity.start(requireContext(), pet)
             }
         )
         petProfileAdapter = PetProfileAdapter(

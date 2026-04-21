@@ -110,6 +110,11 @@ class PostDetailActivity : AppCompatActivity() {
                     val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)
                     bottomSheet.show(supportFragmentManager, "PostOptionsBottomSheet")
                 }
+            },
+            onTaggedPetClick = { pet ->
+                requireLogin {
+                    PetProfileActivity.start(this, pet)
+                }
             }
         )
 

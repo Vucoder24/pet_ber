@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.databinding.FragmentHashtagSearchBinding
+import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
@@ -73,6 +74,9 @@ class HashtagSearchFragment : Fragment() {
             onMoreOption = {
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(it)
                 bottomSheet.show(childFragmentManager, "PostOptionsBottomSheet")
+            },
+            onTaggedPetClick = { pet ->
+                PetProfileActivity.start(requireContext(), pet)
             }
         )
         val linearLayoutManager = LinearLayoutManager(requireContext())
