@@ -67,7 +67,7 @@
     <string name="my_pet_list">私のペットリスト</string>
     <string name="all_posts">すべての投稿</string>
     <string name="message">メッセージ</string>
-    <string name="add_pet">ペットを追加してください</string>
+    <string name="add_pet">ペット追加</string>
     <string name="personal_information">個人情報:</string>
     <string name="address">住所</string>
     <string name="phone_number">電話番号</string>
@@ -84,7 +84,7 @@
     <string name="username_invalid_characters_length">ユーザー名は最低2文字のものでなければなりません!</string>
     <string name="add_new_story">新しいストーリーを追加する</string>
     <string name="edit_profile">プロフィール編集</string>
-    <string name="add_new_pet">新しいペットを追加</string>
+    <string name="add_new_pet">ペットを追加</string>
     <string name="choose_cover">カバーフォトを選んでください</string>
     <string name="avatar">アバター</string>
     <string name="pet_name">愛称</string>

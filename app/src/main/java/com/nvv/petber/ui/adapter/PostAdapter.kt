@@ -11,7 +11,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Pet
@@ -190,20 +189,17 @@ class PostAdapter(
                 caption.visibility =
                     if (post.caption?.isNotEmpty() == true) View.VISIBLE else View.GONE
 
-                // Tagged Pets
                 val taggedPets = post.taggedPets
                 if (taggedPets.isEmpty()) {
-                    binding.scrollTaggedPets.gone()
+                    binding.rvTaggedPets.gone()
                 } else {
-                    binding.scrollTaggedPets.visible()
-                    binding.layoutTaggedPets.removeAllViews()
-                    taggedPets.forEach { pet ->
-                        val petView = LayoutInflater.from(itemView.context)
-                            .inflate(R.layout.item_tagged_pet, binding.layoutTaggedPets, false)
-                        petView.findViewById<ShapeableImageView>(R.id.imgPetAvatar).loadAvatar(pet.avatarUrl)
-                        petView.setOnClickListener { onTaggedPetClick(pet) }
-                        binding.layoutTaggedPets.addView(petView)
+                    binding.rvTaggedPets.visible()
+
+                    if (binding.rvTaggedPets.adapter == null) {
+                        binding.rvTaggedPets.adapter = TaggedPetAdapter { pet -> onTaggedPetClick(pet) }
                     }
+
+                    (binding.rvTaggedPets.adapter as TaggedPetAdapter).submitList(taggedPets)
                 }
 
                 if (post.hashtags.isNullOrEmpty()) hashtags.gone() else {
@@ -406,10 +402,12 @@ class PostAdapter(
 
     private class PostDiffCallback : DiffUtil.ItemCallback<PostItem>() {
         override fun areItemsTheSame(oldItem: PostItem, newItem: PostItem): Boolean {
-            return if (oldItem is PostItem.Data && newItem is PostItem.Data) {
-                oldItem.post.id == newItem.post.id
-            } else {
-                oldItem is PostItem.Loading && newItem is PostItem.Loading
+            return when {
+                oldItem is PostItem.Data && newItem is PostItem.Data ->
+                    oldItem.post.id == newItem.post.id
+                oldItem is PostItem.Loading && newItem is PostItem.Loading -> true
+                oldItem is PostItem.CreatePost && newItem is PostItem.CreatePost -> true
+                else -> false
             }
         }
 

@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@id/etSearch"
         app:tabIndicatorColor="#FF9800"
         app:tabIndicatorHeight="3dp"
-        app:tabMode="fixed"
+        app:tabMode="scrollable"
         app:tabRippleColor="@null"
         app:tabPadding="8dp"
         app:tabSelectedTextColor="#FF9800"

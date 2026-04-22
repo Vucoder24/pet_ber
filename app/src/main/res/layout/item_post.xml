@@ -103,22 +103,21 @@
                 android:layout_height="match_parent"
                 android:visibility="gone">
 
-                <!-- GRID 1 -->
                 <FrameLayout
                     android:id="@+id/grid1"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/grid3"
+                    app:layout_constraintEnd_toStartOf="@id/grid2"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/grid2">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/ivGrid1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:importantForAccessibility="no"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/icPlay1"
@@ -127,25 +126,24 @@
                         android:layout_gravity="center"
                         android:importantForAccessibility="no"
                         android:src="@android:drawable/ic_media_play"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </FrameLayout>
 
-                <!-- GRID 2 -->
                 <FrameLayout
                     android:id="@+id/grid2"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/grid4"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/grid1"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/ivGrid2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:importantForAccessibility="no"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/icPlay2"
@@ -154,25 +152,24 @@
                         android:layout_gravity="center"
                         android:importantForAccessibility="no"
                         android:src="@android:drawable/ic_media_play"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </FrameLayout>
 
-                <!-- GRID 3 -->
                 <FrameLayout
                     android:id="@+id/grid3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:layout_constraintTop_toBottomOf="@id/grid1"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/grid4"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/grid4">
+                    app:layout_constraintTop_toBottomOf="@id/grid1">
 
                     <ImageView
                         android:id="@+id/ivGrid3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:importantForAccessibility="no"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/icPlay3"
@@ -181,25 +178,24 @@
                         android:layout_gravity="center"
                         android:importantForAccessibility="no"
                         android:src="@android:drawable/ic_media_play"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </FrameLayout>
 
-                <!-- GRID 4 -->
                 <FrameLayout
                     android:id="@+id/grid4"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:layout_constraintTop_toBottomOf="@id/grid2"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/grid3"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/grid2">
 
                     <ImageView
                         android:id="@+id/ivGrid4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:importantForAccessibility="no"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/icPlay4"
@@ -208,10 +204,9 @@
                         android:layout_gravity="center"
                         android:importantForAccessibility="no"
                         android:src="@android:drawable/ic_media_play"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </FrameLayout>
 
-                <!-- OVERLAY MORE -->
                 <FrameLayout
                     android:id="@+id/overlayMore"
                     android:layout_width="0dp"
@@ -230,7 +225,7 @@
                         android:layout_gravity="center"
                         android:textColor="@android:color/white"
                         android:textSize="24sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </FrameLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -267,23 +262,14 @@
             android:textStyle="normal"
             tools:ignore="HardcodedText" />
 
-        <HorizontalScrollView
-            android:id="@+id/scrollTaggedPets"
-            android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTaggedPets"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:scrollbars="none"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:id="@+id/layoutTaggedPets"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="4dp"
-                android:gravity="center_vertical"/>
-
-        </HorizontalScrollView>
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_tagged_pet" />
 
         <TextView
             android:id="@+id/hashtags"

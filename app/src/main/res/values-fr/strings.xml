@@ -67,7 +67,7 @@
     <string name="my_pet_list">Ma liste d’animaux de compagnie</string>
     <string name="all_posts">Tous les articles</string>
     <string name="message">Message</string>
-    <string name="add_pet">Ajouter un animal de compagnie</string>
+    <string name="add_pet">Ajouter un animal</string>
     <string name="personal_information">Informations personnelles :</string>
     <string name="address">Adresse</string>
     <string name="phone_number">Numéro de téléphone</string>
@@ -84,7 +84,7 @@
     <string name="username_invalid_characters_length">Le nom d’utilisateur doit avoir au moins 2 caractères !</string>
     <string name="add_new_story">Ajouter une nouvelle histoire</string>
     <string name="edit_profile">Modifier le profil</string>
-    <string name="add_new_pet">Ajouter un nouvel animal de compagnie</string>
+    <string name="add_new_pet">Ajouter un nouvel animal</string>
     <string name="choose_cover">Choisissez une photo de couverture</string>
     <string name="avatar">Avatar</string>
     <string name="pet_name">Surnom affectueux</string>

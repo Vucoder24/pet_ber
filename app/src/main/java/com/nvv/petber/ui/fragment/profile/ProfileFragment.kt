@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.User
 import com.nvv.petber.databinding.FragmentProfileBinding
@@ -62,6 +62,8 @@ class ProfileFragment : Fragment() {
 
     private var cropTarget: String? = null
     private var userData: User? = null
+
+    private var lastCheckTime = 0L
 
     @Inject
     lateinit var exoPlayer: ExoPlayer
@@ -256,7 +258,8 @@ class ProfileFragment : Fragment() {
                 viewModel.incrementShareCount(post.id)
             },
             onProfileClick = { user ->
-                binding.dataContainer.smoothScrollTo(0, 0)
+                binding.appBarLayout.setExpanded(true, true)
+                binding.rvPosts.smoothScrollToPosition(0)
             },
             onMoreOption = { post ->
                 val bottomSheet = PostOptionsBottomSheetFragment.newInstance(post)
@@ -288,28 +291,38 @@ class ProfileFragment : Fragment() {
         binding.rvPosts.apply {
             adapter = historyPostAdapter
             layoutManager = LinearLayoutManager(requireContext())
-            isNestedScrollingEnabled = false
         }
 
-        binding.dataContainer.setOnScrollChangeListener { _, _, _, _, _ ->
-            checkVideoVisibility()
-        }
+        binding.rvPosts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
+                val now = System.currentTimeMillis()
+                if (now - lastCheckTime > 300) {
+                    lastCheckTime = now
+                    checkVideoVisibility()
+                }
+            }
+        })
+        binding.appBarLayout.addOnOffsetChangedListener { appBar, verticalOffset ->
+            binding.root.isEnabled = (verticalOffset == 0)
+        }
     }
 
     private fun checkVideoVisibility() {
-        val scrollRect = android.graphics.Rect()
-        binding.dataContainer.getGlobalVisibleRect(scrollRect)
+        val layoutManager = binding.rvPosts.layoutManager as LinearLayoutManager
+
+        val firstVisible = layoutManager.findFirstVisibleItemPosition()
+        val lastVisible = layoutManager.findLastVisibleItemPosition()
 
         for (i in 0 until binding.rvPosts.childCount) {
             val child = binding.rvPosts.getChildAt(i)
             val viewHolder = binding.rvPosts.getChildViewHolder(child)
 
             if (viewHolder is PostAdapter.PostViewHolder) {
-                val childRect = android.graphics.Rect()
-                child.getGlobalVisibleRect(childRect)
+                val position = viewHolder.bindingAdapterPosition
 
-                if (!android.graphics.Rect.intersects(scrollRect, childRect)) {
+                if (position < firstVisible || position > lastVisible) {
                     viewHolder.pausePlayer()
                 }
             }
@@ -562,7 +575,7 @@ class ProfileFragment : Fragment() {
             historyPostAdapter.pauseAllPlayers()
         }
         binding.rvPosts.adapter = null
-        binding.dataContainer.setOnScrollChangeListener(null as NestedScrollView.OnScrollChangeListener?)
+        binding.rvPosts.clearOnScrollListeners()
         _binding = null
     }
 }

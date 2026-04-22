@@ -67,7 +67,7 @@
     <string name="my_pet_list">Danh sách thú cưng của tôi</string>
     <string name="all_posts">Tất cả bài viết</string>
     <string name="message">Tin nhắn</string>
-    <string name="add_pet">Thêm thú cưng</string>
+    <string name="add_pet">Thêm pet</string>
     <string name="personal_information">Thông tin cá nhân:</string>
     <string name="address">Địa chỉ</string>
     <string name="phone_number">Số điện thoại</string>
@@ -257,7 +257,7 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="what_is_the_boss_doing_today">Boss đang làm gì hôm nay? 🐾</string>
     <string name="share_the_boss_s_adorable_moment">Chia sẻ khoảnh khắc đáng yêu của Boss</string>
     <string name="capture_a_memory_of_today_s_boss">Ghi lại ký ức về boss hôm nay</string>
-    <string name="add_pet_tag">Thêm thú cưng +</string>
+    <string name="add_pet_tag">Thêm pet +</string>
     <string name="no_saved_posts_yet">Chưa có bài đăng nào được lưu</string>
     <string name="list_of_saved_posts">Danh sách các bài đăng đã lưu</string>
     <string name="recently_deleted_posts">Bài đăng đã xóa gần đây</string>
