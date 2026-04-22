@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.media3.exoplayer.ExoPlayer
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityViewPostSavedBinding
 import com.nvv.petber.ui.adapter.PostAdapter
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
 import com.nvv.petber.ui.dialog.SavedPostOptionsBottomSheet
 import com.nvv.petber.utils.ext.toast
@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ViewPostSavedActivity : AppCompatActivity() {
+class ViewPostSavedActivity : BaseActivity() {
 
     private lateinit var binding: ActivityViewPostSavedBinding
     private val viewModel: SavedPostsViewModel by viewModels()

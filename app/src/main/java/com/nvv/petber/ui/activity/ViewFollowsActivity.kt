@@ -4,17 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityViewFollowsBinding
 import com.nvv.petber.ui.adapter.FollowPagerAdapter
+import com.nvv.petber.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ViewFollowsActivity : AppCompatActivity() {
+class ViewFollowsActivity : BaseActivity() {
     private lateinit var binding: ActivityViewFollowsBinding
     private var userId: String? = null
 

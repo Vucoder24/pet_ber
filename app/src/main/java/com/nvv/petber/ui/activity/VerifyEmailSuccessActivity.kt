@@ -3,14 +3,14 @@ package com.nvv.petber.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityVerifyEmailSuccessBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.ui.base.BaseActivity
 
-class VerifyEmailSuccessActivity : AppCompatActivity() {
+class VerifyEmailSuccessActivity : BaseActivity() {
     private lateinit var binding: ActivityVerifyEmailSuccessBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

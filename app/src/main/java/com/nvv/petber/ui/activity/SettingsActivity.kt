@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivitySettingsBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.showLogoutConfirmDialog
 import com.nvv.petber.utils.ext.toast
@@ -17,7 +17,7 @@ import com.nvv.petber.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
     private lateinit var binding: ActivitySettingsBinding
 
     private val viewModel: SettingsViewModel by viewModels()
@@ -45,7 +45,8 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             btnLanguage.setOnClickListener {
-
+                val intent = Intent(this@SettingsActivity, SetLanguageActivity::class.java)
+                startActivity(intent)
             }
 
             btnBack.setOnClickListener {

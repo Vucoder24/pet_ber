@@ -10,7 +10,6 @@ import android.widget.AutoCompleteTextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -22,6 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.nvv.petber.R
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.databinding.ActivityCreateEditPetBinding
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.toast
@@ -36,7 +36,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 @AndroidEntryPoint
-class CreateEditPetActivity : AppCompatActivity() {
+class CreateEditPetActivity : BaseActivity() {
     private lateinit var binding: ActivityCreateEditPetBinding
     private val viewModel: CreatePetViewModel by viewModels()
 

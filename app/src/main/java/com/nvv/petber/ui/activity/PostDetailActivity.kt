@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.media3.exoplayer.ExoPlayer
@@ -14,6 +13,7 @@ import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityPostDetailBinding
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
 import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
 import com.nvv.petber.utils.SharePrefUtils
@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PostDetailActivity : AppCompatActivity() {
+class PostDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityPostDetailBinding
     private val viewModel: PostDetailViewModel by viewModels()
     private lateinit var currentUserId: String

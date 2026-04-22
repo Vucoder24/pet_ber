@@ -1,0 +1,358 @@
+<resources>
+    <string name="app_name">Pet Ber</string>
+    <string name="text_email">メール</string>
+    <string name="text_password">パスワード</string>
+    <string name="text_login">ログイン</string>
+    <string name="txt_forgot_password">パスワードを忘れましたか?</string>
+    <string name="action_navigate_register">新しいアカウントを登録してください</string>
+    <string name="blank_email">メールは空欄のままにはなりません!</string>
+    <string name="invalid_email">メールアドレスが無効です!</string>
+    <string name="pw_empty">パスワードが空であってはならない!</string>
+    <string name="invalid_length_password">パスワードは最低6文字以上でなければなりません!</string>
+    <string name="text_sign_up">サインアップ</string>
+    <string name="text_display_name">ディスプレイ名</string>
+    <string name="text_confirm_password">パスワード確認</string>
+    <string name="text_already_have_account">すでにアカウントをお持ちですか?</string>
+    <string name="confirm_pw_empty">パスワードを入力してください</string>
+    <string name="invalid_confirm_password">パスワード確認が無効です!</string>
+    <string name="username_empty">ユーザー名は空欄です!</string>
+    <string name="register_success">登録が成功したら、ログイン前にメールアドレスを確認する必要があります!</string>
+    <string name="login_success">ログイン成功!</string>
+    <string name="home">ホーム</string>
+    <string name="search">検索</string>
+    <string name="create">作成</string>
+    <string name="notifications">通知</string>
+    <string name="profile">プロフィール</string>
+    <string name="hello_blank_fragment">こんにちは、空白の断片さん</string>
+    <string name="pet">Pet </string>
+    <string name="ber">Ber</string>
+    <string name="pet_stories">ペットの話:</string>
+    <string name="hint_edt_search">ユーザー、ペット、ハッシュタグを検索する…</string>
+    <string name="follow">フォロー</string>
+    <string name="users">ユーザー</string>
+    <string name="pets">ペット</string>
+    <string name="hashtags">ハッシュタグ</string>
+    <string name="user_name">ユーザー名</string>
+    <string name="petber_user">PetBerユーザー</string>
+    <string name="images_videos">画像/動画</string>
+    <string name="sub_title_story">ペットの24時間の瞬間を共有しましょう</string>
+    <string name="story">ストーリー</string>
+    <string name="create_a_new_story">新しいストーリーを作成</string>
+    <string name="create_content">コンテンツ作成</string>
+    <string name="dep_item_create_post">ペットの写真や動画を投稿してください</string>
+    <string name="preview_story">プレビューストーリー</string>
+    <string name="post_story">ストーリー後</string>
+    <string name="choose_media">メディアを選びましょう</string>
+    <string name="choose_multiple">複数を選んでください</string>
+    <string name="next">次</string>
+    <string name="all">全員</string>
+    <string name="image">画像</string>
+    <string name="video">ビデオ</string>
+    <string name="choose">選択</string>
+    <string name="permission_question">写真や動画を選択するには許可が必要です。</string>
+    <string name="uploading">アップロード中…</string>
+    <string name="dont_exit_app">アプリを終了しないでください</string>
+    <string name="story_posted">ストーリー投稿完了!</string>
+    <string name="post_details">投稿詳細</string>
+    <string name="post_content">投稿内容</string>
+    <string name="post">投稿</string>
+    <string name="create_a_new_post">新しい投稿を作成</string>
+    <string name="hint_caption">こちらからキャプションを入力してください…</string>
+    <string name="tag_your_pet">ペットにタグをつけましょう</string>
+    <string name="hint_hashtags">#hashtags…</string>
+    <string name="post_now">今すぐ投稿</string>
+    <string name="caption_empty">キャプションを入力してください!</string>
+    <string name="error_select_media">ぜひ少なくとも1枚の写真や動画を選んでください!</string>
+    <string name="edit_media">編集メディア</string>
+    <string name="my_pet_list">私のペットリスト</string>
+    <string name="all_posts">すべての投稿</string>
+    <string name="message">メッセージ</string>
+    <string name="add_pet">ペットを追加してください</string>
+    <string name="personal_information">個人情報:</string>
+    <string name="address">住所</string>
+    <string name="phone_number">電話番号</string>
+    <string name="gender">性別</string>
+    <string name="hobbies">趣味</string>
+    <string name="add_bio">プロフィールを追加…</string>
+    <string name="add_gender">性別を追加してください</string>
+    <string name="add_address">アドレスを追加</string>
+    <string name="add_phone_number">電話番号を追加してください</string>
+    <string name="add_birthday">誕生日を追加してください</string>
+    <string name="add_hobbies">趣味を加える</string>
+    <string name="username_cannot_contain_spaces">ユーザー名にスペースを入れてはいけません!</string>
+    <string name="username_invalid_characters">ユーザー名は小文字、数字、下線(_)、ピリオド(.)のみでなければなりません!</string>
+    <string name="username_invalid_characters_length">ユーザー名は最低2文字のものでなければなりません!</string>
+    <string name="add_new_story">新しいストーリーを追加する</string>
+    <string name="edit_profile">プロフィール編集</string>
+    <string name="add_new_pet">新しいペットを追加</string>
+    <string name="choose_cover">カバーフォトを選んでください</string>
+    <string name="avatar">アバター</string>
+    <string name="pet_name">愛称</string>
+    <string name="breed">品種</string>
+    <string name="species">種</string>
+    <string name="birthday">誕生日</string>
+    <string name="health">健康</string>
+    <string name="describe">説明</string>
+    <string name="healthy">健康</string>
+    <string name="add">追加</string>
+    <string name="opening_image_cropper">画像クロッパーを開く…</string>
+    <string name="body_condition">体調</string>
+    <string name="clinical_status">臨床状況</string>
+    <string name="activity_amp_mental_state"><![CDATA[活動と精神状態]]></string>
+    <string name="preventive_status">予防的状況</string>
+    <string name="has_been_neutered">去勢手術は済んでいますか?</string>
+    <string name="weight_kg">重量(kg)</string>
+    <string name="error_empty_pet_name">愛称を入力してください!</string>
+    <string name="error_empty_pet_species">種を入力してください!</string>
+    <string name="create_pet_success">ペットが正常に追加されました</string>
+    <string name="view_avatar">アバターを見る</string>
+    <string name="choose_avatar">アバターを選ぶ</string>
+    <string name="view_cover">表紙を見る</string>
+    <string name="post_saved">投稿が保存されました</string>
+    <string name="story_saved">ストーリー保存</string>
+    <string name="language">言語</string>
+    <string name="log_out">ログアウト</string>
+    <string name="settings">設定</string>
+    <string name="error_send_otp">OTPを送信できません。もう一度お試しください。</string>
+    <string name="otp_incorrect_or_expired">OTPは誤っているか、期限切れになっています。</string>
+    <string name="error_update_password">パスワードは変更できません。</string>
+    <string name="otp_expired">OTPは期限切れです。新しいコードを再送信してください。</string>
+    <string name="otp_invalid">OTP無効です。</string>
+    <string name="email_not_confirmed">メール未確認</string>
+    <string name="invalid_credentials">情報は誤りです。</string>
+    <string name="error_too_many_requests">リクエストが多すぎます。しばらくしてからもう一度お試しください。</string>
+    <string name="til_forgot_password">パスワードを忘れました</string>
+    <string name="title_input_email">パスワードリセットOTPを受け取るにはメールを入力してください。</string>
+    <string name="send">送信</string>
+    <string name="send_otp">OTPを送信</string>
+    <string name="verify_your_email">メールアドレスを確認してください</string>
+    <string name="hint_enter_otp">OTPを入力してください</string>
+    <string name="action_continue">続けてください</string>
+    <string name="dep_verify_otp">認証コードはあなたのメールに送信されました</string>
+    <string name="otp_will_expire">OTPコードの有効期限は以下の通りです:</string>
+    <string name="second">秒</string>
+    <string name="not_received_yet">まだ受け取っていませんか?</string>
+    <string name="action_resend_otp">再送信 検証コード</string>
+    <string name="resend_otp">OTPコードを再送信します</string>
+    <string name="resend_otp_second">再送信OTP(%1$d)</string>
+    <string name="til_reset_password">パスワードをリセットする</string>
+    <string name="password_updated">パスワード変更が成功しました。</string>
+    <string name="please_enter_otp">OTPコードを入力してください。</string>
+    <string name="please_enter_full_otp">完全なOTPコードを入力してください。</string>
+    <string name="message_email_verify_success">あなたのメールアドレスは認証済みです。これでログインできます。</string>
+    <string name="action_back_login">ログインに戻る</string>
+    <string name="confirmed_successfully">確認成功!</string>
+    <string name="time_just_now">さっき</string>
+    <string name="time_minutes_ago">%1$d分前</string>
+    <string name="time_hours_ago">%1$d時間前</string>
+    <string name="time_days_ago">%1$d日前</string>
+    <string name="updating_avatar">アバターの更新中…</string>
+    <string name="updating_cover">表紙を更新します…</string>
+    <string name="update_user_success">ユーザー情報の更新が成功しました。</string>
+    <string name="no_cover_found">カバーは見つかりませんでした!</string>
+    <string name="no_avatar_found">アバターが見つかりませんでした!</string>
+    <string name="full_name">フルネーム</string>
+    <string name="bio">経歴</string>
+    <string name="action_save">セーブ</string>
+    <string name="please_enter_full_name">フルネームを入力してください!</string>
+    <string name="error_get_arg">データ取得エラー!</string>
+    <string name="media_not_found">メディアが見つかりません!</string>
+    <string name="error_checking_session">エラーチェックセッション:%1$s</string>
+    <string name="maximum_media_and_count">最大%1$d個のアイテム</string>
+    <string name="permission_media_request">メディアアクセスが必要で、継続する。</string>
+    <string name="error_fetch_data">データの読み込みエラーがありました。</string>
+    <string name="comments">コメント</string>
+    <string name="add_comment">コメントを追加…</string>
+    <string name="author">著者</string>
+    <string name="error_add_cmt_failed">エラーコメントです!</string>
+    <string name="share_post">投稿を共有する</string>
+    <string name="save_post">投稿を保存</string>
+    <string name="copy_link">リンクをコピーして共有してください</string>
+    <string name="hide_this_post">この投稿を非表示にしてください</string>
+    <string name="block_user">ブロック %1$s</string>
+    <string name="dep_save_post">保存した投稿リストに追加</string>
+    <string name="dep_remove_post">保存済みリストから投稿を削除する</string>
+    <string name="dep_hide_post">この投稿をタイムラインから非表示にしてください</string>
+    <string name="dep_block_user">お互いに表示・連絡できなくなります</string>
+    <string name="post_link">投稿リンク</string>
+    <string name="link_copied">リンクをコピーしました</string>
+    <string name="post_unsaved">投稿が保存されていません</string>
+    <string name="error_action">動作中にエラーが発生しました!</string>
+    <string name="blocked_user">このユーザーをブロックしました</string>
+    <string name="error">エラー、もう一度お試しください!</string>
+    <string name="reply">返信</string>
+    <string name="see_x_answers">—— %1$d 回答を参照</string>
+    <string name="replying_to_user">%1$sへの返信</string>
+    <string name="hide_answers">—— 答えを隠す</string>
+    <string name="no_comments_yet">まだコメントはありません。
+最初にコメントしてください!</string>
+    <string name="error_load_comments_failed">コメントを読み込めません。もう一度お試しください!</string>
+    <string name="follow_user">フォローしてください %1$s</string>
+    <string name="cancel_follow_user">フォローを外す %1$s</string>
+    <string name="edit_post">編集投稿</string>
+    <string name="edit_privacy">編集プライバシー</string>
+    <string name="followed_user">%1$sをフォローしました</string>
+    <string name="unfollowed_user">フォローされていない %1$s</string>
+    <string name="posts">投稿</string>
+    <string name="followers">フォロワー</string>
+    <string name="following">フォロー</string>
+    <string name="friend">友人</string>
+    <string name="empty_list">空のリスト</string>
+    <string name="fail_to_load_pet_data">ペットデータの読み込み失敗</string>
+    <string name="not_updated">更新されていません</string>
+    <string name="not_desc_yet">まだ説明はない</string>
+    <string name="label_gender">性別: %1$s</string>
+    <string name="label_weight">体重: %1$s</string>
+    <string name="label_birthday">誕生日: %1$s</string>
+    <string name="label_neutered">去勢: %1$s</string>
+    <string name="label_body_condition">体調: %1$s</string>
+    <string name="label_clinical_status">臨床状態: %1$s</string>
+    <string name="label_mental_state">精神状態: %1$s</string>
+    <string name="label_medical_history">病歴: %1$s</string>
+    <string name="label_preventive">予防: %1$s</string>
+
+    <string name="value_na">該当なし</string>
+    <string name="value_neutered_yes">去勢</string>
+    <string name="value_neutered_no">去勢はしていません</string>
+    <string name="related_posts">関連記事</string>
+    <string name="please_login">ログインしてください</string>
+    <string name="update_pet_success">ペット情報の更新。</string>
+    <string name="edit_pet_info">ペット情報編集</string>
+    <string name="save">セーブ</string>
+    <string name="pet_following">ペットのファン</string>
+    <string name="friends">友人</string>
+    <string name="unfollow">フォローを外す</string>
+    <string name="confirm_logout">本当にログアウトしたいの?</string>
+    <string name="cancel">キャンセル</string>
+    <string name="yes">はい</string>
+    <string name="img_not_updated">写真は更新されていません</string>
+    <string name="basic_info">基本情報</string>
+    <string name="health_conditions">健康状態</string>
+    <string name="copied_to_clipboard">クリップボードにコピー</string>
+    <string name="error_data_post">ポストデータエラー</string>
+    <string name="post_created">投稿作成</string>
+    <string name="post_updated">投稿が更新されました</string>
+    <string name="add_media">メディアの追加</string>
+    <string name="new_notification">新しい通知</string>
+    <string name="no_notifications_yet">まだ通知はありません!</string>
+    <string name="dep_empty_notif">ペットからの新しいやり取りやニュースがあればお知らせします!</string>
+    <string name="pet_diary">ペット日記</string>
+    <string name="new_notifications">新しい通知があります</string>
+    <string name="notif_type_post_like"><b>%1$s</b>投稿がいいね。</string>
+    <string name="n_new_notifications">新しい%1$d件の通知があります</string>
+    <string name="notif_type_comment"><b>%1$s</b>あなたの投稿にコメントしました。</string>
+    <string name="notif_type_comment_reply"><b>%1$s</b>あなたのコメントに返信しました。</string>
+    <string name="notif_type_comment_like"><b>%1$s</b>あなたのコメントがいいね。</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b>があなたのストーリーに%2$sしました。</string>
+    <string name="notif_type_user_follow"><b>%1$s</b>あなたの後をつけ始めた。</string>
+    <string name="notif_type_pet_follow"><b>%1$s</b>ペットを追いかけ始めました。</string>
+    <string name="story_unavailable">このストーリーは現在は利用できなくなったか、期限切れとなっています。</string>
+    <string name="something_went_wrong">エラーが発生しました。後でもう一度お試しください。</string>
+    <string name="list_of_emotional_responses">感情的反応の一覧</string>
+    <string name="no_emotions_yet">まだ感情はない。</string>
+    <string name="count_emotions">%1$d 感情</string>
+    <string name="no_post_yet">まだ投稿はありません</string>
+    <string name="publish_your_first_post">最初の投稿を公開してください</string>
+    <string name="new_post">新しい投稿</string>
+    <string name="what_is_the_boss_doing_today">今日はペットは何をしていますか？🐾</string>
+    <string name="share_the_boss_s_adorable_moment">ボスの可愛い瞬間を共有しましょう</string>
+    <string name="capture_a_memory_of_today_s_boss">今日のボスの思い出を捉えましょう</string>
+    <string name="add_pet_tag">ペット+を追加</string>
+    <string name="no_saved_posts_yet">まだ保存された投稿はありません</string>
+    <string name="list_of_saved_posts">保存された投稿一覧</string>
+    <string name="recently_deleted_posts">最近削除された投稿</string>
+    <string name="error_connection_internet">オフラインですから、もう一度ネットワーク接続を確認してください!</string>
+    <string name="move_post_to_trash">投稿をゴミ箱に移す</string>
+    <string name="dep_soft_delete_post">投稿は30日後に永久に削除されます</string>
+    <string name="moved_post_trash">投稿をゴミ箱に移しました</string>
+    <string name="softdelete_post_fail">投稿は削除できません。もう一度お試しください</string>
+    <string name="restore_this_post">この投稿を復元してください</string>
+    <string name="del_restore_post">投稿が30日以内に永久に削除される前に復元してください。</string>
+    <string name="permanently_post">投稿を永久削除する</string>
+    <string name="dep_permanently_post">この行動は取り消せない。</string>
+    <string name="list_of_recently_deleted_posts">最近削除された投稿一覧</string>
+    <string name="no_recently_deleted_posts">最近削除された投稿はありません</string>
+    <string name="confirm">確認してください</string>
+    <string name="delete">削除</string>
+    <string name="confirm_permanently_delete_title">この投稿を削除しますか?</string>
+    <string name="confirm_permanently_delete_msg">この投稿は永久に削除され、復元はできません。</string>
+    <string name="restore_failed">故障回復</string>
+    <string name="permanently_delete_failed">永久削除失敗</string>
+    <string name="error_permanently_delete_post">投稿は削除できません。もう一度お試しください。</string>
+    <string name="permanently_deleted_post">永久に削除された投稿</string>
+    <string name="successfull_restore_post">回復後の成功</string>
+    <string name="dep_title_recently_deleted_post">削除された投稿は30日後に永久に削除されます。</string>
+    <string name="apply">応募してください</string>
+    <string name="select_language">言語選択</string>
+
+    <string name="currently_using">現在使用中の言語</string>
+    <string name="all_languages">すべての言語</string>
+
+    <!-- Language display names (in English) -->
+    <string name="lang_en_display">英語</string>
+    <string name="lang_en_native">英語</string>
+
+    <string name="lang_vi_display">ベトナム語</string>
+    <string name="lang_vi_native">ベトナム語</string>
+
+    <string name="lang_ja_display">日本語</string>
+    <string name="lang_ja_native">日本語</string>
+
+    <string name="lang_ko_display">韓国語</string>
+    <string name="lang_ko_native">韓国語</string>
+
+    <string name="lang_zh_display">中国語</string>
+    <string name="lang_zh_native">中国語</string>
+
+    <string name="lang_fr_display">フランス語</string>
+    <string name="lang_fr_native">Français</string>
+
+    <string name="lang_de_display">ドイツ語</string>
+    <string name="lang_de_native">ドイツ語</string>
+
+    <string name="lang_es_display">スペイン語</string>
+    <string name="lang_es_native">スペイン語</string>
+
+    <string name="lang_pt_display">ポルトガル語</string>
+    <string name="lang_pt_native">ポルトガル語</string>
+
+    <string name="lang_th_display">タイ語</string>
+    <string name="lang_th_native">ไทย</string>
+
+
+    <string-array name="media_types">
+        <item>@string/all</item>
+        <item>@string/image</item>
+        <item>@string/video</item>
+    </string-array>
+
+    <string-array name="gender_options">
+        <item>男性</item>
+        <item>女性</item>
+        <item>その他</item>
+    </string-array>
+
+    <string-array name="preventive_status_options">
+        <item>最新情報</item>
+        <item>進行中</item>
+        <item>遅延/リスクあり</item>
+    </string-array>
+
+    <string-array name="body_condition_options">
+        <item>理想</item>
+        <item>低体重</item>
+        <item>太り気味/肥満</item>
+    </string-array>
+
+    <string-array name="clinical_status_options">
+        <item>安定</item>
+        <item>監視下</item>
+        <item>緊急・緊急</item>
+    </string-array>
+
+    <string-array name="activity_mental_options">
+        <item>アクティブ/アラート</item>
+        <item>ノーマル</item>
+        <item>無気力</item>
+    </string-array>
+</resources>

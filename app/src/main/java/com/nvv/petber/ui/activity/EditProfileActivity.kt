@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -14,6 +13,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.nvv.petber.R
 import com.nvv.petber.data.model.User
 import com.nvv.petber.databinding.ActivityEditProfileBinding
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.DateTimeUtils
 import com.nvv.petber.utils.ValidationUtils
 import com.nvv.petber.utils.ext.gone
@@ -29,7 +29,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 @AndroidEntryPoint
-class EditProfileActivity : AppCompatActivity() {
+class EditProfileActivity : BaseActivity() {
     private lateinit var binding: ActivityEditProfileBinding
     private var selectedBirthdayDb: String? = null
     private var selectedBirthdayDisplay: String? = null

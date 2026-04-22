@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -14,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityRegisterBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.ValidationUtils
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.AuthState
@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : BaseActivity() {
     lateinit var binding: ActivityRegisterBinding
     private val authViewModel: AuthViewModel by viewModels()
 

@@ -2,10 +2,10 @@ package com.nvv.petber.ui.deeplink
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.nvv.petber.ui.activity.PostDetailActivity
+import com.nvv.petber.ui.base.BaseActivity
 
-class DeepLinkActivity : AppCompatActivity() {
+class DeepLinkActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

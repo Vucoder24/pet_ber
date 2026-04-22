@@ -9,7 +9,6 @@ import android.widget.CompoundButton
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,6 +20,7 @@ import com.nvv.petber.data.model.Post
 import com.nvv.petber.databinding.ActivityCreateEditPostBinding
 import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.ui.adapter.MediaPreviewAdapter
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.ui.dialog.UploadProgressDialog
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.getVideoDuration
@@ -29,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 
 @AndroidEntryPoint
-class CreateEditPostActivity : AppCompatActivity() {
+class CreateEditPostActivity : BaseActivity() {
     private lateinit var binding: ActivityCreateEditPostBinding
     private val viewModel: CreateContentViewModel by viewModels()
     private lateinit var uploadDialog: UploadProgressDialog

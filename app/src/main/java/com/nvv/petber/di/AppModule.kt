@@ -1,6 +1,7 @@
 package com.nvv.petber.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.nvv.petber.BuildConfig
 import com.nvv.petber.data.repo.remote.AuthRepository
 import com.nvv.petber.data.repo.remote.HomeRepository
@@ -66,5 +67,11 @@ object AppModule {
         @ApplicationContext context: Context
     ): Context {
         return context
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("settings", Context.MODE_PRIVATE)
     }
 }

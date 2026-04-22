@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -13,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivitySplashBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.toast
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     lateinit var binding: ActivitySplashBinding
 

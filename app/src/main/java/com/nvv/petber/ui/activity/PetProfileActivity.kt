@@ -8,7 +8,6 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,6 +22,7 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.databinding.ActivityPetProfileBinding
 import com.nvv.petber.ui.adapter.PetProfilePagerAdapter
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.PermissionUtils
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.autoHeight
@@ -40,7 +40,7 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PetProfileActivity : AppCompatActivity() {
+class PetProfileActivity : BaseActivity() {
     @Inject
     lateinit var exoPlayer: ExoPlayer
 

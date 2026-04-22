@@ -1,0 +1,358 @@
+<resources>
+    <string name="app_name">Pet Ber</string>
+    <string name="text_email">Correo electrónico</string>
+    <string name="text_password">Contraseña</string>
+    <string name="text_login">Iniciar sesión</string>
+    <string name="txt_forgot_password">¿Olvidaste la contraseña?</string>
+    <string name="action_navigate_register">Crea una nueva cuenta</string>
+    <string name="blank_email">¡El correo electrónico no puede quedarse en blanco!</string>
+    <string name="invalid_email">¡Dirección de correo electrónico inválida!</string>
+    <string name="pw_empty">¡La contraseña no puede estar vacía!</string>
+    <string name="invalid_length_password">¡La contraseña debe tener al menos 6 caracteres!</string>
+    <string name="text_sign_up">Regístrate</string>
+    <string name="text_display_name">Nombre de visualización</string>
+    <string name="text_confirm_password">Confirmar contraseña</string>
+    <string name="text_already_have_account">¿Ya tienes una cuenta?</string>
+    <string name="confirm_pw_empty">¡Confirma que la contraseña está vacía!</string>
+    <string name="invalid_confirm_password">¡Confirmar contraseña inválida!</string>
+    <string name="username_empty">¡El nombre de usuario está vacío!</string>
+    <string name="register_success">Si te has registrado correctamente, ¡tienes que confirmar tu correo antes de iniciar sesión!</string>
+    <string name="login_success">¡Inicio de sesión exitoso!</string>
+    <string name="home">Inicio</string>
+    <string name="search">Búsqueda</string>
+    <string name="create">Crear</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="profile">Perfil</string>
+    <string name="hello_blank_fragment">Hola, fragmento en blanco</string>
+    <string name="pet">Pet </string>
+    <string name="ber">Ber</string>
+    <string name="pet_stories">Historias de mascotas:</string>
+    <string name="hint_edt_search">Busca usuarios, mascotas, hashtags…</string>
+    <string name="follow">Sigue</string>
+    <string name="users">Usuarios</string>
+    <string name="pets">Mascotas</string>
+    <string name="hashtags">Hashtags</string>
+    <string name="user_name">Nombre de usuario</string>
+    <string name="petber_user">Usuario de PetBer</string>
+    <string name="images_videos">Imágenes / Vídeos</string>
+    <string name="sub_title_story">Comparte los momentos de tu mascota las 24 horas</string>
+    <string name="story">Historia</string>
+    <string name="create_a_new_story">Crea una nueva historia</string>
+    <string name="create_content">Crear contenido</string>
+    <string name="dep_item_create_post">Publica fotos o vídeos de tus mascotas</string>
+    <string name="preview_story">Vista previa de historia</string>
+    <string name="post_story">Publicar historia</string>
+    <string name="choose_media">Elegir medios</string>
+    <string name="choose_multiple">Elige varios</string>
+    <string name="next">Siguiente</string>
+    <string name="all">Todos</string>
+    <string name="image">Imagen</string>
+    <string name="video">Vídeo</string>
+    <string name="choose">Elige</string>
+    <string name="permission_question">Necesitas conceder permiso para seleccionar fotos/vídeos.</string>
+    <string name="uploading">Subiendo algo…</string>
+    <string name="dont_exit_app">Por favor, no salgas de la solicitud</string>
+    <string name="story_posted">¡Historia publicada!</string>
+    <string name="post_details">Detalles de la publicación</string>
+    <string name="post_content">Contenido de la publicación</string>
+    <string name="post">Publicación</string>
+    <string name="create_a_new_post">Crear nueva publicación</string>
+    <string name="hint_caption">Introduce el pie de foto aquí…</string>
+    <string name="tag_your_pet">Etiqueta a tu mascota</string>
+    <string name="hint_hashtags">#hashtags…</string>
+    <string name="post_now">Publicar ahora</string>
+    <string name="caption_empty">¡Por favor, introduce un pie de foto!</string>
+    <string name="error_select_media">¡Por favor, selecciona al menos una foto/vídeo!</string>
+    <string name="edit_media">Editar medios</string>
+    <string name="my_pet_list">Mi lista de mascotas</string>
+    <string name="all_posts">Todas las publicaciones</string>
+    <string name="message">Mensaje</string>
+    <string name="add_pet">Añadir mascota</string>
+    <string name="personal_information">Información personal:</string>
+    <string name="address">Dirección</string>
+    <string name="phone_number">Número de teléfono</string>
+    <string name="gender">Género</string>
+    <string name="hobbies">Aficiones</string>
+    <string name="add_bio">Añadir biografía…</string>
+    <string name="add_gender">Añadir género</string>
+    <string name="add_address">Añadir dirección</string>
+    <string name="add_phone_number">Añadir número de teléfono</string>
+    <string name="add_birthday">Añadir fecha de nacimiento</string>
+    <string name="add_hobbies">Añadir aficiones</string>
+    <string name="username_cannot_contain_spaces">¡El nombre de usuario no puede contener espacios!</string>
+    <string name="username_invalid_characters">El nombre de usuario solo debe contener letras minúsculas, números, guiones bajos (_) y puntos (.)!</string>
+    <string name="username_invalid_characters_length">¡El nombre de usuario debe tener al menos 2 caracteres!</string>
+    <string name="add_new_story">Añadir nueva historia</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="add_new_pet">Añadir nueva mascota</string>
+    <string name="choose_cover">Elige una foto de portada</string>
+    <string name="avatar">Avatar</string>
+    <string name="pet_name">Apodo cariñoso</string>
+    <string name="breed">Raza</string>
+    <string name="species">Especies</string>
+    <string name="birthday">Cumpleaños</string>
+    <string name="health">Salud</string>
+    <string name="describe">Describe</string>
+    <string name="healthy">Saludable</string>
+    <string name="add">Añadir</string>
+    <string name="opening_image_cropper">Recorte de imagen inicial…</string>
+    <string name="body_condition">Condición corporal</string>
+    <string name="clinical_status">Estado clínico</string>
+    <string name="activity_amp_mental_state"><![CDATA[Actividad y estado mental]]></string>
+    <string name="preventive_status">Estado preventivo</string>
+    <string name="has_been_neutered">¿Ha sido castrado?</string>
+    <string name="weight_kg">Peso (kg)</string>
+    <string name="error_empty_pet_name">¡Por favor, introduce tu apodo!</string>
+    <string name="error_empty_pet_species">¡Por favor, introduzca la especie!</string>
+    <string name="create_pet_success">Mascota creada con éxito</string>
+    <string name="view_avatar">Ver avatar</string>
+    <string name="choose_avatar">Elegir avatar</string>
+    <string name="view_cover">Ver portada</string>
+    <string name="post_saved">Publicación guardada</string>
+    <string name="story_saved">Historia salvada</string>
+    <string name="language">Idioma</string>
+    <string name="log_out">Cerrar sesión</string>
+    <string name="settings">Configuración</string>
+    <string name="error_send_otp">No se puede enviar OTP. Por favor, inténtalo de nuevo.</string>
+    <string name="otp_incorrect_or_expired">OTP es incorrecto o ha caducado.</string>
+    <string name="error_update_password">No se puede cambiar la contraseña.</string>
+    <string name="otp_expired">OTP ha expirado, por favor reenvía un código nuevo.</string>
+    <string name="otp_invalid">OTP inválido.</string>
+    <string name="email_not_confirmed">Correo electrónico no confirmado</string>
+    <string name="invalid_credentials">La información es incorrecta.</string>
+    <string name="error_too_many_requests">Has actuado demasiado rápido, por favor inténtalo de nuevo más tarde.</string>
+    <string name="til_forgot_password">Se me olvidó la contraseña</string>
+    <string name="title_input_email">Introduce el correo electrónico para recibir el OTP de restablecimiento de contraseña.</string>
+    <string name="send">Envía</string>
+    <string name="send_otp">Enviar OTP</string>
+    <string name="verify_your_email">Verifica tu correo electrónico</string>
+    <string name="hint_enter_otp">Entra en escena OTP</string>
+    <string name="action_continue">Continúa</string>
+    <string name="dep_verify_otp">El código de verificación se ha enviado a tu correo electrónico</string>
+    <string name="otp_will_expire">El código OTP caducará en:</string>
+    <string name="second">Segundo</string>
+    <string name="not_received_yet">¿Aún no lo recibiste?</string>
+    <string name="action_resend_otp">Reenviar código de verificación</string>
+    <string name="resend_otp">Reenviar código OTP</string>
+    <string name="resend_otp_second">Reenviar OTP (%1$d)</string>
+    <string name="til_reset_password">Restablecer contraseña</string>
+    <string name="password_updated">La contraseña cambió con éxito.</string>
+    <string name="please_enter_otp">Por favor, introduzca el código OTP.</string>
+    <string name="please_enter_full_otp">Por favor, introduce el código completo OTP.</string>
+    <string name="message_email_verify_success">Tu correo electrónico ha sido verificado. Ahora puedes iniciar sesión.</string>
+    <string name="action_back_login">Volver a Iniciar sesión</string>
+    <string name="confirmed_successfully">¡Confirmado con éxito!</string>
+    <string name="time_just_now">Justo ahora</string>
+    <string name="time_minutes_ago">%1$dm hace</string>
+    <string name="time_hours_ago">%1$dh hace</string>
+    <string name="time_days_ago">%1$dd hace</string>
+    <string name="updating_avatar">Actualizando avatar…</string>
+    <string name="updating_cover">Actualizando la portada…</string>
+    <string name="update_user_success">Actualización exitosa de la información del usuario.</string>
+    <string name="no_cover_found">¡No se ha encontrado ninguna tapadera!</string>
+    <string name="no_avatar_found">¡No se ha encontrado ningún avatar!</string>
+    <string name="full_name">Nombre completo</string>
+    <string name="bio">Biografía</string>
+    <string name="action_save">Guardar</string>
+    <string name="please_enter_full_name">¡Por favor, introduce el nombre completo!</string>
+    <string name="error_get_arg">¡Error recuperando datos!</string>
+    <string name="media_not_found">¡Medios no encontrados!</string>
+    <string name="error_checking_session">Sesión de comprobación de errores: %1$s</string>
+    <string name="maximum_media_and_count">Máximo %1$d de artículos</string>
+    <string name="permission_media_request">Necesita acceso a los medios para continuar.</string>
+    <string name="error_fetch_data">Hubo un error cargando datos.</string>
+    <string name="comments">Comentarios</string>
+    <string name="add_comment">Añadir comentario…</string>
+    <string name="author">Autor</string>
+    <string name="error_add_cmt_failed">¡Error al comentar!</string>
+    <string name="share_post">Compartir publicación</string>
+    <string name="save_post">Guardar publicación</string>
+    <string name="copy_link">Copia el enlace para compartirlo</string>
+    <string name="hide_this_post">Ocultar esta publicación</string>
+    <string name="block_user">Bloquear a %1$s</string>
+    <string name="dep_save_post">Añadir a la lista de publicaciones guardadas</string>
+    <string name="dep_remove_post">Eliminar publicaciones de la lista guardada</string>
+    <string name="dep_hide_post">Oculta esta publicación de tu timeline</string>
+    <string name="dep_block_user">No os veréis ni os comunicaréis</string>
+    <string name="post_link">Enlace a la publicación</string>
+    <string name="link_copied">Enlace copiado</string>
+    <string name="post_unsaved">Publicación sin guardar</string>
+    <string name="error_action">¡Ocurrió un error mientras realizaba la acción!</string>
+    <string name="blocked_user">He bloqueado a este usuario</string>
+    <string name="error">¡Error, inténtalo de nuevo!</string>
+    <string name="reply">Respuesta</string>
+    <string name="see_x_answers">—— Ver respuestas de %1$d</string>
+    <string name="replying_to_user">Responder a %1$s</string>
+    <string name="hide_answers">—— Ocultar respuesta</string>
+    <string name="no_comments_yet">Aún no hay comentarios.
+¡Sé el primero en comentar!</string>
+    <string name="error_load_comments_failed">No se pueden cargar los comentarios. ¡Por favor, inténtalo de nuevo!</string>
+    <string name="follow_user">Sigue %1$s</string>
+    <string name="cancel_follow_user">Dejar de seguir %1$s</string>
+    <string name="edit_post">Editar publicación</string>
+    <string name="edit_privacy">Editar privacidad</string>
+    <string name="followed_user">Seguido por %1$s</string>
+    <string name="unfollowed_user">No seguido %1$s</string>
+    <string name="posts">Entradas</string>
+    <string name="followers">Seguidores</string>
+    <string name="following">Siguiendo</string>
+    <string name="friend">Amigo</string>
+    <string name="empty_list">Lista vacía</string>
+    <string name="fail_to_load_pet_data">No se pudieron cargar los datos de mascotas</string>
+    <string name="not_updated">No actualizado</string>
+    <string name="not_desc_yet">Aún no hay descripción</string>
+    <string name="label_gender">Género: %1$s</string>
+    <string name="label_weight">Peso: %1$s</string>
+    <string name="label_birthday">Fecha de nacimiento: %1$s</string>
+    <string name="label_neutered">Castrado: %1$s</string>
+    <string name="label_body_condition">Estado corporal: %1$s</string>
+    <string name="label_clinical_status">Estado clínico: %1$s</string>
+    <string name="label_mental_state">Estado mental: %1$s</string>
+    <string name="label_medical_history">Historial médico: %1$s</string>
+    <string name="label_preventive">Preventivo: %1$s</string>
+
+    <string name="value_na">N/A</string>
+    <string name="value_neutered_yes">Castrado</string>
+    <string name="value_neutered_no">No castrado</string>
+    <string name="related_posts">Publicaciones relacionadas</string>
+    <string name="please_login">Por favor, inicia sesión</string>
+    <string name="update_pet_success">Actualizar la información sobre mascotas con éxito.</string>
+    <string name="edit_pet_info">Editar información sobre mascotas</string>
+    <string name="save">Salvar</string>
+    <string name="pet_following">Siguiendo mascotas</string>
+    <string name="friends">Amigos</string>
+    <string name="unfollow">Dejar de seguir</string>
+    <string name="confirm_logout">¿Estás seguro de que quieres cerrar sesión?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="yes">Sí</string>
+    <string name="img_not_updated">Foto no actualizada</string>
+    <string name="basic_info">Información básica</string>
+    <string name="health_conditions">Condiciones de salud</string>
+    <string name="copied_to_clipboard">Copiado a la carpeta</string>
+    <string name="error_data_post">Errores de datos posteriores</string>
+    <string name="post_created">Publicación creada</string>
+    <string name="post_updated">Publicación actualizada</string>
+    <string name="add_media">Añadir medios</string>
+    <string name="new_notification">Nueva notificación</string>
+    <string name="no_notifications_yet">¡Todavía no hay notificaciones!</string>
+    <string name="dep_empty_notif">¡Te avisaremos cuando haya una nueva interacción o noticia de tu mascota!</string>
+    <string name="pet_diary">Diario de mascotas</string>
+    <string name="new_notifications">Tienes una nueva notificación</string>
+    <string name="notif_type_post_like"><b>%1$s</b> Me ha gustado tu publicación.</string>
+    <string name="n_new_notifications">Tienes una nueva notificación de %1$d</string>
+    <string name="notif_type_comment"><b>%1$s</b> Comenté en tu publicación.</string>
+    <string name="notif_type_comment_reply"><b>%1$s</b> Respondí a tu comentario.</string>
+    <string name="notif_type_comment_like"><b>%1$s</b> Me ha gustado tu comentario.</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b> Reaccioné a tu historia.</string>
+    <string name="notif_type_user_follow"><b>%1$s</b> Empezó a seguirte.</string>
+    <string name="notif_type_pet_follow"><b>%1$s</b> Empecé a seguir a tu mascota.</string>
+    <string name="story_unavailable">Esta historia ya no está disponible o ha caducado.</string>
+    <string name="something_went_wrong">Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.</string>
+    <string name="list_of_emotional_responses">Lista de respuestas emocionales</string>
+    <string name="no_emotions_yet">Todavía no hay emociones.</string>
+    <string name="count_emotions">%1$d Emociones</string>
+    <string name="no_post_yet">Aún no hay publicación</string>
+    <string name="publish_your_first_post">Publica tu primera entrada</string>
+    <string name="new_post">NNueva publicación</string>
+    <string name="what_is_the_boss_doing_today">¿Qué hace el jefe hoy? 🐾</string>
+    <string name="share_the_boss_s_adorable_moment">Comparte el momento adorable del jefe</string>
+    <string name="capture_a_memory_of_today_s_boss">Captura un recuerdo del jefe de hoy</string>
+    <string name="add_pet_tag">Añadir mascota +</string>
+    <string name="no_saved_posts_yet">Todavía no hay publicaciones guardadas</string>
+    <string name="list_of_saved_posts">Lista de publicaciones guardadas</string>
+    <string name="recently_deleted_posts">Publicaciones eliminadas recientemente</string>
+    <string name="error_connection_internet">Estás desconectado, ¡revisa la conexión de red otra vez!</string>
+    <string name="move_post_to_trash">Mover las publicaciones a la basura</string>
+    <string name="dep_soft_delete_post">Tu publicación será eliminada permanentemente tras 30 días</string>
+    <string name="moved_post_trash">Trasladado la publicación a la basura</string>
+    <string name="softdelete_post_fail">La publicación no puede ser borrada, por favor inténtalo de nuevo</string>
+    <string name="restore_this_post">Restaurar esta publicación</string>
+    <string name="del_restore_post">Restaura la publicación antes de que se elimine permanentemente en 30 días.</string>
+    <string name="permanently_post">Eliminar una publicación de forma permanente</string>
+    <string name="dep_permanently_post">Esta acción no puede deshacerse.</string>
+    <string name="list_of_recently_deleted_posts">Lista de publicaciones eliminadas recientemente</string>
+    <string name="no_recently_deleted_posts">No hay publicaciones eliminadas recientemente</string>
+    <string name="confirm">Confirmar</string>
+    <string name="delete">Borrar</string>
+    <string name="confirm_permanently_delete_title">¿Borrar esta publicación?</string>
+    <string name="confirm_permanently_delete_msg">Esta publicación será eliminada permanentemente y no podrá ser restaurada.</string>
+    <string name="restore_failed">Recuperación de fallos</string>
+    <string name="permanently_delete_failed">Fallo de eliminación permanente</string>
+    <string name="error_permanently_delete_post">Las publicaciones no se pueden eliminar. Por favor, inténtalo de nuevo.</string>
+    <string name="permanently_deleted_post">Publicaciones eliminadas permanentemente</string>
+    <string name="successfull_restore_post">Recuperación exitosa tras la recuperación</string>
+    <string name="dep_title_recently_deleted_post">Las publicaciones eliminadas serán eliminadas permanentemente después de 30 días.</string>
+    <string name="apply">Solicita</string>
+    <string name="select_language">Idioma seleccionado</string>
+
+    <string name="currently_using">Actualmente en uso</string>
+    <string name="all_languages">Todos los idiomas</string>
+
+    <!-- Language display names (in English) -->
+    <string name="lang_en_display">Inglés</string>
+    <string name="lang_en_native">Inglés</string>
+
+    <string name="lang_vi_display">Vietnamita</string>
+    <string name="lang_vi_native">Tiếng Việt</string>
+
+    <string name="lang_ja_display">Japonés</string>
+    <string name="lang_ja_native">Japonés</string>
+
+    <string name="lang_ko_display">Coreano</string>
+    <string name="lang_ko_native">Coreano</string>
+
+    <string name="lang_zh_display">Chino</string>
+    <string name="lang_zh_native">Chino</string>
+
+    <string name="lang_fr_display">Francés</string>
+    <string name="lang_fr_native">Français</string>
+
+    <string name="lang_de_display">Alemán</string>
+    <string name="lang_de_native">Alemán</string>
+
+    <string name="lang_es_display">Español</string>
+    <string name="lang_es_native">Español</string>
+
+    <string name="lang_pt_display">Portugués</string>
+    <string name="lang_pt_native">Portugués</string>
+
+    <string name="lang_th_display">Tailandés</string>
+    <string name="lang_th_native">ไทย</string>
+
+
+    <string-array name="media_types">
+        <item>@string/all</item>
+        <item>@string/image</item>
+        <item>@string/video</item>
+    </string-array>
+
+    <string-array name="gender_options">
+        <item>Masculino</item>
+        <item>Femenino</item>
+        <item>Otros</item>
+    </string-array>
+
+    <string-array name="preventive_status_options">
+        <item>Actualizado</item>
+        <item>En Progreso</item>
+        <item>Atrasado/En riesgo</item>
+    </string-array>
+
+    <string-array name="body_condition_options">
+        <item>Ideal</item>
+        <item>Bajo peso</item>
+        <item>Sobrepeso / Obesidad</item>
+    </string-array>
+
+    <string-array name="clinical_status_options">
+        <item>Estable</item>
+        <item>Bajo observación</item>
+        <item>Crítico/Emergencia</item>
+    </string-array>
+
+    <string-array name="activity_mental_options">
+        <item>Activo/Alerta</item>
+        <item>Normal</item>
+        <item>Letárgico</item>
+    </string-array>
+</resources>
