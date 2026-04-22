@@ -12,6 +12,7 @@ import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.postgrest.rpc
 import io.github.jan.supabase.realtime.selectAsFlow
+import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,7 +22,7 @@ import javax.inject.Inject
 data class UserIdResponse(val user_id: String)
 
 class HomeRepository @Inject constructor(
-    supabaseClient: SupabaseClient
+    val supabaseClient: SupabaseClient
 ) {
 
     private val db = supabaseClient.postgrest
@@ -349,6 +350,83 @@ class HomeRepository @Inject constructor(
         } catch (e: Exception) {
             Log.e("HomeRepository", "softDeletePost error: ${e.message}")
             Result.failure(e)
+        }
+    }
+
+    suspend fun fetchDeletedPosts(
+        userId: String,
+        page: Int = 0,
+        pageSize: Int = 10
+    ): Result<List<Post>> {
+        return try {
+            val from = page * pageSize
+            val to = from + pageSize - 1
+
+            val posts = db["posts"]
+                .select(columns = Columns.raw("*, users(*), post_media(*), post_likes(*)")) {
+                    filter {
+                        eq("user_id", userId)
+                        filterNot("deleted_at", FilterOperator.IS, "null")
+                        eq("post_likes.user_id", userId)
+                    }
+                    order("deleted_at", Order.DESCENDING)
+                    range(from.toLong(), to.toLong())
+                }
+                .decodeList<Post>().map {
+                    it.apply { isLiked = !postLikes.isNullOrEmpty() }
+                }
+            Result.success(posts)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+    suspend fun restorePost(postId: String): Result<Unit> {
+        return try {
+            db["posts"].update(mapOf("deleted_at" to null)) {
+                filter { eq("id", postId) }
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun hardDeletePostComplete(post: Post): Result<Unit> {
+        return try {
+            val mediaUrls = post.postMedia?.map { it.mediaUrl } ?: emptyList()
+
+            db.rpc("hard_delete_post_v2", mapOf("p_post_id" to post.id))
+
+            if (mediaUrls.isNotEmpty()) {
+                deletePostMediaFromStorage(mediaUrls)
+            }
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("HomeRepository", "Lỗi xóa vĩnh viễn: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+    private fun extractFilePathFromUrl(url: String, bucket: String): String? {
+        val lookFor = "/object/public/$bucket/"
+        return if (url.contains(lookFor)) {
+            url.substringAfter(lookFor)
+        } else null
+    }
+
+    suspend fun deletePostMediaFromStorage(urls: List<String>) {
+        urls.forEach { url ->
+            val path = extractFilePathFromUrl(url, "posts")
+            if (path != null) {
+                try {
+                    supabaseClient.storage.from("posts").delete(path)
+                } catch (e: Exception) {
+                    Log.e("HomeRepository", "Lỗi xóa file storage: ${e.message}")
+                }
+            }
         }
     }
 }

@@ -84,14 +84,14 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
     private fun setupListeners() {
         post?.let { p ->
             if (p.userId == currentUserId) {
-                binding.btnBlock.gone()
-                binding.btnHide.gone()
+//                binding.btnBlock.gone()
+//                binding.btnHide.gone()
                 binding.btnFollow.gone()
                 binding.btnEditPost.visible()
                 binding.btnSoftDelete.visible()
             } else {
-                binding.btnBlock.visible()
-                binding.btnHide.visible()
+//                binding.btnBlock.visible()
+//                binding.btnHide.visible()
                 binding.btnFollow.visible()
                 binding.btnEditPost.gone()
                 binding.btnSoftDelete.gone()
@@ -100,9 +100,9 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
             binding.tvFollow.text = getString(
                 R.string.follow_user, p.users?.fullName ?: R.string.petber_user
             )
-            binding.tvBlock.text = getString(
-                R.string.block_user, p.users?.fullName ?: R.string.petber_user
-            )
+//            binding.tvBlock.text = getString(
+//                R.string.block_user, p.users?.fullName ?: R.string.petber_user
+//            )
 
             binding.btnSave.setOnClickListener { viewModel.toggleSavePost(p) }
 

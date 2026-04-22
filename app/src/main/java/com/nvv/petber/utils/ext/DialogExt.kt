@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nvv.petber.R
 
 fun Context.showLogoutConfirmDialog(
@@ -77,4 +78,23 @@ fun Context.showCoverOptionDialog(
 
     dialog.setContentView(view)
     dialog.show()
+}
+
+fun Context.showConfirmDialog(
+    title: String,
+    message: String,
+    positiveButtonText: String = getString(R.string.confirm),
+    onConfirm: () -> Unit
+) {
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(positiveButtonText) { dialog, _ ->
+            onConfirm()
+            dialog.dismiss()
+        }
+        .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        .show()
 }

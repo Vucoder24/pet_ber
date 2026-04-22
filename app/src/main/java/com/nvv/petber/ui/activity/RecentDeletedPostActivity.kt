@@ -13,43 +13,39 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
-import com.nvv.petber.databinding.ActivityViewPostSavedBinding
+import com.nvv.petber.databinding.ActivityRecentDeletedPostBinding
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
-import com.nvv.petber.ui.dialog.SavedPostOptionsBottomSheet
+import com.nvv.petber.ui.dialog.TrashOptionsBottomSheet
+import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.toast
-import com.nvv.petber.viewmodel.SavedPostsViewModel
+import com.nvv.petber.viewmodel.RecentDeletedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ViewPostSavedActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityViewPostSavedBinding
-    private val viewModel: SavedPostsViewModel by viewModels()
-
+class RecentDeletedPostActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRecentDeletedPostBinding
+    private val viewModel: RecentDeletedViewModel by viewModels()
     private lateinit var postAdapter: PostAdapter
-    @Inject lateinit var exoPlayer: ExoPlayer
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
+    private var userId: String = ""
 
-    private lateinit var userId: String
-
-    companion object {
-        private const val EXTRA_USER_ID = "extra_user_id"
-
+    companion object{
+        const val EXTRA_USER_ID = "EXTRA_USER_ID"
         fun start(context: Context, userId: String) {
-            val intent = Intent(context, ViewPostSavedActivity::class.java).apply {
+            val intent = Intent(context, RecentDeletedPostActivity::class.java).apply {
                 putExtra(EXTRA_USER_ID, userId)
             }
             context.startActivity(intent)
         }
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityViewPostSavedBinding.inflate(layoutInflater)
+        binding = ActivityRecentDeletedPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -57,20 +53,21 @@ class ViewPostSavedActivity : AppCompatActivity() {
         }
         userId = intent.getStringExtra(EXTRA_USER_ID) ?: ""
         if (userId.isEmpty()){
-            toast(getString(R.string.error_get_arg))
+            toast(R.string.error_get_arg)
             finish()
         }
-        setupRecyclerView()
-        observeViewModel()
-    }
 
-    private fun setupRecyclerView() {
+        setupUI()
+        observeViewModel()
+        viewModel.init(userId)
+    }
+    private fun setupUI() {
+        binding.btnBack.setOnClickListener { finish() }
+
         binding.root.setOnRefreshListener {
             viewModel.refresh()
         }
-        binding.btnBack.setOnClickListener { finish() }
 
-        viewModel.init(userId)
         postAdapter = PostAdapter(
             exoPlayer = exoPlayer,
             onLikeClick = { post ->
@@ -94,40 +91,25 @@ class ViewPostSavedActivity : AppCompatActivity() {
                 UserProfileActivity.start(this, user.id)
             },
             onMoreOption = { post ->
-                val bottomSheet = SavedPostOptionsBottomSheet {
-                    viewModel.removePostLocal(post)
-                    viewModel.unsavePost(post)
-                }
-
-                bottomSheet.show(supportFragmentManager, "SavedPostOptions")
+                val bottomSheet = TrashOptionsBottomSheet(
+                    post = post,
+                    onActionSuccess = {
+                        viewModel.refresh()
+                    }
+                )
+                bottomSheet.show(supportFragmentManager, "TrashOptions")
             },
             onTaggedPetClick = { pet ->
                 PetProfileActivity.start(this, pet)
             }
         )
 
-        binding.rvSavedPosts.apply {
-            layoutManager = LinearLayoutManager(this@ViewPostSavedActivity)
+        binding.rvRecentDeleted.apply {
+            layoutManager = LinearLayoutManager(this@RecentDeletedPostActivity)
             adapter = postAdapter
-            itemAnimator = null
-
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (dy <= 0) return
-
-                    val lm = layoutManager as LinearLayoutManager
-                    val visibleItemCount = lm.childCount
-                    val totalItemCount = lm.itemCount
-                    val firstVisibleItemPosition = lm.findFirstVisibleItemPosition()
-
-                    val shouldLoadMore =
-                        visibleItemCount + firstVisibleItemPosition >= totalItemCount - 3
-
-                    if (shouldLoadMore &&
-                        viewModel.isLoadingMore.value == false &&
-                        viewModel.isLastPage.value == false
-                    ) {
+                    if (dy > 0 && !binding.rvRecentDeleted.canScrollVertically(1)) {
                         viewModel.loadMore()
                     }
                 }
@@ -137,41 +119,40 @@ class ViewPostSavedActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.posts.observe(this) { posts ->
-            renderPosts(posts)
+            postAdapter.submitPostData(
+                posts,
+                viewModel.isLoadingMore.value == true,
+                false
+            )
             binding.tvEmpty.visibility =
                 if (posts.isEmpty() && viewModel.isLoading.value != true) View.VISIBLE else View.GONE
+            binding.root.isRefreshing = false
         }
 
         viewModel.isLoading.observe(this) { loading ->
-            binding.root.isRefreshing = loading
+            if (!loading) binding.root.isRefreshing = false
             binding.progressInitial.visibility = if (loading) View.VISIBLE else View.GONE
-            binding.rvSavedPosts.visibility =
+            binding.rvRecentDeleted.visibility =
                 if (loading && viewModel.posts.value.isNullOrEmpty()) View.GONE else View.VISIBLE
-            updateEmptyState()
+
+            if (loading) binding.tvEmpty.gone()
         }
-
-        viewModel.isLoadingMore.observe(this) { loadingMore ->
-            renderPosts(viewModel.posts.value.orEmpty(), loadingMore)
+        viewModel.errorState.observe(this) { message ->
+            message?.let {
+                toast(it)
+                viewModel.clearError()
+            }
+        }
+        viewModel.successState.observe(this) { message ->
+            message?.let {
+                toast(it)
+                viewModel.clearSuccess()
+            }
         }
     }
-
-    private fun updateEmptyState() {
-        val isLoading = viewModel.isLoading.value == true
-        val isEmpty = viewModel.posts.value.isNullOrEmpty()
-
-        binding.tvEmpty.visibility = if (!isLoading && isEmpty) View.VISIBLE else View.GONE
-    }
-
-    private fun renderPosts(posts: List<com.nvv.petber.data.model.Post>, isLoadingMore: Boolean = false) {
-        postAdapter.submitPostData(
-            list = posts,
-            isLoadingMore = isLoadingMore,
-            showCreatePost = false
-        )
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         exoPlayer.release()
     }
+
 }

@@ -34,8 +34,8 @@ class SavedPostOptionsBottomSheet(
 
         binding.pbLoading.gone()
         binding.btnFollow.gone()
-        binding.btnHide.gone()
-        binding.btnBlock.gone()
+//        binding.btnHide.gone()
+//        binding.btnBlock.gone()
         binding.btnEditPost.gone()
         binding.btnCopyLink.gone()
 

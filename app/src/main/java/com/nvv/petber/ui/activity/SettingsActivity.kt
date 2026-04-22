@@ -44,10 +44,6 @@ class SettingsActivity : AppCompatActivity() {
                 ViewPostSavedActivity.start(this@SettingsActivity, currentUserId)
             }
 
-            btnStoryDeleted.setOnClickListener {
-
-            }
-
             btnLanguage.setOnClickListener {
 
             }
@@ -55,6 +51,10 @@ class SettingsActivity : AppCompatActivity() {
             btnBack.setOnClickListener {
                 finish()
             }
+            btnRecentDeletedPost.setOnClickListener {
+                RecentDeletedPostActivity.start(this@SettingsActivity, currentUserId)
+            }
+
 
             btnLogout.setOnClickListener {
                 showLogoutConfirmDialog {

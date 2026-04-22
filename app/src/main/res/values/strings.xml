@@ -265,6 +265,22 @@
     <string name="dep_soft_delete_post">Your post will be permanently deleted after 30 days</string>
     <string name="moved_post_trash">Moved post to trash</string>
     <string name="softdelete_post_fail">The post can\'t be deleted, please try again</string>
+    <string name="restore_this_post">Restore this post</string>
+    <string name="del_restore_post">Restore post before it’s permanently deleted in 30 days.</string>
+    <string name="permanently_post">Permanently delete a post</string>
+    <string name="dep_permanently_post">This action cannot be undone.</string>
+    <string name="list_of_recently_deleted_posts">List of recently deleted posts</string>
+    <string name="no_recently_deleted_posts">No recently deleted posts</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete">Delete</string>
+    <string name="confirm_permanently_delete_title">Delete this post?</string>
+    <string name="confirm_permanently_delete_msg">This post will be permanently deleted and cannot be restored.</string>
+    <string name="restore_failed">Failure Recovery</string>
+    <string name="permanently_delete_failed">Permanent Delete Failure</string>
+    <string name="error_permanently_delete_post">Posts can\'t be deleted. Please try again.</string>
+    <string name="permanently_deleted_post">Permanently deleted posts</string>
+    <string name="successfull_restore_post">Successful post recovery</string>
+    <string name="dep_title_recently_deleted_post">Deleted posts will be permanently removed after 30 days.</string>
 
 
     <string-array name="media_types">
