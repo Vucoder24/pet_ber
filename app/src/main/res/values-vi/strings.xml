@@ -1,0 +1,358 @@
+<resources>
+    <string name="app_name">Pet Ber</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Mật khẩu</string>
+    <string name="text_login">Đăng nhập</string>
+    <string name="txt_forgot_password">Quên mật khẩu?</string>
+    <string name="action_navigate_register">Đăng ký tài khoản mới</string>
+    <string name="blank_email">Email không được để trống!</string>
+    <string name="invalid_email">Địa chỉ email không hợp lệ!</string>
+    <string name="pw_empty">Mật khẩu không được trống!</string>
+    <string name="invalid_length_password">Mật khẩu phải dài ít nhất 6 ký tự!</string>
+    <string name="text_sign_up">Đăng ký</string>
+    <string name="text_display_name">Tên hiển thị</string>
+    <string name="text_confirm_password">Xác nhận mật khẩu</string>
+    <string name="text_already_have_account">Bạn đã có tài khoản?</string>
+    <string name="confirm_pw_empty">Xác nhận mật khẩu trống!</string>
+    <string name="invalid_confirm_password">Xác nhận mật khẩu không hợp lệ!</string>
+    <string name="username_empty">Tên người dùng trống!</string>
+    <string name="register_success">Đăng ký thành công, bạn cần xác nhận email của mình trước khi đăng nhập!</string>
+    <string name="login_success">Đăng nhập thành công!</string>
+    <string name="home">Trang chủ</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="create">Tạo mới</string>
+    <string name="notifications">Thông báo</string>
+    <string name="profile">Hồ sơ</string>
+    <string name="hello_blank_fragment">Xin chào mảnh trống</string>
+    <string name="pet">Pet</string>
+    <string name="ber">Ber</string>
+    <string name="pet_stories">Khoảnh khắc của thú cưng</string>
+    <string name="hint_edt_search">Tìm kiếm người dùng, thú cưng, hashtag…</string>
+    <string name="follow">Theo dõi</string>
+    <string name="users">Người dùng</string>
+    <string name="pets">Thú cưng</string>
+    <string name="hashtags">Hashtag</string>
+    <string name="user_name">Tên đăng nhập</string>
+    <string name="petber_user">Người dùng PetBer</string>
+    <string name="images_videos">Hình ảnh / Video</string>
+    <string name="sub_title_story">Chia sẻ khoảnh khắc 24 giờ của thú cưng của bạn</string>
+    <string name="story">Khoảnh khắc</string>
+    <string name="create_a_new_story">Tạo một khoảnh khắc mới</string>
+    <string name="create_content">Tạo nội dung</string>
+    <string name="dep_item_create_post">Đăng ảnh hoặc video về thú cưng của bạn</string>
+    <string name="preview_story">Xem trước khoảnh khắc</string>
+    <string name="post_story">Đăng khoảnh khắc</string>
+    <string name="choose_media">Chọn phương tiện</string>
+    <string name="choose_multiple">Chọn nhiều</string>
+    <string name="next">Kế tiếp</string>
+    <string name="all">Tất cả</string>
+    <string name="image">Hình Ảnh</string>
+    <string name="video">Video</string>
+    <string name="choose">Chọn</string>
+    <string name="permission_question">Bạn cần cấp quyền chọn ảnh / video.</string>
+    <string name="uploading">Đang tải lên…</string>
+    <string name="dont_exit_app">Vui lòng không thoát khỏi ứng dụng</string>
+    <string name="story_posted">Đã đăng khoảnh khắc!</string>
+    <string name="post_details">Chi tiết bài viết</string>
+    <string name="post_content">Đăng nội dung</string>
+    <string name="post">Bài đăng</string>
+    <string name="create_a_new_post">Tạo bài viết mới</string>
+    <string name="hint_caption">Nhập nội dung tại đây…</string>
+    <string name="tag_your_pet">Gắn thẻ thú cưng của bạn</string>
+    <string name="hint_hashtags">#hashtags…</string>
+    <string name="post_now">Đăng ngay</string>
+    <string name="caption_empty">Vui lòng nhập caption!</string>
+    <string name="error_select_media">Vui lòng chọn ít nhất một ảnh/video!</string>
+    <string name="edit_media">Chỉnh sửa phương tiện</string>
+    <string name="my_pet_list">Danh sách thú cưng của tôi</string>
+    <string name="all_posts">Tất cả bài viết</string>
+    <string name="message">Tin nhắn</string>
+    <string name="add_pet">Thêm thú cưng</string>
+    <string name="personal_information">Thông tin cá nhân:</string>
+    <string name="address">Địa chỉ</string>
+    <string name="phone_number">Số điện thoại</string>
+    <string name="gender">Giới tính</string>
+    <string name="hobbies">Sở thích</string>
+    <string name="add_bio">Thêm tiểu sử…</string>
+    <string name="add_gender">Thêm giới tính</string>
+    <string name="add_address">Thêm địa chỉ</string>
+    <string name="add_phone_number">Thêm số điện thoại</string>
+    <string name="add_birthday">Thêm ngày sinh</string>
+    <string name="add_hobbies">Thêm sở thích</string>
+    <string name="username_cannot_contain_spaces">Tên người dùng không được chứa dấu cách!</string>
+    <string name="username_invalid_characters">Tên người dùng chỉ được chứa chữ thường, số, dấu gạch dưới (_) và dấu chấm (.)!</string>
+    <string name="username_invalid_characters_length">Tên người dùng phải có ít nhất 2 ký tự!</string>
+    <string name="add_new_story">Thêm khoảnh khắc</string>
+    <string name="edit_profile">Chỉnh sửa hồ sơ</string>
+    <string name="add_new_pet">Thêm thú cưng mới</string>
+    <string name="choose_cover">Chọn ảnh bìa</string>
+    <string name="avatar">Ảnh đại diện</string>
+    <string name="pet_name">Tên thú cưng</string>
+    <string name="breed">Giống</string>
+    <string name="species">Loài</string>
+    <string name="birthday">Sinh nhật</string>
+    <string name="health">Sức khỏe</string>
+    <string name="describe">Mô tả</string>
+    <string name="healthy">Khỏe mạnh</string>
+    <string name="add">Thêm</string>
+    <string name="opening_image_cropper">Mở trình cắt hình ảnh…</string>
+    <string name="body_condition">Tình trạng cơ thể</string>
+    <string name="clinical_status">Tình trạng lâm sàng</string>
+    <string name="activity_amp_mental_state">Hoạt động và trạng thái tinh thần</string>
+    <string name="preventive_status">Tình trạng phòng ngừa</string>
+    <string name="has_been_neutered">Đã được triệt sản?</string>
+    <string name="weight_kg">Trọng lượng (kg)</string>
+    <string name="error_empty_pet_name">Vui lòng nhập tên thú cưng!</string>
+    <string name="error_empty_pet_species">Vui lòng nhập loài!</string>
+    <string name="create_pet_success">Tạo ra thành công cho thú cưng.</string>
+    <string name="view_avatar">Xem hình đại diện</string>
+    <string name="choose_avatar">Chọn hình đại diện</string>
+    <string name="view_cover">Xem bìa</string>
+    <string name="post_saved">Bài đăng đã lưu</string>
+    <string name="story_saved">Đã lưu khoảnh khắc</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="log_out">Đăng xuất</string>
+    <string name="settings">Cài đặt</string>
+    <string name="error_send_otp">Không thể gửi OTP. Vui lòng thử lại.</string>
+    <string name="otp_incorrect_or_expired">OTP không chính xác hoặc đã hết hạn.</string>
+    <string name="error_update_password">Không thể thay đổi mật khẩu.</string>
+    <string name="otp_expired">OTP đã hết hạn, vui lòng gửi lại mã mới.</string>
+    <string name="otp_invalid">OTP không hợp lệ.</string>
+    <string name="email_not_confirmed">Email chưa được xác nhận</string>
+    <string name="invalid_credentials">Thông tin không chính xác.</string>
+    <string name="error_too_many_requests">Bạn đã hành động quá nhanh, vui lòng thử lại sau.</string>
+    <string name="til_forgot_password">Quên mật khẩu</string>
+    <string name="title_input_email">Nhập email để nhận OTP đặt lại mật khẩu.</string>
+    <string name="send">Gửi</string>
+    <string name="send_otp">Gửi OTP</string>
+    <string name="verify_your_email">Xác minh email của bạn</string>
+    <string name="hint_enter_otp">Nhập OTP</string>
+    <string name="action_continue">Tiếp tục</string>
+    <string name="dep_verify_otp">Mã xác minh đã được gửi đến email của bạn</string>
+    <string name="otp_will_expire">Mã OTP sẽ hết hạn trong:</string>
+    <string name="second">Thứ hai</string>
+    <string name="not_received_yet">Chưa nhận được?</string>
+    <string name="action_resend_otp">Gửi lại mã xác minh</string>
+    <string name="resend_otp">Gửi lại mã OTP</string>
+    <string name="resend_otp_second">Gửi lại OTP (%1$d)</string>
+    <string name="til_reset_password">Đặt lại mật khẩu</string>
+    <string name="password_updated">Thay đổi mật khẩu thành công.</string>
+    <string name="please_enter_otp">Vui lòng nhập mã otp.</string>
+    <string name="please_enter_full_otp">Vui lòng nhập mã otp đầy đủ.</string>
+    <string name="message_email_verify_success">Email của bạn đã được xác minh. Bây giờ bạn có thể đăng nhập.</string>
+    <string name="action_back_login">Quay lại Đăng nhập</string>
+    <string name="confirmed_successfully">Xác nhận thành công!</string>
+    <string name="time_just_now">Vừa rồi</string>
+    <string name="time_minutes_ago">%1$dphút trước</string>
+    <string name="time_hours_ago">%1$dgiờ trước</string>
+    <string name="time_days_ago">%1$dngày trước</string>
+    <string name="updating_avatar">Đang cập nhật hình ảnh đại diện…</string>
+    <string name="updating_cover">Đang cập nhật bìa…</string>
+    <string name="update_user_success">Cập nhật thông tin người dùng thành công.</string>
+    <string name="no_cover_found">Không tìm thấy ảnh bìa!</string>
+    <string name="no_avatar_found">Không tìm thấy hình đại diện!</string>
+    <string name="full_name">Họ và tên</string>
+    <string name="bio">Tiểu sử</string>
+    <string name="action_save">Lưu</string>
+    <string name="please_enter_full_name">Vui lòng nhập họ tên!</string>
+    <string name="error_get_arg">Lỗi truy xuất dữ liệu!</string>
+    <string name="media_not_found">Không tìm thấy phương tiện!</string>
+    <string name="error_checking_session">Phiên kiểm tra lỗi: %1$s</string>
+    <string name="maximum_media_and_count">Mặt hàng %1$d tối đa</string>
+    <string name="permission_media_request">Cần quyền truy cập phương tiện để tiếp tục.</string>
+    <string name="error_fetch_data">Đã xảy ra lỗi khi tải dữ liệu.</string>
+    <string name="comments">Bình luận</string>
+    <string name="add_comment">Thêm bình luận…</string>
+    <string name="author">Tác giả</string>
+    <string name="error_add_cmt_failed">Lỗi bình luận!</string>
+    <string name="share_post">Chia sẻ bài viết</string>
+    <string name="save_post">Lưu bài viết</string>
+    <string name="copy_link">Sao chép liên kết để chia sẻ</string>
+    <string name="hide_this_post">Ẩn bài viết này</string>
+    <string name="block_user">Chặn %1$s</string>
+    <string name="dep_save_post">Thêm vào danh sách bài đăng đã lưu</string>
+    <string name="dep_remove_post">Xóa bài đăng khỏi danh sách đã lưu</string>
+    <string name="dep_hide_post">Ẩn bài viết này khỏi dòng thời gian của bạn</string>
+    <string name="dep_block_user">Bạn sẽ không nhìn thấy hoặc giao tiếp với nhau</string>
+    <string name="post_link">Liên kết bài viết</string>
+    <string name="link_copied">Đã sao chép liên kết</string>
+    <string name="post_unsaved">Bỏ lưu bài viết</string>
+    <string name="error_action">Đã xảy ra lỗi trong khi thực hiện hành động!</string>
+    <string name="blocked_user">Đã chặn người dùng này</string>
+    <string name="error">Lỗi, vui lòng thử lại!</string>
+    <string name="reply">trả lời</string>
+    <string name="see_x_answers">— Xem %1$d câu trả lời</string>
+    <string name="replying_to_user">Trả lời %1$s</string>
+    <string name="hide_answers">—— Ẩn câu trả lời</string>
+    <string name="no_comments_yet">Chưa có bình luận nào.
+Hãy là người đầu tiên bình luận!</string>
+    <string name="error_load_comments_failed">Không thể tải nhận xét. Vui lòng thử lại!</string>
+    <string name="follow_user">Theo dõi %1$s</string>
+    <string name="cancel_follow_user">Hủy theo dõi %1$s</string>
+    <string name="edit_post">Chỉnh sửa bài viết</string>
+    <string name="edit_privacy">Chỉnh sửa quyền riêng tư</string>
+    <string name="followed_user">Đã theo dõi %1$s</string>
+    <string name="unfollowed_user">%1$s đã hủy theo dõi</string>
+    <string name="posts">Bài viết</string>
+    <string name="followers">Người theo dõi</string>
+    <string name="following">Đang theo dõi</string>
+    <string name="friend">Bạn bè</string>
+    <string name="empty_list">Danh sách trống</string>
+    <string name="fail_to_load_pet_data">Không tải được dữ liệu thú cưng</string>
+    <string name="not_updated">Chưa cập nhật</string>
+    <string name="not_desc_yet">Chưa có mô tả</string>
+    <string name="label_gender">Giới tính: %1$s</string>
+    <string name="label_weight">Trọng lượng: %1$s</string>
+    <string name="label_birthday">Ngày sinh: %1$s</string>
+    <string name="label_neutered">Triệt sản: %1$s</string>
+    <string name="label_body_condition">Tình trạng cơ thể: %1$s</string>
+    <string name="label_clinical_status">Tình trạng lâm sàng: %1$s</string>
+    <string name="label_mental_state">Trạng thái tinh thần: %1$s</string>
+    <string name="label_medical_history">Tiền sử bệnh: %1$s</string>
+    <string name="label_preventive">Phòng ngừa: %1$s</string>
+
+    <string name="value_na">Không có</string>
+    <string name="value_neutered_yes">Triệt sản</string>
+    <string name="value_neutered_no">Không triệt sản</string>
+    <string name="related_posts">bài viết liên quan</string>
+    <string name="please_login">Vui lòng đăng nhập</string>
+    <string name="update_pet_success">Cập nhật thông tin thú cưng thành công.</string>
+    <string name="edit_pet_info">Chỉnh sửa thông tin thú cưng</string>
+    <string name="save">Lưu</string>
+    <string name="pet_following">Theo dõi thú cưng</string>
+    <string name="friends">Bạn bè</string>
+    <string name="unfollow">Hủy theo dõi</string>
+    <string name="confirm_logout">Bạn có chắc chắn muốn đăng xuất không?</string>
+    <string name="cancel">Hủy bỏ</string>
+    <string name="yes">Có</string>
+    <string name="img_not_updated">Ảnh không được cập nhật</string>
+    <string name="basic_info">Thông tin cơ bản</string>
+    <string name="health_conditions">Tình trạng sức khỏe</string>
+    <string name="copied_to_clipboard">Đã sao chép vào khay nhớ tạm</string>
+    <string name="error_data_post">Lỗi dữ liệu bài đăng</string>
+    <string name="post_created">Đã tạo bài viết</string>
+    <string name="post_updated">Đã cập nhật bài viết</string>
+    <string name="add_media">Thêm phương tiện</string>
+    <string name="new_notification">Thông báo mới</string>
+    <string name="no_notifications_yet">Chưa có thông báo!</string>
+    <string name="dep_empty_notif">Chúng tôi sẽ thông báo cho bạn khi có tương tác hoặc tin tức mới từ thú cưng của bạn!</string>
+    <string name="pet_diary">Nhật ký thú cưng</string>
+    <string name="new_notifications">Bạn có một thông báo mới</string>
+    <string name="notif_type_post_like"><b>%1$s</b> thích bài đăng của bạn.</string>
+    <string name="n_new_notifications">Bạn có %1$d thông báo mới</string>
+    <string name="notif_type_comment"><b>%1$s</b> đã bình luận về bài đăng của bạn.</string>
+    <string name="notif_type_comment_reply"><b>%1$s</b> đã trả lời bình luận của bạn.</string>
+    <string name="notif_type_comment_like"><b>%1$s</b> thích bình luận của bạn.</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b> phản hồi cảm xúc %2$s với khoảnh khắc của bạn.</string>
+    <string name="notif_type_user_follow"><b>%1$s</b> bắt đầu theo dõi bạn.</string>
+    <string name="notif_type_pet_follow"><b>%1$s</b> bắt đầu theo dõi thú cưng của bạn.</string>
+    <string name="story_unavailable">Khoảnh khắc này không còn khả dụng hoặc đã hết hạn.</string>
+    <string name="something_went_wrong">Đã xảy ra lỗi. Vui lòng thử lại sau.</string>
+    <string name="list_of_emotional_responses">Danh sách các phản hồi cảm xúc</string>
+    <string name="no_emotions_yet">Chưa có cảm xúc.</string>
+    <string name="count_emotions">%1$d Cảm xúc</string>
+    <string name="no_post_yet">Chưa có bài đăng nào</string>
+    <string name="publish_your_first_post">Xuất bản bài đăng đầu tiên của bạn</string>
+    <string name="new_post">Bài viết mới</string>
+    <string name="what_is_the_boss_doing_today">Boss đang làm gì hôm nay? 🐾</string>
+    <string name="share_the_boss_s_adorable_moment">Chia sẻ khoảnh khắc đáng yêu của Boss</string>
+    <string name="capture_a_memory_of_today_s_boss">Ghi lại ký ức về boss hôm nay</string>
+    <string name="add_pet_tag">Thêm thú cưng +</string>
+    <string name="no_saved_posts_yet">Chưa có bài đăng nào được lưu</string>
+    <string name="list_of_saved_posts">Danh sách các bài đăng đã lưu</string>
+    <string name="recently_deleted_posts">Bài đăng đã xóa gần đây</string>
+    <string name="error_connection_internet">Bạn đang ngoại tuyến, hãy kiểm tra lại kết nối mạng!</string>
+    <string name="move_post_to_trash">Di chuyển bài đăng vào thùng rác</string>
+    <string name="dep_soft_delete_post">Bài đăng của bạn sẽ bị xóa vĩnh viễn sau 30 ngày</string>
+    <string name="moved_post_trash">Đã chuyển bài đăng vào thùng rác</string>
+    <string name="softdelete_post_fail">Không thể xóa bài đăng, vui lòng thử lại</string>
+    <string name="restore_this_post">Khôi phục bài đăng này</string>
+    <string name="del_restore_post">Khôi phục bài đăng trước khi bị xóa vĩnh viễn sau 30 ngày.</string>
+    <string name="permanently_post">Xóa vĩnh viễn bài đăng</string>
+    <string name="dep_permanently_post">Hành động này không thể hoàn tác.</string>
+    <string name="list_of_recently_deleted_posts">Danh sách các bài đăng đã xóa gần đây</string>
+    <string name="no_recently_deleted_posts">Không có bài đăng nào bị xóa gần đây</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="delete">Xóa</string>
+    <string name="confirm_permanently_delete_title">Xóa bài đăng này?</string>
+    <string name="confirm_permanently_delete_msg">Bài đăng này sẽ bị xóa vĩnh viễn và không thể khôi phục.</string>
+    <string name="restore_failed">Phục hồi thất bại</string>
+    <string name="permanently_delete_failed">Xóa vĩnh viễn không thành công</string>
+    <string name="error_permanently_delete_post">Không thể xóa bài đăng. Vui lòng thử lại.</string>
+    <string name="permanently_deleted_post">Bài đăng đã xóa vĩnh viễn</string>
+    <string name="successfull_restore_post">Khôi phục thành công</string>
+    <string name="dep_title_recently_deleted_post">Các bài đăng đã xóa sẽ bị xóa vĩnh viễn sau 30 ngày.</string>
+    <string name="apply">Áp dụng</string>
+    <string name="select_language">Chọn ngôn ngữ</string>
+
+    <string name="currently_using">Hiện đang sử dụng</string>
+    <string name="all_languages">Tất cả các ngôn ngữ</string>
+
+    <!-- Language display names (in English) -->
+    <string name="lang_en_display">Tiếng Anh</string>
+    <string name="lang_en_native">English</string>
+
+    <string name="lang_vi_display">Tiếng Việt</string>
+    <string name="lang_vi_native">Tiếng Việt</string>
+
+    <string name="lang_ja_display">Tiếng Nhật</string>
+    <string name="lang_ja_native">Tiếng Nhật</string>
+
+    <string name="lang_ko_display">Tiếng Hàn</string>
+    <string name="lang_ko_native">Tiếng Hàn</string>
+
+    <string name="lang_zh_display">Tiếng Trung Quốc</string>
+    <string name="lang_zh_native">Tiếng Trung Quốc</string>
+
+    <string name="lang_fr_display">Tiếng Pháp</string>
+    <string name="lang_fr_native">Français</string>
+
+    <string name="lang_de_display">Tiếng Đức</string>
+    <string name="lang_de_native">Tiếng Đức</string>
+
+    <string name="lang_es_display">Tiếng Tây Ban Nha</string>
+    <string name="lang_es_native">Tiếng Tây Ban Nha</string>
+
+    <string name="lang_pt_display">Tiếng Bồ Đào Nha</string>
+    <string name="lang_pt_native">Tiếng Bồ Đào Nha</string>
+
+    <string name="lang_th_display">Tiếng Thái</string>
+    <string name="lang_th_native">ไทย</string>
+
+
+    <string-array name="media_types">
+        <item>@string/all</item>
+        <item>@string/image</item>
+        <item>@string/video</item>
+    </string-array>
+
+    <string-array name="gender_options">
+        <item>Nam giới</item>
+        <item>Nữ</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="preventive_status_options">
+        <item>Cập nhật</item>
+        <item>Đang tiến hành</item>
+        <item>Quá hạn / Có rủi ro</item>
+    </string-array>
+
+    <string-array name="body_condition_options">
+        <item>Lý tưởng</item>
+        <item>Thiếu cân</item>
+        <item>Thừa cân/béo phì</item>
+    </string-array>
+
+    <string-array name="clinical_status_options">
+        <item>Ổn định</item>
+        <item>Dưới sự quan sát</item>
+        <item>Nghiêm trọng / Khẩn cấp</item>
+    </string-array>
+
+    <string-array name="activity_mental_options">
+        <item>Hoạt động / Cảnh báo</item>
+        <item>Bình thường</item>
+        <item>Lờ đờ</item>
+    </string-array>
+</resources>

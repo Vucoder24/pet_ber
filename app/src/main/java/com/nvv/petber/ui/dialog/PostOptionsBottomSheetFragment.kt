@@ -84,27 +84,28 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
     private fun setupListeners() {
         post?.let { p ->
             if (p.userId == currentUserId) {
-                binding.btnBlock.gone()
-                binding.btnHide.gone()
+//                binding.btnBlock.gone()
+//                binding.btnHide.gone()
                 binding.btnFollow.gone()
                 binding.btnEditPost.visible()
+                binding.btnSoftDelete.visible()
             } else {
-                binding.btnBlock.visible()
-                binding.btnHide.visible()
+//                binding.btnBlock.visible()
+//                binding.btnHide.visible()
                 binding.btnFollow.visible()
                 binding.btnEditPost.gone()
+                binding.btnSoftDelete.gone()
             }
 
             binding.tvFollow.text = getString(
                 R.string.follow_user, p.users?.fullName ?: R.string.petber_user
             )
-            binding.tvBlock.text = getString(
-                R.string.block_user, p.users?.fullName ?: R.string.petber_user
-            )
+//            binding.tvBlock.text = getString(
+//                R.string.block_user, p.users?.fullName ?: R.string.petber_user
+//            )
 
             binding.btnSave.setOnClickListener { viewModel.toggleSavePost(p) }
 
-            binding.btnHide.setOnClickListener { viewModel.hidePost(p.id) }
 
             binding.btnCopyLink.setOnClickListener {
                 copyToClipboard("https://project-ilyyx.vercel.app/post/${p.id}")
@@ -116,6 +117,12 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
                 viewModel.toggleFollowUser(p)
             }
 
+            binding.btnSoftDelete.setOnClickListener {
+                post?.let { p ->
+                    viewModel.softDeletePost(p.id)
+                }
+            }
+
             binding.btnEditPost.setOnClickListener {
                 val intent = Intent(requireContext(), CreateEditPostActivity::class.java).apply {
                     putExtra(CreateEditPostActivity.IS_EDIT_MODE, true)
@@ -124,8 +131,6 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
                 editPostLauncher.launch(intent)
             }
 
-
-            binding.btnBlock.setOnClickListener { viewModel.blockUser(p.userId) }
         }
     }
 
@@ -146,6 +151,13 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
                     when (state) {
                         is ActionState.Success -> {
                             requireContext().toast(state.message)
+                            if (state.message.contains("Moved", ignoreCase = true)) {
+                                parentFragmentManager.setFragmentResult(
+                                    "post_deleted_key",
+                                    Bundle().apply {
+                                        putString("bundle_post_id", post?.id)
+                                    })
+                            }
                             viewModel.resetState()
                             dismiss()
                         }
@@ -224,7 +236,7 @@ class PostOptionsBottomSheetFragment : BottomSheetDialogFragment() {
             requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(getString(R.string.post_link), text)
         clipboard.setPrimaryClip(clip)
-            requireContext().toast(getString(R.string.copied_to_clipboard))
+        requireContext().toast(getString(R.string.copied_to_clipboard))
     }
 
     companion object {

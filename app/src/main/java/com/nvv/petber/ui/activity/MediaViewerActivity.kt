@@ -2,7 +2,6 @@ package com.nvv.petber.ui.activity
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -14,8 +13,9 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.PostMedia
 import com.nvv.petber.databinding.ActivityMediaViewerBinding
 import com.nvv.petber.ui.adapter.MediaPagerAdapter
+import com.nvv.petber.ui.base.BaseActivity
 
-class MediaViewerActivity : AppCompatActivity() {
+class MediaViewerActivity : BaseActivity() {
     private lateinit var binding: ActivityMediaViewerBinding
     private var mediaList: List<PostMedia> = emptyList()
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
@@ -21,6 +20,7 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.Notification
 import com.nvv.petber.databinding.ActivityMainBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.NotificationHelper
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.viewmodel.MainViewModel
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), BottomNavController {
+class MainActivity : BaseActivity(), BottomNavController {
     lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
     @Inject

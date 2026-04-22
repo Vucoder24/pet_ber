@@ -4,22 +4,24 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivitySettingsBinding
 import com.nvv.petber.ui.auth.login.LoginActivity
+import com.nvv.petber.ui.base.BaseActivity
+import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.showLogoutConfirmDialog
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
     private lateinit var binding: ActivitySettingsBinding
 
     private val viewModel: SettingsViewModel by viewModels()
+    private lateinit var currentUserId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,7 @@ class SettingsActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        currentUserId = SharePrefUtils.getCurrentUserId(this)
 
         setupListeners()
     }
@@ -38,20 +41,21 @@ class SettingsActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.apply {
             btnPostSaved.setOnClickListener {
-
-            }
-
-            btnStorySaved.setOnClickListener {
-
+                ViewPostSavedActivity.start(this@SettingsActivity, currentUserId)
             }
 
             btnLanguage.setOnClickListener {
-
+                val intent = Intent(this@SettingsActivity, SetLanguageActivity::class.java)
+                startActivity(intent)
             }
 
             btnBack.setOnClickListener {
                 finish()
             }
+            btnRecentDeletedPost.setOnClickListener {
+                RecentDeletedPostActivity.start(this@SettingsActivity, currentUserId)
+            }
+
 
             btnLogout.setOnClickListener {
                 showLogoutConfirmDialog {

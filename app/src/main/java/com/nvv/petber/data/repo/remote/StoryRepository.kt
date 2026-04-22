@@ -71,7 +71,7 @@ class StoryRepository @Inject constructor(
                 }
                 .decodeList<StoryReactionDetail>()
             return result
-        }catch (e: Exception){
+        }catch (_: Exception){
              emptyList()
         }
     }

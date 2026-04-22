@@ -12,7 +12,7 @@
     <string name="text_sign_up">Sign up</string>
     <string name="text_display_name">Display name</string>
     <string name="text_confirm_password">Confirm password</string>
-    <string name="text_already_have_account">"Already have an account? "</string>
+    <string name="text_already_have_account">Already have an account?</string>
     <string name="confirm_pw_empty">Confirm password is empty!</string>
     <string name="invalid_confirm_password">Invalid confirm password!</string>
     <string name="username_empty">Username is empty!</string>
@@ -26,7 +26,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
-    <string name="pet_stories">Pet Stories:</string>
+    <string name="pet_stories">Pet Stories</string>
     <string name="hint_edt_search">Search for users, pets, hashtags…</string>
     <string name="follow">Follow</string>
     <string name="users">Users</string>
@@ -257,6 +257,66 @@
     <string name="share_the_boss_s_adorable_moment">Share the boss\'s adorable moment</string>
     <string name="capture_a_memory_of_today_s_boss">Capture a memory of today\'s boss</string>
     <string name="add_pet_tag">Add pet +</string>
+    <string name="no_saved_posts_yet">No saved posts yet</string>
+    <string name="list_of_saved_posts">List of Saved Posts</string>
+    <string name="recently_deleted_posts">Recently Deleted Posts</string>
+    <string name="error_connection_internet">You\'re offline, check the network connection again!</string>
+    <string name="move_post_to_trash">Move posts to trash</string>
+    <string name="dep_soft_delete_post">Your post will be permanently deleted after 30 days</string>
+    <string name="moved_post_trash">Moved post to trash</string>
+    <string name="softdelete_post_fail">The post can\'t be deleted, please try again</string>
+    <string name="restore_this_post">Restore this post</string>
+    <string name="del_restore_post">Restore post before it’s permanently deleted in 30 days.</string>
+    <string name="permanently_post">Permanently delete a post</string>
+    <string name="dep_permanently_post">This action cannot be undone.</string>
+    <string name="list_of_recently_deleted_posts">List of recently deleted posts</string>
+    <string name="no_recently_deleted_posts">No recently deleted posts</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete">Delete</string>
+    <string name="confirm_permanently_delete_title">Delete this post?</string>
+    <string name="confirm_permanently_delete_msg">This post will be permanently deleted and cannot be restored.</string>
+    <string name="restore_failed">Failure Recovery</string>
+    <string name="permanently_delete_failed">Permanent Delete Failure</string>
+    <string name="error_permanently_delete_post">Posts can\'t be deleted. Please try again.</string>
+    <string name="permanently_deleted_post">Permanently deleted posts</string>
+    <string name="successfull_restore_post">Successful post recovery</string>
+    <string name="dep_title_recently_deleted_post">Deleted posts will be permanently removed after 30 days.</string>
+    <string name="apply">Apply</string>
+    <string name="select_language">Select language</string>
+
+    <string name="currently_using">Currently using</string>
+    <string name="all_languages">All languages</string>
+
+    <!-- Language display names (in English) -->
+    <string name="lang_en_display">English</string>
+    <string name="lang_en_native">English</string>
+
+    <string name="lang_vi_display">Vietnamese</string>
+    <string name="lang_vi_native">Tiếng Việt</string>
+
+    <string name="lang_ja_display">Japanese</string>
+    <string name="lang_ja_native">日本語</string>
+
+    <string name="lang_ko_display">Korean</string>
+    <string name="lang_ko_native">한국어</string>
+
+    <string name="lang_zh_display">Chinese</string>
+    <string name="lang_zh_native">中文</string>
+
+    <string name="lang_fr_display">French</string>
+    <string name="lang_fr_native">Français</string>
+
+    <string name="lang_de_display">German</string>
+    <string name="lang_de_native">Deutsch</string>
+
+    <string name="lang_es_display">Spanish</string>
+    <string name="lang_es_native">Español</string>
+
+    <string name="lang_pt_display">Portuguese</string>
+    <string name="lang_pt_native">Português</string>
+
+    <string name="lang_th_display">Thai</string>
+    <string name="lang_th_native">ภาษาไทย</string>
 
 
     <string-array name="media_types">

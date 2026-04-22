@@ -149,6 +149,16 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun removePostById(deletedPostId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                profileRepoLocal.deletePostById(deletedPostId)
+            } catch (e: Exception) {
+                Log.e("ProfileVM", "Delete post error: ${e.message}")
+            }
+        }
+    }
+
 }
 
 sealed class UpdateUserState {

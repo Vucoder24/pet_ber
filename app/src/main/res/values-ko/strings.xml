@@ -1,0 +1,358 @@
+<resources>
+    <string name="app_name">Pet Ber</string>
+    <string name="text_email">이메일</string>
+    <string name="text_password">비밀번호</string>
+    <string name="text_login">로그인</string>
+    <string name="txt_forgot_password">비밀번호를 잊었나요?</string>
+    <string name="action_navigate_register">새 계정 등록</string>
+    <string name="blank_email">이메일을 비워둘 수 없습니다!</string>
+    <string name="invalid_email">잘못된 이메일 주소입니다!</string>
+    <string name="pw_empty">비밀번호가 비어 있을 수 없어!</string>
+    <string name="invalid_length_password">비밀번호는 최소 6자 이내여야 합니다!</string>
+    <string name="text_sign_up">가입하기</string>
+    <string name="text_display_name">디스플레이 네임</string>
+    <string name="text_confirm_password">비밀번호 확인</string>
+    <string name="text_already_have_account">이미 계정이 있나요?</string>
+    <string name="confirm_pw_empty">비밀번호가 비어 있는지 확인해!</string>
+    <string name="invalid_confirm_password">비밀번호 확인이 유효하지 않습니다!</string>
+    <string name="username_empty">사용자 이름이 비어 있어요!</string>
+    <string name="register_success">성공적으로 등록하셨으니, 로그인 전에 이메일을 꼭 확인해 주세요!</string>
+    <string name="login_success">로그인 성공!</string>
+    <string name="home">홈</string>
+    <string name="search">검색</string>
+    <string name="create">만들기</string>
+    <string name="notifications">알림</string>
+    <string name="profile">프로필</string>
+    <string name="hello_blank_fragment">안녕하세요, 빈 조각 여러분</string>
+    <string name="pet">Pet </string>
+    <string name="ber">Ber</string>
+    <string name="pet_stories">반려동물 이야기:</string>
+    <string name="hint_edt_search">사용자, 애완동물, 해시태그 검색…</string>
+    <string name="follow">팔로우</string>
+    <string name="users">사용자</string>
+    <string name="pets">반려동물</string>
+    <string name="hashtags">해시태그</string>
+    <string name="user_name">사용자 이름</string>
+    <string name="petber_user">PetBer 사용자</string>
+    <string name="images_videos">이미지 / 동영상</string>
+    <string name="sub_title_story">반려동물의 24시간 동안 나누는 순간들을 공유하세요</string>
+    <string name="story">스토리</string>
+    <string name="create_a_new_story">새로운 이야기를 창조하세요</string>
+    <string name="create_content">콘텐츠 제작</string>
+    <string name="dep_item_create_post">반려동물의 사진이나 동영상을 게시하세요</string>
+    <string name="preview_story">미리보기 스토리</string>
+    <string name="post_story">스토리 게시</string>
+    <string name="choose_media">미디어 선택</string>
+    <string name="choose_multiple">여러 개 선택하세요</string>
+    <string name="next">다음</string>
+    <string name="all">모두</string>
+    <string name="image">이미지</string>
+    <string name="video">비디오</string>
+    <string name="choose">선택하세요</string>
+    <string name="permission_question">사진/동영상을 선택하려면 권한을 부여해야 합니다.</string>
+    <string name="uploading">업로드 중…</string>
+    <string name="dont_exit_app">앱을 종료하지 마세요</string>
+    <string name="story_posted">스토리 게시!</string>
+    <string name="post_details">게시물 정보</string>
+    <string name="post_content">게시물 내용</string>
+    <string name="post">포스트</string>
+    <string name="create_a_new_post">새 게시물 생성</string>
+    <string name="hint_caption">여기에 캡션을 입력하세요…</string>
+    <string name="tag_your_pet">반려동물을 태그하세요</string>
+    <string name="hint_hashtags">#hashtags…</string>
+    <string name="post_now">지금 게시하기</string>
+    <string name="caption_empty">캡션을 입력해 주세요!</string>
+    <string name="error_select_media">최소한 한 장의 사진/영상을 선택해 주세요!</string>
+    <string name="edit_media">편집 미디어</string>
+    <string name="my_pet_list">내 애완동물 목록</string>
+    <string name="all_posts">모든 게시물</string>
+    <string name="message">메시지</string>
+    <string name="add_pet">애완동물 추가하세요</string>
+    <string name="personal_information">개인정보:</string>
+    <string name="address">주소</string>
+    <string name="phone_number">전화번호</string>
+    <string name="gender">성별</string>
+    <string name="hobbies">취미</string>
+    <string name="add_bio">바이오 추가…</string>
+    <string name="add_gender">성별 추가</string>
+    <string name="add_address">주소 추가</string>
+    <string name="add_phone_number">전화번호 추가하세요</string>
+    <string name="add_birthday">생일 추가하세요</string>
+    <string name="add_hobbies">취미 추가하기</string>
+    <string name="username_cannot_contain_spaces">사용자 이름에 공백이 들어갈 수 없습니다!</string>
+    <string name="username_invalid_characters">사용자 이름에는 소문자, 숫자, 밑줄(_), 마침표(.)만 포함해야 합니다!</string>
+    <string name="username_invalid_characters_length">사용자 이름은 최소 2자 이상이어야 합니다!</string>
+    <string name="add_new_story">새로운 이야기 추가</string>
+    <string name="edit_profile">프로필 편집</string>
+    <string name="add_new_pet">새 펫 추가하기</string>
+    <string name="choose_cover">커버 사진을 선택하세요</string>
+    <string name="avatar">아바타</string>
+    <string name="pet_name">애칭</string>
+    <string name="breed">품종</string>
+    <string name="species">종</string>
+    <string name="birthday">생일</string>
+    <string name="health">보건</string>
+    <string name="describe">설명</string>
+    <string name="healthy">건강해</string>
+    <string name="add">추가</string>
+    <string name="opening_image_cropper">이미지 크로퍼를 엽니다…</string>
+    <string name="body_condition">체내 상태</string>
+    <string name="clinical_status">임상 상태</string>
+    <string name="activity_amp_mental_state">활동 및 정신 상태</string>
+    <string name="preventive_status">예방 상태</string>
+    <string name="has_been_neutered">중성화 수술을 했나요?</string>
+    <string name="weight_kg">무게 (kg)</string>
+    <string name="error_empty_pet_name">애칭을 입력해 주세요!</string>
+    <string name="error_empty_pet_species">종을 입력해 주세요!</string>
+    <string name="create_pet_success">반려동물의 성공을 만들어 보세요.</string>
+    <string name="view_avatar">아바타 보기</string>
+    <string name="choose_avatar">아바타를 선택하세요</string>
+    <string name="view_cover">표지 보기</string>
+    <string name="post_saved">게시물이 저장되었습니다</string>
+    <string name="story_saved">스토리 저장됨</string>
+    <string name="language">언어</string>
+    <string name="log_out">로그아웃</string>
+    <string name="settings">설정</string>
+    <string name="error_send_otp">OTP를 보낼 수 없습니다. 다시 시도해 주세요.</string>
+    <string name="otp_incorrect_or_expired">OTP가 잘못되었거나 만료되었습니다.</string>
+    <string name="error_update_password">비밀번호를 변경할 수 없습니다.</string>
+    <string name="otp_expired">OTP가 만료되었으니, 새 코드를 다시 보내주세요.</string>
+    <string name="otp_invalid">유효하지 않은 OTP입니다.</string>
+    <string name="email_not_confirmed">이메일 확인되지 않음</string>
+    <string name="invalid_credentials">정보가 잘못됐어.</string>
+    <string name="error_too_many_requests">요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.</string>
+    <string name="til_forgot_password">비밀번호를 잊었어요</string>
+    <string name="title_input_email">비밀번호 재설정 OTP를 받으려면 이메일을 입력하세요.</string>
+    <string name="send">보내세요</string>
+    <string name="send_otp">OTP 전송</string>
+    <string name="verify_your_email">이메일 확인</string>
+    <string name="hint_enter_otp">OTP가 등장한다</string>
+    <string name="action_continue">계속</string>
+    <string name="dep_verify_otp">인증 코드가 이메일로 발송되었습니다</string>
+    <string name="otp_will_expire">OTP 코드는 다음 시기에 만료됩니다:</string>
+    <string name="second">둘째</string>
+    <string name="not_received_yet">아직 안 받으셨나요?</string>
+    <string name="action_resend_otp">검증 코드 재전송</string>
+    <string name="resend_otp">OTP 코드를 다시 전송합니다</string>
+    <string name="resend_otp_second">Resend OTP (%1$d)</string>
+    <string name="til_reset_password">비밀번호 재설정</string>
+    <string name="password_updated">비밀번호 변경이 성공적으로 완료되었습니다.</string>
+    <string name="please_enter_otp">OTP 코드를 입력해 주세요.</string>
+    <string name="please_enter_full_otp">전체 OTP 코드를 입력해 주세요.</string>
+    <string name="message_email_verify_success">귀하의 이메일은 검증되었습니다. 이제 로그인할 수 있습니다.</string>
+    <string name="action_back_login">로그인으로 돌아가기</string>
+    <string name="confirmed_successfully">확인 완료!</string>
+    <string name="time_just_now">방금</string>
+    <string name="time_minutes_ago">%1$dm 전</string>
+    <string name="time_hours_ago">%1$dh 전</string>
+    <string name="time_days_ago">%1$dd 전</string>
+    <string name="updating_avatar">아바타 업데이트 중…</string>
+    <string name="updating_cover">표지 업데이트 중…</string>
+    <string name="update_user_success">사용자 정보를 성공적으로 업데이트했습니다.</string>
+    <string name="no_cover_found">엄폐물 찾지 못했어!</string>
+    <string name="no_avatar_found">아바타를 찾지 못했습니다!</string>
+    <string name="full_name">전체 이름</string>
+    <string name="bio">약력</string>
+    <string name="action_save">저장</string>
+    <string name="please_enter_full_name">전체 이름을 입력해 주세요!</string>
+    <string name="error_get_arg">데이터 조회 오류!</string>
+    <string name="media_not_found">미디어 찾지 못함!</string>
+    <string name="error_checking_session">오류 검사 세션: %1$s</string>
+    <string name="maximum_media_and_count">최대 %1$d개 항목</string>
+    <string name="permission_media_request">계속하려면 언론 접근이 필요해.</string>
+    <string name="error_fetch_data">데이터 로딩에 오류가 있었습니다.</string>
+    <string name="comments">댓글</string>
+    <string name="add_comment">댓글 추가…</string>
+    <string name="author">저자</string>
+    <string name="error_add_cmt_failed">댓글 오류!</string>
+    <string name="share_post">게시물 공유</string>
+    <string name="save_post">저장 게시물</string>
+    <string name="copy_link">링크를 복사해서 공유하세요</string>
+    <string name="hide_this_post">이 게시물을 숨기기</string>
+    <string name="block_user">블록 %1$s</string>
+    <string name="dep_save_post">저장된 게시물 목록에 추가하기</string>
+    <string name="dep_remove_post">저장된 목록에서 게시물을 삭제하세요</string>
+    <string name="dep_hide_post">이 게시물을 타임라인에서 숨기기</string>
+    <string name="dep_block_user">서로 보거나 소통하지 않을 것입니다</string>
+    <string name="post_link">게시물 링크</string>
+    <string name="link_copied">링크 복사됨</string>
+    <string name="post_unsaved">게시물 저장되지 않음</string>
+    <string name="error_action">동작을 수행하다가 오류가 발생했습니다!</string>
+    <string name="blocked_user">이 사용자를 차단했습니다</string>
+    <string name="error">에러, 다시 시도해 주세요!</string>
+    <string name="reply">답글</string>
+    <string name="see_x_answers">—— %1$d개의 답변 보기</string>
+    <string name="replying_to_user">%1$s에 답글 작성 중</string>
+    <string name="hide_answers">—— 대답 숨겨</string>
+    <string name="no_comments_yet">아직 댓글이 없습니다.
+가장 먼저 댓글을 남겨주세요!</string>
+    <string name="error_load_comments_failed">댓글을 불러올 수 없습니다. 다시 시도해 주세요!</string>
+    <string name="follow_user">팔로우 %1$s</string>
+    <string name="cancel_follow_user">팔로우 언팔로우 %1$s</string>
+    <string name="edit_post">수정 게시물</string>
+    <string name="edit_privacy">편집 개인정보 보호</string>
+    <string name="followed_user">팔로우 %1$s</string>
+    <string name="unfollowed_user">팔로우 없음 %1$s</string>
+    <string name="posts">게시물</string>
+    <string name="followers">추종자</string>
+    <string name="following">팔로우</string>
+    <string name="friend">친구</string>
+    <string name="empty_list">빈 목록</string>
+    <string name="fail_to_load_pet_data">애완동물 데이터 불러오지 않음</string>
+    <string name="not_updated">업데이트되지 않았습니다</string>
+    <string name="not_desc_yet">아직 설명은 없습니다</string>
+    <string name="label_gender">성별: %1$s</string>
+    <string name="label_weight">무게: %1$s</string>
+    <string name="label_birthday">생일: %1$s</string>
+    <string name="label_neutered">중성화: %1$s</string>
+    <string name="label_body_condition">체내 상태: %1$s</string>
+    <string name="label_clinical_status">임상 상태: %1$s</string>
+    <string name="label_mental_state">정신 상태: %1$s</string>
+    <string name="label_medical_history">병력: %1$s</string>
+    <string name="label_preventive">예방: %1$s</string>
+
+    <string name="value_na">해당 없음</string>
+    <string name="value_neutered_yes">중성화 수술</string>
+    <string name="value_neutered_no">중성화 수술은 하지 않았습니다</string>
+    <string name="related_posts">관련 게시물</string>
+    <string name="please_login">로그인해 주세요</string>
+    <string name="update_pet_success">반려동물 정보 성공 업데이트.</string>
+    <string name="edit_pet_info">반려동물 정보 수정</string>
+    <string name="save">저장</string>
+    <string name="pet_following">반려동물 팔로워</string>
+    <string name="friends">친구들</string>
+    <string name="unfollow">팔로우 취소</string>
+    <string name="confirm_logout">정말 로그아웃할 거야?</string>
+    <string name="cancel">취소</string>
+    <string name="yes">네</string>
+    <string name="img_not_updated">사진은 업데이트되지 않음</string>
+    <string name="basic_info">기본 정보</string>
+    <string name="health_conditions">건강 상태</string>
+    <string name="copied_to_clipboard">클립보드에 복사함</string>
+    <string name="error_data_post">게시물 데이터 오류</string>
+    <string name="post_created">게시글 작성</string>
+    <string name="post_updated">게시물 업데이트</string>
+    <string name="add_media">미디어 추가</string>
+    <string name="new_notification">새로운 공지</string>
+    <string name="no_notifications_yet">아직 알림이 없습니다!</string>
+    <string name="dep_empty_notif">반려동물과의 새로운 소식이나 소식이 있을 때 저희가 알려드리겠습니다!</string>
+    <string name="pet_diary">펫 일기</string>
+    <string name="new_notifications">새로운 알림이 도착했습니다</string>
+    <string name="notif_type_post_like"><b>%1$s</b> 게시물 좋아요 눌렀어요.</string>
+    <string name="n_new_notifications">새로운 %1$d개의 알림이 있습니다</string>
+    <string name="notif_type_comment"><b>%1$s</b> 당신의 글에 댓글을 달았습니다.</string>
+    <string name="notif_type_comment_reply"><b>%1$s</b> 댓글에 답글을 달았습니다.</string>
+    <string name="notif_type_comment_like"><b>%1$s</b> 댓글 좋아요.</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b> 당신의 이야기에 반응했습니다.</string>
+    <string name="notif_type_user_follow"><b>%1$s</b> 너를 따라다니기 시작했어.</string>
+    <string name="notif_type_pet_follow"><b>%1$s</b> 반려동물을 따라가기 시작했어요.</string>
+    <string name="story_unavailable">이 이야기는 더 이상 이용 가능하지 않거나 만료되었습니다.</string>
+    <string name="something_went_wrong">오류가 발생했습니다. 나중에 다시 시도해 주세요.</string>
+    <string name="list_of_emotional_responses">감정 반응 목록</string>
+    <string name="no_emotions_yet">아직 감정은 없다.</string>
+    <string name="count_emotions">%1$d개의 감정</string>
+    <string name="no_post_yet">아직 게시물은 없습니다</string>
+    <string name="publish_your_first_post">첫 게시물을 게시하세요</string>
+    <string name="new_post">새 게시물</string>
+    <string name="what_is_the_boss_doing_today">우리 아이는 오늘 뭐 하고 있나요? 🐾</string>
+    <string name="share_the_boss_s_adorable_moment">사장님의 귀여운 순간을 공유하세요</string>
+    <string name="capture_a_memory_of_today_s_boss">오늘의 소중한 순간을 담아보세요.</string>
+    <string name="add_pet_tag">애완동물 + 추가하세요</string>
+    <string name="no_saved_posts_yet">아직 저장된 게시물이 없습니다</string>
+    <string name="list_of_saved_posts">저장된 게시물 목록</string>
+    <string name="recently_deleted_posts">최근 삭제된 게시물</string>
+    <string name="error_connection_internet">오프라인이니 네트워크 연결을 다시 확인하세요!</string>
+    <string name="move_post_to_trash">게시물을 쓰레기통으로 옮기기</string>
+    <string name="dep_soft_delete_post">게시물은 30일 후에 영구히 삭제됩니다</string>
+    <string name="moved_post_trash">게시물을 쓰레기통으로 옮겼습니다</string>
+    <string name="softdelete_post_fail">게시물은 삭제할 수 없으니 다시 시도해 주세요</string>
+    <string name="restore_this_post">이 게시물을 복원하세요</string>
+    <string name="del_restore_post">30일 이내에 영구 삭제되기 전에 게시물을 복원하세요.</string>
+    <string name="permanently_post">게시물을 영구 삭제하세요</string>
+    <string name="dep_permanently_post">이 행동은 되돌릴 수 없습니다.</string>
+    <string name="list_of_recently_deleted_posts">최근에 삭제된 게시물 목록</string>
+    <string name="no_recently_deleted_posts">최근에 삭제된 게시물은 없습니다</string>
+    <string name="confirm">확인해</string>
+    <string name="delete">삭제</string>
+    <string name="confirm_permanently_delete_title">이 글을 삭제할까요?</string>
+    <string name="confirm_permanently_delete_msg">이 게시물은 영구적으로 삭제되며 복원할 수 없습니다.</string>
+    <string name="restore_failed">고장 복구</string>
+    <string name="permanently_delete_failed">영구 삭제 실패</string>
+    <string name="error_permanently_delete_post">게시물은 삭제할 수 없습니다. 다시 시도해 주세요.</string>
+    <string name="permanently_deleted_post">영구 삭제된 게시물</string>
+    <string name="successfull_restore_post">성공적인 회복 후</string>
+    <string name="dep_title_recently_deleted_post">삭제된 게시물은 30일 후 영구 삭제됩니다.</string>
+    <string name="apply">지원</string>
+    <string name="select_language">선택 언어</string>
+
+    <string name="currently_using">현재 사용 중</string>
+    <string name="all_languages">모든 언어</string>
+
+    <!-- Language display names (in English) -->
+    <string name="lang_en_display">영어</string>
+    <string name="lang_en_native">영어</string>
+
+    <string name="lang_vi_display">베트남어</string>
+    <string name="lang_vi_native">베트남어</string>
+
+    <string name="lang_ja_display">일본어</string>
+    <string name="lang_ja_native">일본어</string>
+
+    <string name="lang_ko_display">한국어</string>
+    <string name="lang_ko_native">한국어</string>
+
+    <string name="lang_zh_display">중국어</string>
+    <string name="lang_zh_native">중국어</string>
+
+    <string name="lang_fr_display">프랑스어</string>
+    <string name="lang_fr_native">Français</string>
+
+    <string name="lang_de_display">독일어</string>
+    <string name="lang_de_native">독일어</string>
+
+    <string name="lang_es_display">스페인어</string>
+    <string name="lang_es_native">스페인어</string>
+
+    <string name="lang_pt_display">포르투갈어</string>
+    <string name="lang_pt_native">포르투갈어</string>
+
+    <string name="lang_th_display">태국어</string>
+    <string name="lang_th_native">ไทย</string>
+
+
+    <string-array name="media_types">
+        <item>@string/all</item>
+        <item>@string/image</item>
+        <item>@string/video</item>
+    </string-array>
+
+    <string-array name="gender_options">
+        <item>남성</item>
+        <item>여성</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="preventive_status_options">
+        <item>최신 정보</item>
+        <item>진행 중</item>
+        <item>연체/위험</item>
+    </string-array>
+
+    <string-array name="body_condition_options">
+        <item>이상적인</item>
+        <item>저체중</item>
+        <item>과체중/비만</item>
+    </string-array>
+
+    <string-array name="clinical_status_options">
+        <item>안정</item>
+        <item>관찰</item>
+        <item>위급/응급 상황</item>
+    </string-array>
+
+    <string-array name="activity_mental_options">
+        <item>활성/경계</item>
+        <item>정상</item>
+        <item>무기력함</item>
+    </string-array>
+</resources>

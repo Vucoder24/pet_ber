@@ -4,12 +4,12 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityCreateStoryBinding
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.ui.dialog.UploadProgressDialog
 import com.nvv.petber.utils.AppEventManager
 import com.nvv.petber.utils.ext.gone
@@ -21,7 +21,7 @@ import com.nvv.petber.viewmodel.CreateContentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreateStoryActivity : AppCompatActivity() {
+class CreateStoryActivity : BaseActivity() {
     private lateinit var binding: ActivityCreateStoryBinding
     private val viewModel: CreateContentViewModel by viewModels()
     private lateinit var uploadDialog: UploadProgressDialog

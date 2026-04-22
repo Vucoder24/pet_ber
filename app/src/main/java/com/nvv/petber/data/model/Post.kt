@@ -51,6 +51,9 @@ data class Post(
     var isLiked: Boolean = false,
 
     var taggedPets: List<Pet> = emptyList(),
+
+    @SerialName("deleted_at")
+    val deletedAt: String? = null
 )
 
 

@@ -54,4 +54,7 @@ interface ProfileDao {
         deletePostsByUser(userId)
         insertPosts(posts)
     }
+
+    @Query("DELETE FROM posts WHERE id = :postId")
+    suspend fun deletePostById(postId: String)
 }

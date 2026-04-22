@@ -9,6 +9,7 @@ import com.nvv.petber.data.model.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
@@ -135,12 +136,12 @@ class SearchRepository @Inject constructor(
         val rawQuery = "%$query%"
         return try {
             val posts = db["posts"].select(
-                Columns.raw("*, users(*), post_media(*), " +
-                        "post_likes(*)"
+                Columns.raw("""*, users(*), post_media(*),
+                        post_likes(*)""".trimIndent()
                 )) {
                 filter {
                     neq("user_id", currentUserId)
-
+                    filter("deleted_at", FilterOperator.IS, null)
                     if (query.isNotEmpty())  {
                         ilike("hashtags", rawQuery)
                     }

@@ -64,22 +64,22 @@ class PostOptionsViewModel @Inject constructor(
                 post.userId,
                 currentStatus
             ).onSuccess {
-                    val newStatus = !currentStatus
-                    _isFollowing.value = newStatus
-                    val msg = if (newStatus)
-                        context.getString(
-                            R.string.followed_user,
-                            post.users?.fullName ?: context.getString(R.string.petber_user)
-                        )
-                    else context.getString(
-                        R.string.unfollowed_user,
+                val newStatus = !currentStatus
+                _isFollowing.value = newStatus
+                val msg = if (newStatus)
+                    context.getString(
+                        R.string.followed_user,
                         post.users?.fullName ?: context.getString(R.string.petber_user)
                     )
-                    _actionState.value = ActionState.Success(msg)
+                else context.getString(
+                    R.string.unfollowed_user,
+                    post.users?.fullName ?: context.getString(R.string.petber_user)
+                )
+                _actionState.value = ActionState.Success(msg)
             }.onFailure {
-                    _actionState.value =
-                        ActionState.Error(context.getString(R.string.error_action))
-                }
+                _actionState.value =
+                    ActionState.Error(context.getString(R.string.error_action))
+            }
         }
     }
 
@@ -100,14 +100,20 @@ class PostOptionsViewModel @Inject constructor(
         }
     }
 
-    fun hidePost(postId: String) {
-        _actionState.value = ActionState.Success("Đã ẩn bài viết này khỏi bảng tin")
-    }
-
-    fun blockUser(targetUserId: String) {
+    fun softDeletePost(postId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            // homeRepository.blockUser(currentUserId, targetUserId)
-            _actionState.value = ActionState.Success(context.getString(R.string.blocked_user))
+            _isLoading.value = true
+            homeRepository.softDeletePost(postId)
+                .onSuccess {
+                    _isLoading.value = false
+                    _actionState.value =
+                        ActionState.Success(context.getString(R.string.moved_post_trash))
+                }
+                .onFailure {
+                    _isLoading.value = false
+                    _actionState.value =
+                        ActionState.Error(context.getString(R.string.softdelete_post_fail))
+                }
         }
     }
 

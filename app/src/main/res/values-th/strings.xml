@@ -1,0 +1,358 @@
+<resources>
+    <string name="app_name">Pet Ber</string>
+    <string name="text_email">อีเมล</string>
+    <string name="text_password">รหัสผ่าน</string>
+    <string name="text_login">เข้าสู่ระบบ</string>
+    <string name="txt_forgot_password">ลืมรหัสผ่าน?</string>
+    <string name="action_navigate_register">ลงทะเบียนบัญชีใหม่</string>
+    <string name="blank_email">อีเมลไม่สามารถเว้นว่างไว้ได้!</string>
+    <string name="invalid_email">ที่อยู่อีเมลไม่ถูกต้อง!</string>
+    <string name="pw_empty">รหัสผ่านต้องไม่ว่างเปล่า!</string>
+    <string name="invalid_length_password">รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร!</string>
+    <string name="text_sign_up">ลงทะเบียน</string>
+    <string name="text_display_name">ชื่อที่แสดง</string>
+    <string name="text_confirm_password">ยืนยันรหัสผ่าน</string>
+    <string name="text_already_have_account">มีบัญชีอยู่แล้วใช่ไหม</string>
+    <string name="confirm_pw_empty">ยืนยันรหัสผ่านว่างเปล่า!</string>
+    <string name="invalid_confirm_password">ยืนยันรหัสผ่านไม่ถูกต้อง!</string>
+    <string name="username_empty">ชื่อผู้ใช้ว่างเปล่า!</string>
+    <string name="register_success">ลงทะเบียนสําเร็จคุณต้องยืนยันอีเมลของคุณก่อนเข้าสู่ระบบ!</string>
+    <string name="login_success">เข้าสู่ระบบสําเร็จ!</string>
+    <string name="home">หน้าแรก</string>
+    <string name="search">ค้นหา</string>
+    <string name="create">สร้าง</string>
+    <string name="notifications">การแจ้งเตือน</string>
+    <string name="profile">ข้อมูลส่วนตัว</string>
+    <string name="hello_blank_fragment">สวัสดีชิ้นส่วนเปล่า</string>
+    <string name="pet">Pet </string>
+    <string name="ber">Ber</string>
+    <string name="pet_stories">เรื่องราวสัตว์เลี้ยง:</string>
+    <string name="hint_edt_search">ค้นหาผู้ใช้ สัตว์เลี้ยง แฮชแท็ก…</string>
+    <string name="follow">ติดตาม</string>
+    <string name="users">ผู้ใช้</string>
+    <string name="pets">สัตว์เลี้ยง</string>
+    <string name="hashtags">แฮชแท็ก</string>
+    <string name="user_name">ชื่อผู้ใช้</string>
+    <string name="petber_user">ผู้ใช้ PetBer</string>
+    <string name="images_videos">รูปภาพ / วิดีโอ</string>
+    <string name="sub_title_story">แบ่งปันช่วงเวลาตลอด 24 ชั่วโมงของสัตว์เลี้ยงของคุณ</string>
+    <string name="story">เรื่องราว</string>
+    <string name="create_a_new_story">สร้างเรื่องราวใหม่</string>
+    <string name="create_content">สร้างเนื้อหา</string>
+    <string name="dep_item_create_post">โพสต์รูปภาพหรือวิดีโอของสัตว์เลี้ยงของคุณ</string>
+    <string name="preview_story">ตัวอย่างเรื่องราว</string>
+    <string name="post_story">โพสต์เรื่องราว</string>
+    <string name="choose_media">เลือกสื่อ</string>
+    <string name="choose_multiple">เลือกหลายรายการ</string>
+    <string name="next">ต่อไป</string>
+    <string name="all">ทั้งหมด</string>
+    <string name="image">ภาพ</string>
+    <string name="video">วิดีโอ</string>
+    <string name="choose">เลือก</string>
+    <string name="permission_question">คุณต้องให้สิทธิ์ในการเลือกรูปภาพ/วิดีโอ</string>
+    <string name="uploading">กําลังอัปโหลด…</string>
+    <string name="dont_exit_app">กรุณาอย่าออกจากแอปพลิเคชัน</string>
+    <string name="story_posted">โพสต์เรื่องราวแล้ว!</string>
+    <string name="post_details">รายละเอียดโพสต์</string>
+    <string name="post_content">โพสต์เนื้อหา</string>
+    <string name="post">โพสต์</string>
+    <string name="create_a_new_post">สร้างโพสต์ใหม่</string>
+    <string name="hint_caption">ใส่คําบรรยายที่นี่…</string>
+    <string name="tag_your_pet">แท็กสัตว์เลี้ยงของคุณ</string>
+    <string name="hint_hashtags">#hashtags…</string>
+    <string name="post_now">โพสต์เลย</string>
+    <string name="caption_empty">กรุณาใส่คําบรรยาย!</string>
+    <string name="error_select_media">โปรดเลือกรูปภาพ/วิดีโออย่างน้อยหนึ่งภาพ!</string>
+    <string name="edit_media">แก้ไขสื่อ</string>
+    <string name="my_pet_list">รายชื่อสัตว์เลี้ยงของฉัน</string>
+    <string name="all_posts">กระทู้ทั้งหมด</string>
+    <string name="message">ข้อความ</string>
+    <string name="add_pet">เพิ่มสัตว์เลี้ยง</string>
+    <string name="personal_information">ข้อมูลส่วนบุคคล:</string>
+    <string name="address">ที่อยู่</string>
+    <string name="phone_number">หมายเลขโทรศัพท์</string>
+    <string name="gender">เพศ</string>
+    <string name="hobbies">งานอดิเรก</string>
+    <string name="add_bio">เพิ่มชีวภาพ…</string>
+    <string name="add_gender">เพิ่มเพศ</string>
+    <string name="add_address">เพิ่มที่อยู่</string>
+    <string name="add_phone_number">เพิ่มหมายเลขโทรศัพท์</string>
+    <string name="add_birthday">เพิ่มวันเกิด</string>
+    <string name="add_hobbies">เพิ่มงานอดิเรก</string>
+    <string name="username_cannot_contain_spaces">ชื่อผู้ใช้ต้องไม่มีช่องว่าง!</string>
+    <string name="username_invalid_characters">ชื่อผู้ใช้ต้องมีเฉพาะตัวพิมพ์เล็ก ตัวเลข ขีดล่าง (_) และจุด (.)!</string>
+    <string name="username_invalid_characters_length">ชื่อผู้ใช้ต้องมีอย่างน้อย 2 ตัวอักษร!</string>
+    <string name="add_new_story">เพิ่มเรื่องราวใหม่</string>
+    <string name="edit_profile">แก้ไขโปรไฟล์</string>
+    <string name="add_new_pet">เพิ่มสัตว์เลี้ยงใหม่</string>
+    <string name="choose_cover">เลือกรูปภาพหน้าปก</string>
+    <string name="avatar">อวตาร</string>
+    <string name="pet_name">ชื่อสัตว์เลี้ยง</string>
+    <string name="breed">พันธุ์</string>
+    <string name="species">สายพันธุ์</string>
+    <string name="birthday">วันเกิด</string>
+    <string name="health">สุขภาพ</string>
+    <string name="describe">อธิบาย</string>
+    <string name="healthy">สุขภาพดี</string>
+    <string name="add">เพิ่ม</string>
+    <string name="opening_image_cropper">การเปิดเครื่องมือครอบตัดรูปภาพ…</string>
+    <string name="body_condition">สภาพร่างกาย</string>
+    <string name="clinical_status">สถานะทางคลินิก</string>
+    <string name="activity_amp_mental_state">กิจกรรมและสภาพจิตใจ</string>
+    <string name="preventive_status">สถานะการป้องกัน</string>
+    <string name="has_been_neutered">ทําหมันแล้ว?</string>
+    <string name="weight_kg">น้ําหนัก (กก.)</string>
+    <string name="error_empty_pet_name">กรุณากรอกชื่อสัตว์เลี้ยง!</string>
+    <string name="error_empty_pet_species">กรุณาป้อนสายพันธุ์!</string>
+    <string name="create_pet_success">สร้างสัตว์เลี้ยงสําเร็จ</string>
+    <string name="view_avatar">ดูอวาตาร์</string>
+    <string name="choose_avatar">เลือกอวาตาร์</string>
+    <string name="view_cover">ดูหน้าปก</string>
+    <string name="post_saved">บันทึกโพสต์แล้ว</string>
+    <string name="story_saved">บันทึกเรื่องราว</string>
+    <string name="language">ภาษา</string>
+    <string name="log_out">ออกจากระบบ</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="error_send_otp">ไม่สามารถส่ง OTP ได้ โปรดลองอีกครั้ง</string>
+    <string name="otp_incorrect_or_expired">รหัส OTP ไม่ถูกต้องหรือหมดอายุแล้ว</string>
+    <string name="error_update_password">ไม่สามารถเปลี่ยนรหัสผ่านได้</string>
+    <string name="otp_expired">รหัส OTP หมดอายุแล้ว โปรดส่งรหัสใหม่อีกครั้ง</string>
+    <string name="otp_invalid">OTP ไม่ถูกต้อง</string>
+    <string name="email_not_confirmed">อีเมลไม่ได้รับการยืนยัน</string>
+    <string name="invalid_credentials">ข้อมูลไม่ถูกต้อง</string>
+    <string name="error_too_many_requests">คุณดําเนินการเร็วเกินไป โปรดลองอีกครั้งในภายหลัง</string>
+    <string name="til_forgot_password">ลืมรหัสผ่าน</string>
+    <string name="title_input_email">กรอกอีเมลเพื่อรับรหัส OTP รีเซ็ตรหัสผ่าน</string>
+    <string name="send">ส่ง</string>
+    <string name="send_otp">ส่ง OTP</string>
+    <string name="verify_your_email">ยืนยันอีเมลของคุณ</string>
+    <string name="hint_enter_otp">กรอกรหัส OTP</string>
+    <string name="action_continue">ดําเนินการต่อ</string>
+    <string name="dep_verify_otp">รหัสยืนยันถูกส่งไปยังอีเมลของคุณแล้ว</string>
+    <string name="otp_will_expire">รหัส OTP จะหมดอายุใน:</string>
+    <string name="second">ที่สอง</string>
+    <string name="not_received_yet">ยังไม่ได้รับ?</string>
+    <string name="action_resend_otp">ส่งรหัสยืนยันอีกครั้ง</string>
+    <string name="resend_otp">ส่งรหัส OTP อีกครั้ง</string>
+    <string name="resend_otp_second">ส่ง OTP อีกครั้ง (%1$d)</string>
+    <string name="til_reset_password">รีเซ็ตรหัสผ่าน</string>
+    <string name="password_updated">เปลี่ยนรหัสผ่านสําเร็จ</string>
+    <string name="please_enter_otp">กรุณากรอกรหัส otp</string>
+    <string name="please_enter_full_otp">กรุณากรอกรหัส OTP แบบเต็ม</string>
+    <string name="message_email_verify_success">อีเมลของคุณได้รับการยืนยันแล้ว ตอนนี้คุณสามารถเข้าสู่ระบบได้แล้ว</string>
+    <string name="action_back_login">กลับไปที่เข้าสู่ระบบ</string>
+    <string name="confirmed_successfully">ยืนยันเรียบร้อยแล้ว!</string>
+    <string name="time_just_now">เพิ่ง</string>
+    <string name="time_minutes_ago">%1$dm ที่ผ่านมา</string>
+    <string name="time_hours_ago">%1$dh ที่ผ่านมา</string>
+    <string name="time_days_ago">%1$dd ที่ผ่านมา</string>
+    <string name="updating_avatar">กําลังอัปเดตอวาตาร์…</string>
+    <string name="updating_cover">กําลังอัปเดตปก…</string>
+    <string name="update_user_success">อัปเดตข้อมูลผู้ใช้เรียบร้อยแล้ว</string>
+    <string name="no_cover_found">ไม่พบที่กําบัง!</string>
+    <string name="no_avatar_found">ไม่พบอวาตาร์!</string>
+    <string name="full_name">ชื่อเต็ม</string>
+    <string name="bio">ชีวประวัติ</string>
+    <string name="action_save">บันทึก</string>
+    <string name="please_enter_full_name">กรุณาใส่ชื่อนามสกุล!</string>
+    <string name="error_get_arg">เกิดข้อผิดพลาดในการดึงข้อมูล!</string>
+    <string name="media_not_found">ไม่พบสื่อ!</string>
+    <string name="error_checking_session">เซสชันการตรวจสอบข้อผิดพลาด: %1$s</string>
+    <string name="maximum_media_and_count">รายการ %1$d สูงสุด</string>
+    <string name="permission_media_request">ต้องการการเข้าถึงสื่อเพื่อดําเนินการต่อ</string>
+    <string name="error_fetch_data">เกิดข้อผิดพลาดในการโหลดข้อมูล</string>
+    <string name="comments">ความคิดเห็น</string>
+    <string name="add_comment">เพิ่มความคิดเห็น…</string>
+    <string name="author">ผู้เขียน</string>
+    <string name="error_add_cmt_failed">แสดงความคิดเห็นผิดพลาด!</string>
+    <string name="share_post">แชร์โพสต์</string>
+    <string name="save_post">บันทึกโพสต์</string>
+    <string name="copy_link">คัดลอกลิงก์เพื่อแชร์</string>
+    <string name="hide_this_post">ซ่อนโพสต์นี้</string>
+    <string name="block_user">บล็อก %1$s</string>
+    <string name="dep_save_post">เพิ่มในรายการโพสต์ที่บันทึกไว้</string>
+    <string name="dep_remove_post">ลบโพสต์ออกจากรายการที่บันทึกไว้</string>
+    <string name="dep_hide_post">ซ่อนโพสต์นี้จากไทม์ไลน์ของคุณ</string>
+    <string name="dep_block_user">คุณจะไม่เห็นหรือสื่อสารกัน</string>
+    <string name="post_link">ลิงค์โพสต์</string>
+    <string name="link_copied">คัดลอกลิงก์แล้ว</string>
+    <string name="post_unsaved">โพสต์ที่ยังไม่ได้บันทึก</string>
+    <string name="error_action">เกิดข้อผิดพลาดขณะดําเนินการ!</string>
+    <string name="blocked_user">บล็อกผู้ใช้รายนี้</string>
+    <string name="error">ข้อผิดพลาด โปรดลองอีกครั้ง!</string>
+    <string name="reply">ตอบ</string>
+    <string name="see_x_answers">—— ดูคำตอบ %1$d รายการ</string>
+    <string name="replying_to_user">ตอบกลับ %1$s</string>
+    <string name="hide_answers">—— ซ่อนคําตอบ</string>
+    <string name="no_comments_yet">ยังไม่มีความคิดเห็น
+เป็นคนแรกที่แสดงความคิดเห็น!</string>
+    <string name="error_load_comments_failed">ไม่สามารถโหลดความคิดเห็นได้ โปรดลองอีกครั้ง!</string>
+    <string name="follow_user">ติดตาม %1$s</string>
+    <string name="cancel_follow_user">เลิกติดตาม %1$s</string>
+    <string name="edit_post">แก้ไขโพสต์</string>
+    <string name="edit_privacy">แก้ไขความเป็นส่วนตัว</string>
+    <string name="followed_user">ติดตาม %1$s</string>
+    <string name="unfollowed_user">เลิกติดตาม %1$s</string>
+    <string name="posts">โพสต์</string>
+    <string name="followers">ผู้ติดตาม</string>
+    <string name="following">กําลังติดตาม</string>
+    <string name="friend">เพื่อน</string>
+    <string name="empty_list">รายการว่างเปล่า</string>
+    <string name="fail_to_load_pet_data">โหลดข้อมูลสัตว์เลี้ยงไม่สําเร็จ</string>
+    <string name="not_updated">ยังไม่อัปเดต</string>
+    <string name="not_desc_yet">ยังไม่มีคําอธิบาย</string>
+    <string name="label_gender">เพศ: %1$s</string>
+    <string name="label_weight">น้ําหนัก: %1$s</string>
+    <string name="label_birthday">วันเกิด: %1$s</string>
+    <string name="label_neutered">ทําหมัน: %1$s</string>
+    <string name="label_body_condition">สภาพร่างกาย: %1$s</string>
+    <string name="label_clinical_status">สถานะทางคลินิก: %1$s</string>
+    <string name="label_mental_state">สภาพจิตใจ: %1$s</string>
+    <string name="label_medical_history">ประวัติทางการแพทย์: %1$s</string>
+    <string name="label_preventive">การป้องกัน: %1$s</string>
+
+    <string name="value_na">ไม่มี</string>
+    <string name="value_neutered_yes">ทําหมัน</string>
+    <string name="value_neutered_no">ไม่ทําหมัน</string>
+    <string name="related_posts">กระทู้ที่เกี่ยวข้อง</string>
+    <string name="please_login">กรุณาเข้าสู่ระบบ</string>
+    <string name="update_pet_success">อัปเดตข้อมูลสัตว์เลี้ยงให้สําเร็จ</string>
+    <string name="edit_pet_info">แก้ไขข้อมูลสัตว์เลี้ยง</string>
+    <string name="save">บันทึก</string>
+    <string name="pet_following">การติดตามสัตว์เลี้ยง</string>
+    <string name="friends">เพื่อน</string>
+    <string name="unfollow">เลิกติดตาม</string>
+    <string name="confirm_logout">คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="yes">ใช่</string>
+    <string name="img_not_updated">รูปภาพไม่อัปเดต</string>
+    <string name="basic_info">ข้อมูลพื้นฐาน</string>
+    <string name="health_conditions">สภาวะสุขภาพ</string>
+    <string name="copied_to_clipboard">คัดลอกไปยังคลิปบอร์ด</string>
+    <string name="error_data_post">ข้อผิดพลาดในการโพสต์ข้อมูล</string>
+    <string name="post_created">สร้างโพสต์แล้ว</string>
+    <string name="post_updated">อัพเดทโพสต์</string>
+    <string name="add_media">เพิ่มสื่อ</string>
+    <string name="new_notification">การแจ้งเตือนใหม่</string>
+    <string name="no_notifications_yet">ยังไม่มีการแจ้งเตือน!</string>
+    <string name="dep_empty_notif">เราจะแจ้งให้คุณทราบเมื่อมีปฏิสัมพันธ์หรือข่าวสารใหม่จากสัตว์เลี้ยงของคุณ!</string>
+    <string name="pet_diary">ไดอารี่สัตว์เลี้ยง</string>
+    <string name="new_notifications">คุณมีการแจ้งเตือนใหม่</string>
+    <string name="notif_type_post_like"><b>%1$s</b> ถูกใจโพสต์ของคุณ</string>
+    <string name="n_new_notifications">คุณมีการแจ้งเตือน %1$d ใหม่</string>
+    <string name="notif_type_comment"><b>%1$s</b> แสดงความคิดเห็นในโพสต์ของคุณ</string>
+    <string name="notif_type_comment_reply"><b>%1$s</b> ตอบกลับความคิดเห็นของคุณ</string>
+    <string name="notif_type_comment_like"><b>%1$s</b> ถูกใจความคิดเห็นของคุณ</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b> ตอบสนอง %2$s ต่อเรื่องราวของคุณ</string>
+    <string name="notif_type_user_follow"><b>%1$s</b> เริ่มติดตามคุณ</string>
+    <string name="notif_type_pet_follow"><b>%1$s</b> เริ่มติดตามสัตว์เลี้ยงของคุณ</string>
+    <string name="story_unavailable">เรื่องราวนี้ไม่มีให้บริการอีกต่อไปหรือหมดอายุแล้ว</string>
+    <string name="something_went_wrong">เกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง</string>
+    <string name="list_of_emotional_responses">รายการการตอบสนองทางอารมณ์</string>
+    <string name="no_emotions_yet">ยังไม่มีอารมณ์</string>
+    <string name="count_emotions">%1$d อารมณ์</string>
+    <string name="no_post_yet">ยังไม่มีโพสต์</string>
+    <string name="publish_your_first_post">เผยแพร่โพสต์แรกของคุณ</string>
+    <string name="new_post">โพสต์ใหม่</string>
+    <string name="what_is_the_boss_doing_today">วันนี้เจ้านายทําอะไรอยู่? 🐾</string>
+    <string name="share_the_boss_s_adorable_moment">แบ่งปันช่วงเวลาที่น่ารักของเจ้านาย</string>
+    <string name="capture_a_memory_of_today_s_boss">บันทึกความทรงจําของเจ้านายในปัจจุบัน</string>
+    <string name="add_pet_tag">เพิ่มสัตว์เลี้ยง +</string>
+    <string name="no_saved_posts_yet">ยังไม่มีโพสต์ที่บันทึกไว้</string>
+    <string name="list_of_saved_posts">รายชื่อโพสต์ที่บันทึกไว้</string>
+    <string name="recently_deleted_posts">โพสต์ที่เพิ่งลบ</string>
+    <string name="error_connection_internet">คุณออฟไลน์อยู่ ให้ตรวจสอบการเชื่อมต่อเครือข่ายอีกครั้ง!</string>
+    <string name="move_post_to_trash">ย้ายโพสต์ไปยังถังขยะ</string>
+    <string name="dep_soft_delete_post">โพสต์ของคุณจะถูกลบอย่างถาวรหลังจากผ่านไป 30 วัน</string>
+    <string name="moved_post_trash">ย้ายโพสต์ไปที่ถังขยะ</string>
+    <string name="softdelete_post_fail">ไม่สามารถลบโพสต์ได้ โปรดลองอีกครั้ง</string>
+    <string name="restore_this_post">กู้คืนโพสต์นี้</string>
+    <string name="del_restore_post">กู้คืนโพสต์ก่อนที่จะถูกลบอย่างถาวรภายใน 30 วัน</string>
+    <string name="permanently_post">ลบโพสต์อย่างถาวร</string>
+    <string name="dep_permanently_post">การดําเนินการนี้ไม่สามารถยกเลิกได้</string>
+    <string name="list_of_recently_deleted_posts">รายการโพสต์ที่เพิ่งลบล่าสุด</string>
+    <string name="no_recently_deleted_posts">ไม่มีโพสต์ที่เพิ่งลบไป</string>
+    <string name="confirm">ยืนยัน</string>
+    <string name="delete">ลบ</string>
+    <string name="confirm_permanently_delete_title">ลบโพสต์นี้?</string>
+    <string name="confirm_permanently_delete_msg">โพสต์นี้จะถูกลบอย่างถาวรและไม่สามารถกู้คืนได้</string>
+    <string name="restore_failed">กู้คืนล้มเหลว</string>
+    <string name="permanently_delete_failed">ลบถาวรล้มเหลว</string>
+    <string name="error_permanently_delete_post">โพสต์จะลบไม่ได้ โปรดลองอีกครั้ง</string>
+    <string name="permanently_deleted_post">โพสต์ที่ถูกลบอย่างถาวร</string>
+    <string name="successfull_restore_post">กู้คืนโพสต์สําเร็จ</string>
+    <string name="dep_title_recently_deleted_post">โพสต์ที่ถูกลบจะถูกลบออกอย่างถาวรหลังจากผ่านไป 30 วัน</string>
+    <string name="apply">สมัคร</string>
+    <string name="select_language">เลือกภาษา</string>
+
+    <string name="currently_using">กำลังใช้งาน</string>
+    <string name="all_languages">ภาษาทั้งหมด</string>
+
+    <!-- Language display names (in English) -->
+    <string name="lang_en_display">อังกฤษ</string>
+    <string name="lang_en_native">อังกฤษ</string>
+
+    <string name="lang_vi_display">ภาษาเวียดนาม</string>
+    <string name="lang_vi_native">Tiếng Việt</string>
+
+    <string name="lang_ja_display">ภาษาญี่ปุ่น</string>
+    <string name="lang_ja_native">ภาษาญี่ปุ่น</string>
+
+    <string name="lang_ko_display">เกาหลี</string>
+    <string name="lang_ko_native">เกาหลี</string>
+
+    <string name="lang_zh_display">ภาษาจีน</string>
+    <string name="lang_zh_native">ภาษาจีน</string>
+
+    <string name="lang_fr_display">ฝรั่งเศส</string>
+    <string name="lang_fr_native">Français</string>
+
+    <string name="lang_de_display">เยอรมัน</string>
+    <string name="lang_de_native">เยอรมัน</string>
+
+    <string name="lang_es_display">สเปน</string>
+    <string name="lang_es_native">สเปน</string>
+
+    <string name="lang_pt_display">โปรตุเกส</string>
+    <string name="lang_pt_native">โปรตุเกส</string>
+
+    <string name="lang_th_display">ภาษาไทย</string>
+    <string name="lang_th_native">ภาษาไทย</string>
+
+
+    <string-array name="media_types">
+        <item>@string/all</item>
+        <item>@string/image</item>
+        <item>@string/video</item>
+    </string-array>
+
+    <string-array name="gender_options">
+        <item>ชาย</item>
+        <item>หญิง</item>
+        <item>อื่น ๆ</item>
+    </string-array>
+
+    <string-array name="preventive_status_options">
+        <item>ทันสมัย</item>
+        <item>กําลังดําเนินการ</item>
+        <item>เกินกําหนด/มีความเสี่ยง</item>
+    </string-array>
+
+    <string-array name="body_condition_options">
+        <item>ในอุดมคติ</item>
+        <item>น้ําหนักน้อย</item>
+        <item>น้ําหนักเกิน/อ้วน</item>
+    </string-array>
+
+    <string-array name="clinical_status_options">
+        <item>มีเสถียรภาพ</item>
+        <item>ภายใต้การสังเกตการณ์</item>
+        <item>วิกฤต/ฉุกเฉิน</item>
+    </string-array>
+
+    <string-array name="activity_mental_options">
+        <item>ใช้งานอยู่/แจ้งเตือน</item>
+        <item>ปกติ</item>
+        <item>เซื่องซึม</item>
+    </string-array>
+</resources>

@@ -187,61 +187,105 @@
 <!--                android:textSize="18sp" />-->
 <!--        </LinearLayout>-->
 
+<!--        <LinearLayout-->
+<!--            android:id="@+id/btnHide"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:background="?attr/selectableItemBackground"-->
+<!--            android:paddingHorizontal="16dp"-->
+
+<!--            android:paddingVertical="4dp">-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="28dp"-->
+<!--                android:layout_height="28dp"-->
+<!--                android:importantForAccessibility="no"-->
+<!--                android:src="@drawable/ic_close_window" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="12dp"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:fontFamily="@font/baloo2"-->
+<!--                    android:text="@string/hide_this_post"-->
+<!--                    android:textColor="@color/text_brown"-->
+<!--                    android:textSize="18sp" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/dep_hide_post"-->
+<!--                    android:textColor="#757575"-->
+<!--                    android:layout_marginTop="-4dp"-->
+<!--                    android:fontFamily="@font/baloo2"-->
+<!--                    android:textSize="16sp" />-->
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/btnBlock"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:background="?attr/selectableItemBackground"-->
+<!--            android:paddingHorizontal="16dp"-->
+<!--            android:paddingVertical="4dp">-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="28dp"-->
+<!--                android:layout_height="28dp"-->
+<!--                android:importantForAccessibility="no"-->
+<!--                android:src="@drawable/ic_ban_user"-->
+<!--                app:tint="#B8322F" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="12dp"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tvBlock"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/block_user"-->
+<!--                    android:textColor="#B8322F"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:fontFamily="@font/baloo2"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/dep_block_user"-->
+<!--                    android:textColor="#E57373"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:layout_marginTop="-4dp"-->
+<!--                    android:fontFamily="@font/baloo2"-->
+<!--                    tools:ignore="TextContrastCheck" />-->
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
+
         <LinearLayout
-            android:id="@+id/btnHide"
+            android:id="@+id/btnSoftDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:background="?attr/selectableItemBackground"
             android:paddingHorizontal="16dp"
-
             android:paddingVertical="4dp">
 
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_close_window" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/baloo2"
-                    android:text="@string/hide_this_post"
-                    android:textColor="@color/text_brown"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dep_hide_post"
-                    android:textColor="#757575"
-                    android:layout_marginTop="-4dp"
-                    android:fontFamily="@font/baloo2"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btnBlock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="4dp">
-
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_ban_user"
+                android:src="@drawable/ic_trash"
                 app:tint="#B8322F" />
 
             <LinearLayout
@@ -251,10 +295,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvBlock"
+                    android:id="@+id/tvDelete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/block_user"
+                    android:text="@string/move_post_to_trash"
                     android:textColor="#B8322F"
                     android:textSize="18sp"
                     android:fontFamily="@font/baloo2"
@@ -263,7 +307,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dep_block_user"
+                    android:text="@string/dep_soft_delete_post"
                     android:textColor="#E57373"
                     android:textSize="16sp"
                     android:layout_marginTop="-4dp"

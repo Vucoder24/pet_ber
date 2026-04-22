@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
@@ -13,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityForgotPwBinding
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.ui.forgot_pw.fragment.ForgotPasswordEmailFragment
 import com.nvv.petber.ui.forgot_pw.fragment.ForgotPasswordNewPasswordFragment
 import com.nvv.petber.ui.forgot_pw.fragment.ForgotPasswordOtpFragment
@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ForgotPwActivity : AppCompatActivity() {
+class ForgotPwActivity : BaseActivity() {
     private lateinit var binding: ActivityForgotPwBinding
     private val viewModel: ForgotPasswordViewModel by viewModels()
 

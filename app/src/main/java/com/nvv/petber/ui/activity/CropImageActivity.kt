@@ -5,16 +5,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityCropImageBinding
+import com.nvv.petber.ui.base.BaseActivity
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CropImageActivity : AppCompatActivity() {
+class CropImageActivity : BaseActivity() {
     private lateinit var binding: ActivityCropImageBinding
     private var sourceUri: Uri? = null
     private var targetType: String = TARGET_AVATAR

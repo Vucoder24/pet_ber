@@ -173,10 +173,23 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupFragmentResultListeners() {
-        childFragmentManager.setFragmentResultListener("refresh_key", viewLifecycleOwner) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(
+            "refresh_key",
+            viewLifecycleOwner
+        ) { _, bundle ->
             val isUpdated = bundle.getBoolean("bundle_is_updated", false)
             if (isUpdated) {
                 viewModel.refreshProfile(true)
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(
+            "post_deleted_key",
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val deletedPostId = bundle.getString("bundle_post_id")
+            if (deletedPostId != null) {
+                viewModel.removePostById(deletedPostId)
             }
         }
     }

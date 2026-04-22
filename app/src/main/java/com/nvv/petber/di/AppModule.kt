@@ -1,9 +1,11 @@
 package com.nvv.petber.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.nvv.petber.BuildConfig
 import com.nvv.petber.data.repo.remote.AuthRepository
 import com.nvv.petber.data.repo.remote.HomeRepository
+import com.nvv.petber.utils.NetworkErrorPlugin
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +28,7 @@ object AppModule {
     @OptIn(SupabaseInternal::class)
     @Provides
     @Singleton
-    fun provideSupabaseClient(): SupabaseClient {
+    fun provideSupabaseClient(@ApplicationContext context: Context): SupabaseClient {
         return createSupabaseClient(
             supabaseKey = BuildConfig.SUPABASE_KEY,
             supabaseUrl = BuildConfig.SUPABASE_URL
@@ -40,6 +42,9 @@ object AppModule {
                     requestTimeoutMillis = 30_000
                     connectTimeoutMillis = 30_000
                     socketTimeoutMillis = 30_000
+                }
+                install(NetworkErrorPlugin) {
+                    this.context = context
                 }
             }
         }
@@ -62,5 +67,11 @@ object AppModule {
         @ApplicationContext context: Context
     ): Context {
         return context
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("settings", Context.MODE_PRIVATE)
     }
 }

@@ -1,0 +1,358 @@
+<resources>
+    <string name="app_name">Pet Ber</string>
+    <string name="text_email">电子邮件</string>
+    <string name="text_password">密码</string>
+    <string name="text_login">登录</string>
+    <string name="txt_forgot_password">忘记密码了吗？</string>
+    <string name="action_navigate_register">注册新账户</string>
+    <string name="blank_email">邮件不能留空！</string>
+    <string name="invalid_email">邮箱地址无效！</string>
+    <string name="pw_empty">密码不能是空的！</string>
+    <string name="invalid_length_password">密码必须至少有6个字符！</string>
+    <string name="text_sign_up">注册</string>
+    <string name="text_display_name">显示名称</string>
+    <string name="text_confirm_password">确认密码</string>
+    <string name="text_already_have_account">已经有账号了吗？</string>
+    <string name="confirm_pw_empty">确认密码是空的！</string>
+    <string name="invalid_confirm_password">密码确认无效！</string>
+    <string name="username_empty">用户名是空的！</string>
+    <string name="register_success">成功注册后，登录前需要确认您的邮箱！</string>
+    <string name="login_success">登录成功！</string>
+    <string name="home">首页</string>
+    <string name="search">搜索</string>
+    <string name="create">创作</string>
+    <string name="notifications">通知</string>
+    <string name="profile">个人资料</string>
+    <string name="hello_blank_fragment">你好，空白片段</string>
+    <string name="pet">Pet </string>
+    <string name="ber">Ber</string>
+    <string name="pet_stories">宠物故事：</string>
+    <string name="hint_edt_search">搜索用户、宠物、标签......</string>
+    <string name="follow">关注</string>
+    <string name="users">用户</string>
+    <string name="pets">宠物</string>
+    <string name="hashtags">标签</string>
+    <string name="user_name">用户名</string>
+    <string name="petber_user">PetBer 用户</string>
+    <string name="images_videos">图片 / 视频</string>
+    <string name="sub_title_story">分享你宠物24小时的瞬间</string>
+    <string name="story">故事</string>
+    <string name="create_a_new_story">创造一个新故事</string>
+    <string name="create_content">创作内容</string>
+    <string name="dep_item_create_post">发布你宠物的照片或视频</string>
+    <string name="preview_story">预览故事</string>
+    <string name="post_story">发布故事</string>
+    <string name="choose_media">选择媒介</string>
+    <string name="choose_multiple">选择多个</string>
+    <string name="next">下一个</string>
+    <string name="all">全部</string>
+    <string name="image">图片</string>
+    <string name="video">视频</string>
+    <string name="choose">选择</string>
+    <string name="permission_question">你需要授权选择照片/视频。</string>
+    <string name="uploading">上传中......</string>
+    <string name="dont_exit_app">请不要退出应用</string>
+    <string name="story_posted">故事已发布！</string>
+    <string name="post_details">帖子详情</string>
+    <string name="post_content">帖子内容</string>
+    <string name="post">帖子</string>
+    <string name="create_a_new_post">创建新帖子</string>
+    <string name="hint_caption">请在此输入说明文字......</string>
+    <string name="tag_your_pet">给你的宠物贴标签</string>
+    <string name="hint_hashtags">#hashtags......</string>
+    <string name="post_now">立即发布</string>
+    <string name="caption_empty">请输入说明文字！</string>
+    <string name="error_select_media">请至少选择一张照片/视频！</string>
+    <string name="edit_media">编辑媒体</string>
+    <string name="my_pet_list">我的宠物清单</string>
+    <string name="all_posts">所有帖子</string>
+    <string name="message">信息</string>
+    <string name="add_pet">添加宠物</string>
+    <string name="personal_information">个人信息：</string>
+    <string name="address">地址</string>
+    <string name="phone_number">电话号码</string>
+    <string name="gender">性别</string>
+    <string name="hobbies">爱好</string>
+    <string name="add_bio">添加个人简介......</string>
+    <string name="add_gender">添加性别</string>
+    <string name="add_address">添加地址</string>
+    <string name="add_phone_number">添加电话号码</string>
+    <string name="add_birthday">添加生日</string>
+    <string name="add_hobbies">添加爱好</string>
+    <string name="username_cannot_contain_spaces">用户名不能包含空格！</string>
+    <string name="username_invalid_characters">用户名只能包含小写字母、数字、下划线（_）和句号（.）！</string>
+    <string name="username_invalid_characters_length">用户名必须至少有两个字符！</string>
+    <string name="add_new_story">添加新故事</string>
+    <string name="edit_profile">编辑简介</string>
+    <string name="add_new_pet">添加新宠物</string>
+    <string name="choose_cover">选择一张封面照片</string>
+    <string name="avatar">阿凡达</string>
+    <string name="pet_name">昵称</string>
+    <string name="breed">品种</string>
+    <string name="species">物种</string>
+    <string name="birthday">生日</string>
+    <string name="health">医疗</string>
+    <string name="describe">描述</string>
+    <string name="healthy">健康</string>
+    <string name="add">添加</string>
+    <string name="opening_image_cropper">打开图像裁剪器......</string>
+    <string name="body_condition">身体状况</string>
+    <string name="clinical_status">临床状况</string>
+    <string name="activity_amp_mental_state"><![CDATA[活动与心理状态]]></string>
+    <string name="preventive_status">预防状态</string>
+    <string name="has_been_neutered">已经绝育了吗？</string>
+    <string name="weight_kg">体重（公斤）</string>
+    <string name="error_empty_pet_name">请输入昵称！</string>
+    <string name="error_empty_pet_species">请输入物种！</string>
+    <string name="create_pet_success">宠物创建成功。</string>
+    <string name="view_avatar">查看头像</string>
+    <string name="choose_avatar">选择化身</string>
+    <string name="view_cover">查看封面</string>
+    <string name="post_saved">帖子已保存</string>
+    <string name="story_saved">故事已保存</string>
+    <string name="language">语言</string>
+    <string name="log_out">登出</string>
+    <string name="settings">设置</string>
+    <string name="error_send_otp">无法发送OTP。请再试一次。</string>
+    <string name="otp_incorrect_or_expired">OTP不正确或已过期。</string>
+    <string name="error_update_password">无法更改密码。</string>
+    <string name="otp_expired">OTP已过期，请重新发送新的验证码。</string>
+    <string name="otp_invalid">OTP无效。</string>
+    <string name="email_not_confirmed">邮件未确认</string>
+    <string name="invalid_credentials">信息不准确。</string>
+    <string name="error_too_many_requests">你动作太快了，请稍后再试。</string>
+    <string name="til_forgot_password">忘记密码了</string>
+    <string name="title_input_email">输入电子邮件即可接收密码重置 OTP。</string>
+    <string name="send">发送</string>
+    <string name="send_otp">发送OTP</string>
+    <string name="verify_your_email">验证你的邮箱</string>
+    <string name="hint_enter_otp">输入验证码</string>
+    <string name="action_continue">继续</string>
+    <string name="dep_verify_otp">验证码已发送到您的邮箱</string>
+    <string name="otp_will_expire">OTP代码将于以下时间过期：</string>
+    <string name="second">秒</string>
+    <string name="not_received_yet">还没收到？</string>
+    <string name="action_resend_otp">重新发送验证码</string>
+    <string name="resend_otp">重新发送OTP代码</string>
+    <string name="resend_otp_second">Resend OTP （%1$d）</string>
+    <string name="til_reset_password">重置密码</string>
+    <string name="password_updated">密码已成功更改。</string>
+    <string name="please_enter_otp">请输入OTP码。</string>
+    <string name="please_enter_full_otp">请输入完整的OTP码。</string>
+    <string name="message_email_verify_success">您的电子邮件已经过验证。你现在可以登录了。</string>
+    <string name="action_back_login">返回登录</string>
+    <string name="confirmed_successfully">已确认成功！</string>
+    <string name="time_just_now">刚才</string>
+    <string name="time_minutes_ago">%1$dm 前</string>
+    <string name="time_hours_ago">%1$dh 之前</string>
+    <string name="time_days_ago">%1$dd 之前</string>
+    <string name="updating_avatar">更新阿凡达......</string>
+    <string name="updating_cover">更新封面......</string>
+    <string name="update_user_success">已成功更新用户信息。</string>
+    <string name="no_cover_found">未找到封面！</string>
+    <string name="no_avatar_found">找不到头像！</string>
+    <string name="full_name">全名</string>
+    <string name="bio">简介</string>
+    <string name="action_save">保存</string>
+    <string name="please_enter_full_name">请输入全名！</string>
+    <string name="error_get_arg">数据获取错误！</string>
+    <string name="media_not_found">找不到媒体！</string>
+    <string name="error_checking_session">错误检查会话：%1$s</string>
+    <string name="maximum_media_and_count">最多 %1$d 个项目</string>
+    <string name="permission_media_request">需要媒体接触才能继续。</string>
+    <string name="error_fetch_data">数据加载出了错误。</string>
+    <string name="comments">评论</string>
+    <string name="add_comment">补充评论......</string>
+    <string name="author">作者</string>
+    <string name="error_add_cmt_failed">错误评论！</string>
+    <string name="share_post">分享帖子</string>
+    <string name="save_post">存档帖子</string>
+    <string name="copy_link">复制链接分享</string>
+    <string name="hide_this_post">隐藏这篇帖子</string>
+    <string name="block_user">屏蔽 %1$s</string>
+    <string name="dep_save_post">添加到保存帖子列表</string>
+    <string name="dep_remove_post">从保存列表中删除帖子</string>
+    <string name="dep_hide_post">把这篇帖子从你的时间线里隐藏起来</string>
+    <string name="dep_block_user">你们不会见面或交流</string>
+    <string name="post_link">帖子链接</string>
+    <string name="link_copied">链接已复制</string>
+    <string name="post_unsaved">帖子未保存</string>
+    <string name="error_action">执行动作时发生了错误！</string>
+    <string name="blocked_user">已屏蔽此用户</string>
+    <string name="error">错误，请再试一次！</string>
+    <string name="reply">回复</string>
+    <string name="see_x_answers">—— 参见 %1$d 答案</string>
+    <string name="replying_to_user">回复 %1$s</string>
+    <string name="hide_answers">—— 隐藏答案</string>
+    <string name="no_comments_yet">目前还没有评论。
+成为第一个评论的人！</string>
+    <string name="error_load_comments_failed">无法加载评论。请再试一次！</string>
+    <string name="follow_user">关注 %1$s</string>
+    <string name="cancel_follow_user">取消关注 %1$s</string>
+    <string name="edit_post">编辑帖子</string>
+    <string name="edit_privacy">编辑隐私</string>
+    <string name="followed_user">跟随 %1$s</string>
+    <string name="unfollowed_user">已取消关注 %1$s</string>
+    <string name="posts">帖子</string>
+    <string name="followers">粉丝</string>
+    <string name="following">关注</string>
+    <string name="friend">朋友</string>
+    <string name="empty_list">空列表</string>
+    <string name="fail_to_load_pet_data">未能加载宠物数据</string>
+    <string name="not_updated">未更新</string>
+    <string name="not_desc_yet">还没有描述</string>
+    <string name="label_gender">性别：%1$s</string>
+    <string name="label_weight">重量：%1$s</string>
+    <string name="label_birthday">生日：%1$s</string>
+    <string name="label_neutered">绝育：%1$s</string>
+    <string name="label_body_condition">体况：%1$s</string>
+    <string name="label_clinical_status">临床状况：%1$s</string>
+    <string name="label_mental_state">心理状态：%1$s</string>
+    <string name="label_medical_history">病史：%1$s</string>
+    <string name="label_preventive">预防：%1$s</string>
+
+    <string name="value_na">无</string>
+    <string name="value_neutered_yes">绝育</string>
+    <string name="value_neutered_no">未绝育</string>
+    <string name="related_posts">相关文章</string>
+    <string name="please_login">请登录</string>
+    <string name="update_pet_success">更新宠物信息成功。</string>
+    <string name="edit_pet_info">编辑宠物信息</string>
+    <string name="save">保存</string>
+    <string name="pet_following">宠物追随</string>
+    <string name="friends">朋友们</string>
+    <string name="unfollow">取消关注</string>
+    <string name="confirm_logout">你确定要登出吗？</string>
+    <string name="cancel">取消</string>
+    <string name="yes">是的</string>
+    <string name="img_not_updated">照片未更新</string>
+    <string name="basic_info">基本信息</string>
+    <string name="health_conditions">健康状况</string>
+    <string name="copied_to_clipboard">复制到剪贴板上</string>
+    <string name="error_data_post">后期数据错误</string>
+    <string name="post_created">帖子创建</string>
+    <string name="post_updated">帖子更新</string>
+    <string name="add_media">添加媒体</string>
+    <string name="new_notification">新通知</string>
+    <string name="no_notifications_yet">还没有通知！</string>
+    <string name="dep_empty_notif">当有新的互动或宠物消息时，我们会通知您！</string>
+    <string name="pet_diary">宠物日记</string>
+    <string name="new_notifications">你有新的通知</string>
+    <string name="notif_type_post_like"><b>%1$s</b>点赞你的帖子。</string>
+    <string name="n_new_notifications">你收到了一个新的 %1$d 通知</string>
+    <string name="notif_type_comment"><b>%1$s</b>在你的帖子下评论了。</string>
+    <string name="notif_type_comment_reply"><b>%1$s</b>回复了你的评论。</string>
+    <string name="notif_type_comment_like"><b>%1$s</b>点赞你的评论。</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b> 对你的故事做出了 %2$s 反应。</string>
+    <string name="notif_type_user_follow"><b>%1$s</b> 关注了你。</string>
+    <string name="notif_type_pet_follow"><b>%1$s</b> 关注了你的宠物。</string>
+    <string name="story_unavailable">此故事已不再可用或已过期。</string>
+    <string name="something_went_wrong">发生了错误。请稍后再试。</string>
+    <string name="list_of_emotional_responses">情绪反应列表</string>
+    <string name="no_emotions_yet">还没有情绪。</string>
+    <string name="count_emotions">%1$d 情绪</string>
+    <string name="no_post_yet">还没有帖子</string>
+    <string name="publish_your_first_post">发布你的第一篇帖子</string>
+    <string name="new_post">新帖子</string>
+    <string name="what_is_the_boss_doing_today">老板今天在做什么？🐾</string>
+    <string name="share_the_boss_s_adorable_moment">分享老板的可爱瞬间</string>
+    <string name="capture_a_memory_of_today_s_boss">捕捉今天老板的回忆</string>
+    <string name="add_pet_tag">添加宠物 +</string>
+    <string name="no_saved_posts_yet">还没有保存帖子</string>
+    <string name="list_of_saved_posts">已保存帖子列表</string>
+    <string name="recently_deleted_posts">最近删除的帖子</string>
+    <string name="error_connection_internet">你现在离线了，再检查一次网络连接！</string>
+    <string name="move_post_to_trash">把帖子移到垃圾桶</string>
+    <string name="dep_soft_delete_post">你的帖子将在30天后被永久删除</string>
+    <string name="moved_post_trash">把帖子转到垃圾桶了</string>
+    <string name="softdelete_post_fail">帖子无法删除，请再试一次</string>
+    <string name="restore_this_post">恢复此帖</string>
+    <string name="del_restore_post">在帖子在30天内永久删除前恢复。</string>
+    <string name="permanently_post">永久删除帖子</string>
+    <string name="dep_permanently_post">这一行为无法撤销。</string>
+    <string name="list_of_recently_deleted_posts">最近删除帖子列表</string>
+    <string name="no_recently_deleted_posts">没有最近删除的帖子</string>
+    <string name="confirm">确认</string>
+    <string name="delete">删除</string>
+    <string name="confirm_permanently_delete_title">删除这条帖子？</string>
+    <string name="confirm_permanently_delete_msg">此帖将被永久删除，无法恢复。</string>
+    <string name="restore_failed">故障恢复</string>
+    <string name="permanently_delete_failed">永久删除失败</string>
+    <string name="error_permanently_delete_post">帖子不能被删除。请再试一次。</string>
+    <string name="permanently_deleted_post">永久删除的帖子</string>
+    <string name="successfull_restore_post">恢复成功</string>
+    <string name="dep_title_recently_deleted_post">删除的帖子将在30天后永久删除。</string>
+    <string name="apply">申请</string>
+    <string name="select_language">选择语言</string>
+
+    <string name="currently_using">目前使用</string>
+    <string name="all_languages">所有语言</string>
+
+    <!-- Language display names (in English) -->
+    <string name="lang_en_display">英语</string>
+    <string name="lang_en_native">英语</string>
+
+    <string name="lang_vi_display">越南语</string>
+    <string name="lang_vi_native">Tiếng Việt</string>
+
+    <string name="lang_ja_display">日语</string>
+    <string name="lang_ja_native">日语</string>
+
+    <string name="lang_ko_display">朝鲜语</string>
+    <string name="lang_ko_native">朝鲜语</string>
+
+    <string name="lang_zh_display">中文</string>
+    <string name="lang_zh_native">中文</string>
+
+    <string name="lang_fr_display">法语</string>
+    <string name="lang_fr_native">Français</string>
+
+    <string name="lang_de_display">德语</string>
+    <string name="lang_de_native">德语</string>
+
+    <string name="lang_es_display">西班牙语</string>
+    <string name="lang_es_native">西班牙语</string>
+
+    <string name="lang_pt_display">葡萄牙语</string>
+    <string name="lang_pt_native">葡萄牙语</string>
+
+    <string name="lang_th_display">泰语</string>
+    <string name="lang_th_native">ไทย</string>
+
+
+    <string-array name="media_types">
+        <item>@string/all</item>
+        <item>@string/image</item>
+        <item>@string/video</item>
+    </string-array>
+
+    <string-array name="gender_options">
+        <item>男性</item>
+        <item>女性</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="preventive_status_options">
+        <item>最新情况</item>
+        <item>进行中</item>
+        <item>逾期/面临风险</item>
+    </string-array>
+
+    <string-array name="body_condition_options">
+        <item>理想</item>
+        <item>体重过轻</item>
+        <item>超重/肥胖</item>
+    </string-array>
+
+    <string-array name="clinical_status_options">
+        <item>稳定</item>
+        <item>观察中</item>
+        <item>危急/紧急情况</item>
+    </string-array>
+
+    <string-array name="activity_mental_options">
+        <item>主动/警觉</item>
+        <item>普通</item>
+        <item>无精打采</item>
+    </string-array>
+</resources>

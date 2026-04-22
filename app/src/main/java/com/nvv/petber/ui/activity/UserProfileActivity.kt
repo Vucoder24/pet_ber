@@ -4,16 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityUserProfileBinding
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.ui.fragment.profile.OtherUserProfileFragment
 import com.nvv.petber.ui.fragment.profile.ProfileFragment
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserProfileActivity : AppCompatActivity() {
+class UserProfileActivity : BaseActivity() {
     private lateinit var binding: ActivityUserProfileBinding
 
     companion object {

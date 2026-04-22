@@ -2,7 +2,6 @@ package com.nvv.petber.ui.activity
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -12,13 +11,14 @@ import com.bumptech.glide.Glide
 import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityMediaPreviewBinding
 import com.nvv.petber.ui.adapter.MediaItem
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.ext.loadMediaCoverWithExtremeGradient
 import com.nvv.petber.utils.ext.visible
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MediaPreviewActivity : AppCompatActivity() {
+class MediaPreviewActivity : BaseActivity() {
     private lateinit var binding: ActivityMediaPreviewBinding
     @Inject lateinit var exoPlayer: ExoPlayer
 

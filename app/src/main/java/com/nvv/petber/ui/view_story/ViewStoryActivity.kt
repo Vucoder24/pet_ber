@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -16,6 +15,7 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.ActivityViewStoryBinding
 import com.nvv.petber.ui.adapter.StoryPagerAdapter
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.StoryHostState
@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ViewStoryActivity : AppCompatActivity() {
+class ViewStoryActivity : BaseActivity() {
     private lateinit var binding: ActivityViewStoryBinding
     private var storyGroups: List<UserStoryGroup> = emptyList()
     private var currentPosition = -1

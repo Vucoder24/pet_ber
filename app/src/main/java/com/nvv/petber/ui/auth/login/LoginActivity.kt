@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -15,6 +14,7 @@ import com.nvv.petber.R
 import com.nvv.petber.databinding.ActivityLoginBinding
 import com.nvv.petber.ui.activity.MainActivity
 import com.nvv.petber.ui.auth.register.RegisterActivity
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.ui.forgot_pw.ForgotPwActivity
 import com.nvv.petber.utils.ValidationUtils
 import com.nvv.petber.utils.ext.toast
@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
     lateinit var binding: ActivityLoginBinding
     private val authViewModel: AuthViewModel by viewModels()
 

@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -22,6 +21,7 @@ import com.nvv.petber.databinding.ActivityMediaPickerBinding
 import com.nvv.petber.ui.adapter.ActivityWithResult
 import com.nvv.petber.ui.adapter.MediaGridAdapter
 import com.nvv.petber.ui.adapter.MediaItem
+import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.ext.visible
@@ -32,7 +32,7 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 
 @AndroidEntryPoint
-class MediaPickerActivity : AppCompatActivity(), ActivityWithResult {
+class MediaPickerActivity : BaseActivity(), ActivityWithResult {
     private lateinit var binding: ActivityMediaPickerBinding
     private var mode: String = MODE_SINGLE
     private var maxSelect = DEFAULT_MAX

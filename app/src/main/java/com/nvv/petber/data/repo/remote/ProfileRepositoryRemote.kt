@@ -15,6 +15,7 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
 import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.postgrest.rpc
 import io.github.jan.supabase.storage.storage
 import io.github.jan.supabase.storage.upload
@@ -60,6 +61,7 @@ class ProfileRepositoryRemote @Inject constructor(
                 ) {
                     filter {
                         eq("user_id", userId)
+                        filter("deleted_at", FilterOperator.IS, null)
                         eq("post_likes.user_id", userId)
                     }
                 }
@@ -99,6 +101,7 @@ class ProfileRepositoryRemote @Inject constructor(
                 ) {
                     filter {
                         eq("user_id", userId)
+                        filter("deleted_at", FilterOperator.IS, null)
                         eq("post_likes.user_id", currentUserId)
                     }
                     order("created_at", Order.DESCENDING)
