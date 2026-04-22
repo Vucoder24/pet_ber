@@ -317,6 +317,8 @@
 
     <string name="lang_th_display">Thai</string>
     <string name="lang_th_native">ภาษาไทย</string>
+    <string name="delete_notification">Delete this notification</string>
+    <string name="notifi_deleted">Notification removed</string>
 
 
     <string-array name="media_types">

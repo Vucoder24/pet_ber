@@ -22,6 +22,8 @@ import com.nvv.petber.ui.adapter.NotificationAdapter
 import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.showNotificationOptionBottomSheet
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,8 +89,12 @@ class NotificationFragment : Fragment() {
                     }
                 }
             },
-            onMoreClick = {
-
+            onMoreClick = { notification ->
+                requireContext().showNotificationOptionBottomSheet(
+                    onDelete = {
+                        mainViewModel.deleteNotification(notification.id)
+                    }
+                )
             }
         )
         linearLayoutManager = LinearLayoutManager(requireContext())
@@ -142,6 +148,12 @@ class NotificationFragment : Fragment() {
                         if (!mainViewModel.isLoading.value && list.isNotEmpty()) {
                             hideNotificationsBadge()
                         }
+                    }
+                }
+
+                launch {
+                    mainViewModel.toastEvent.collect { message ->
+                       requireContext().toast(message)
                     }
                 }
             }

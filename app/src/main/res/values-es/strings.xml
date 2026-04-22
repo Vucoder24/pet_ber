@@ -318,6 +318,8 @@
 
     <string name="lang_th_display">Tailandés</string>
     <string name="lang_th_native">ไทย</string>
+    <string name="delete_notification">Eliminar esta notificación</string>
+    <string name="notifi_deleted">Notificación eliminada</string>
 
 
     <string-array name="media_types">

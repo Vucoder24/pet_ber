@@ -318,6 +318,8 @@
 
     <string name="lang_th_display">泰语</string>
     <string name="lang_th_native">ไทย</string>
+    <string name="delete_notification">删除此通知</string>
+    <string name="notifi_deleted">通知已删除</string>
 
 
     <string-array name="media_types">

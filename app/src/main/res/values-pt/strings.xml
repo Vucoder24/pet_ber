@@ -318,6 +318,8 @@ Seja o primeiro a comentar!</string>
 
     <string name="lang_th_display">Tailandês</string>
     <string name="lang_th_native">ไทย</string>
+    <string name="delete_notification">Excluir esta notificação</string>
+    <string name="notifi_deleted">Notificação removida</string>
 
 
     <string-array name="media_types">
