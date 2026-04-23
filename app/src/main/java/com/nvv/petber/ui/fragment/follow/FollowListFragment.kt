@@ -64,7 +64,7 @@ class FollowListFragment : Fragment() {
                     PetProfileActivity.start(requireContext(), it)
                 },
                 onUnfollowClick = { petId ->
-                    viewModel.unfollowPet(petId)
+                    viewModel.unfollowPet(petId, targetUserId)
                 }
             )
             binding.rvList.adapter = petAdapter

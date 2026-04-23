@@ -112,9 +112,9 @@ class FollowViewModel @Inject constructor(
                 state.value = state.value.copy(users = updated)
             }
             when (type) {
-                0 -> updateList(_followersState)
-                1 -> updateList(_followingState)
-                2 -> updateList(_friendsState)
+                1 -> updateList(_followersState)
+                2 -> updateList(_followingState)
+                3 -> updateList(_friendsState)
             }
 
             // call API
@@ -133,15 +133,15 @@ class FollowViewModel @Inject constructor(
                     )
                 }
                 when (type) {
-                    0 -> revertList(_followersState)
-                    1 -> revertList(_followingState)
-                    2 -> revertList(_friendsState)
+                    1 -> revertList(_followersState)
+                    2 -> revertList(_followingState)
+                    3 -> revertList(_friendsState)
                 }
             }
         }
     }
 
-    fun unfollowPet(petId: String) {
+    fun unfollowPet(petId: String, targetUserId: String) {
         viewModelScope.launch {
             val currentList = _petFollowingState.value.pets
 
@@ -153,7 +153,7 @@ class FollowViewModel @Inject constructor(
                 repository.unfollowPet(currentUserId, petId)
             }
             result.onFailure {
-                loadData(currentUserId, 0)
+                loadData(targetUserId, 0)
                 launch(Dispatchers.Main) {
                     context.toast(context.getString(R.string.error_action))
                 }
