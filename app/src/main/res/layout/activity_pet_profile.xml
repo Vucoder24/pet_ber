@@ -99,6 +99,48 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             tools:text="Chó • Shiba Inu" />
+                        <LinearLayout
+                            android:id="@+id/layoutStats"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+
+
+                            <LinearLayout
+                                android:id="@+id/btnViewFollowes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                tools:ignore="UselessParent">
+
+                                <TextView
+                                    android:id="@+id/tvFollowCount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="@font/baloo2"
+                                    android:textColor="@color/text_color"
+                                    tools:ignore="HardcodedText" />
+
+                                <TextView
+                                    android:id="@+id/tvFollow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/baloo2"
+                                    android:text="@string/followers"
+                                    android:textColor="#888888"
+                                    android:textSize="14sp"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    tools:ignore="TextContrastCheck" />
+                            </LinearLayout>
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"

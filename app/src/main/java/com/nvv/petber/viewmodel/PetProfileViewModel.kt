@@ -38,6 +38,8 @@ class PetProfileViewModel @Inject constructor(
 
     private val _isFollowing = MutableStateFlow(false)
     val isFollowing: StateFlow<Boolean> = _isFollowing.asStateFlow()
+    private val _followerCount = MutableStateFlow(0L)
+    val followerCount: StateFlow<Long> = _followerCount.asStateFlow()
     private val _petState = MutableStateFlow<Pet?>(null)
     val petState: StateFlow<Pet?> = _petState.asStateFlow()
 
@@ -66,7 +68,20 @@ class PetProfileViewModel @Inject constructor(
         _isOwner.value = isOwner
         loadPetPosts(pet.id, isRefresh = true)
         loadDiaryPosts(pet.id)
+        loadFollowerCount(pet.id)
     }
+
+    fun loadFollowerCount(petId: String) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                petRepo.getPetFollowerCount(petId)
+            }
+            result.onSuccess { count ->
+                _followerCount.value = count
+            }
+        }
+    }
+
 
     fun fetchPetById(petId: String) {
         viewModelScope.launch {
@@ -80,6 +95,7 @@ class PetProfileViewModel @Inject constructor(
                     checkOwnershipAndFollowStatus(pet)
                     loadPetPosts(petId, isRefresh = true)
                     loadDiaryPosts(petId)
+                    loadFollowerCount(petId)
                 } else {
                     _error.value = "Pet information not found"
                     _isLoading.value = false
@@ -133,6 +149,7 @@ class PetProfileViewModel @Inject constructor(
 
         // Optimistic UI update
         _isFollowing.value = !currentStatus
+        if (!currentStatus) _followerCount.value++ else _followerCount.value--
 
         viewModelScope.launch {
             val success = withContext(Dispatchers.IO) {
@@ -140,6 +157,7 @@ class PetProfileViewModel @Inject constructor(
             }
             if (!success) {
                 _isFollowing.value = currentStatus
+                if (!currentStatus) _followerCount.value-- else _followerCount.value++
                 _error.value = context.getString(R.string.error_action)
             }
         }

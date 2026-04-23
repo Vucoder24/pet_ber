@@ -320,7 +320,11 @@
     <string name="delete_notification">Delete this notification</string>
     <string name="notifi_deleted">Notification removed</string>
     <string name="copy">Copy</string>
-
+    <string name="title_pet_followers">List pet followers</string>
+    <string name="no_followers_yet">No followers yet</string>
+    <string name="notif_type_new_post"><b>%1$s</b> has just posted a new article.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> has just updated a new story.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> has tagged the pet you following in a post.</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

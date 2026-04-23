@@ -321,6 +321,11 @@
     <string name="delete_notification">この通知を削除する</string>
     <string name="notifi_deleted">通知を削除しました</string>
     <string name="copy">コピー</string>
+    <string name="title_pet_followers">ペットのフォロワー一覧</string>
+    <string name="no_followers_yet">まだフォロワーはいません</string>
+    <string name="notif_type_new_post"><b>%1$s</b>さんが新しい投稿をしました。</string>
+    <string name="notif_type_new_story"><b>%1$s</b>さんが新しいストーリーを更新しました。</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b>さんが、あなたがフォローしているペットを投稿でタグ付けしました。</string>
 
 
     <string-array name="media_types">

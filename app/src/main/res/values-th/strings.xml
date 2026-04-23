@@ -321,6 +321,11 @@
     <string name="delete_notification">ลบการแจ้งเตือนนี้</string>
     <string name="notifi_deleted">ลบการแจ้งเตือนแล้ว</string>
     <string name="copy">คัดลอก</string>
+    <string name="title_pet_followers">รายชื่อผู้ติดตามสัตว์เลี้ยง</string>
+    <string name="no_followers_yet">ยังไม่มีผู้ติดตาม</string>
+    <string name="notif_type_new_post"><b>%1$s</b> เพิ่งโพสต์บทความใหม่</string>
+    <string name="notif_type_new_story"><b>%1$s</b> เพิ่งอัปเดตสตอรี่ใหม่</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> ได้แท็กสัตว์เลี้ยงที่คุณติดตามในโพสต์</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

@@ -243,7 +243,7 @@
     <string name="notif_type_comment"><b>%1$s</b> 당신의 글에 댓글을 달았습니다.</string>
     <string name="notif_type_comment_reply"><b>%1$s</b> 댓글에 답글을 달았습니다.</string>
     <string name="notif_type_comment_like"><b>%1$s</b> 댓글 좋아요.</string>
-    <string name="notif_type_story_reaction"><b>%1$s</b> 당신의 이야기에 반응했습니다.</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b>님이 당신의 스토리에 %2$s 반응을 보냈습니다.</string>
     <string name="notif_type_user_follow"><b>%1$s</b> 너를 따라다니기 시작했어.</string>
     <string name="notif_type_pet_follow"><b>%1$s</b> 반려동물을 따라가기 시작했어요.</string>
     <string name="story_unavailable">이 이야기는 더 이상 이용 가능하지 않거나 만료되었습니다.</string>
@@ -321,6 +321,11 @@
     <string name="delete_notification">이 알림 삭제</string>
     <string name="notifi_deleted">알림이 삭제되었습니다</string>
     <string name="copy">복사</string>
+    <string name="title_pet_followers">반려동물 팔로워 목록</string>
+    <string name="no_followers_yet">아직 팔로워가 없습니다</string>
+    <string name="notif_type_new_post"><b>%1$s</b>님이 새 게시물을 올렸습니다.</string>
+    <string name="notif_type_new_story"><b>%1$s</b>님이 새 스토리를 업데이트했습니다.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b>님이 당신이 팔로우하는 반려동물을 게시물에서 태그했습니다.</string>
 
 
     <string-array name="media_types">

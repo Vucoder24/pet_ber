@@ -243,7 +243,7 @@
     <string name="notif_type_comment"><b>%1$s</b> Comenté en tu publicación.</string>
     <string name="notif_type_comment_reply"><b>%1$s</b> Respondí a tu comentario.</string>
     <string name="notif_type_comment_like"><b>%1$s</b> Me ha gustado tu comentario.</string>
-    <string name="notif_type_story_reaction"><b>%1$s</b> Reaccioné a tu historia.</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b> reaccionó %2$s a tu historia.</string>
     <string name="notif_type_user_follow"><b>%1$s</b> Empezó a seguirte.</string>
     <string name="notif_type_pet_follow"><b>%1$s</b> Empecé a seguir a tu mascota.</string>
     <string name="story_unavailable">Esta historia ya no está disponible o ha caducado.</string>
@@ -321,6 +321,11 @@
     <string name="delete_notification">Eliminar esta notificación</string>
     <string name="notifi_deleted">Notificación eliminada</string>
     <string name="copy">Copiar</string>
+    <string name="title_pet_followers">Lista de seguidores de la mascota</string>
+    <string name="no_followers_yet">Aún no hay seguidores</string>
+    <string name="notif_type_new_post"><b>%1$s</b> acaba de publicar un nuevo artículo.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> acaba de actualizar una nueva historia.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> ha etiquetado a la mascota que sigues en una publicación.</string>
 
 
     <string-array name="media_types">

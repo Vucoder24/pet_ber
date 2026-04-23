@@ -65,14 +65,14 @@ class NotificationFragment : Fragment() {
                 }
 
                 when (notification.type) {
-                    "post_like", "comment", "comment_reply", "comment_like" -> {
+                    "post_like", "comment", "comment_reply", "comment_like", "new_post", "pet_tagged" -> {
                         notification.postId?.let { postId ->
                              val intent = Intent(requireContext(), PostDetailActivity::class.java)
                              intent.putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
                              startActivity(intent)
                         }
                     }
-                    "story_reaction" -> {
+                    "story_reaction", "new_story" -> {
                         notification.storyId?.let { storyId ->
                             ViewStoryActivity.startWithId(requireContext(), storyId)
                         }

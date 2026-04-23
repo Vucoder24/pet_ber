@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBer">
         <activity
+            android:name=".ui.activity.ViewFollowersPetActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.SetLanguageActivity"
             android:exported="false" />
         <activity
@@ -149,6 +152,7 @@
                     android:scheme="petber" />
             </intent-filter>
         </activity>
+
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"

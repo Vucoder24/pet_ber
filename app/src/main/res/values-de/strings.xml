@@ -287,6 +287,11 @@ Sei der Erste, der kommentiert!</string>
     <string name="delete_notification">Diese Benachrichtigung löschen</string>
     <string name="notifi_deleted">Benachrichtigung entfernt</string>
     <string name="copy">Kopieren</string>
+    <string name="title_pet_followers">Liste der Haustier-Follower</string>
+    <string name="no_followers_yet">Noch keine Follower</string>
+    <string name="notif_type_new_post"><b>%1$s</b> hat gerade einen neuen Beitrag veröffentlicht.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> hat gerade eine neue Story gepostet.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> hat das Haustier, dem du folgst, in einem Beitrag markiert.</string>
 
     <string name="currently_using">Derzeit im Einsatz</string>
     <string name="all_languages">Alle Sprachen</string>

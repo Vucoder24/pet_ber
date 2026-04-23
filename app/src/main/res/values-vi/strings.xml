@@ -322,6 +322,11 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="notifi_deleted">Đã xóa thông báo</string>
     <string name="copy">Sao chép</string>
     <string name="delete_notification">Xóa thông báo này</string>
+    <string name="title_pet_followers">Danh sách người theo dõi thú cưng</string>
+    <string name="no_followers_yet">Chưa có người theo dõi</string>
+    <string name="notif_type_new_post"><b>%1$s</b> vừa đăng một bài viết mới.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> vừa đăng một khoảnh khắc mới.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> đã gắn thẻ thú cưng mà bạn đang theo dõi trong một bài viết.</string>
 
 
     <string-array name="media_types">

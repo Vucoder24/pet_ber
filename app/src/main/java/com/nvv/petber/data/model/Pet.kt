@@ -82,3 +82,9 @@ data class PetFollowRecord(
     @SerialName("created_at")
     val createdAt: String? = null
 )
+
+@Serializable
+data class PetFollowWithUser(
+    @SerialName("users")
+    val user: User? = null
+)

@@ -321,6 +321,11 @@ Soyez le premier à commenter !</string>
     <string name="delete_notification">Supprimer cette notification</string>
     <string name="notifi_deleted">Notification supprimée</string>
     <string name="copy">Copier</string>
+    <string name="title_pet_followers">Liste des abonnés de l’animal</string>
+    <string name="no_followers_yet">Aucun abonné pour le moment</string>
+    <string name="notif_type_new_post"><b>%1$s</b> vient de publier un nouvel article.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> vient de publier une nouvelle story.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> a identifié l’animal que vous suivez dans une publication.</string>
 
 
     <string-array name="media_types">

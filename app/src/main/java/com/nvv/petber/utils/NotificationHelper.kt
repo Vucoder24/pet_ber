@@ -21,6 +21,9 @@ object NotificationHelper {
             "user_follow" -> context.getString(R.string.notif_type_user_follow, senderName)
             "pet_follow" -> context.getString(R.string.notif_type_pet_follow, senderName)
             "grouped" -> notification.message.toString()
+            "new_post" -> context.getString(R.string.notif_type_new_post, senderName)
+            "new_story" -> context.getString(R.string.notif_type_new_story, senderName)
+            "pet_tagged" -> context.getString(R.string.notif_type_pet_tagged, senderName)
             else -> notification.message ?: context.getString(R.string.new_notifications)
         }
     }

@@ -321,6 +321,11 @@ Seja o primeiro a comentar!</string>
     <string name="delete_notification">Excluir esta notificação</string>
     <string name="notifi_deleted">Notificação removida</string>
     <string name="copy">Copiar</string>
+    <string name="title_pet_followers">Lista de seguidores do pet</string>
+    <string name="no_followers_yet">Ainda não há seguidores</string>
+    <string name="notif_type_new_post"><b>%1$s</b> acabou de publicar um novo post.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> acabou de atualizar uma nova história.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> marcou o pet que você segue em uma publicação.</string>
 
 
     <string-array name="media_types">
