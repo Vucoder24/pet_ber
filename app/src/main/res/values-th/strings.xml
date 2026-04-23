@@ -338,6 +338,7 @@
     <string name="permission_required">คำขอการอนุญาต</string>
     <string name="photo">รูปภาพ</string>
     <string name="grant_permission">ให้การอนุญาต</string>
+    <string name="no_diary_yet">ยังไม่มีบันทึก</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

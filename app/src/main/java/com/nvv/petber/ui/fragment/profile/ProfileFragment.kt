@@ -305,7 +305,7 @@ class ProfileFragment : Fragment() {
             }
         })
         binding.appBarLayout.addOnOffsetChangedListener { appBar, verticalOffset ->
-            binding.root.isEnabled = (verticalOffset == 0)
+            _binding?.root?.isEnabled = (verticalOffset == 0)
         }
     }
 

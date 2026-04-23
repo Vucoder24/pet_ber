@@ -338,6 +338,7 @@ Soyez le premier à commenter !</string>
     <string name="permission_required">Autorisation requise</string>
     <string name="photo">Photo</string>
     <string name="grant_permission">Accorder l\'autorisation</string>
+    <string name="no_diary_yet">Pas encore de journal</string>
 
 
     <string-array name="media_types">

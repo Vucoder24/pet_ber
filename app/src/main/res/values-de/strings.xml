@@ -304,6 +304,7 @@ Sei der Erste, der kommentiert!</string>
     <string name="permission_required">Zugriffsberechtigung erforderlich</string>
     <string name="photo">Foto</string>
     <string name="grant_permission">Berechtigung erteilen</string>
+    <string name="no_diary_yet">Noch keine Tagebucheinträge</string>
 
     <string name="currently_using">Derzeit im Einsatz</string>
     <string name="all_languages">Alle Sprachen</string>

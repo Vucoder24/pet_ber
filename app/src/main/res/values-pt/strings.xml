@@ -338,6 +338,7 @@ Seja o primeiro a comentar!</string>
     <string name="permission_required">Permissão necessária</string>
     <string name="photo">Foto</string>
     <string name="grant_permission">Conceder permissão</string>
+    <string name="no_diary_yet">Nenhum diário ainda</string>
 
 
     <string-array name="media_types">

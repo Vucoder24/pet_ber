@@ -130,7 +130,8 @@ class PostDetailActivity : BaseActivity() {
         viewModel.post.observe(this){
             adapter.submitPostData(
                 list = it?.let { listOf(it) } ?: emptyList(),
-                isLoadingMore = false
+                isLoadingMore = false,
+                showCreatePost = false
             )
         }
         viewModel.isLoading.observe(this){

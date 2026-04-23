@@ -339,6 +339,7 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="permission_required">Yêu cầu quyền truy cập</string>
     <string name="photo">Ảnh</string>
     <string name="grant_permission">Cấp quyền</string>
+    <string name="no_diary_yet">Chưa có nhật ký nào</string>
 
 
     <string-array name="media_types">

@@ -71,7 +71,12 @@ class OtherUserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        targetUserId = arguments?.getString(ARG_USER_ID) ?: return requireActivity().finish()
+        val id = arguments?.getString(ARG_USER_ID)
+        if (id == null) {
+            requireActivity().finish()
+            return
+        }
+        targetUserId = id
 
         setupFragmentResultListener()
         viewModel.loadUserProfile(targetUserId)
@@ -157,7 +162,7 @@ class OtherUserProfileFragment : Fragment() {
             }
         })
         binding.appBarLayout.addOnOffsetChangedListener { appBar, verticalOffset ->
-            binding.root.isEnabled = (verticalOffset == 0)
+            _binding?.root?.isEnabled = (verticalOffset == 0)
         }
     }
 
@@ -192,7 +197,8 @@ class OtherUserProfileFragment : Fragment() {
         viewModel.posts.observe(viewLifecycleOwner) { posts ->
             historyPostAdapter.submitPostData(
                 list = posts,
-                isLoadingMore = viewModel.isLoadMore.value ?: false
+                isLoadingMore = viewModel.isLoadMore.value ?: false,
+                showCreatePost = false
             )
         }
 

@@ -338,6 +338,7 @@
     <string name="permission_required">需要权限</string>
     <string name="photo">照片</string>
     <string name="grant_permission">授予权限</string>
+    <string name="no_diary_yet">尚无日记</string>
 
 
     <string-array name="media_types">

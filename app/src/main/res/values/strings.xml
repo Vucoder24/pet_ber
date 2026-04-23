@@ -337,6 +337,7 @@
     <string name="permission_required">Access permission request</string>
     <string name="photo">Photo</string>
     <string name="grant_permission">Grant Permission</string>
+    <string name="no_diary_yet">No dairy yet</string>
 
 
     <string-array name="media_types">

@@ -338,6 +338,7 @@
     <string name="permission_required">Permiso requerido</string>
     <string name="photo">Foto</string>
     <string name="grant_permission">Otorgar permiso</string>
+    <string name="no_diary_yet">No hay diarios aún</string>
 
 
     <string-array name="media_types">
