@@ -19,7 +19,9 @@ class CommentAdapter(
     private val postAuthorId: String,
     private val onReplyClick: (CommentUI) -> Unit,
     private val onLikeClick: (CommentUI) -> Unit,
-    private val onToggleReplies: (CommentUI) -> Unit
+    private val onToggleReplies: (CommentUI) -> Unit,
+    private val onLongClick: (CommentUI) -> Unit,
+    private val onProfileClick: (CommentUI) -> Unit
 ) :
     ListAdapter<CommentUI, CommentAdapter.CommentViewHolder>(CommentDiffCallback()) {
 
@@ -89,6 +91,12 @@ class CommentAdapter(
             binding.tvReply.setOnClickListener { onReplyClick(uiModel) }
             binding.ivLike.setOnClickListener { onLikeClick(uiModel) }
             binding.tvToggleReplies.setOnClickListener { onToggleReplies(uiModel) }
+            binding.root.setOnLongClickListener {
+                onLongClick(uiModel)
+                true
+            }
+            binding.tvUsername.setOnClickListener { onProfileClick(uiModel) }
+            binding.ivAvatar.setOnClickListener { onProfileClick(uiModel) }
         }
     }
 

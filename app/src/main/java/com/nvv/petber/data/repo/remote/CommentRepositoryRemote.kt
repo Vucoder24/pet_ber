@@ -87,4 +87,18 @@ class CommentRepositoryRemote @Inject constructor(
             Result.failure(e)
         }
     }
+
+    suspend fun deleteComment(commentId: String): Result<Boolean> {
+        return try {
+            db["comments"].delete {
+                filter {
+                    eq("id", commentId)
+                }
+            }
+            Result.success(true)
+        } catch (e: Exception) {
+            Log.e("Repository", "Hard delete error: ${e.message}")
+            Result.failure(e)
+        }
+    }
 }

@@ -138,6 +138,35 @@ class CommentViewModel @Inject constructor(
         rootNodes.forEach { flatten(it, 0) }
         return flatList
     }
+
+    fun deleteComment(commentId: String) {
+        val previousRawComments = _uiState.value.rawComments
+        val previousExpandedIds = _uiState.value.expandedIds
+
+        val updatedRawComments = previousRawComments.filterNot {
+            it.id == commentId || it.parentCommentId == commentId
+        }
+
+        _uiState.value = _uiState.value.copy(
+            rawComments = updatedRawComments,
+            flatComments = buildFlatList(updatedRawComments, previousExpandedIds)
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteComment(commentId)
+                .onFailure { error ->
+                    _uiState.value = _uiState.value.copy(
+                        rawComments = previousRawComments,
+                        flatComments = buildFlatList(previousRawComments, previousExpandedIds),
+                        error = "DELETE_FAILED"
+                    )
+                }
+        }
+    }
+
+    fun clearError() {
+        _uiState.value = _uiState.value.copy(error = null)
+    }
 }
 
 data class CommentUiState(
