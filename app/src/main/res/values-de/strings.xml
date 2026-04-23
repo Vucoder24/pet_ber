@@ -292,6 +292,18 @@ Sei der Erste, der kommentiert!</string>
     <string name="notif_type_new_post"><b>%1$s</b> hat gerade einen neuen Beitrag veröffentlicht.</string>
     <string name="notif_type_new_story"><b>%1$s</b> hat gerade eine neue Story gepostet.</string>
     <string name="notif_type_pet_tagged"><b>%1$s</b> hat das Haustier, dem du folgst, in einem Beitrag markiert.</string>
+    <string name="no_camera_found">Gerät hat keine Kamera</string>
+    <string name="camera_init_failed">Kamera konnte nicht initialisiert werden</string>
+    <string name="camera_permission_required">Kamerazugriff ist erforderlich, um fortzufahren</string>
+    <string name="camera_permission_permanently_denied">Sie haben die Kameraberechtigung dauerhaft verweigert. Bitte gehen Sie zu den Einstellungen, um die Berechtigung zu erteilen.</string>
+    <string name="microphone_permission_required">Mikrofonberechtigung ist erforderlich, um Videos mit Ton aufzunehmen</string>
+    <string name="error_insufficient_storage">Nicht genügend Speicherplatz zum Speichern der Datei</string>
+    <string name="error_camera_closed">Kamera wurde geschlossen</string>
+    <string name="error_capture_failed">Aufnahme/Video nicht möglich, bitte versuchen Sie es erneut</string>
+    <string name="go_to_settings">Einstellungen öffnen</string>
+    <string name="permission_required">Zugriffsberechtigung erforderlich</string>
+    <string name="photo">Foto</string>
+    <string name="grant_permission">Berechtigung erteilen</string>
 
     <string name="currently_using">Derzeit im Einsatz</string>
     <string name="all_languages">Alle Sprachen</string>

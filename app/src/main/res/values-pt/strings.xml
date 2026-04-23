@@ -326,6 +326,18 @@ Seja o primeiro a comentar!</string>
     <string name="notif_type_new_post"><b>%1$s</b> acabou de publicar um novo post.</string>
     <string name="notif_type_new_story"><b>%1$s</b> acabou de atualizar uma nova história.</string>
     <string name="notif_type_pet_tagged"><b>%1$s</b> marcou o pet que você segue em uma publicação.</string>
+    <string name="no_camera_found">O dispositivo não possui câmera</string>
+    <string name="camera_init_failed">Não foi possível inicializar a câmera</string>
+    <string name="camera_permission_required">A permissão de acesso à câmera é necessária para continuar</string>
+    <string name="camera_permission_permanently_denied">Você negou permanentemente a permissão da câmera. Vá em Configurações para conceder a permissão.</string>
+    <string name="microphone_permission_required">A permissão do microfone é necessária para gravar vídeos com som</string>
+    <string name="error_insufficient_storage">Espaço insuficiente para salvar o arquivo</string>
+    <string name="error_camera_closed">A câmera foi fechada</string>
+    <string name="error_capture_failed">Não foi possível capturar/gravar vídeo, tente novamente</string>
+    <string name="go_to_settings">Abrir Configurações</string>
+    <string name="permission_required">Permissão necessária</string>
+    <string name="photo">Foto</string>
+    <string name="grant_permission">Conceder permissão</string>
 
 
     <string-array name="media_types">

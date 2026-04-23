@@ -326,6 +326,18 @@
     <string name="notif_type_new_post"><b>%1$s</b>님이 새 게시물을 올렸습니다.</string>
     <string name="notif_type_new_story"><b>%1$s</b>님이 새 스토리를 업데이트했습니다.</string>
     <string name="notif_type_pet_tagged"><b>%1$s</b>님이 당신이 팔로우하는 반려동물을 게시물에서 태그했습니다.</string>
+    <string name="no_camera_found">기기에 카메라가 없습니다</string>
+    <string name="camera_init_failed">카메라를 초기화할 수 없습니다</string>
+    <string name="camera_permission_required">계속하려면 카메라 액세스 권한이 필요합니다</string>
+    <string name="camera_permission_permanently_denied">카메라 권한을 영구적으로 거부했습니다. 설정에서 권한을 허용해 주세요.</string>
+    <string name="microphone_permission_required">소리가 포함된 동영상을 녹화하려면 마이크 권한이 필요합니다</string>
+    <string name="error_insufficient_storage">파일을 저장할 저장 공간이 부족합니다</string>
+    <string name="error_camera_closed">카메라가 닫혔습니다</string>
+    <string name="error_capture_failed">캡처/동영상 촬영에 실패했습니다. 다시 시도해 주세요</string>
+    <string name="go_to_settings">설정으로 이동</string>
+    <string name="permission_required">권한 요청</string>
+    <string name="photo">사진</string>
+    <string name="grant_permission">권한 허용</string>
 
 
     <string-array name="media_types">

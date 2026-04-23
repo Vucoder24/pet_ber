@@ -27,7 +27,7 @@ data class MediaItem(
     val isFromRemote: Boolean = false,
     val remoteId: String? = null,
     val remoteUrl: String? = null
-): Parcelable
+) : Parcelable
 
 class MediaGridAdapter(
     private val ctx: Context,
@@ -49,6 +49,7 @@ class MediaGridAdapter(
         }
     }
 
+    @Suppress("DEPRECATION")
     inner class VH(private val b: ItemMediaGridBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(item: MediaItem) {
             // load thumbnail
@@ -167,6 +168,30 @@ class MediaGridAdapter(
         } else {
             notifyListUpdated()
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addItemToSelection(item: MediaItem) {
+        val currentItems = currentList.toMutableList()
+        if (currentItems.none { it.uri == item.uri }) {
+            currentItems.add(0, item)
+            selected[item.uri] = selected.size + 1
+            onSelectionChanged?.invoke(selected.size)
+            super.submitList(currentItems)
+            notifyDataSetChanged()
+            return
+        }
+
+        if (!selected.containsKey(item.uri)) {
+            if (selected.size >= maxSelect) {
+                ctx.toast(ctx.getString(R.string.maximum_media_and_count, maxSelect))
+                return
+            }
+            selected[item.uri] = selected.size + 1
+        }
+
+        onSelectionChanged?.invoke(selected.size)
+        notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
