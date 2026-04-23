@@ -286,6 +286,7 @@ Sei der Erste, der kommentiert!</string>
     <string name="select_language">Ausgewählte Sprache</string>
     <string name="delete_notification">Diese Benachrichtigung löschen</string>
     <string name="notifi_deleted">Benachrichtigung entfernt</string>
+    <string name="copy">Kopieren</string>
 
     <string name="currently_using">Derzeit im Einsatz</string>
     <string name="all_languages">Alle Sprachen</string>

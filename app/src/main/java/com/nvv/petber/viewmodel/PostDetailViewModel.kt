@@ -11,6 +11,7 @@ import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,12 +53,14 @@ class PostDetailViewModel @Inject constructor(
         )
         _post.value = updatedPost
 
-        viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.toggleLike(currentPost.id, currentUserId, currentPost.isLiked)
-                .onFailure {
-                    _post.value = currentPost
-                    _error.value = it.message
-                }
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.toggleLike(currentPost.id, currentUserId, currentPost.isLiked)
+            }
+            result.onFailure {
+                _post.value = currentPost
+                _error.value = it.message
+            }
         }
     }
 

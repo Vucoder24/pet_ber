@@ -320,6 +320,7 @@
     <string name="lang_th_native">ไทย</string>
     <string name="delete_notification">この通知を削除する</string>
     <string name="notifi_deleted">通知を削除しました</string>
+    <string name="copy">コピー</string>
 
 
     <string-array name="media_types">

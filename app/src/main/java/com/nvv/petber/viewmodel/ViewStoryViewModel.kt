@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -78,10 +79,12 @@ class ViewStoryViewModel @Inject constructor(
     }
 
     private fun fetchReactions(storyId: String, userId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
                 if (userId == currentUserId) {
-                    val details = storyRepository.getStoryReactionDetails(storyId)
+                    val details = withContext(Dispatchers.IO) {
+                        storyRepository.getStoryReactionDetails(storyId)
+                    }
 
                     val grouped = details.groupBy { it.userId }.map { entry ->
                         GroupedStoryReaction(

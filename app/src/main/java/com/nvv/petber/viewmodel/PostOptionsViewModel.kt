@@ -14,6 +14,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +39,7 @@ class PostOptionsViewModel @Inject constructor(
 
     fun loadInitData(post: Post) {
         viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.value = true
+            _isLoading.emit(true)
             val savedDef = async { homeRepository.isPostSaved(post.id, currentUserId) }
             val followDef = async { homeRepository.checkFollowStatus(currentUserId, post.userId) }
 
@@ -46,24 +47,27 @@ class PostOptionsViewModel @Inject constructor(
             val followResult = followDef.await()
 
             if (savedResult.isSuccess && followResult.isSuccess) {
-                _isSavedRemote.value = savedResult.getOrNull()
-                _isFollowing.value = followResult.getOrNull()
-                _isLoading.value = false
+                _isSavedRemote.emit(savedResult.getOrNull())
+                _isFollowing.emit(followResult.getOrNull())
+                _isLoading.emit(false)
             } else {
-                _loadError.value = context.getString(R.string.error)
-                _isLoading.value = false
+                _loadError.emit(context.getString(R.string.error))
+                _isLoading.emit(false)
             }
         }
     }
 
     fun toggleFollowUser(post: Post) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val currentStatus = _isFollowing.value ?: false
-            homeRepository.toggleFollowUser(
-                currentUserId,
-                post.userId,
-                currentStatus
-            ).onSuccess {
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.toggleFollowUser(
+                    currentUserId,
+                    post.userId,
+                    currentStatus
+                )
+            }
+            result.onSuccess {
                 val newStatus = !currentStatus
                 _isFollowing.value = newStatus
                 val msg = if (newStatus)
@@ -80,40 +84,45 @@ class PostOptionsViewModel @Inject constructor(
                 _actionState.value =
                     ActionState.Error(context.getString(R.string.error_action))
             }
+
         }
     }
 
     fun toggleSavePost(post: Post) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val currentStatus = _isSavedRemote.value ?: false
-            homeRepository.toggleSavePost(post.id, currentUserId, currentStatus)
-                .onSuccess {
-                    val newStatus = !currentStatus
-                    _isSavedRemote.value = newStatus
-                    val msg = if (newStatus) context.getString(R.string.post_saved)
-                    else context.getString(R.string.post_unsaved)
-                    _actionState.value = ActionState.Success(msg)
-                }
-                .onFailure {
-                    _actionState.value = ActionState.Error(context.getString(R.string.error_action))
-                }
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.toggleSavePost(post.id, currentUserId, currentStatus)
+            }
+            result.onSuccess {
+                val newStatus = !currentStatus
+                _isSavedRemote.value = newStatus
+                val msg = if (newStatus) context.getString(R.string.post_saved)
+                else context.getString(R.string.post_unsaved)
+                _actionState.value = ActionState.Success(msg)
+            }.onFailure {
+                _actionState.value = ActionState.Error(context.getString(R.string.error_action))
+            }
+
         }
     }
 
     fun softDeletePost(postId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _isLoading.value = true
-            homeRepository.softDeletePost(postId)
-                .onSuccess {
-                    _isLoading.value = false
-                    _actionState.value =
-                        ActionState.Success(context.getString(R.string.moved_post_trash))
-                }
-                .onFailure {
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.softDeletePost(postId)
+            }
+            result.onSuccess {
+                _isLoading.value = false
+                _actionState.value =
+                    ActionState.Success(context.getString(R.string.moved_post_trash))
+            }.onFailure {
                     _isLoading.value = false
                     _actionState.value =
                         ActionState.Error(context.getString(R.string.softdelete_post_fail))
                 }
+
         }
     }
 

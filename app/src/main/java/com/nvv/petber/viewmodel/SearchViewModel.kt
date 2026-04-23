@@ -55,11 +55,11 @@ class SearchViewModel @Inject constructor(
 
     private fun executeSearch(q: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.value = true
+            _isLoading.emit(true)
             launch { _users.value = searchRepository.searchUsers(q, currentUserId) }
             launch { _pets.value = searchRepository.searchPets(q, currentUserId) }
             launch { _posts.value = searchRepository.searchPostsByHashtag(q, currentUserId) }
-            _isLoading.value = false
+            _isLoading.emit(false)
         }
     }
 

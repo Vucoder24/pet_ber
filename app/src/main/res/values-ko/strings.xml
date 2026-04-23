@@ -320,6 +320,7 @@
     <string name="lang_th_native">ไทย</string>
     <string name="delete_notification">이 알림 삭제</string>
     <string name="notifi_deleted">알림이 삭제되었습니다</string>
+    <string name="copy">복사</string>
 
 
     <string-array name="media_types">

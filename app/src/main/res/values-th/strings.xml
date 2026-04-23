@@ -320,6 +320,7 @@
     <string name="lang_th_native">ภาษาไทย</string>
     <string name="delete_notification">ลบการแจ้งเตือนนี้</string>
     <string name="notifi_deleted">ลบการแจ้งเตือนแล้ว</string>
+    <string name="copy">คัดลอก</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

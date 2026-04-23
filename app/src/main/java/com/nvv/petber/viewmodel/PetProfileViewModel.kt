@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,10 +69,12 @@ class PetProfileViewModel @Inject constructor(
     }
 
     fun fetchPetById(petId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _error.value = null
             try {
-                val pet = repository.getPetById(petId)
+                val pet = withContext(Dispatchers.IO) {
+                    repository.getPetById(petId)
+                }
                 if (pet != null) {
                     _petState.value = pet
                     checkOwnershipAndFollowStatus(pet)
@@ -99,9 +102,11 @@ class PetProfileViewModel @Inject constructor(
     }
 
     private fun loadDiaryPosts(petId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
-                val allPosts = petRepo.getAllPetDiaryPosts(petId)
+                val allPosts = withContext(Dispatchers.IO) {
+                    petRepo.getAllPetDiaryPosts(petId)
+                }
 
                 val groupedData = FilterPostUtils.groupPostsByMonth(allPosts)
                 _diaryPosts.value = groupedData
@@ -129,8 +134,10 @@ class PetProfileViewModel @Inject constructor(
         // Optimistic UI update
         _isFollowing.value = !currentStatus
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val success = petRepo.toggleFollowPet(currentUserId, petId, currentStatus)
+        viewModelScope.launch {
+            val success = withContext(Dispatchers.IO) {
+                petRepo.toggleFollowPet(currentUserId, petId, currentStatus)
+            }
             if (!success) {
                 _isFollowing.value = currentStatus
                 _error.value = context.getString(R.string.error_action)
@@ -149,10 +156,12 @@ class PetProfileViewModel @Inject constructor(
             _isLoadMore.value = true
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
                 val offsetToFetch = if (isRefresh) 0 else currentOffset
-                val newPosts = repository.getPetPosts(petId, offsetToFetch, limitPost, currentUserId)
+                val newPosts = withContext(Dispatchers.IO) {
+                    repository.getPetPosts(petId, offsetToFetch, limitPost, currentUserId)
+                }
 
                 if (isRefresh) {
                     _posts.value = newPosts
@@ -175,10 +184,12 @@ class PetProfileViewModel @Inject constructor(
 
     fun updateAvatar(uri: Uri) {
         val currentPet = _petState.value ?: return
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = UpdatePetState.Loading("avatar")
             try {
-                val updatedPet = petRepo.updatePetAvatar(currentPet.id, uri, currentPet.avatarUrl)
+                val updatedPet = withContext(Dispatchers.IO) {
+                    petRepo.updatePetAvatar(currentPet.id, uri, currentPet.avatarUrl)
+                }
                 _petState.value = updatedPet
                 _uiState.value = UpdatePetState.Success
             } catch (e: Exception) {
@@ -189,10 +200,12 @@ class PetProfileViewModel @Inject constructor(
 
     fun updateCover(uri: Uri) {
         val currentPet = _petState.value ?: return
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = UpdatePetState.Loading("cover")
             try {
-                val updatedPet = petRepo.updatePetCover(currentPet.id, uri, currentPet.coverUrl)
+                val updatedPet = withContext(Dispatchers.IO) {
+                    petRepo.updatePetCover(currentPet.id, uri, currentPet.coverUrl)
+                }
                 _petState.value = updatedPet
                 _uiState.value = UpdatePetState.Success
             } catch (e: Exception) {
@@ -202,7 +215,7 @@ class PetProfileViewModel @Inject constructor(
     }
 
     fun toggleLike(post: Post) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val wasLikedBefore = post.isLiked
             val originalLikeCount = post.likeCount
 
@@ -216,15 +229,18 @@ class PetProfileViewModel @Inject constructor(
             }
             _posts.value = updatedPosts
 
-            homeRepository.toggleLike(post.id, currentUserId, wasLikedBefore)
-                .onFailure { error ->
-                    val revertedPosts = _posts.value.map {
-                        if (it.id == post.id) {
-                            it.copy(isLiked = wasLikedBefore, likeCount = originalLikeCount)
-                        } else it
-                    }
-                    _posts.value = revertedPosts
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.toggleLike(post.id, currentUserId, wasLikedBefore)
+            }
+            result.onFailure { error ->
+                val revertedPosts = _posts.value.map {
+                    if (it.id == post.id) {
+                        it.copy(isLiked = wasLikedBefore, likeCount = originalLikeCount)
+                    } else it
                 }
+                _posts.value = revertedPosts
+            }
+
         }
     }
 

@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,8 +31,8 @@ class RecentDeletedViewModel @Inject constructor(
     private val _isLoadingMore = MutableLiveData(false)
     val isLoadingMore: LiveData<Boolean> = _isLoadingMore
 
-    private val _errorState = MutableLiveData<String>()
-    val errorState: LiveData<String> = _errorState
+    private val _errorState = MutableLiveData<String?>()
+    val errorState: LiveData<String?> = _errorState
 
     private val _successState = MutableLiveData<String?>()
     val successState: LiveData<String?> = _successState
@@ -147,15 +148,17 @@ class RecentDeletedViewModel @Inject constructor(
     }
 
     fun toggleLike(post: Post) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val wasLikedBefore = post.isLiked
             val originalLikeCount = post.likeCount
 
-            val result = homeRepository.toggleLike(
-                postId = post.id,
-                userId = userId,
-                isCurrentlyLiked = wasLikedBefore
-            )
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.toggleLike(
+                    postId = post.id,
+                    userId = userId,
+                    isCurrentlyLiked = wasLikedBefore
+                )
+            }
 
             result.onSuccess { liked ->
                 val current = _posts.value.orEmpty().toMutableList()
