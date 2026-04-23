@@ -32,13 +32,13 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/baloo2"
             android:gravity="center"
             android:paddingEnd="40dp"
             android:text="@string/title_pet_followers"
             android:textColor="@color/text_orange"
-            android:textSize="28sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             tools:ignore="RtlSymmetry,TextContrastCheck" />
     </LinearLayout>
