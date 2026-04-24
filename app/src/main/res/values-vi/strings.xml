@@ -27,7 +27,7 @@
     <string name="pet">Pet</string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Khoảnh khắc của thú cưng</string>
-    <string name="hint_edt_search">Tìm kiếm người dùng, thú cưng, hashtag…</string>
+    <string name="hint_edt_search">Tìm kiếm người dùng, thú cưng, bài viết…</string>
     <string name="follow">Theo dõi</string>
     <string name="users">Người dùng</string>
     <string name="pets">Thú cưng</string>
@@ -340,6 +340,7 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="photo">Ảnh</string>
     <string name="grant_permission">Cấp quyền</string>
     <string name="no_diary_yet">Chưa có nhật ký nào</string>
+    <string name="no_results_found">Không tìm thấy kết quả</string>
 
 
     <string-array name="media_types">

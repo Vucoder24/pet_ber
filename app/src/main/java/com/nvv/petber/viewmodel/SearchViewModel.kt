@@ -58,7 +58,7 @@ class SearchViewModel @Inject constructor(
             _isLoading.emit(true)
             launch { _users.value = searchRepository.searchUsers(q, currentUserId) }
             launch { _pets.value = searchRepository.searchPets(q, currentUserId) }
-            launch { _posts.value = searchRepository.searchPostsByHashtag(q, currentUserId) }
+            launch { _posts.value = searchRepository.searchPosts(q, currentUserId) }
             _isLoading.emit(false)
         }
     }

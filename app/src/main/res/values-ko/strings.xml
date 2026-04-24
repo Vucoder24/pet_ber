@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">반려동물 이야기:</string>
-    <string name="hint_edt_search">사용자, 애완동물, 해시태그 검색…</string>
+    <string name="hint_edt_search">사용자, 애완동물, 게시물 검색…</string>
     <string name="follow">팔로우</string>
     <string name="users">사용자</string>
     <string name="pets">반려동물</string>
@@ -339,6 +339,7 @@
     <string name="photo">사진</string>
     <string name="grant_permission">권한 허용</string>
     <string name="no_diary_yet">작성된 일기가 없습니다</string>
+    <string name="no_results_found">검색 결과가 없습니다</string>
 
 
     <string-array name="media_types">

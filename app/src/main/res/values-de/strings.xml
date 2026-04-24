@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Haustiergeschichten</string>
-    <string name="hint_edt_search">Suche nach Nutzern, Haustieren, Hashtags…</string>
+    <string name="hint_edt_search">Suche nach Nutzern, Haustieren, Beiträgen…</string>
     <string name="follow">Folge</string>
     <string name="users">Nutzer</string>
     <string name="pets">Haustiere</string>
@@ -305,6 +305,7 @@ Sei der Erste, der kommentiert!</string>
     <string name="photo">Foto</string>
     <string name="grant_permission">Berechtigung erteilen</string>
     <string name="no_diary_yet">Noch keine Tagebucheinträge</string>
+    <string name="no_results_found">Keine Ergebnisse gefunden</string>
 
     <string name="currently_using">Derzeit im Einsatz</string>
     <string name="all_languages">Alle Sprachen</string>

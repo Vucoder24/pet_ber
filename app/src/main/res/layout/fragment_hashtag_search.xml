@@ -28,5 +28,21 @@
         android:padding="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="visible" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+    <TextView
+        android:id="@+id/tvNoResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_results_found"
+        android:textSize="16sp"
+        android:fontFamily="@font/baloo2"
+        android:textColor="@color/gray_400"
+        android:visibility="gone" />
 
 </FrameLayout>

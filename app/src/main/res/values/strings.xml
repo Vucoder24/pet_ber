@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Pet Stories</string>
-    <string name="hint_edt_search">Search for users, pets, hashtags…</string>
+    <string name="hint_edt_search">Search for users, pets, post…</string>
     <string name="follow">Follow</string>
     <string name="users">Users</string>
     <string name="pets">Pets</string>
@@ -338,6 +338,7 @@
     <string name="photo">Photo</string>
     <string name="grant_permission">Grant Permission</string>
     <string name="no_diary_yet">No dairy yet</string>
+    <string name="no_results_found">No results found</string>
 
 
     <string-array name="media_types">

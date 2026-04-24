@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">ペットの話:</string>
-    <string name="hint_edt_search">ユーザー、ペット、ハッシュタグを検索する…</string>
+    <string name="hint_edt_search">ユーザー、ペット、投稿を検索…</string>
     <string name="follow">フォロー</string>
     <string name="users">ユーザー</string>
     <string name="pets">ペット</string>
@@ -339,6 +339,7 @@
     <string name="photo">写真</string>
     <string name="grant_permission">権限を許可する</string>
     <string name="no_diary_yet">日記はまだありません</string>
+    <string name="no_results_found">結果が見つかりません</string>
 
 
     <string-array name="media_types">

@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Historias de mascotas:</string>
-    <string name="hint_edt_search">Busca usuarios, mascotas, hashtags…</string>
+    <string name="hint_edt_search">Busca usuarios, mascotas, publicaciones…</string>
     <string name="follow">Sigue</string>
     <string name="users">Usuarios</string>
     <string name="pets">Mascotas</string>
@@ -284,6 +284,7 @@
     <string name="dep_title_recently_deleted_post">Las publicaciones eliminadas serán eliminadas permanentemente después de 30 días.</string>
     <string name="apply">Solicita</string>
     <string name="select_language">Idioma seleccionado</string>
+    <string name="no_results_found">No se encontraron resultados</string>
 
     <string name="currently_using">Actualmente en uso</string>
     <string name="all_languages">Todos los idiomas</string>

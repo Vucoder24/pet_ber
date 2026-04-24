@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">เรื่องราวสัตว์เลี้ยง:</string>
-    <string name="hint_edt_search">ค้นหาผู้ใช้ สัตว์เลี้ยง แฮชแท็ก…</string>
+    <string name="hint_edt_search">ค้นหาผู้ใช้ สัตว์เลี้ยง โพสต์…</string>
     <string name="follow">ติดตาม</string>
     <string name="users">ผู้ใช้</string>
     <string name="pets">สัตว์เลี้ยง</string>
@@ -339,6 +339,7 @@
     <string name="photo">รูปภาพ</string>
     <string name="grant_permission">ให้การอนุญาต</string>
     <string name="no_diary_yet">ยังไม่มีบันทึก</string>
+    <string name="no_results_found">ไม่พบผลลัพธ์</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

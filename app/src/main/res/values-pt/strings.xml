@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Histórias de Animais de Estimação:</string>
-    <string name="hint_edt_search">Procure por usuários, pets, hashtags…</string>
+    <string name="hint_edt_search">Procure por usuários, pets, publicações…</string>
     <string name="follow">Siga</string>
     <string name="users">Usuários</string>
     <string name="pets">Animais de estimação</string>
@@ -339,7 +339,7 @@ Seja o primeiro a comentar!</string>
     <string name="photo">Foto</string>
     <string name="grant_permission">Conceder permissão</string>
     <string name="no_diary_yet">Nenhum diário ainda</string>
-
+    <string name="no_results_found">Nenhum resultado encontrado</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

@@ -38,6 +38,9 @@ class SearchRepository @Inject constructor(
                         or {
                             ilike("username", rawQuery)
                             ilike("full_name", rawQuery)
+                            ilike("bio", rawQuery)
+                            ilike("hobbies", rawQuery)
+                            ilike("address", rawQuery)
                         }
                     }
                 }
@@ -92,6 +95,9 @@ class SearchRepository @Inject constructor(
 
                     if (query.isNotEmpty()) {
                         ilike("name", rawQuery)
+                        ilike("breed", rawQuery)
+                        ilike("species", rawQuery)
+                        ilike("description", rawQuery)
                     }
                 }
                 limit(15)
@@ -132,7 +138,7 @@ class SearchRepository @Inject constructor(
         }
     }
 
-    suspend fun searchPostsByHashtag(query: String, currentUserId: String): List<Post> {
+    suspend fun searchPosts(query: String, currentUserId: String): List<Post> {
         val rawQuery = "%$query%"
         return try {
             val posts = db["posts"].select(
@@ -143,6 +149,7 @@ class SearchRepository @Inject constructor(
                     neq("user_id", currentUserId)
                     filter("deleted_at", FilterOperator.IS, null)
                     if (query.isNotEmpty())  {
+                        ilike("caption", rawQuery)
                         ilike("hashtags", rawQuery)
                     }
                     eq("post_likes.user_id", currentUserId)

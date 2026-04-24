@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">宠物故事：</string>
-    <string name="hint_edt_search">搜索用户、宠物、标签......</string>
+    <string name="hint_edt_search">搜索用户、宠物、帖子…</string>
     <string name="follow">关注</string>
     <string name="users">用户</string>
     <string name="pets">宠物</string>
@@ -339,7 +339,7 @@
     <string name="photo">照片</string>
     <string name="grant_permission">授予权限</string>
     <string name="no_diary_yet">尚无日记</string>
-
+    <string name="no_results_found">未找到结果</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

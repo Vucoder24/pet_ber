@@ -44,7 +44,7 @@ class SearchFragment : Fragment() {
             tab.text = when(position) {
                 0 -> getString(R.string.users)
                 1 -> getString(R.string.pets)
-                else -> getString(R.string.hashtags)
+                else -> getString(R.string.posts)
             }
         }.attach()
     }

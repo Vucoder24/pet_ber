@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Histoires d’animaux de compagnie :</string>
-    <string name="hint_edt_search">Cherchez des utilisateurs, des animaux, des hashtags…</string>
+    <string name="hint_edt_search">Cherchez des utilisateurs, des animaux, des publications…</string>
     <string name="follow">Suivre</string>
     <string name="users">Utilisateurs</string>
     <string name="pets">Animaux de compagnie</string>
@@ -284,6 +284,7 @@ Soyez le premier à commenter !</string>
     <string name="dep_title_recently_deleted_post">Les publications supprimées seront définitivement supprimées après 30 jours.</string>
     <string name="apply">Postulez</string>
     <string name="select_language">Langue choisie</string>
+    <string name="no_results_found">Aucun résultat trouvé</string>
 
     <string name="currently_using">Utilisation actuelle</string>
     <string name="all_languages">Toutes les langues</string>
