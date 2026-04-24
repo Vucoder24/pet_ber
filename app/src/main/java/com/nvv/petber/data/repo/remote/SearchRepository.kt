@@ -1,14 +1,18 @@
 package com.nvv.petber.data.repo.remote
 
+import android.util.Log
 import com.nvv.petber.data.model.FollowRecord
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.PetFollowRecord
 import com.nvv.petber.data.model.PetSearchResult
 import com.nvv.petber.data.model.Post
+import com.nvv.petber.data.model.SearchFilter
+import com.nvv.petber.data.model.SpeciesDTO
 import com.nvv.petber.data.model.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
@@ -26,7 +30,8 @@ class SearchRepository @Inject constructor(
 
     suspend fun searchUsers(
         query: String,
-        currentUserId: String
+        currentUserId: String,
+        filter: SearchFilter?
     ): List<UserSearchResult> {
         val rawQuery = "%$query%"
 
@@ -43,6 +48,8 @@ class SearchRepository @Inject constructor(
                             ilike("address", rawQuery)
                         }
                     }
+                    filter?.userGender?.let { eq("gender", it) }
+                    filter?.userPhoneNumber?.let { ilike("phone", "%$it%") }
                 }
                 limit(15)
             }.decodeList<User>()
@@ -86,7 +93,7 @@ class SearchRepository @Inject constructor(
         } catch (_: Exception) { false }
     }
 
-    suspend fun searchPets(query: String, currentUserId: String): List<PetSearchResult> {
+    suspend fun searchPets(query: String, currentUserId: String, filter: SearchFilter?): List<PetSearchResult> {
         val rawQuery = "%$query%"
         return try {
             val pets = db["pets"].select {
@@ -94,10 +101,14 @@ class SearchRepository @Inject constructor(
                     neq("owner_id", currentUserId)
 
                     if (query.isNotEmpty()) {
-                        ilike("name", rawQuery)
-                        ilike("breed", rawQuery)
-                        ilike("species", rawQuery)
-                        ilike("description", rawQuery)
+                        or {
+                            ilike("name", rawQuery)
+                            ilike("breed", rawQuery)
+                            ilike("description", rawQuery)
+                        }
+                        filter?.petSpecies?.let { eq("species", it) }
+                        filter?.petGender?.let { eq("gender", it) }
+                        filter?.isNeutered?.let { eq("is_neutered", it) }
                     }
                 }
                 limit(15)
@@ -138,7 +149,7 @@ class SearchRepository @Inject constructor(
         }
     }
 
-    suspend fun searchPosts(query: String, currentUserId: String): List<Post> {
+    suspend fun searchPosts(query: String, currentUserId: String, filter: SearchFilter?): List<Post> {
         val rawQuery = "%$query%"
         return try {
             val posts = db["posts"].select(
@@ -149,11 +160,15 @@ class SearchRepository @Inject constructor(
                     neq("user_id", currentUserId)
                     filter("deleted_at", FilterOperator.IS, null)
                     if (query.isNotEmpty())  {
-                        ilike("caption", rawQuery)
-                        ilike("hashtags", rawQuery)
+                        or {
+                            ilike("caption", rawQuery)
+                            ilike("hashtags", rawQuery)
+                        }
                     }
                     eq("post_likes.user_id", currentUserId)
                 }
+                val sortCol = filter?.postSortBy ?: "created_at"
+                order(column = sortCol, order = Order.DESCENDING)
                 limit(15)
             }.decodeList<Post>()
 
@@ -169,5 +184,17 @@ class SearchRepository @Inject constructor(
                 }
             }
         } catch (_: Exception) { emptyList() }
+    }
+    suspend fun getUniqueSpecies(): List<String> {
+        return try {
+            db["pets"].select(Columns.raw("species"))
+                .decodeList<SpeciesDTO>()
+                .mapNotNull { it.species }
+                .distinct()
+                .filter { it.isNotBlank() }
+        } catch (e: Exception) {
+            Log.e("SearchRepository", "Error fetching species: ${e.message}")
+            emptyList()
+        }
     }
 }

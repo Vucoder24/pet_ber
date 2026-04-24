@@ -339,6 +339,13 @@
     <string name="grant_permission">Grant Permission</string>
     <string name="no_diary_yet">No dairy yet</string>
     <string name="no_results_found">No results found</string>
+    <string name="search_filters">Search filters</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="sort_by">Sort by</string>
+    <string name="most_recent">Most Recent</string>
+    <string name="featured_many_likes">Featured (Many Likes)</string>
+    <string name="select_or_enter_a_species">Select or enter a species...</string>
 
 
     <string-array name="media_types">

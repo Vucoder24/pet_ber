@@ -11,6 +11,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.nvv.petber.R
 import com.nvv.petber.databinding.FragmentSearchBinding
 import com.nvv.petber.ui.adapter.SearchPagerAdapter
+import com.nvv.petber.ui.dialog.SearchFilterBottomSheet
 import com.nvv.petber.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,6 +48,16 @@ class SearchFragment : Fragment() {
                 else -> getString(R.string.posts)
             }
         }.attach()
+
+        binding.btnFilter.setOnClickListener {
+            val currentTab = binding.viewPager.currentItem
+            val bottomSheet = SearchFilterBottomSheet(
+                initialFilter = viewModel.getCurrentFilter(currentTab)
+            ) { updatedFilter ->
+                viewModel.applyFilter(updatedFilter)
+            }
+            bottomSheet.show(childFragmentManager, "SearchFilter")
+        }
     }
 
     private fun setupSearch() {

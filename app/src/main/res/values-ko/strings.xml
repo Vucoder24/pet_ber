@@ -340,6 +340,13 @@
     <string name="grant_permission">권한 허용</string>
     <string name="no_diary_yet">작성된 일기가 없습니다</string>
     <string name="no_results_found">검색 결과가 없습니다</string>
+    <string name="search_filters">검색 필터</string>
+    <string name="male">수컷</string>
+    <string name="female">암컷</string>
+    <string name="sort_by">정렬 기준</string>
+    <string name="most_recent">최신순</string>
+    <string name="featured_many_likes">추천 (좋아요 많음)</string>
+    <string name="select_or_enter_a_species">종을 선택하거나 입력하세요...</string>
 
 
     <string-array name="media_types">

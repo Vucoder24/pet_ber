@@ -340,6 +340,14 @@
     <string name="grant_permission">授予权限</string>
     <string name="no_diary_yet">尚无日记</string>
     <string name="no_results_found">未找到结果</string>
+    <string name="search_filters">搜索筛选</string>
+    <string name="male">雄性</string>
+    <string name="female">雌性</string>
+    <string name="sort_by">排序方式</string>
+    <string name="most_recent">最新</string>
+    <string name="featured_many_likes">精选（点赞多）</string>
+    <string name="select_or_enter_a_species">选择或输入物种...</string>
+
 
     <string-array name="media_types">
         <item>@string/all</item>

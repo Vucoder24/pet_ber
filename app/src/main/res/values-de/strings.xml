@@ -340,6 +340,13 @@ Sei der Erste, der kommentiert!</string>
 
     <string name="lang_th_display">Thai</string>
     <string name="lang_th_native">ไทย</string>
+    <string name="search_filters">Suchfilter</string>
+    <string name="male">Männlich</string>
+    <string name="female">Weiblich</string>
+    <string name="sort_by">Sortieren nach</string>
+    <string name="most_recent">Neueste</string>
+    <string name="featured_many_likes">Empfohlen (Viele Likes)</string>
+    <string name="select_or_enter_a_species">Wählen Sie eine Art oder geben Sie eine ein…</string>
 
 
     <string-array name="media_types">

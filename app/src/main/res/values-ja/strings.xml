@@ -340,6 +340,13 @@
     <string name="grant_permission">権限を許可する</string>
     <string name="no_diary_yet">日記はまだありません</string>
     <string name="no_results_found">結果が見つかりません</string>
+    <string name="search_filters">検索フィルター</string>
+    <string name="male">オス</string>
+    <string name="female">メス</string>
+    <string name="sort_by">並び替え</string>
+    <string name="most_recent">最新</string>
+    <string name="featured_many_likes">おすすめ（いいね多数）</string>
+    <string name="select_or_enter_a_species">種類を選択または入力してください...</string>
 
 
     <string-array name="media_types">

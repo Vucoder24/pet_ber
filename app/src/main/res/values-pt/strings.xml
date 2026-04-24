@@ -340,6 +340,13 @@ Seja o primeiro a comentar!</string>
     <string name="grant_permission">Conceder permissão</string>
     <string name="no_diary_yet">Nenhum diário ainda</string>
     <string name="no_results_found">Nenhum resultado encontrado</string>
+    <string name="search_filters">Filtros de pesquisa</string>
+    <string name="male">Macho</string>
+    <string name="female">Fêmea</string>
+    <string name="sort_by">Ordenar por</string>
+    <string name="most_recent">Mais recente</string>
+    <string name="featured_many_likes">Destaque (Muitos likes)</string>
+    <string name="select_or_enter_a_species">Selecione ou insira uma espécie...</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

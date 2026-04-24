@@ -88,3 +88,8 @@ data class PetFollowWithUser(
     @SerialName("users")
     val user: User? = null
 )
+
+@Serializable
+data class SpeciesDTO(
+    val species: String? = null
+)

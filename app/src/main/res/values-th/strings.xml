@@ -340,6 +340,13 @@
     <string name="grant_permission">ให้การอนุญาต</string>
     <string name="no_diary_yet">ยังไม่มีบันทึก</string>
     <string name="no_results_found">ไม่พบผลลัพธ์</string>
+    <string name="search_filters">ตัวกรองการค้นหา</string>
+    <string name="male">ตัวผู้</string>
+    <string name="female">ตัวเมีย</string>
+    <string name="sort_by">เรียงตาม</string>
+    <string name="most_recent">ล่าสุด</string>
+    <string name="featured_many_likes">แนะนำ (ถูกใจจำนวนมาก)</string>
+    <string name="select_or_enter_a_species">เลือกหรือกรอกสายพันธุ์...</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

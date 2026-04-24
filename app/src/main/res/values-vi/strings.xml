@@ -341,6 +341,13 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="grant_permission">Cấp quyền</string>
     <string name="no_diary_yet">Chưa có nhật ký nào</string>
     <string name="no_results_found">Không tìm thấy kết quả</string>
+    <string name="search_filters">Bộ lọc tìm kiếm</string>
+    <string name="male">Đực</string>
+    <string name="female">Cái</string>
+    <string name="sort_by">Sắp xếp theo</string>
+    <string name="most_recent">Mới nhất</string>
+    <string name="featured_many_likes">Nổi bật (Nhiều lượt thích)</string>
+    <string name="select_or_enter_a_species">Chọn hoặc nhập loài...</string>
 
 
     <string-array name="media_types">

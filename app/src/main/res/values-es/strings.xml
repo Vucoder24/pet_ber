@@ -285,6 +285,13 @@
     <string name="apply">Solicita</string>
     <string name="select_language">Idioma seleccionado</string>
     <string name="no_results_found">No se encontraron resultados</string>
+    <string name="search_filters">Filtros de búsqueda</string>
+    <string name="male">Macho</string>
+    <string name="female">Hembra</string>
+    <string name="sort_by">Ordenar por</string>
+    <string name="most_recent">Más reciente</string>
+    <string name="featured_many_likes">Destacado (Muchos Me gusta)</string>
+    <string name="select_or_enter_a_species">Selecciona o ingresa una especie...</string>
 
     <string name="currently_using">Actualmente en uso</string>
     <string name="all_languages">Todos los idiomas</string>
