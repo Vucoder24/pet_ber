@@ -54,6 +54,7 @@ class PetSearchFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 sharedViewModel.pets.collect { list ->
                     adapter.submitList(list)
+                    binding.tvNoResults.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
         }
@@ -61,6 +62,13 @@ class PetSearchFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 sharedViewModel.errorEvent.collect { errorMessage ->
                     requireContext().toast(errorMessage)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.isLoading.collect { isLoading ->
+                    binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
                 }
             }
         }

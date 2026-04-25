@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Haustiergeschichten</string>
-    <string name="hint_edt_search">Suche nach Nutzern, Haustieren, Hashtags…</string>
+    <string name="hint_edt_search">Suche nach Nutzern, Haustieren, Beiträgen…</string>
     <string name="follow">Folge</string>
     <string name="users">Nutzer</string>
     <string name="pets">Haustiere</string>
@@ -284,6 +284,28 @@ Sei der Erste, der kommentiert!</string>
     <string name="dep_title_recently_deleted_post">Gelöschte Beiträge werden nach 30 Tagen dauerhaft entfernt.</string>
     <string name="apply">Bewerben Sie sich</string>
     <string name="select_language">Ausgewählte Sprache</string>
+    <string name="delete_notification">Diese Benachrichtigung löschen</string>
+    <string name="notifi_deleted">Benachrichtigung entfernt</string>
+    <string name="copy">Kopieren</string>
+    <string name="title_pet_followers">Liste der Haustier-Follower</string>
+    <string name="no_followers_yet">Noch keine Follower</string>
+    <string name="notif_type_new_post"><b>%1$s</b> hat gerade einen neuen Beitrag veröffentlicht.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> hat gerade eine neue Story gepostet.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> hat das Haustier, dem du folgst, in einem Beitrag markiert.</string>
+    <string name="no_camera_found">Gerät hat keine Kamera</string>
+    <string name="camera_init_failed">Kamera konnte nicht initialisiert werden</string>
+    <string name="camera_permission_required">Kamerazugriff ist erforderlich, um fortzufahren</string>
+    <string name="camera_permission_permanently_denied">Sie haben die Kameraberechtigung dauerhaft verweigert. Bitte gehen Sie zu den Einstellungen, um die Berechtigung zu erteilen.</string>
+    <string name="microphone_permission_required">Mikrofonberechtigung ist erforderlich, um Videos mit Ton aufzunehmen</string>
+    <string name="error_insufficient_storage">Nicht genügend Speicherplatz zum Speichern der Datei</string>
+    <string name="error_camera_closed">Kamera wurde geschlossen</string>
+    <string name="error_capture_failed">Aufnahme/Video nicht möglich, bitte versuchen Sie es erneut</string>
+    <string name="go_to_settings">Einstellungen öffnen</string>
+    <string name="permission_required">Zugriffsberechtigung erforderlich</string>
+    <string name="photo">Foto</string>
+    <string name="grant_permission">Berechtigung erteilen</string>
+    <string name="no_diary_yet">Noch keine Tagebucheinträge</string>
+    <string name="no_results_found">Keine Ergebnisse gefunden</string>
 
     <string name="currently_using">Derzeit im Einsatz</string>
     <string name="all_languages">Alle Sprachen</string>
@@ -318,6 +340,19 @@ Sei der Erste, der kommentiert!</string>
 
     <string name="lang_th_display">Thai</string>
     <string name="lang_th_native">ไทย</string>
+    <string name="search_filters">Suchfilter</string>
+    <string name="male">Männlich</string>
+    <string name="female">Weiblich</string>
+    <string name="sort_by">Sortieren nach</string>
+    <string name="most_recent">Neueste</string>
+    <string name="featured_many_likes">Empfohlen (Viele Likes)</string>
+    <string name="select_or_enter_a_species">Wählen Sie eine Art oder geben Sie eine ein…</string>
+    <string name="confirm_delete_pet">Löschen des Haustiers bestätigen</string>
+    <string name="dep_confirm_delete_pet">Dieses Haustier wird dauerhaft gelöscht.</string>
+    <string name="delete_pet">Dieses Haustier löschen</string>
+    <string name="delete_pet_success">Haustier erfolgreich gelöscht</string>
+    <string name="deleting_pet">Haustier wird gelöscht...</string>
+    <string name="delete_pet_error">Beim Löschen des Haustiers ist ein Fehler aufgetreten</string>
 
 
     <string-array name="media_types">

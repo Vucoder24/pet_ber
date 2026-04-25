@@ -98,3 +98,21 @@ fun Context.showConfirmDialog(
         }
         .show()
 }
+
+fun Context.showNotificationOptionBottomSheet(
+    onDelete: () -> Unit
+) {
+    val dialog = BottomSheetDialog(this)
+    val view = LayoutInflater.from(this)
+        .inflate(R.layout.layout_bottom_sheet_notification_options, null)
+
+    val btnDelete = view.findViewById<LinearLayout>(R.id.btnDeleteNotif)
+
+    btnDelete.setOnClickListener {
+        onDelete()
+        dialog.dismiss()
+    }
+
+    dialog.setContentView(view)
+    dialog.show()
+}

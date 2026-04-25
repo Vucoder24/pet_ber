@@ -12,7 +12,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nvv.petber.R
+import com.nvv.petber.data.model.CommentUI
 import com.nvv.petber.databinding.FragmentBottomSheetCommentBinding
+import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.CommentAdapter
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.gone
@@ -62,18 +64,49 @@ class CommentBottomSheetFragment : BottomSheetDialogFragment() {
         adapter = CommentAdapter(
             postAuthorId = postAuthorId,
             onReplyClick = { uiModel ->
-                viewModel.setReplyingTo(uiModel.comment)
-                binding.etComment.requestFocus()
+                handleReply(uiModel)
             },
             onLikeClick = { uiModel ->
                 viewModel.toggleLike(uiModel.comment, currentUserId)
             },
             onToggleReplies = { uiModel ->
                 viewModel.toggleExpand(uiModel.comment.id)
+            },
+            onLongClick = { uiModel ->
+                showActionMenu(uiModel)
+            },
+            onProfileClick = { uModel ->
+                UserProfileActivity.start(requireContext(), uModel.comment.userId)
             }
         )
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
         binding.rvComments.adapter = adapter
+    }
+    private fun handleReply(uiModel: CommentUI) {
+        viewModel.setReplyingTo(uiModel.comment)
+        binding.etComment.post {
+            binding.etComment.requestFocus()
+            showKeyboard()
+        }
+    }
+
+    private fun showActionMenu(uiModel: CommentUI) {
+        val isMine = uiModel.comment.userId == currentUserId
+        val actionSheet = CommentActionBottomSheetFragment(
+            commentUI = uiModel,
+            isMine = isMine,
+            onReply = { handleReply(uiModel) },
+            onDelete = {
+                viewModel.deleteComment(uiModel.comment.id)
+            }
+        )
+        actionSheet.show(childFragmentManager, "CommentAction")
+    }
+
+    private fun showKeyboard() {
+        dialog?.window?.setSoftInputMode(
+            android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
+        )
     }
 
     private fun setupActions() {
@@ -170,7 +203,16 @@ class CommentBottomSheetFragment : BottomSheetDialogFragment() {
                     }
 
                     state.error?.let {
-                        requireContext().toast(R.string.error_add_cmt_failed)
+                        when (it) {
+                            "DELETE_FAILED" -> {
+                                requireContext().toast(R.string.error_action)
+                                viewModel.clearError()
+                            }
+                            else -> {
+                                requireContext().toast(R.string.error_add_cmt_failed)
+                                viewModel.clearError()
+                            }
+                        }
                     }
                 }
             }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -21,8 +22,10 @@ class AuthViewModel @Inject constructor(
 
     fun login(email: String, password: String) {
         _authState.value = AuthState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = authRepository.loginWithPassword(email, password)
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authRepository.loginWithPassword(email, password)
+            }
             if (result.isSuccess) {
                 _authState.value = AuthState.Success
             } else {
@@ -36,8 +39,10 @@ class AuthViewModel @Inject constructor(
 
     fun register(email: String, pass: String, displayName: String) {
         _authState.value = AuthState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = authRepository.register(email, pass, displayName)
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO){
+                authRepository.register(email, pass, displayName)
+            }
             if (result.isSuccess) {
                 _authState.value = AuthState.Success
             } else {

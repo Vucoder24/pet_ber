@@ -11,7 +11,9 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -42,6 +44,30 @@ class MediaPickerActivity : BaseActivity(), ActivityWithResult {
     private var preselectedItems: List<MediaItem> = emptyList()
 
     private var mediaKind: String = MEDIA_KIND_ALL
+
+    private val cameraLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val uriString = result.data?.getStringExtra(CameraActivity.EXTRA_RESULT_URI) ?: return@registerForActivityResult
+            val isVideo = result.data?.getBooleanExtra(CameraActivity.EXTRA_IS_VIDEO, false) ?: false
+            val uri = uriString.toUri()
+            val mediaItem = MediaItem(uri = uri, isVideo = isVideo, duration = 0L)
+
+            if (mode == MODE_SINGLE) {
+                val intent = Intent()
+                intent.putParcelableArrayListExtra(EXTRA_RESULT_MEDIAS, arrayListOf(mediaItem))
+                setResult(RESULT_OK, intent)
+                finish()
+            } else {
+                val mediaItem = MediaItem(uri = uri, isVideo = isVideo, duration = 0L)
+                if (allItems.none { it.uri == uri }) {
+                    allItems.add(0, mediaItem)
+                }
+                adapter.addItemToSelection(mediaItem)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +115,15 @@ class MediaPickerActivity : BaseActivity(), ActivityWithResult {
 
         binding.toolbar.setNavigationOnClickListener { finish() }
 
+        binding.btnCamera.setOnClickListener {
+            val cameraMode = when (mediaKind) {
+                MEDIA_KIND_IMAGES -> CameraActivity.MODE_PHOTO
+                MEDIA_KIND_VIDEOS -> CameraActivity.MODE_VIDEO
+                else -> CameraActivity.MODE_ALL
+            }
+            cameraLauncher.launch(CameraActivity.createIntent(this, cameraMode))
+        }
+
         binding.btnDone.setOnClickListener {
             val selected = adapter.getSelectedItems()
             if (selected.isEmpty()) {
@@ -135,9 +170,10 @@ class MediaPickerActivity : BaseActivity(), ActivityWithResult {
     }
 
     private fun filterByType(choice: String) {
+        val selectedUris = adapter.getSelectedUris().toSet()
         val filtered = when (choice.lowercase(Locale.getDefault())) {
-            "image" -> allItems.filter { !it.isVideo }
-            "video" -> allItems.filter { it.isVideo }
+            "image" -> allItems.filter { !it.isVideo || it.uri in selectedUris }
+            "video" -> allItems.filter { it.isVideo || it.uri in selectedUris }
             else -> allItems
         }
         adapter.submitList(filtered)

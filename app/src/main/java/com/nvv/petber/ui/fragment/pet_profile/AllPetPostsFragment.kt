@@ -17,6 +17,9 @@ import com.nvv.petber.ui.activity.UserProfileActivity
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
 import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
+import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.PetProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -28,6 +31,7 @@ class AllPetPostsFragment : Fragment() {
     private var _binding: FragmentAllPetPostsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: PetProfileViewModel by activityViewModels()
+    private lateinit var currentUserId: String
 
     @Inject
     lateinit var exoPlayer: ExoPlayer
@@ -40,6 +44,7 @@ class AllPetPostsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        currentUserId = SharePrefUtils.getCurrentUserId(requireContext())
         setupRecyclerView()
         observeData()
     }
@@ -83,7 +88,19 @@ class AllPetPostsFragment : Fragment() {
     private fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.posts.collectLatest { posts ->
-                postAdapter.submitPostData(posts, viewModel.isLoadMore.value)
+                val isOwner = viewModel.isOwner.value
+                postAdapter.submitPostData(
+                    posts,
+                    viewModel.isLoadMore.value,
+                    isOwner
+                )
+                if (posts.isEmpty()) {
+                    binding.tvEmpty.visible()
+                    binding.rvAllPosts.gone()
+                } else {
+                    binding.tvEmpty.gone()
+                    binding.rvAllPosts.visible()
+                }
             }
         }
     }

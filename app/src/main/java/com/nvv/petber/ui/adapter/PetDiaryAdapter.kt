@@ -27,10 +27,12 @@ class PetDiaryAdapter(
         object CreatePost : DiaryItem()
     }
 
-    fun submitData(list: List<DiaryMonth>?) {
+    fun submitData(list: List<DiaryMonth>?, showCreatePost: Boolean = true) {
         val items = mutableListOf<DiaryItem>()
 
-        items.add(DiaryItem.CreatePost)
+        if (showCreatePost){
+            items.add(DiaryItem.CreatePost)
+        }
 
         list?.let {
             items.addAll(it.map { month -> DiaryItem.Month(month) })

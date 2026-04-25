@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Histoires d’animaux de compagnie :</string>
-    <string name="hint_edt_search">Cherchez des utilisateurs, des animaux, des hashtags…</string>
+    <string name="hint_edt_search">Cherchez des utilisateurs, des animaux, des publications…</string>
     <string name="follow">Suivre</string>
     <string name="users">Utilisateurs</string>
     <string name="pets">Animaux de compagnie</string>
@@ -67,7 +67,7 @@
     <string name="my_pet_list">Ma liste d’animaux de compagnie</string>
     <string name="all_posts">Tous les articles</string>
     <string name="message">Message</string>
-    <string name="add_pet">Ajouter un animal de compagnie</string>
+    <string name="add_pet">Ajouter un animal</string>
     <string name="personal_information">Informations personnelles :</string>
     <string name="address">Adresse</string>
     <string name="phone_number">Numéro de téléphone</string>
@@ -84,7 +84,7 @@
     <string name="username_invalid_characters_length">Le nom d’utilisateur doit avoir au moins 2 caractères !</string>
     <string name="add_new_story">Ajouter une nouvelle histoire</string>
     <string name="edit_profile">Modifier le profil</string>
-    <string name="add_new_pet">Ajouter un nouvel animal de compagnie</string>
+    <string name="add_new_pet">Ajouter un nouvel animal</string>
     <string name="choose_cover">Choisissez une photo de couverture</string>
     <string name="avatar">Avatar</string>
     <string name="pet_name">Surnom affectueux</string>
@@ -284,6 +284,20 @@ Soyez le premier à commenter !</string>
     <string name="dep_title_recently_deleted_post">Les publications supprimées seront définitivement supprimées après 30 jours.</string>
     <string name="apply">Postulez</string>
     <string name="select_language">Langue choisie</string>
+    <string name="no_results_found">Aucun résultat trouvé</string>
+    <string name="search_filters">Filtres de recherche</string>
+    <string name="male">Mâle</string>
+    <string name="female">Femelle</string>
+    <string name="sort_by">Trier par</string>
+    <string name="most_recent">Plus récent</string>
+    <string name="featured_many_likes">En vedette (Beaucoup de likes)</string>
+    <string name="select_or_enter_a_species">Sélectionnez ou entrez une espèce...</string>
+    <string name="confirm_delete_pet">Confirmer la suppression de l’animal</string>
+    <string name="dep_confirm_delete_pet">Cet animal sera supprimé définitivement.</string>
+    <string name="delete_pet">Supprimer cet animal</string>
+    <string name="delete_pet_success">Animal supprimé avec succès</string>
+    <string name="deleting_pet">Suppression de l’animal...</string>
+    <string name="delete_pet_error">Une erreur est survenue lors de la suppression de l’animal</string>
 
     <string name="currently_using">Utilisation actuelle</string>
     <string name="all_languages">Toutes les langues</string>
@@ -318,6 +332,27 @@ Soyez le premier à commenter !</string>
 
     <string name="lang_th_display">Thaï</string>
     <string name="lang_th_native">ไทย</string>
+    <string name="delete_notification">Supprimer cette notification</string>
+    <string name="notifi_deleted">Notification supprimée</string>
+    <string name="copy">Copier</string>
+    <string name="title_pet_followers">Liste des abonnés de l’animal</string>
+    <string name="no_followers_yet">Aucun abonné pour le moment</string>
+    <string name="notif_type_new_post"><b>%1$s</b> vient de publier un nouvel article.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> vient de publier une nouvelle story.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> a identifié l’animal que vous suivez dans une publication.</string>
+    <string name="no_camera_found">L\'appareil n\'a pas de caméra</string>
+    <string name="camera_init_failed">Impossible d\'initialiser la caméra</string>
+    <string name="camera_permission_required">L\'autorisation d\'accès à la caméra est requise pour continuer</string>
+    <string name="camera_permission_permanently_denied">Vous avez refusé l\'autorisation de la caméra de façon permanente. Veuillez aller dans les Paramètres pour l\'accorder.</string>
+    <string name="microphone_permission_required">L\'autorisation du microphone est requise pour enregistrer des vidéos avec du son</string>
+    <string name="error_insufficient_storage">Espace de stockage insuffisant pour enregistrer le fichier</string>
+    <string name="error_camera_closed">La caméra a été fermée</string>
+    <string name="error_capture_failed">Impossible de capturer/vidéo, veuillez réessayer</string>
+    <string name="go_to_settings">Ouvrir les Paramètres</string>
+    <string name="permission_required">Autorisation requise</string>
+    <string name="photo">Photo</string>
+    <string name="grant_permission">Accorder l\'autorisation</string>
+    <string name="no_diary_yet">Pas encore de journal</string>
 
 
     <string-array name="media_types">

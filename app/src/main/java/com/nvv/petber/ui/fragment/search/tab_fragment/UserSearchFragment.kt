@@ -49,6 +49,7 @@ class UserSearchFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.users.collect { list ->
                     adapter.submitList(list)
+                    binding.tvNoResults.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
         }
@@ -56,6 +57,13 @@ class UserSearchFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.errorEvent.collect { errorMessage ->
                     requireContext().toast(errorMessage)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isLoading.collect { isLoading ->
+                    binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
                 }
             }
         }

@@ -10,6 +10,7 @@ import com.nvv.petber.data.repo.remote.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,12 +68,13 @@ class SavedPostsViewModel @Inject constructor(
     }
 
     fun unsavePost(post: Post) {
-        viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.toggleSavePost(post.id, userId, true)
-                .onSuccess {
-                    pendingRemovedPosts.remove(post.id)
-                }
-                .onFailure {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.toggleSavePost(post.id, userId, true)
+            }
+            result.onSuccess {
+                pendingRemovedPosts.remove(post.id)
+            }.onFailure {
                     val pending = pendingRemovedPosts[post.id] ?: return@onFailure
                     val (originalPost, index) = pending
 
@@ -86,6 +88,7 @@ class SavedPostsViewModel @Inject constructor(
 
                     pendingRemovedPosts.remove(post.id)
                 }
+
         }
     }
 

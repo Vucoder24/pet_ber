@@ -132,15 +132,12 @@ class UserProfileViewModel @Inject constructor(
     fun toggleFollow() {
         val currentlyFollowing = _isFollowing.value ?: return
         viewModelScope.launch(Dispatchers.IO) {
-            // Cập nhật UI ngay lập tức (Optimistic UI update)
             _isFollowing.postValue(!currentlyFollowing)
 
             val result =
                 homeRepository.toggleFollowUser(currentUserId, targetUserId, currentlyFollowing)
             result.onFailure {
-                // Rollback nếu lỗi
                 _isFollowing.postValue(currentlyFollowing)
-                Log.e("UserProfileVM", "Toggle follow failed: ${it.message}")
             }
         }
     }
@@ -150,7 +147,6 @@ class UserProfileViewModel @Inject constructor(
             val wasLikedBefore = post.isLiked
             val originalLikeCount = post.likeCount
 
-            // Cập nhật UI ngay lập tức
             val updatedPosts = _posts.value?.map {
                 if (it.id == post.id) {
                     it.copy(
@@ -161,11 +157,9 @@ class UserProfileViewModel @Inject constructor(
             }
             _posts.postValue(updatedPosts)
 
-            // Gọi API
             homeRepository.toggleLike(post.id, currentUserId, wasLikedBefore)
                 .onFailure { error ->
                     Log.e("UserProfileVM", "Toggle like failed: ${error.message}")
-                    // Rollback nếu lỗi
                     val revertedPosts = _posts.value?.map {
                         if (it.id == post.id) {
                             it.copy(isLiked = wasLikedBefore, likeCount = originalLikeCount)

@@ -11,622 +11,631 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
-        <include layout="@layout/layout_profile_shimmer" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/dataContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:visibility="visible">
 
-            <!-- COVER IMAGE -->
-            <ImageView
-                android:id="@+id/imgCover"
-                android:layout_width="0dp"
-                android:layout_height="250dp"
-                android:importantForAccessibility="no"
-                android:scaleType="centerCrop"
-                android:src="#E0E0E0"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ImageContrastCheck" />
+            <include layout="@layout/layout_profile_shimmer" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <!-- MENU (3 DOT) -->
-            <ImageView
-                android:id="@+id/btnMore"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_icon_button_dark"
-                android:importantForAccessibility="no"
-                android:padding="8dp"
-                android:src="@drawable/ic_more"
-                app:layout_constraintEnd_toEndOf="@id/imgCover"
-                app:layout_constraintTop_toTopOf="@id/imgCover"
-                app:tint="@android:color/white"
-                tools:ignore="ImageContrastCheck" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/dataContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <!-- PROFILE CARD -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/profileCard"
-                android:layout_width="0dp"
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-40dp"
-                app:cardBackgroundColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imgCover"
-                app:shapeAppearanceOverlay="@style/CardTopRounded">
+                android:background="@android:color/transparent"
+                app:elevation="0dp">
 
-                <LinearLayout
+                <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp">
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                    <TextView
-                        android:id="@+id/tvFullName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="64dp"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/baloo2"
-                        android:maxLines="2"
-                        android:text="Display name"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:id="@+id/tvUserName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-4dp"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/baloo2"
-                        android:maxLines="2"
-                        android:text="\@username"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-
-                    <!-- STATS -->
-                    <LinearLayout
-                        android:id="@+id/layoutStats"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal"
-                        android:gravity="center">
+                        android:paddingBottom="8dp">
 
+                        <ImageView
+                            android:id="@+id/imgCover"
+                            android:layout_width="0dp"
+                            android:layout_height="250dp"
+                            android:importantForAccessibility="no"
+                            android:scaleType="centerCrop"
+                            android:src="#E0E0E0"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="ImageContrastCheck" />
 
-                        <!-- PetFollowing -->
-                        <LinearLayout
-                            android:id="@+id/itemPetFollowing"
+                        <ImageView
+                            android:id="@+id/btnBack"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_icon_button_dark"
+                            android:importantForAccessibility="no"
+                            android:paddingStart="10dp"
+                            android:paddingVertical="8dp"
+                            android:src="@drawable/ic_back"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="@id/imgCover"
+                            app:layout_constraintTop_toTopOf="@id/imgCover"
+                            app:tint="@android:color/white"
+                            tools:ignore="ImageContrastCheck,RtlSymmetry" />
+                        <ImageView
+                            android:id="@+id/btnMore"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:background="@drawable/bg_icon_button_dark"
+                            android:importantForAccessibility="no"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_more"
+                            app:layout_constraintEnd_toEndOf="@id/imgCover"
+                            app:layout_constraintTop_toTopOf="@id/imgCover"
+                            app:tint="@android:color/white"
+                            tools:ignore="ImageContrastCheck" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/profileCard"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:layout_marginTop="-40dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/imgCover"
+                            app:shapeAppearanceOverlay="@style/CardTopRounded">
 
-                            <TextView
-                                android:id="@+id/tvPetFollowingCount"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:fontFamily="@font/baloo2"
-                                android:textColor="@color/text_color"
-                                tools:ignore="HardcodedText" />
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp">
 
-                            <TextView
-                                android:id="@+id/tvPetFollowing"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/baloo2"
-                                android:text="@string/pet_following"
-                                android:textColor="#888888"
-                                android:textSize="12sp"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                tools:ignore="TextContrastCheck" />
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/tvFullName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="64dp"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/baloo2"
+                                    android:maxLines="2"
+                                    android:text="Display name"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
 
-                        <!-- LINE -->
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="20dp"
-                            android:background="#DDDDDD"/>
+                                <TextView
+                                    android:id="@+id/tvUserName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-4dp"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/baloo2"
+                                    android:maxLines="2"
+                                    android:text="\@username"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
 
-                        <!-- FOLLOWERS -->
-                        <LinearLayout
-                            android:id="@+id/itemFollowers"
-                            android:layout_width="0dp"
+                                <LinearLayout
+                                    android:id="@+id/layoutStats"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:id="@+id/itemPetFollowing"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:orientation="vertical"
+                                        tools:ignore="TooDeepLayout">
+
+                                        <TextView
+                                            android:id="@+id/tvPetFollowingCount"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/baloo2"
+                                            android:text="0"
+                                            android:textColor="@color/text_color"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold"
+                                            tools:ignore="HardcodedText" />
+
+                                        <TextView
+                                            android:id="@+id/tvPetFollowing"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:ellipsize="end"
+                                            android:fontFamily="@font/baloo2"
+                                            android:maxLines="1"
+                                            android:text="@string/pet_following"
+                                            android:textColor="#888888"
+                                            android:textSize="12sp"
+                                            tools:ignore="TextContrastCheck" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="20dp"
+                                        android:background="#DDDDDD" />
+
+                                    <LinearLayout
+                                        android:id="@+id/itemFollowers"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvFollowerCount"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/baloo2"
+                                            android:text="0"
+                                            android:textColor="@color/text_color"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold"
+                                            tools:ignore="HardcodedText" />
+
+                                        <TextView
+                                            android:id="@+id/tvFollowers"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:ellipsize="end"
+                                            android:fontFamily="@font/baloo2"
+                                            android:maxLines="1"
+                                            android:text="@string/followers"
+                                            android:textColor="#888888"
+                                            android:textSize="12sp"
+                                            tools:ignore="TextContrastCheck" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="20dp"
+                                        android:background="#DDDDDD" />
+
+                                    <LinearLayout
+                                        android:id="@+id/itemFollowing"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvFollowingCount"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/baloo2"
+                                            android:text="0"
+                                            android:textColor="@color/text_color"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold"
+                                            tools:ignore="HardcodedText" />
+
+                                        <TextView
+                                            android:id="@+id/tvFollowings"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:ellipsize="end"
+                                            android:fontFamily="@font/baloo2"
+                                            android:maxLines="1"
+                                            android:text="@string/following"
+                                            android:textColor="#888888"
+                                            android:textSize="12sp"
+                                            tools:ignore="TextContrastCheck" />
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="20dp"
+                                        android:background="#DDDDDD" />
+
+                                    <LinearLayout
+                                        android:id="@+id/itemFriends"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvFriendsCount"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/baloo2"
+                                            android:text="0"
+                                            android:textColor="@color/text_color"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold"
+                                            tools:ignore="HardcodedText" />
+
+                                        <TextView
+                                            android:id="@+id/tvFriends"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:ellipsize="end"
+                                            android:fontFamily="@font/baloo2"
+                                            android:maxLines="1"
+                                            android:text="@string/friends"
+                                            android:textColor="#888888"
+                                            android:textSize="12sp"
+                                            tools:ignore="TextContrastCheck" />
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btnAddStory"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/bg_btn"
+                                        android:fontFamily="@font/baloo2"
+                                        android:maxLines="2"
+                                        android:text="@string/add_new_story"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:icon="@drawable/ic_add_story"
+                                        app:iconGravity="start"
+                                        app:iconPadding="0dp"
+                                        app:iconTint="@color/white"
+                                        tools:ignore="ButtonStyle,TouchTargetSizeCheck,TextContrastCheck,VisualLintButtonSize" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btnEditProfile"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/gray_light"
+                                        android:fontFamily="@font/baloo2"
+                                        android:paddingHorizontal="32dp"
+                                        android:text="@string/edit_profile"
+                                        android:textColor="@color/black"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:icon="@drawable/ic_edit"
+                                        app:iconGravity="start"
+                                        app:iconPadding="0dp"
+                                        app:iconTint="@color/black"
+                                        tools:ignore="ButtonStyle,TouchTargetSizeCheck,VisualLintButtonSize" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/tvBio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/baloo2"
+                                    android:gravity="center"
+                                    android:maxLines="2"
+                                    android:text="..."
+                                    android:textSize="15sp"
+                                    android:textStyle=""
+                                    tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/avatar"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:elevation="12dp"
+                            android:src="@drawable/ic_default_avatar"
+                            android:translationY="-45dp"
+                            app:civ_border_color="@android:color/white"
+                            app:civ_border_width="3dp"
+                            app:layout_constraintEnd_toEndOf="@id/profileCard"
+                            app:layout_constraintStart_toStartOf="@id/profileCard"
+                            app:layout_constraintTop_toTopOf="@id/profileCard"
+                            tools:ignore="ImageContrastCheck" />
+
+                        <TextView
+                            android:id="@+id/tvPetList"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/tvFollowerCount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:fontFamily="@font/baloo2"
-                                android:textColor="@color/text_color"
-                                tools:ignore="HardcodedText" />
-
-                            <TextView
-                                android:id="@+id/tvFollowers"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/baloo2"
-                                android:text="@string/followers"
-                                android:textColor="#888888"
-                                android:textSize="12sp"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                tools:ignore="TextContrastCheck" />
-                        </LinearLayout>
-
-                        <!-- LINE -->
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="20dp"
-                            android:background="#DDDDDD"/>
-
-                        <!-- FOLLOWING -->
-                        <LinearLayout
-                            android:id="@+id/itemFollowing"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/tvFollowingCount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:fontFamily="@font/baloo2"
-                                android:textColor="@color/text_color"
-                                tools:ignore="HardcodedText" />
-
-                            <TextView
-                                android:id="@+id/tvFollowings"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/baloo2"
-                                android:text="@string/following"
-                                android:textColor="#888888"
-                                android:textSize="12sp"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                tools:ignore="TextContrastCheck" />
-                        </LinearLayout>
-
-                        <!-- LINE -->
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="20dp"
-                            android:background="#DDDDDD"/>
-
-                        <!-- FOLLOWING -->
-                        <LinearLayout
-                            android:id="@+id/itemFriends"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/tvFriendsCount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:fontFamily="@font/baloo2"
-                                android:textColor="@color/text_color"
-                                tools:ignore="HardcodedText" />
-
-                            <TextView
-                                android:id="@+id/tvFriends"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/baloo2"
-                                android:text="@string/friends"
-                                android:textColor="#888888"
-                                android:textSize="12sp"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                tools:ignore="TextContrastCheck" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- BUTTONS -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        >
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnAddStory"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/bg_btn"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="4dp"
                             android:fontFamily="@font/baloo2"
-                            android:text="@string/add_new_story"
-                            app:iconGravity="start"
-                            app:icon="@drawable/ic_add_story"
-                            app:iconTint="@color/white"
-                            app:iconPadding="0dp"
-                            android:maxLines="2"
-                            android:textSize="16sp"
+                            android:text="@string/my_pet_list"
+                            android:textColor="@color/title_color"
+                            android:textSize="20sp"
                             android:textStyle="bold"
-                            tools:ignore="ButtonStyle,TouchTargetSizeCheck,TextContrastCheck,VisualLintButtonSize" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/profileCard"
+                            tools:ignore="TextContrastCheck" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnEditProfile"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvPets"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/gray_light"
+                            android:clipToPadding="false"
+                            android:paddingStart="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvPetList"
+                            tools:ignore="RtlSymmetry" />
+
+                        <View
+                            android:id="@+id/line1"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:background="@color/text_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/rvPets" />
+
+                        <TextView
+                            android:id="@+id/tvInfor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="4dp"
                             android:fontFamily="@font/baloo2"
-                            android:text="@string/edit_profile"
-                            app:iconGravity="start"
-                            app:iconTint="@color/black"
-                            app:iconPadding="0dp"
-                            android:paddingHorizontal="32dp"
-                            app:icon="@drawable/ic_edit"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:text="@string/personal_information"
+                            android:textColor="@color/title_color"
+                            android:textSize="20sp"
                             android:textStyle="bold"
-                            tools:ignore="ButtonStyle,TouchTargetSizeCheck,VisualLintButtonSize" />
-                    </LinearLayout>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line1"
+                            tools:ignore="TextContrastCheck" />
 
-                    <!-- BIO -->
-                    <TextView
-                        android:id="@+id/tvBio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/baloo2"
-                        android:gravity="center"
-                        android:maxLines="2"
-                        android:textStyle=""
-                        android:text="..."
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText" />
+                        <ImageView
+                            android:id="@+id/btnEditInformation"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="16dp"
+                            android:background="@drawable/btn_icon_background"
+                            android:importantForAccessibility="no"
+                            android:padding="6dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_edit"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/rvPets"
+                            app:tint="@color/text_gray" />
 
-                </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/itemAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvInfor">
 
-            </com.google.android.material.card.MaterialCardView>
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginEnd="12dp"
+                                android:importantForAccessibility="no"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_location"
+                                app:tint="@color/text_gray" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/avatar"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:elevation="12dp"
-                android:src="@drawable/ic_default_avatar"
-                android:translationY="-45dp"
-                app:civ_border_color="@android:color/white"
-                app:civ_border_width="3dp"
-                app:layout_constraintEnd_toEndOf="@id/profileCard"
-                app:layout_constraintStart_toStartOf="@id/profileCard"
-                app:layout_constraintTop_toTopOf="@id/profileCard"
-                tools:ignore="ImageContrastCheck" />
+                            <TextView
+                                android:id="@+id/tvAddress"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/baloo2"
+                                android:maxLines="1"
+                                android:text="@string/address"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
-            <!-- HIGHLIGHTS TITLE -->
-            <TextView
-                android:id="@+id/tvPetList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/baloo2"
-                android:text="@string/my_pet_list"
-                android:textColor="@color/title_color"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profileCard"
-                tools:ignore="TextContrastCheck" />
+                        </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPets"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvPetList"
-                tools:ignore="RtlSymmetry" />
+                        <LinearLayout
+                            android:id="@+id/itemPhone"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/itemAddress">
 
-            <View
-                android:id="@+id/line1"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="8dp"
-                android:background="@color/text_gray"
-                app:layout_constraintTop_toBottomOf="@id/rvPets"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginEnd="12dp"
+                                android:importantForAccessibility="no"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_call"
+                                app:tint="@color/text_gray" />
 
-            <TextView
-                android:id="@+id/tvInfor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/baloo2"
-                android:text="@string/personal_information"
-                android:textColor="@color/title_color"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line1"
-                tools:ignore="TextContrastCheck" />
+                            <TextView
+                                android:id="@+id/tvPhone"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/baloo2"
+                                android:text="@string/phone_number"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/btnEditInformation"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:padding="6dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:importantForAccessibility="no"
-                android:background="@drawable/btn_icon_background"
-                android:src="@drawable/ic_edit"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvPets"
-                app:tint="@color/text_gray" />
+                        </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/itemAddress"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tvInfor">
+                        <LinearLayout
+                            android:id="@+id/itemGender"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/itemPhone">
 
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginEnd="12dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_location"
-                    android:scaleType="centerCrop"
-                    app:tint="@color/text_gray" />
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginEnd="16dp"
+                                android:importantForAccessibility="no"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_gender"
+                                app:tint="@color/text_gray" />
 
-                <TextView
-                    android:id="@+id/tvAddress"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/baloo2"
-                    android:text="@string/address"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
+                            <TextView
+                                android:id="@+id/tvGender"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/baloo2"
+                                android:text="@string/gender"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
-            </LinearLayout>
+                        </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/itemPhone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/itemAddress">
+                        <LinearLayout
+                            android:id="@+id/itemBirthday"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="16dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/itemGender">
 
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginEnd="12dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_call"
-                    android:scaleType="centerCrop"
-                    app:tint="@color/text_gray" />
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginEnd="16dp"
+                                android:importantForAccessibility="no"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_birthday"
+                                app:tint="@color/text_gray" />
 
-                <TextView
-                    android:id="@+id/tvPhone"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/baloo2"
-                    android:text="@string/phone_number"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
+                            <TextView
+                                android:id="@+id/tvBirthday"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/baloo2"
+                                android:text="dd/mm/yyyy"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
 
-            </LinearLayout>
+                        </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/itemGender"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/itemPhone">
+                        <LinearLayout
+                            android:id="@+id/itemHobbies"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/itemBirthday">
 
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginEnd="16dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_gender"
-                    android:scaleType="centerCrop"
-                    app:tint="@color/text_gray" />
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginEnd="16dp"
+                                android:importantForAccessibility="no"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_hobbies"
+                                app:tint="@color/text_gray" />
 
-                <TextView
-                    android:id="@+id/tvGender"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/baloo2"
-                    android:text="@string/gender"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
+                            <TextView
+                                android:id="@+id/tvHobbies"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/baloo2"
+                                android:maxLines="1"
+                                android:text="@string/hobbies"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
-            </LinearLayout>
+                        </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/itemBirthday"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="6dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/itemGender">
+                        <View
+                            android:id="@+id/line2"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@color/text_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/itemHobbies" />
 
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginEnd="16dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_birthday"
-                    android:scaleType="centerCrop"
-                    app:tint="@color/text_gray" />
+                        <TextView
+                            android:id="@+id/allPostsTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/baloo2"
+                            android:text="@string/all_posts"
+                            android:textColor="@color/title_color"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line2"
+                            tools:ignore="TextContrastCheck" />
 
-                <TextView
-                    android:id="@+id/tvBirthday"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/baloo2"
-                    android:text="dd/mm/yyyy"
-                    android:layout_marginTop="4dp"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/itemHobbies"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/itemBirthday">
-
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginEnd="16dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_hobbies"
-                    android:scaleType="centerCrop"
-                    app:tint="@color/text_gray" />
-
-                <TextView
-                    android:id="@+id/tvHobbies"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/baloo2"
-                    android:text="@string/hobbies"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/line2"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@color/text_gray"
-                android:layout_marginTop="12dp"
-                android:layout_marginHorizontal="8dp"
-                app:layout_constraintTop_toBottomOf="@id/itemHobbies"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <!-- POSTS TITLE -->
-            <TextView
-                android:id="@+id/allPostsTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/baloo2"
-                android:text="@string/all_posts"
-                android:textColor="@color/title_color"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line2"
-                tools:ignore="TextContrastCheck" />
-
-            <!-- POSTS LIST -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPosts"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="12dp"
-                android:layout_marginBottom="24dp"
                 android:layout_marginTop="4dp"
-                android:nestedScrollingEnabled="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/allPostsTitle" />
+                android:clipToPadding="false"
+                android:paddingBottom="48dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

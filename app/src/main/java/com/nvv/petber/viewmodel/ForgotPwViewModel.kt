@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 sealed class ForgotPasswordState {
@@ -33,11 +34,13 @@ class ForgotPasswordViewModel @Inject constructor(
 
     fun sendOtp(email: String) {
         _state.value = ForgotPasswordState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            authRepository.sendResetPasswordOtp(email)
-                .onSuccess {
-                    _state.value = ForgotPasswordState.OtpSent(email)
-                }
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authRepository.sendResetPasswordOtp(email)
+            }
+            result.onSuccess {
+                _state.value = ForgotPasswordState.OtpSent(email)
+            }
                 .onFailure {
                     _state.value = ForgotPasswordState.Error(
                         it.toFriendlyMessage(default = context.getString(R.string.error_send_otp))
@@ -48,27 +51,30 @@ class ForgotPasswordViewModel @Inject constructor(
 
     fun verifyOtp(email: String, otp: String) {
         _state.value = ForgotPasswordState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            authRepository.verifyResetPasswordOtp(email, otp)
-                .onSuccess {
-                    _state.value = ForgotPasswordState.OtpVerified(email)
-                }
-                .onFailure {
-                    _state.value = ForgotPasswordState.Error(
-                        it.toFriendlyMessage(default = context.getString(R.string.otp_incorrect_or_expired))
-                    )
-                }
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authRepository.verifyResetPasswordOtp(email, otp)
+            }
+            result.onSuccess {
+                _state.value = ForgotPasswordState.OtpVerified(email)
+            }.onFailure {
+                _state.value = ForgotPasswordState.Error(
+                    it.toFriendlyMessage(default = context.getString(R.string.otp_incorrect_or_expired))
+                )
+            }
+
         }
     }
 
     fun updatePassword(newPassword: String) {
         _state.value = ForgotPasswordState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            authRepository.updatePassword(newPassword)
-                .onSuccess {
-                    _state.value = ForgotPasswordState.PasswordUpdated
-                }
-                .onFailure {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authRepository.updatePassword(newPassword)
+            }
+            result.onSuccess {
+                _state.value = ForgotPasswordState.PasswordUpdated
+            }.onFailure {
                     _state.value = ForgotPasswordState.Error(
                         it.toFriendlyMessage(default = context.getString(R.string.error_update_password))
                     )
@@ -87,7 +93,10 @@ class ForgotPasswordViewModel @Inject constructor(
             "otp_expired" in raw -> context.getString(R.string.otp_expired)
             "otp_invalid" in raw || "invalid otp" in raw -> context.getString(R.string.otp_invalid)
             "email not confirmed" in raw || "email_not_confirmed" in raw -> context.getString(R.string.email_not_confirmed)
-            "invalid login credentials" in raw || "invalid_credentials" in raw -> context.getString(R.string.invalid_credentials)
+            "invalid login credentials" in raw || "invalid_credentials" in raw -> context.getString(
+                R.string.invalid_credentials
+            )
+
             "too many requests" in raw -> context.getString(R.string.error_too_many_requests)
             else -> message ?: default
         }

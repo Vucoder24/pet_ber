@@ -16,11 +16,20 @@ import com.nvv.petber.utils.FilterPostUtils
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
+sealed class PetProfileEvent {
+    object PetDeleted : PetProfileEvent()
+    object PetDeleteError: PetProfileEvent()
+}
 
 @HiltViewModel
 class PetProfileViewModel @Inject constructor(
@@ -37,6 +46,8 @@ class PetProfileViewModel @Inject constructor(
 
     private val _isFollowing = MutableStateFlow(false)
     val isFollowing: StateFlow<Boolean> = _isFollowing.asStateFlow()
+    private val _followerCount = MutableStateFlow(0L)
+    val followerCount: StateFlow<Long> = _followerCount.asStateFlow()
     private val _petState = MutableStateFlow<Pet?>(null)
     val petState: StateFlow<Pet?> = _petState.asStateFlow()
 
@@ -55,6 +66,12 @@ class PetProfileViewModel @Inject constructor(
     private val _diaryPosts = MutableStateFlow<List<DiaryMonth>>(emptyList())
     val diaryPosts: StateFlow<List<DiaryMonth>> = _diaryPosts.asStateFlow()
 
+    private val _event = MutableSharedFlow<PetProfileEvent>()
+    val event: SharedFlow<PetProfileEvent> = _event.asSharedFlow()
+
+    private val _isDeleting = MutableStateFlow(false)
+    val isDeleting: StateFlow<Boolean> = _isDeleting.asStateFlow()
+
     private var currentOffset = 0
     private val limitPost = 10
     private var hasMoreData = true
@@ -65,18 +82,34 @@ class PetProfileViewModel @Inject constructor(
         _isOwner.value = isOwner
         loadPetPosts(pet.id, isRefresh = true)
         loadDiaryPosts(pet.id)
+        loadFollowerCount(pet.id)
     }
 
+    fun loadFollowerCount(petId: String) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                petRepo.getPetFollowerCount(petId)
+            }
+            result.onSuccess { count ->
+                _followerCount.value = count
+            }
+        }
+    }
+
+
     fun fetchPetById(petId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _error.value = null
             try {
-                val pet = repository.getPetById(petId)
+                val pet = withContext(Dispatchers.IO) {
+                    repository.getPetById(petId)
+                }
                 if (pet != null) {
                     _petState.value = pet
                     checkOwnershipAndFollowStatus(pet)
                     loadPetPosts(petId, isRefresh = true)
                     loadDiaryPosts(petId)
+                    loadFollowerCount(petId)
                 } else {
                     _error.value = "Pet information not found"
                     _isLoading.value = false
@@ -99,9 +132,11 @@ class PetProfileViewModel @Inject constructor(
     }
 
     private fun loadDiaryPosts(petId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
-                val allPosts = petRepo.getAllPetDiaryPosts(petId)
+                val allPosts = withContext(Dispatchers.IO) {
+                    petRepo.getAllPetDiaryPosts(petId)
+                }
 
                 val groupedData = FilterPostUtils.groupPostsByMonth(allPosts)
                 _diaryPosts.value = groupedData
@@ -128,11 +163,15 @@ class PetProfileViewModel @Inject constructor(
 
         // Optimistic UI update
         _isFollowing.value = !currentStatus
+        if (!currentStatus) _followerCount.value++ else _followerCount.value--
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val success = petRepo.toggleFollowPet(currentUserId, petId, currentStatus)
+        viewModelScope.launch {
+            val success = withContext(Dispatchers.IO) {
+                petRepo.toggleFollowPet(currentUserId, petId, currentStatus)
+            }
             if (!success) {
                 _isFollowing.value = currentStatus
+                if (!currentStatus) _followerCount.value-- else _followerCount.value++
                 _error.value = context.getString(R.string.error_action)
             }
         }
@@ -149,10 +188,12 @@ class PetProfileViewModel @Inject constructor(
             _isLoadMore.value = true
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
                 val offsetToFetch = if (isRefresh) 0 else currentOffset
-                val newPosts = repository.getPetPosts(petId, offsetToFetch, limitPost, currentUserId)
+                val newPosts = withContext(Dispatchers.IO) {
+                    repository.getPetPosts(petId, offsetToFetch, limitPost, currentUserId)
+                }
 
                 if (isRefresh) {
                     _posts.value = newPosts
@@ -175,10 +216,12 @@ class PetProfileViewModel @Inject constructor(
 
     fun updateAvatar(uri: Uri) {
         val currentPet = _petState.value ?: return
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = UpdatePetState.Loading("avatar")
             try {
-                val updatedPet = petRepo.updatePetAvatar(currentPet.id, uri, currentPet.avatarUrl)
+                val updatedPet = withContext(Dispatchers.IO) {
+                    petRepo.updatePetAvatar(currentPet.id, uri, currentPet.avatarUrl)
+                }
                 _petState.value = updatedPet
                 _uiState.value = UpdatePetState.Success
             } catch (e: Exception) {
@@ -189,10 +232,12 @@ class PetProfileViewModel @Inject constructor(
 
     fun updateCover(uri: Uri) {
         val currentPet = _petState.value ?: return
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = UpdatePetState.Loading("cover")
             try {
-                val updatedPet = petRepo.updatePetCover(currentPet.id, uri, currentPet.coverUrl)
+                val updatedPet = withContext(Dispatchers.IO) {
+                    petRepo.updatePetCover(currentPet.id, uri, currentPet.coverUrl)
+                }
                 _petState.value = updatedPet
                 _uiState.value = UpdatePetState.Success
             } catch (e: Exception) {
@@ -202,7 +247,7 @@ class PetProfileViewModel @Inject constructor(
     }
 
     fun toggleLike(post: Post) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val wasLikedBefore = post.isLiked
             val originalLikeCount = post.likeCount
 
@@ -216,15 +261,18 @@ class PetProfileViewModel @Inject constructor(
             }
             _posts.value = updatedPosts
 
-            homeRepository.toggleLike(post.id, currentUserId, wasLikedBefore)
-                .onFailure { error ->
-                    val revertedPosts = _posts.value.map {
-                        if (it.id == post.id) {
-                            it.copy(isLiked = wasLikedBefore, likeCount = originalLikeCount)
-                        } else it
-                    }
-                    _posts.value = revertedPosts
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.toggleLike(post.id, currentUserId, wasLikedBefore)
+            }
+            result.onFailure { error ->
+                val revertedPosts = _posts.value.map {
+                    if (it.id == post.id) {
+                        it.copy(isLiked = wasLikedBefore, likeCount = originalLikeCount)
+                    } else it
                 }
+                _posts.value = revertedPosts
+            }
+
         }
     }
 
@@ -236,6 +284,21 @@ class PetProfileViewModel @Inject constructor(
         _uiState.value = UpdatePetState.Idle
     }
 
+    fun deletePet() {
+        val petId = _petState.value?.id ?: return
+        viewModelScope.launch {
+            _isDeleting.value = true
+            val result = withContext(Dispatchers.IO) {
+                petRepo.deletePet(petId)
+            }
+            _isDeleting.value = false
+            result.onSuccess {
+                _event.emit(PetProfileEvent.PetDeleted)
+            }.onFailure { e ->
+                _event.emit(PetProfileEvent.PetDeleteError)
+            }
+        }
+    }
 }
 
 sealed class UpdatePetState {

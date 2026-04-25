@@ -9,7 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,20 +20,18 @@ class CreatePetViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CreatePetState>(CreatePetState.Idle)
-    val uiState: StateFlow<CreatePetState> = _uiState
+    val uiState: StateFlow<CreatePetState> = _uiState.asStateFlow()
 
     fun createPet(
         pet: Pet,
         avatarUri: Uri?, coverUri: Uri?
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = CreatePetState.Loading
 
-            val result = repository.createPet(
-                pet,
-                avatarUri,
-                coverUri
-            )
+            val result = withContext(Dispatchers.IO) {
+                repository.createPet(pet, avatarUri, coverUri)
+            }
 
             _uiState.value = if (result.isSuccess) {
                 CreatePetState.Success
@@ -46,10 +46,12 @@ class CreatePetViewModel @Inject constructor(
     }
 
     fun savePet(pet: Pet) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = CreatePetState.Loading
 
-            val result = repository.updatePet(pet)
+            val result = withContext(Dispatchers.IO) {
+                repository.updatePet(pet)
+            }
             _uiState.value = if (result.isSuccess) {
                 CreatePetState.Success
             } else {

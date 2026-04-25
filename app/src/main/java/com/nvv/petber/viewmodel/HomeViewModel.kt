@@ -8,11 +8,13 @@ import com.nvv.petber.data.model.Story
 import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class HomeUiState(
@@ -34,7 +36,7 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
-    context: Context
+    @ApplicationContext val context: Context
 ) : ViewModel() {
 
     private val currentUserId = SharePrefUtils.getCurrentUserId(context)
@@ -65,7 +67,7 @@ class HomeViewModel @Inject constructor(
         if (_uiState.value.isLoadingStories || _uiState.value.isLoadingMoreStories) return
         if (!refresh && !_uiState.value.hasMoreStories) return
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val page = if (refresh) 0 else _uiState.value.currentStoryPage
 
             if (refresh) {
@@ -74,31 +76,33 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(isLoadingMoreStories = true)
             }
 
-            homeRepository.fetchStories(page = page, userLimit = limitStory)
-                .onSuccess { newStories ->
-                    val updatedStories = if (refresh) newStories else _uiState.value.stories + newStories
+            val result = withContext(Dispatchers.IO) {
+                homeRepository.fetchStories(page = page, userLimit = limitStory)
+            }
+            result.onSuccess { newStories ->
+                val updatedStories =
+                    if (refresh) newStories else _uiState.value.stories + newStories
 
-                    val newUniqueUsersCount = newStories.distinctBy { it.userId }.size
+                val newUniqueUsersCount = newStories.distinctBy { it.userId }.size
 
-                    _uiState.value = _uiState.value.copy(
-                        stories = updatedStories,
-                        isLoadingStories = false,
-                        isLoadingMoreStories = false,
-                        currentStoryPage = page + 1,
-                        hasMoreStories = newUniqueUsersCount >= limitStory
-                    )
-                }
-                .onFailure { e ->
-                    _uiState.value =
-                        _uiState.value.copy(isLoadingStories = false, isLoadingMoreStories = false)
-                }
+                _uiState.value = _uiState.value.copy(
+                    stories = updatedStories,
+                    isLoadingStories = false,
+                    isLoadingMoreStories = false,
+                    currentStoryPage = page + 1,
+                    hasMoreStories = newUniqueUsersCount >= limitStory
+                )
+            }.onFailure { e ->
+                _uiState.value =
+                    _uiState.value.copy(isLoadingStories = false, isLoadingMoreStories = false)
+            }
         }
     }
 
     fun loadPosts(refresh: Boolean = false) {
         if (_uiState.value.isLoadingPosts || _uiState.value.isLoadingMore || _uiState.value.isRefreshing) return
         if (!refresh && !_uiState.value.hasMorePost) return
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val page = if (refresh) 0 else _uiState.value.currentPage
 
             if (refresh) {
@@ -112,29 +116,30 @@ class HomeViewModel @Inject constructor(
             }
 
             try {
-                homeRepository.fetchPosts(currentUserId, page)
-                    .onSuccess { newPosts ->
-                        val updatedPosts =
-                            if (refresh) newPosts else _uiState.value.posts + newPosts
-                        _uiState.value = _uiState.value.copy(
-                            posts = updatedPosts,
-                            isLoadingPosts = false,
-                            isRefreshing = false,
-                            isLoadingMore = false,
-                            isInitialLoading = false,
-                            currentPage = page + 1,
-                            hasMorePost = newPosts.size >= limitPost
-                        )
-                    }
-                    .onFailure { e ->
-                        _uiState.value = _uiState.value.copy(
-                            isLoadingPosts = false,
-                            isRefreshing = false,
-                            isLoadingMore = false,
-                            isInitialLoading = false,
-                            error = e.message
-                        )
-                    }
+                val result = withContext(Dispatchers.IO) {
+                    homeRepository.fetchPosts(currentUserId, page)
+                }
+                result.onSuccess { newPosts ->
+                    val updatedPosts =
+                        if (refresh) newPosts else _uiState.value.posts + newPosts
+                    _uiState.value = _uiState.value.copy(
+                        posts = updatedPosts,
+                        isLoadingPosts = false,
+                        isRefreshing = false,
+                        isLoadingMore = false,
+                        isInitialLoading = false,
+                        currentPage = page + 1,
+                        hasMorePost = newPosts.size >= limitPost
+                    )
+                }.onFailure { e ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoadingPosts = false,
+                        isRefreshing = false,
+                        isLoadingMore = false,
+                        isInitialLoading = false,
+                        error = e.message
+                    )
+                }
             } catch (_: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoadingPosts = false,
@@ -158,7 +163,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun toggleLike(post: Post) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
                 // Optimistic update
                 val updatedPosts = _uiState.value.posts.map { p ->
@@ -171,20 +176,23 @@ class HomeViewModel @Inject constructor(
                 }
                 _uiState.value = _uiState.value.copy(posts = updatedPosts)
 
-                homeRepository.toggleLike(post.id, currentUserId, post.isLiked)
-                    .onFailure {
-                        // Revert on error
-                        val revertedPosts = _uiState.value.posts.map { p ->
-                            if (p.id == post.id) {
-                                p.copy(
-                                    isLiked = post.isLiked,
-                                    likeCount = post.likeCount
-                                )
-                            } else p
-                        }
-                        _uiState.value =
-                            _uiState.value.copy(posts = revertedPosts, error = it.message)
+                val result = withContext(Dispatchers.IO) {
+                    homeRepository.toggleLike(post.id, currentUserId, post.isLiked)
+                }
+                result.onFailure {
+                    // Revert on error
+                    val revertedPosts = _uiState.value.posts.map { p ->
+                        if (p.id == post.id) {
+                            p.copy(
+                                isLiked = post.isLiked,
+                                likeCount = post.likeCount
+                            )
+                        } else p
                     }
+                    _uiState.value =
+                        _uiState.value.copy(posts = revertedPosts, error = it.message)
+                }
+
             } catch (_: Exception) {
             }
         }

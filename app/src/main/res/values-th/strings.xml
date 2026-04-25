@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">เรื่องราวสัตว์เลี้ยง:</string>
-    <string name="hint_edt_search">ค้นหาผู้ใช้ สัตว์เลี้ยง แฮชแท็ก…</string>
+    <string name="hint_edt_search">ค้นหาผู้ใช้ สัตว์เลี้ยง โพสต์…</string>
     <string name="follow">ติดตาม</string>
     <string name="users">ผู้ใช้</string>
     <string name="pets">สัตว์เลี้ยง</string>
@@ -318,7 +318,41 @@
 
     <string name="lang_th_display">ภาษาไทย</string>
     <string name="lang_th_native">ภาษาไทย</string>
-
+    <string name="delete_notification">ลบการแจ้งเตือนนี้</string>
+    <string name="notifi_deleted">ลบการแจ้งเตือนแล้ว</string>
+    <string name="copy">คัดลอก</string>
+    <string name="title_pet_followers">รายชื่อผู้ติดตามสัตว์เลี้ยง</string>
+    <string name="no_followers_yet">ยังไม่มีผู้ติดตาม</string>
+    <string name="notif_type_new_post"><b>%1$s</b> เพิ่งโพสต์บทความใหม่</string>
+    <string name="notif_type_new_story"><b>%1$s</b> เพิ่งอัปเดตสตอรี่ใหม่</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> ได้แท็กสัตว์เลี้ยงที่คุณติดตามในโพสต์</string>
+    <string name="no_camera_found">อุปกรณ์ไม่มีกล้อง</string>
+    <string name="camera_init_failed">ไม่สามารถเริ่มต้นใช้งานกล้องได้</string>
+    <string name="camera_permission_required">จำเป็นต้องได้รับการอนุญาตการเข้าถึงกล้องเพื่อดำเนินการต่อ</string>
+    <string name="camera_permission_permanently_denied">คุณได้ปฏิเสธการอนุญาตกล้องอย่างถาวร โปรดไปที่การตั้งค่าเพื่ออนุญาต</string>
+    <string name="microphone_permission_required">จำเป็นต้องได้รับการอนุญาตไมโครโฟนเพื่อบันทึกวิดีโอพร้อมเสียง</string>
+    <string name="error_insufficient_storage">พื้นที่เก็บข้อมูลไม่เพียงพอที่จะบันทึกไฟล์</string>
+    <string name="error_camera_closed">กล้องถูกปิดแล้ว</string>
+    <string name="error_capture_failed">ไม่สามารถจับภาพ/วิดีโอได้ โปรดลองอีกครั้ง</string>
+    <string name="go_to_settings">ไปที่การตั้งค่า</string>
+    <string name="permission_required">คำขอการอนุญาต</string>
+    <string name="photo">รูปภาพ</string>
+    <string name="grant_permission">ให้การอนุญาต</string>
+    <string name="no_diary_yet">ยังไม่มีบันทึก</string>
+    <string name="no_results_found">ไม่พบผลลัพธ์</string>
+    <string name="search_filters">ตัวกรองการค้นหา</string>
+    <string name="male">ตัวผู้</string>
+    <string name="female">ตัวเมีย</string>
+    <string name="sort_by">เรียงตาม</string>
+    <string name="most_recent">ล่าสุด</string>
+    <string name="featured_many_likes">แนะนำ (ถูกใจจำนวนมาก)</string>
+    <string name="select_or_enter_a_species">เลือกหรือกรอกสายพันธุ์...</string>
+    <string name="confirm_delete_pet">ยืนยันการลบสัตว์เลี้ยง</string>
+    <string name="dep_confirm_delete_pet">สัตว์เลี้ยงนี้จะถูกลบอย่างถาวร</string>
+    <string name="delete_pet">ลบสัตว์เลี้ยงนี้</string>
+    <string name="delete_pet_success">ลบสัตว์เลี้ยงสำเร็จ</string>
+    <string name="deleting_pet">กำลังลบสัตว์เลี้ยง...</string>
+    <string name="delete_pet_error">เกิดข้อผิดพลาดในการลบสัตว์เลี้ยง</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

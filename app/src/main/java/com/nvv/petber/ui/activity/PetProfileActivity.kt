@@ -23,17 +23,19 @@ import com.nvv.petber.data.model.Pet
 import com.nvv.petber.databinding.ActivityPetProfileBinding
 import com.nvv.petber.ui.adapter.PetProfilePagerAdapter
 import com.nvv.petber.ui.base.BaseActivity
+import com.nvv.petber.ui.dialog.PetMoreBottomSheetFragment
 import com.nvv.petber.utils.PermissionUtils
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.autoHeight
+import com.nvv.petber.utils.ext.formatSocialCount
 import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.showAvatarOptionDialog
 import com.nvv.petber.utils.ext.showCoverOptionDialog
 import com.nvv.petber.utils.ext.toast
+import com.nvv.petber.viewmodel.PetProfileEvent
 import com.nvv.petber.viewmodel.PetProfileViewModel
 import com.nvv.petber.viewmodel.UpdatePetState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -118,7 +120,7 @@ class PetProfileActivity : BaseActivity() {
         }
 
     companion object {
-        private const val EXTRA_PET_JSON = "extra_pet_json"
+        const val EXTRA_PET_JSON = "extra_pet_json"
         private const val EXTRA_PET_ID = "extra_pet_id"
 
         fun start(context: Context, pet: Pet) {
@@ -227,22 +229,6 @@ class PetProfileActivity : BaseActivity() {
                 binding.root.isRefreshing = false
             }
         }
-        binding.dataContainer.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
-                if (scrollY > oldScrollY) {
-                    val childHeight = v.getChildAt(0).measuredHeight
-                    val scrollHeight = v.measuredHeight
-
-                    if (scrollY >= childHeight - scrollHeight - 100) {
-                        if (binding.viewPager.currentItem == 0) {
-                            viewModel.petState.value?.id?.let { petId ->
-                                viewModel.loadPetPosts(petId, isRefresh = false)
-                            }
-                        }
-                    }
-                }
-            }
-        )
 
         binding.avatar.setOnClickListener {
             if(viewModel.isOwner.value){
@@ -322,7 +308,7 @@ class PetProfileActivity : BaseActivity() {
             }
         }
         binding.btnEditPet.setOnClickListener {
-            val pet = currentPet ?: return@setOnClickListener
+            val pet = viewModel.petState.value ?: return@setOnClickListener
 
             val intent = Intent(this, CreateEditPetActivity::class.java).apply {
                 putExtra(CreateEditPetActivity.EXTRA_PET, pet)
@@ -341,6 +327,21 @@ class PetProfileActivity : BaseActivity() {
                 }
             }
         )
+        binding.btnViewFollowes.setOnClickListener {
+            ViewFollowersPetActivity.start(this, viewModel.petState.value?.id ?: "")
+        }
+
+
+        binding.btnMore.apply {
+            visibility = View.GONE
+            setOnClickListener {
+                val sheet = PetMoreBottomSheetFragment.newInstance()
+                sheet.onDeleteClick = {
+                    viewModel.deletePet()
+                }
+                sheet.show(supportFragmentManager, "PetMoreSheet")
+            }
+        }
     }
 
     private fun viewMediaOnly(url: String?) {
@@ -362,13 +363,14 @@ class PetProfileActivity : BaseActivity() {
 
     private fun observeViewModel() {
         lifecycleScope.launch {
-            viewModel.isOwner.collectLatest { isOwner ->
+            viewModel.isOwner.collect { isOwner ->
                 binding.btnEditPet.visibility = if (isOwner) View.VISIBLE else View.GONE
                 binding.btnFollow.visibility = if (!isOwner) View.VISIBLE else View.GONE
+                binding.btnMore.visibility = if (isOwner) View.VISIBLE else View.GONE
             }
         }
         lifecycleScope.launch {
-            viewModel.isFollowing.collectLatest { isFollowing ->
+            viewModel.isFollowing.collect { isFollowing ->
                 if (isFollowing) {
                     binding.btnFollow.text = getString(R.string.unfollow)
                     binding.btnFollow.setBackgroundColor(getColor(R.color.gray_light))
@@ -381,7 +383,7 @@ class PetProfileActivity : BaseActivity() {
             }
         }
         lifecycleScope.launch {
-            viewModel.petState.collectLatest { pet ->
+            viewModel.petState.collect { pet ->
                 pet?.let {
                     bindPetData(it)
                     currentPet = it
@@ -390,7 +392,7 @@ class PetProfileActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collectLatest { isLoading ->
+            viewModel.isLoading.collect { isLoading ->
                 binding.root.isRefreshing = isLoading
                 binding.shimmerView.visibility =
                     if (isLoading && viewModel.petState.value == null) View.VISIBLE else View.GONE
@@ -400,7 +402,7 @@ class PetProfileActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.error.collectLatest { errorMsg ->
+            viewModel.error.collect { errorMsg ->
                 errorMsg?.let {
                     toast(it)
                 }
@@ -408,7 +410,7 @@ class PetProfileActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.uiState.collectLatest { state ->
+            viewModel.uiState.collect { state ->
                 when (state) {
                     is UpdatePetState.Loading -> {
                         if (state.style == "avatar") {
@@ -430,6 +432,34 @@ class PetProfileActivity : BaseActivity() {
 
                     is UpdatePetState.Idle -> {}
                 }
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.followerCount.collect { count ->
+                binding.tvFollowCount.text = count.formatSocialCount()
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.event.collect { event ->
+                when (event) {
+                    is PetProfileEvent.PetDeleted -> {
+                        toast(getString(R.string.delete_pet_success))
+                        setResult(RESULT_OK, Intent().apply {
+                            putExtra("pet_deleted", true)
+                        })
+                        finish()
+                    }
+
+                    is PetProfileEvent.PetDeleteError -> {
+                        toast(getString(R.string.delete_pet_error))
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isDeleting.collect { isDeleting ->
+                if (isDeleting) toast(getString(R.string.deleting_pet))
             }
         }
     }

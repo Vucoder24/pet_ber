@@ -5,10 +5,13 @@ import android.net.Uri
 import android.util.Log
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.PetFollowRecord
+import com.nvv.petber.data.model.PetFollowWithUser
 import com.nvv.petber.data.model.Post
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Count
 import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.storage.storage
@@ -185,6 +188,49 @@ class PetRepository @Inject constructor(
             true
         } catch (_: Exception) {
             false
+        }
+    }
+
+    suspend fun getPetFollowers(petId: String): Result<List<com.nvv.petber.data.model.User>> {
+        return try {
+            val result = supabase.from("pet_follows")
+                .select(columns = Columns.raw("*, users(*)")) {
+                    filter {
+                        eq("pet_id", petId)
+                    }
+                }
+                .decodeList<PetFollowWithUser>()
+                .mapNotNull { it.user }
+
+            Result.success(result)
+        } catch (e: Exception) {
+            Log.e("Error", e.message.toString())
+            Result.failure(e)
+        }
+    }
+    suspend fun getPetFollowerCount(petId: String): Result<Long> {
+        return try {
+            val count = supabase.from("pet_follows")
+                .select {
+                    filter { eq("pet_id", petId) }
+                    count(Count.EXACT)
+                }.countOrNull() ?: 0L
+            Result.success(count)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    suspend fun deletePet(petId: String): Result<Unit> {
+        return try {
+            supabase.postgrest.rpc(
+                function = "delete_pet_cascade",
+                parameters = buildJsonObject {
+                    put("input_pet_id", petId)
+                }
+            )
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }

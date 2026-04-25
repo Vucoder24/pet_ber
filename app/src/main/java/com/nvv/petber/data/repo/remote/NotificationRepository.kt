@@ -1,7 +1,6 @@
 package com.nvv.petber.data.repo.remote
 
 import com.nvv.petber.data.model.Notification
-import com.nvv.petber.utils.NotificationGrouper
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Order
@@ -26,6 +25,13 @@ class NotificationRepository @Inject constructor(
         if (channel != null) return
         channel = supabase.channel("notifications-$userId")
         supabase.realtime.connect()
+    }
+
+    suspend fun deleteNotification(notificationId: String) {
+        supabase.from("notifications")
+            .delete {
+                filter { eq("id", notificationId) }
+            }
     }
 
     fun listenToNewNotifications(userId: String): Flow<Notification> {
@@ -53,7 +59,7 @@ class NotificationRepository @Inject constructor(
                 order("created_at", order = Order.DESCENDING)
                 range(from.toLong(), to.toLong())
             }.decodeList<Notification>()
-        return NotificationGrouper.group(rawData)
+        return rawData
     }
 
     suspend fun getNewNotificationCount(userId: String, lastSeen: String): Int {

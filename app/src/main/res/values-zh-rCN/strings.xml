@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">宠物故事：</string>
-    <string name="hint_edt_search">搜索用户、宠物、标签......</string>
+    <string name="hint_edt_search">搜索用户、宠物、帖子…</string>
     <string name="follow">关注</string>
     <string name="users">用户</string>
     <string name="pets">宠物</string>
@@ -318,6 +318,41 @@
 
     <string name="lang_th_display">泰语</string>
     <string name="lang_th_native">ไทย</string>
+    <string name="delete_notification">删除此通知</string>
+    <string name="notifi_deleted">通知已删除</string>
+    <string name="copy">复制</string>
+    <string name="title_pet_followers">宠物粉丝列表</string>
+    <string name="no_followers_yet">暂无粉丝</string>
+    <string name="notif_type_new_post"><b>%1$s</b> 刚刚发布了一篇新文章。</string>
+    <string name="notif_type_new_story"><b>%1$s</b> 刚刚更新了一个新动态。</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> 在一条帖子中标记了你关注的宠物。</string>
+    <string name="no_camera_found">设备未发现摄像头</string>
+    <string name="camera_init_failed">无法初始化摄像头</string>
+    <string name="camera_permission_required">需要摄像头访问权限才能继续</string>
+    <string name="camera_permission_permanently_denied">您已永久拒绝摄像头权限。请前往设置进行授权。</string>
+    <string name="microphone_permission_required">录制带声音的视频需要麦克风权限</string>
+    <string name="error_insufficient_storage">存储空间不足，无法保存文件</string>
+    <string name="error_camera_closed">摄像头已关闭</string>
+    <string name="error_capture_failed">无法拍照/录像，请重试</string>
+    <string name="go_to_settings">前往设置</string>
+    <string name="permission_required">需要权限</string>
+    <string name="photo">照片</string>
+    <string name="grant_permission">授予权限</string>
+    <string name="no_diary_yet">尚无日记</string>
+    <string name="no_results_found">未找到结果</string>
+    <string name="search_filters">搜索筛选</string>
+    <string name="male">雄性</string>
+    <string name="female">雌性</string>
+    <string name="sort_by">排序方式</string>
+    <string name="most_recent">最新</string>
+    <string name="featured_many_likes">精选（点赞多）</string>
+    <string name="select_or_enter_a_species">选择或输入物种...</string>
+    <string name="confirm_delete_pet">确认删除宠物</string>
+    <string name="dep_confirm_delete_pet">此宠物将被永久删除。</string>
+    <string name="delete_pet">删除此宠物</string>
+    <string name="delete_pet_success">宠物删除成功</string>
+    <string name="deleting_pet">正在删除宠物...</string>
+    <string name="delete_pet_error">删除宠物时发生错误</string>
 
 
     <string-array name="media_types">

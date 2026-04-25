@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -36,10 +37,12 @@ class StoryHostViewModel @Inject constructor(
     }
 
     fun loadFromApi(storyId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = StoryHostState.Loading
             try {
-                val result = repository.getStoryGroupByStoryId(storyId)
+                val result = withContext(Dispatchers.IO) {
+                    repository.getStoryGroupByStoryId(storyId)
+                }
                 _uiState.value = StoryHostState.Success(result.groups, result.initialIndex)
             } catch (e: Exception) {
                 if (e.message == "STORY_UNAVAILABLE") {

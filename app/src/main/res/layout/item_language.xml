@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:paddingHorizontal="16dp"
+    android:paddingHorizontal="24dp"
     android:background="?attr/selectableItemBackground">
 
     <!-- Flag emoji -->
@@ -34,7 +34,8 @@
         app:layout_constraintStart_toEndOf="@id/tvFlag"
         app:layout_constraintEnd_toStartOf="@id/radioBtn"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tvNative" />
+        app:layout_constraintBottom_toTopOf="@id/tvNative"
+        app:layout_constraintVertical_chainStyle="packed"/>
 
     <TextView
         android:id="@+id/tvNative"

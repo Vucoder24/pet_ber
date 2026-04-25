@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Pet Stories</string>
-    <string name="hint_edt_search">Search for users, pets, hashtags…</string>
+    <string name="hint_edt_search">Search for users, pets, post…</string>
     <string name="follow">Follow</string>
     <string name="users">Users</string>
     <string name="pets">Pets</string>
@@ -317,6 +317,41 @@
 
     <string name="lang_th_display">Thai</string>
     <string name="lang_th_native">ภาษาไทย</string>
+    <string name="delete_notification">Delete this notification</string>
+    <string name="notifi_deleted">Notification removed</string>
+    <string name="copy">Copy</string>
+    <string name="title_pet_followers">List pet followers</string>
+    <string name="no_followers_yet">No followers yet</string>
+    <string name="notif_type_new_post"><b>%1$s</b> has just posted a new article.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> has just updated a new story.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> has tagged the pet you following in a post.</string>
+    <string name="no_camera_found">Device has no camera</string>
+    <string name="camera_init_failed">Unable to initialize the camera</string>
+    <string name="camera_permission_required">Camera access permission is required to continue</string>
+    <string name="camera_permission_permanently_denied">You have permanently denied camera permission. Please go to Settings to grant permission.</string>
+    <string name="microphone_permission_required">Microphone permission is required to record videos with sound</string>
+    <string name="error_insufficient_storage">Not enough storage to save the file</string>
+    <string name="error_camera_closed">Camera has been closed</string>
+    <string name="error_capture_failed">Unable to capture/video, please try again</string>
+    <string name="go_to_settings">Open Settings</string>
+    <string name="permission_required">Access permission request</string>
+    <string name="photo">Photo</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="no_diary_yet">No dairy yet</string>
+    <string name="no_results_found">No results found</string>
+    <string name="search_filters">Search filters</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="sort_by">Sort by</string>
+    <string name="most_recent">Most Recent</string>
+    <string name="featured_many_likes">Featured (Many Likes)</string>
+    <string name="select_or_enter_a_species">Select or enter a species…</string>
+    <string name="confirm_delete_pet">Confirm pet deletion</string>
+    <string name="dep_confirm_delete_pet">This pet pine will be permanently deleted.</string>
+    <string name="delete_pet">Delete this pet</string>
+    <string name="delete_pet_success">Successful pet removal</string>
+    <string name="deleting_pet">Deleting pets…</string>
+    <string name="delete_pet_error">There was an error when deleting a pet</string>
 
 
     <string-array name="media_types">

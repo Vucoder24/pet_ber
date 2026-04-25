@@ -158,15 +158,15 @@ class CreateContentViewModel @Inject constructor(
                 }
 
                 flow.collect { progress ->
-                    _uploadProgress.value = progress
+                    _uploadProgress.postValue(progress)
                     if (progress == 100) {
-                        _postSuccess.value = true
+                        _postSuccess.postValue(true)
                     }
                 }
             } catch (e: Exception) {
-                _error.value = "Posting failed: ${e.localizedMessage}"
+                _error.postValue("Posting failed: ${e.localizedMessage}")
             } finally {
-                _isLoading.value = false
+                _isLoading.postValue(false)
             }
         }
     }

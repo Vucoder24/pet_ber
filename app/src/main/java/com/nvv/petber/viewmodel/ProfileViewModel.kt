@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -86,11 +87,13 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun updateAvatar(uri: Uri) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = UpdateUserState.Loading("avatar")
             try {
-                profileRepoLocal.updateAvatar(currentUserId, uri, user.value?.avatarUrl)
-                profileRepoLocal.syncUser(currentUserId)
+                withContext(Dispatchers.IO){
+                    profileRepoLocal.updateAvatar(currentUserId, uri, user.value?.avatarUrl)
+                    profileRepoLocal.syncUser(currentUserId)
+                }
                 _uiState.value = UpdateUserState.Success
             } catch (e: Exception) {
                 _uiState.value = UpdateUserState.Error(e.message ?: "Unknown error")
@@ -100,11 +103,13 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun updateCover(uri: Uri) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = UpdateUserState.Loading("cover")
             try {
-                profileRepoLocal.updateCover(currentUserId, uri, user.value?.coverUrl)
-                profileRepoLocal.syncUser(currentUserId)
+                withContext(Dispatchers.IO){
+                    profileRepoLocal.updateCover(currentUserId, uri, user.value?.coverUrl)
+                    profileRepoLocal.syncUser(currentUserId)
+                }
                 _uiState.value = UpdateUserState.Success
             } catch (e: Exception) {
                 _uiState.value = UpdateUserState.Error(e.message ?: "Unknown error")
@@ -131,10 +136,12 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun updateProfile(user: User){
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch{
             _uiState.value = UpdateUserState.Loading("information")
             try {
-                profileRepoLocal.updateProfile(user)
+                withContext(Dispatchers.IO){
+                    profileRepoLocal.updateProfile(user)
+                }
                 _uiState.value = UpdateUserState.Success
             }catch (e: Exception){
                 _uiState.value = UpdateUserState.Error(e.message ?: "Unknown error")

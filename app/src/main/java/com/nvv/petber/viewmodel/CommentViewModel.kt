@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,10 +23,12 @@ class CommentViewModel @Inject constructor(
     val uiState: StateFlow<CommentUiState> = _uiState.asStateFlow()
 
     fun loadComments(postId: String, userId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            repository.fetchComments(postId, userId)
-                .onSuccess { comments ->
+            val result = withContext(Dispatchers.IO) {
+                repository.fetchComments(postId, userId)
+            }
+            result.onSuccess { comments ->
                     _uiState.value = _uiState.value.copy(
                         rawComments = comments,
                         isLoading = false,
@@ -72,7 +75,7 @@ class CommentViewModel @Inject constructor(
                     it.copy(
                         isLiked = !it.isLiked,
                         likeCount = if (it.isLiked) it.likeCount - 1 else it.likeCount + 1
-                    ).apply { isLiked = !comment.isLiked }
+                    )
                 } else it
             }
             _uiState.value = _uiState.value.copy(
@@ -137,6 +140,35 @@ class CommentViewModel @Inject constructor(
 
         rootNodes.forEach { flatten(it, 0) }
         return flatList
+    }
+
+    fun deleteComment(commentId: String) {
+        val previousRawComments = _uiState.value.rawComments
+        val previousExpandedIds = _uiState.value.expandedIds
+
+        val updatedRawComments = previousRawComments.filterNot {
+            it.id == commentId || it.parentCommentId == commentId
+        }
+
+        _uiState.value = _uiState.value.copy(
+            rawComments = updatedRawComments,
+            flatComments = buildFlatList(updatedRawComments, previousExpandedIds)
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteComment(commentId)
+                .onFailure { error ->
+                    _uiState.value = _uiState.value.copy(
+                        rawComments = previousRawComments,
+                        flatComments = buildFlatList(previousRawComments, previousExpandedIds),
+                        error = "DELETE_FAILED"
+                    )
+                }
+        }
+    }
+
+    fun clearError() {
+        _uiState.value = _uiState.value.copy(error = null)
     }
 }
 

@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 import com.nvv.petber.R
+import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -42,6 +43,9 @@ class MainViewModel @Inject constructor(
     private val _unreadCount = MutableStateFlow(0)
     val unreadCount = _unreadCount.asStateFlow()
 
+    private val _toastEvent = MutableSharedFlow<String>()
+    val toastEvent = _toastEvent.asSharedFlow()
+
     private val pendingNotifications = mutableListOf<Notification>()
 
     private var currentPage = 1
@@ -50,7 +54,7 @@ class MainViewModel @Inject constructor(
 
     fun fetchNotifications(userId: String, isRefresh: Boolean = false) {
         if (_isLoading.value || _isLoadMore.value || (isLastPage && !isRefresh)) return
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             if (isRefresh) {
                 currentPage = 1
                 isLastPage = false
@@ -60,7 +64,9 @@ class MainViewModel @Inject constructor(
             }
 
             try {
-                val newItems = repository.getNotifications(userId, currentPage, pageSize)
+                val newItems = withContext(Dispatchers.IO) {
+                    repository.getNotifications(userId, currentPage, pageSize)
+                }
 
                 if (newItems.isEmpty() || newItems.size < pageSize) {
                     isLastPage = true
@@ -105,7 +111,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val count = repository.getNewNotificationCount(userId, lastSeen)
-                _unreadCount.value = count
+                _unreadCount.emit(count)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -187,6 +193,30 @@ class MainViewModel @Inject constructor(
                     .sortedByDescending { it.createdAt }
 
                 _unreadCount.value += 1
+            }
+        }
+    }
+
+    fun deleteNotification(notificationId: String) {
+        val oldMap = HashMap(notificationMap)
+
+        notificationMap.remove(notificationId)
+
+        _notifications.value = notificationMap.values
+            .sortedByDescending { it.createdAt }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.deleteNotification(notificationId)
+                _toastEvent.emit(context.getString(R.string.notifi_deleted))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _toastEvent.emit(context.getString(R.string.error_action))
+                notificationMap.clear()
+                notificationMap.putAll(oldMap)
+
+                _notifications.value = notificationMap.values
+                    .sortedByDescending { it.createdAt }
             }
         }
     }

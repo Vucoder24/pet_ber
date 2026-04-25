@@ -22,6 +22,8 @@ import com.nvv.petber.ui.adapter.NotificationAdapter
 import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.showNotificationOptionBottomSheet
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,14 +65,14 @@ class NotificationFragment : Fragment() {
                 }
 
                 when (notification.type) {
-                    "post_like", "comment", "comment_reply", "comment_like" -> {
+                    "post_like", "comment", "comment_reply", "comment_like", "new_post", "pet_tagged" -> {
                         notification.postId?.let { postId ->
                              val intent = Intent(requireContext(), PostDetailActivity::class.java)
                              intent.putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
                              startActivity(intent)
                         }
                     }
-                    "story_reaction" -> {
+                    "story_reaction", "new_story" -> {
                         notification.storyId?.let { storyId ->
                             ViewStoryActivity.startWithId(requireContext(), storyId)
                         }
@@ -87,8 +89,12 @@ class NotificationFragment : Fragment() {
                     }
                 }
             },
-            onMoreClick = {
-
+            onMoreClick = { notification ->
+                requireContext().showNotificationOptionBottomSheet(
+                    onDelete = {
+                        mainViewModel.deleteNotification(notification.id)
+                    }
+                )
             }
         )
         linearLayoutManager = LinearLayoutManager(requireContext())
@@ -142,6 +148,12 @@ class NotificationFragment : Fragment() {
                         if (!mainViewModel.isLoading.value && list.isNotEmpty()) {
                             hideNotificationsBadge()
                         }
+                    }
+                }
+
+                launch {
+                    mainViewModel.toastEvent.collect { message ->
+                       requireContext().toast(message)
                     }
                 }
             }

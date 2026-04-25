@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nvv.petber.databinding.FragmentPetDiaryBinding
 import com.nvv.petber.ui.activity.PostDetailActivity
 import com.nvv.petber.ui.adapter.PetDiaryAdapter
+import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.PetProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -47,7 +49,15 @@ class PetDiaryFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.diaryPosts.collectLatest { diaryList ->
-                diaryAdapter.submitData(diaryList)
+                val isOwner = viewModel.isOwner.value
+                diaryAdapter.submitData(diaryList, isOwner)
+                if (diaryList.isEmpty()) {
+                    binding.tvEmpty.visible()
+                    binding.rvDailyPet.gone()
+                } else {
+                    binding.tvEmpty.gone()
+                    binding.rvDailyPet.visible()
+                }
             }
         }
 

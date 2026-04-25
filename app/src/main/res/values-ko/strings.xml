@@ -27,7 +27,7 @@
     <string name="pet">Pet </string>
     <string name="ber">Ber</string>
     <string name="pet_stories">반려동물 이야기:</string>
-    <string name="hint_edt_search">사용자, 애완동물, 해시태그 검색…</string>
+    <string name="hint_edt_search">사용자, 애완동물, 게시물 검색…</string>
     <string name="follow">팔로우</string>
     <string name="users">사용자</string>
     <string name="pets">반려동물</string>
@@ -67,7 +67,7 @@
     <string name="my_pet_list">내 애완동물 목록</string>
     <string name="all_posts">모든 게시물</string>
     <string name="message">메시지</string>
-    <string name="add_pet">애완동물 추가하세요</string>
+    <string name="add_pet">애완동물 추가</string>
     <string name="personal_information">개인정보:</string>
     <string name="address">주소</string>
     <string name="phone_number">전화번호</string>
@@ -243,7 +243,7 @@
     <string name="notif_type_comment"><b>%1$s</b> 당신의 글에 댓글을 달았습니다.</string>
     <string name="notif_type_comment_reply"><b>%1$s</b> 댓글에 답글을 달았습니다.</string>
     <string name="notif_type_comment_like"><b>%1$s</b> 댓글 좋아요.</string>
-    <string name="notif_type_story_reaction"><b>%1$s</b> 당신의 이야기에 반응했습니다.</string>
+    <string name="notif_type_story_reaction"><b>%1$s</b>님이 당신의 스토리에 %2$s 반응을 보냈습니다.</string>
     <string name="notif_type_user_follow"><b>%1$s</b> 너를 따라다니기 시작했어.</string>
     <string name="notif_type_pet_follow"><b>%1$s</b> 반려동물을 따라가기 시작했어요.</string>
     <string name="story_unavailable">이 이야기는 더 이상 이용 가능하지 않거나 만료되었습니다.</string>
@@ -318,6 +318,41 @@
 
     <string name="lang_th_display">태국어</string>
     <string name="lang_th_native">ไทย</string>
+    <string name="delete_notification">이 알림 삭제</string>
+    <string name="notifi_deleted">알림이 삭제되었습니다</string>
+    <string name="copy">복사</string>
+    <string name="title_pet_followers">반려동물 팔로워 목록</string>
+    <string name="no_followers_yet">아직 팔로워가 없습니다</string>
+    <string name="notif_type_new_post"><b>%1$s</b>님이 새 게시물을 올렸습니다.</string>
+    <string name="notif_type_new_story"><b>%1$s</b>님이 새 스토리를 업데이트했습니다.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b>님이 당신이 팔로우하는 반려동물을 게시물에서 태그했습니다.</string>
+    <string name="no_camera_found">기기에 카메라가 없습니다</string>
+    <string name="camera_init_failed">카메라를 초기화할 수 없습니다</string>
+    <string name="camera_permission_required">계속하려면 카메라 액세스 권한이 필요합니다</string>
+    <string name="camera_permission_permanently_denied">카메라 권한을 영구적으로 거부했습니다. 설정에서 권한을 허용해 주세요.</string>
+    <string name="microphone_permission_required">소리가 포함된 동영상을 녹화하려면 마이크 권한이 필요합니다</string>
+    <string name="error_insufficient_storage">파일을 저장할 저장 공간이 부족합니다</string>
+    <string name="error_camera_closed">카메라가 닫혔습니다</string>
+    <string name="error_capture_failed">캡처/동영상 촬영에 실패했습니다. 다시 시도해 주세요</string>
+    <string name="go_to_settings">설정으로 이동</string>
+    <string name="permission_required">권한 요청</string>
+    <string name="photo">사진</string>
+    <string name="grant_permission">권한 허용</string>
+    <string name="no_diary_yet">작성된 일기가 없습니다</string>
+    <string name="no_results_found">검색 결과가 없습니다</string>
+    <string name="search_filters">검색 필터</string>
+    <string name="male">수컷</string>
+    <string name="female">암컷</string>
+    <string name="sort_by">정렬 기준</string>
+    <string name="most_recent">최신순</string>
+    <string name="featured_many_likes">추천 (좋아요 많음)</string>
+    <string name="select_or_enter_a_species">종을 선택하거나 입력하세요...</string>
+    <string name="confirm_delete_pet">반려동물 삭제 확인</string>
+    <string name="dep_confirm_delete_pet">이 반려동물은 영구적으로 삭제됩니다.</string>
+    <string name="delete_pet">이 반려동물 삭제</string>
+    <string name="delete_pet_success">반려동물이 성공적으로 삭제되었습니다</string>
+    <string name="deleting_pet">반려동물 삭제 중...</string>
+    <string name="delete_pet_error">반려동물 삭제 중 오류가 발생했습니다</string>
 
 
     <string-array name="media_types">

@@ -27,7 +27,7 @@
     <string name="pet">Pet</string>
     <string name="ber">Ber</string>
     <string name="pet_stories">Khoảnh khắc của thú cưng</string>
-    <string name="hint_edt_search">Tìm kiếm người dùng, thú cưng, hashtag…</string>
+    <string name="hint_edt_search">Tìm kiếm người dùng, thú cưng, bài viết…</string>
     <string name="follow">Theo dõi</string>
     <string name="users">Người dùng</string>
     <string name="pets">Thú cưng</string>
@@ -67,7 +67,7 @@
     <string name="my_pet_list">Danh sách thú cưng của tôi</string>
     <string name="all_posts">Tất cả bài viết</string>
     <string name="message">Tin nhắn</string>
-    <string name="add_pet">Thêm thú cưng</string>
+    <string name="add_pet">Thêm pet</string>
     <string name="personal_information">Thông tin cá nhân:</string>
     <string name="address">Địa chỉ</string>
     <string name="phone_number">Số điện thoại</string>
@@ -257,7 +257,7 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="what_is_the_boss_doing_today">Boss đang làm gì hôm nay? 🐾</string>
     <string name="share_the_boss_s_adorable_moment">Chia sẻ khoảnh khắc đáng yêu của Boss</string>
     <string name="capture_a_memory_of_today_s_boss">Ghi lại ký ức về boss hôm nay</string>
-    <string name="add_pet_tag">Thêm thú cưng +</string>
+    <string name="add_pet_tag">Thêm pet +</string>
     <string name="no_saved_posts_yet">Chưa có bài đăng nào được lưu</string>
     <string name="list_of_saved_posts">Danh sách các bài đăng đã lưu</string>
     <string name="recently_deleted_posts">Bài đăng đã xóa gần đây</string>
@@ -318,6 +318,42 @@ Hãy là người đầu tiên bình luận!</string>
 
     <string name="lang_th_display">Tiếng Thái</string>
     <string name="lang_th_native">ไทย</string>
+
+    <string name="notifi_deleted">Đã xóa thông báo</string>
+    <string name="copy">Sao chép</string>
+    <string name="delete_notification">Xóa thông báo này</string>
+    <string name="title_pet_followers">Danh sách người theo dõi thú cưng</string>
+    <string name="no_followers_yet">Chưa có người theo dõi</string>
+    <string name="notif_type_new_post"><b>%1$s</b> vừa đăng một bài viết mới.</string>
+    <string name="notif_type_new_story"><b>%1$s</b> vừa đăng một khoảnh khắc mới.</string>
+    <string name="notif_type_pet_tagged"><b>%1$s</b> đã gắn thẻ thú cưng mà bạn đang theo dõi trong một bài viết.</string>
+    <string name="no_camera_found">Thiết bị không có camera</string>
+    <string name="camera_init_failed">Không thể khởi động camera</string>
+    <string name="camera_permission_required">Cần quyền truy cập camera để tiếp tục</string>
+    <string name="camera_permission_permanently_denied">Bạn đã từ chối quyền camera vĩnh viễn. Vui lòng vào Cài đặt để cấp quyền.</string>
+    <string name="microphone_permission_required">Cần quyền microphone để quay video có âm thanh</string>
+    <string name="error_insufficient_storage">Không đủ bộ nhớ để lưu file</string>
+    <string name="error_camera_closed">Camera đã bị đóng</string>
+    <string name="error_capture_failed">Không thể chụp/quay, thử lại</string>
+    <string name="go_to_settings">Mở Cài đặt</string>
+    <string name="permission_required">Yêu cầu quyền truy cập</string>
+    <string name="photo">Ảnh</string>
+    <string name="grant_permission">Cấp quyền</string>
+    <string name="no_diary_yet">Chưa có nhật ký nào</string>
+    <string name="no_results_found">Không tìm thấy kết quả</string>
+    <string name="search_filters">Bộ lọc tìm kiếm</string>
+    <string name="male">Đực</string>
+    <string name="female">Cái</string>
+    <string name="sort_by">Sắp xếp theo</string>
+    <string name="most_recent">Mới nhất</string>
+    <string name="featured_many_likes">Nổi bật (Nhiều lượt thích)</string>
+    <string name="select_or_enter_a_species">Chọn hoặc nhập loài...</string>
+    <string name="confirm_delete_pet">Xác nhận xóa thú cưng này</string>
+    <string name="dep_confirm_delete_pet">Thú cưng này sẽ bị xóa vĩnh viễn.</string>
+    <string name="delete_pet">Xóa thú cưng</string>
+    <string name="delete_pet_success">Xóa thú cưng thành công</string>
+    <string name="deleting_pet">Đang xóa thú cưng...</string>
+    <string name="delete_pet_error">Đã xảy ra lỗi khi xóa thú cưng</string>
 
 
     <string-array name="media_types">

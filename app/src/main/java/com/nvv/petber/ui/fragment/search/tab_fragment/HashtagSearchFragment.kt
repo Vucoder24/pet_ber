@@ -116,6 +116,14 @@ class HashtagSearchFragment : Fragment() {
                         isLoadingMore = false,
                         showCreatePost = false
                     )
+                    binding.tvNoResults.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isLoading.collect { isLoading ->
+                    binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
                 }
             }
         }
