@@ -347,6 +347,12 @@ Seja o primeiro a comentar!</string>
     <string name="most_recent">Mais recente</string>
     <string name="featured_many_likes">Destaque (Muitos likes)</string>
     <string name="select_or_enter_a_species">Selecione ou insira uma espécie...</string>
+    <string name="confirm_delete_pet">Confirmar exclusão do animal</string>
+    <string name="dep_confirm_delete_pet">Este animal será excluído permanentemente.</string>
+    <string name="delete_pet">Excluir este animal</string>
+    <string name="delete_pet_success">Animal removido com sucesso</string>
+    <string name="deleting_pet">Excluindo animal...</string>
+    <string name="delete_pet_error">Ocorreu um erro ao excluir o animal</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

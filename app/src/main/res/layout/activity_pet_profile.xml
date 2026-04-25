@@ -60,6 +60,20 @@
                     app:tint="@android:color/white"
                     tools:ignore="RtlSymmetry,TouchTargetSizeCheck,ImageContrastCheck" />
 
+                <ImageView
+                    android:id="@+id/btnMore"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_icon_button_dark"
+                    android:importantForAccessibility="no"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_more"
+                    app:layout_constraintEnd_toEndOf="@id/imgCover"
+                    app:layout_constraintTop_toTopOf="@id/imgCover"
+                    app:tint="@android:color/white"
+                    tools:ignore="ImageContrastCheck" />
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/profileCard"
                     android:layout_width="0dp"

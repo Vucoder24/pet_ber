@@ -347,6 +347,12 @@ Sei der Erste, der kommentiert!</string>
     <string name="most_recent">Neueste</string>
     <string name="featured_many_likes">Empfohlen (Viele Likes)</string>
     <string name="select_or_enter_a_species">Wählen Sie eine Art oder geben Sie eine ein…</string>
+    <string name="confirm_delete_pet">Löschen des Haustiers bestätigen</string>
+    <string name="dep_confirm_delete_pet">Dieses Haustier wird dauerhaft gelöscht.</string>
+    <string name="delete_pet">Dieses Haustier löschen</string>
+    <string name="delete_pet_success">Haustier erfolgreich gelöscht</string>
+    <string name="deleting_pet">Haustier wird gelöscht...</string>
+    <string name="delete_pet_error">Beim Löschen des Haustiers ist ein Fehler aufgetreten</string>
 
 
     <string-array name="media_types">

@@ -347,6 +347,12 @@
     <string name="most_recent">最新</string>
     <string name="featured_many_likes">おすすめ（いいね多数）</string>
     <string name="select_or_enter_a_species">種類を選択または入力してください...</string>
+    <string name="confirm_delete_pet">ペットの削除を確認</string>
+    <string name="dep_confirm_delete_pet">このペットは完全に削除されます。</string>
+    <string name="delete_pet">このペットを削除</string>
+    <string name="delete_pet_success">ペットの削除に成功しました</string>
+    <string name="deleting_pet">ペットを削除中...</string>
+    <string name="delete_pet_error">ペットの削除中にエラーが発生しました</string>
 
 
     <string-array name="media_types">

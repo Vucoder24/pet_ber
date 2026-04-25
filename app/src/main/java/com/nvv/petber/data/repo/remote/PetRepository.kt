@@ -9,6 +9,7 @@ import com.nvv.petber.data.model.PetFollowWithUser
 import com.nvv.petber.data.model.Post
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
 import io.github.jan.supabase.postgrest.query.Order
@@ -215,6 +216,19 @@ class PetRepository @Inject constructor(
                     count(Count.EXACT)
                 }.countOrNull() ?: 0L
             Result.success(count)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    suspend fun deletePet(petId: String): Result<Unit> {
+        return try {
+            supabase.postgrest.rpc(
+                function = "delete_pet_cascade",
+                parameters = buildJsonObject {
+                    put("input_pet_id", petId)
+                }
+            )
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

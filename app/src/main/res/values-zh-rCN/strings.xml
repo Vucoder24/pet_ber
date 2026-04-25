@@ -347,6 +347,12 @@
     <string name="most_recent">最新</string>
     <string name="featured_many_likes">精选（点赞多）</string>
     <string name="select_or_enter_a_species">选择或输入物种...</string>
+    <string name="confirm_delete_pet">确认删除宠物</string>
+    <string name="dep_confirm_delete_pet">此宠物将被永久删除。</string>
+    <string name="delete_pet">删除此宠物</string>
+    <string name="delete_pet_success">宠物删除成功</string>
+    <string name="deleting_pet">正在删除宠物...</string>
+    <string name="delete_pet_error">删除宠物时发生错误</string>
 
 
     <string-array name="media_types">

@@ -292,6 +292,12 @@ Soyez le premier à commenter !</string>
     <string name="most_recent">Plus récent</string>
     <string name="featured_many_likes">En vedette (Beaucoup de likes)</string>
     <string name="select_or_enter_a_species">Sélectionnez ou entrez une espèce...</string>
+    <string name="confirm_delete_pet">Confirmer la suppression de l’animal</string>
+    <string name="dep_confirm_delete_pet">Cet animal sera supprimé définitivement.</string>
+    <string name="delete_pet">Supprimer cet animal</string>
+    <string name="delete_pet_success">Animal supprimé avec succès</string>
+    <string name="deleting_pet">Suppression de l’animal...</string>
+    <string name="delete_pet_error">Une erreur est survenue lors de la suppression de l’animal</string>
 
     <string name="currently_using">Utilisation actuelle</string>
     <string name="all_languages">Toutes les langues</string>

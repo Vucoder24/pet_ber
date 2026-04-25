@@ -292,6 +292,12 @@
     <string name="most_recent">Más reciente</string>
     <string name="featured_many_likes">Destacado (Muchos Me gusta)</string>
     <string name="select_or_enter_a_species">Selecciona o ingresa una especie...</string>
+    <string name="confirm_delete_pet">Confirmar eliminación de la mascota</string>
+    <string name="dep_confirm_delete_pet">Esta mascota se eliminará permanentemente.</string>
+    <string name="delete_pet">Eliminar esta mascota</string>
+    <string name="delete_pet_success">Mascota eliminada con éxito</string>
+    <string name="deleting_pet">Eliminando mascota...</string>
+    <string name="delete_pet_error">Ocurrió un error al eliminar la mascota</string>
 
     <string name="currently_using">Actualmente en uso</string>
     <string name="all_languages">Todos los idiomas</string>

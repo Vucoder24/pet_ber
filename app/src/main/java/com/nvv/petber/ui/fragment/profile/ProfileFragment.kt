@@ -1,6 +1,7 @@
 package com.nvv.petber.ui.fragment.profile
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -37,6 +38,7 @@ import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
 import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
 import com.nvv.petber.utils.DateTimeUtils
 import com.nvv.petber.utils.PermissionUtils
+import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.formatSocialCount
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadAvatar
@@ -49,6 +51,8 @@ import com.nvv.petber.viewmodel.ProfileViewModel
 import com.nvv.petber.viewmodel.UpdateUserState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -64,13 +68,24 @@ class ProfileFragment : Fragment() {
     private var userData: User? = null
 
     private var lastCheckTime = 0L
+    private lateinit var currentUserId: String
 
     @Inject
     lateinit var exoPlayer: ExoPlayer
 
+    private val petProfileLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val petDeleted = result.data?.getBooleanExtra("pet_deleted", false) ?: false
+            if (petDeleted) {
+                viewModel.syncPets()
+            }
+        }
+    }
     private val cropLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == android.app.Activity.RESULT_OK) {
+            if (result.resultCode == Activity.RESULT_OK) {
                 val uriString = result.data?.getStringExtra(CropImageActivity.EXTRA_RESULT_URI)
                     ?: return@registerForActivityResult
                 val uri = uriString.toUri()
@@ -86,7 +101,7 @@ class ProfileFragment : Fragment() {
     private val createPetLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == android.app.Activity.RESULT_OK) {
+        if (result.resultCode == Activity.RESULT_OK) {
             viewModel.syncPets()
             Log.d("Sync", "Sync pets")
         }
@@ -108,7 +123,7 @@ class ProfileFragment : Fragment() {
 
     private val storyPickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == android.app.Activity.RESULT_OK) {
+            if (result.resultCode == Activity.RESULT_OK) {
                 @Suppress("DEPRECATION")
                 val medias =
                     result.data?.getParcelableArrayListExtra<MediaItem>(
@@ -124,7 +139,7 @@ class ProfileFragment : Fragment() {
 
     private val avatarPickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == android.app.Activity.RESULT_OK) {
+            if (result.resultCode == Activity.RESULT_OK) {
                 @Suppress("DEPRECATION")
                 val medias =
                     result.data?.getParcelableArrayListExtra<MediaItem>(
@@ -138,7 +153,7 @@ class ProfileFragment : Fragment() {
 
     private val coverPickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == android.app.Activity.RESULT_OK) {
+            if (result.resultCode == Activity.RESULT_OK) {
                 @Suppress("DEPRECATION")
                 val medias =
                     result.data?.getParcelableArrayListExtra<MediaItem>(
@@ -167,6 +182,7 @@ class ProfileFragment : Fragment() {
             v.setPadding(0, systemBars.top, 0, 0)
             insets
         }
+        currentUserId = SharePrefUtils.getCurrentUserId(requireContext())
         initView()
         setupListener()
         observerData()
@@ -272,7 +288,10 @@ class ProfileFragment : Fragment() {
         petProfileAdapter = PetProfileAdapter(
             isOwner = true,
             onClick = { pet ->
-                PetProfileActivity.start(requireContext(), pet)
+                val intent = Intent(requireContext(), PetProfileActivity::class.java).apply {
+                    putExtra(PetProfileActivity.EXTRA_PET_JSON, Json.encodeToString(pet))
+                }
+                petProfileLauncher.launch(intent)
             },
             onAddClick = {
                 val intent = Intent(requireContext(), CreateEditPetActivity::class.java)

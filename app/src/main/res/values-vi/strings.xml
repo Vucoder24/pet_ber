@@ -348,6 +348,12 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="most_recent">Mới nhất</string>
     <string name="featured_many_likes">Nổi bật (Nhiều lượt thích)</string>
     <string name="select_or_enter_a_species">Chọn hoặc nhập loài...</string>
+    <string name="confirm_delete_pet">Xác nhận xóa thú cưng này</string>
+    <string name="dep_confirm_delete_pet">Thú cưng này sẽ bị xóa vĩnh viễn.</string>
+    <string name="delete_pet">Xóa thú cưng</string>
+    <string name="delete_pet_success">Xóa thú cưng thành công</string>
+    <string name="deleting_pet">Đang xóa thú cưng...</string>
+    <string name="delete_pet_error">Đã xảy ra lỗi khi xóa thú cưng</string>
 
 
     <string-array name="media_types">

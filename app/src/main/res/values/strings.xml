@@ -345,7 +345,13 @@
     <string name="sort_by">Sort by</string>
     <string name="most_recent">Most Recent</string>
     <string name="featured_many_likes">Featured (Many Likes)</string>
-    <string name="select_or_enter_a_species">Select or enter a species...</string>
+    <string name="select_or_enter_a_species">Select or enter a species…</string>
+    <string name="confirm_delete_pet">Confirm pet deletion</string>
+    <string name="dep_confirm_delete_pet">This pet pine will be permanently deleted.</string>
+    <string name="delete_pet">Delete this pet</string>
+    <string name="delete_pet_success">Successful pet removal</string>
+    <string name="deleting_pet">Deleting pets…</string>
+    <string name="delete_pet_error">There was an error when deleting a pet</string>
 
 
     <string-array name="media_types">

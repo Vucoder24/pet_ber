@@ -23,6 +23,7 @@ import com.nvv.petber.data.model.Pet
 import com.nvv.petber.databinding.ActivityPetProfileBinding
 import com.nvv.petber.ui.adapter.PetProfilePagerAdapter
 import com.nvv.petber.ui.base.BaseActivity
+import com.nvv.petber.ui.dialog.PetMoreBottomSheetFragment
 import com.nvv.petber.utils.PermissionUtils
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.autoHeight
@@ -31,6 +32,7 @@ import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.showAvatarOptionDialog
 import com.nvv.petber.utils.ext.showCoverOptionDialog
 import com.nvv.petber.utils.ext.toast
+import com.nvv.petber.viewmodel.PetProfileEvent
 import com.nvv.petber.viewmodel.PetProfileViewModel
 import com.nvv.petber.viewmodel.UpdatePetState
 import dagger.hilt.android.AndroidEntryPoint
@@ -118,7 +120,7 @@ class PetProfileActivity : BaseActivity() {
         }
 
     companion object {
-        private const val EXTRA_PET_JSON = "extra_pet_json"
+        const val EXTRA_PET_JSON = "extra_pet_json"
         private const val EXTRA_PET_ID = "extra_pet_id"
 
         fun start(context: Context, pet: Pet) {
@@ -328,6 +330,18 @@ class PetProfileActivity : BaseActivity() {
         binding.btnViewFollowes.setOnClickListener {
             ViewFollowersPetActivity.start(this, viewModel.petState.value?.id ?: "")
         }
+
+
+        binding.btnMore.apply {
+            visibility = View.GONE
+            setOnClickListener {
+                val sheet = PetMoreBottomSheetFragment.newInstance()
+                sheet.onDeleteClick = {
+                    viewModel.deletePet()
+                }
+                sheet.show(supportFragmentManager, "PetMoreSheet")
+            }
+        }
     }
 
     private fun viewMediaOnly(url: String?) {
@@ -352,6 +366,7 @@ class PetProfileActivity : BaseActivity() {
             viewModel.isOwner.collect { isOwner ->
                 binding.btnEditPet.visibility = if (isOwner) View.VISIBLE else View.GONE
                 binding.btnFollow.visibility = if (!isOwner) View.VISIBLE else View.GONE
+                binding.btnMore.visibility = if (isOwner) View.VISIBLE else View.GONE
             }
         }
         lifecycleScope.launch {
@@ -422,6 +437,29 @@ class PetProfileActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.followerCount.collect { count ->
                 binding.tvFollowCount.text = count.formatSocialCount()
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.event.collect { event ->
+                when (event) {
+                    is PetProfileEvent.PetDeleted -> {
+                        toast(getString(R.string.delete_pet_success))
+                        setResult(RESULT_OK, Intent().apply {
+                            putExtra("pet_deleted", true)
+                        })
+                        finish()
+                    }
+
+                    is PetProfileEvent.PetDeleteError -> {
+                        toast(getString(R.string.delete_pet_error))
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isDeleting.collect { isDeleting ->
+                if (isDeleting) toast(getString(R.string.deleting_pet))
             }
         }
     }

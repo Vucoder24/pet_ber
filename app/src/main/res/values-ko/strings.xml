@@ -347,6 +347,12 @@
     <string name="most_recent">최신순</string>
     <string name="featured_many_likes">추천 (좋아요 많음)</string>
     <string name="select_or_enter_a_species">종을 선택하거나 입력하세요...</string>
+    <string name="confirm_delete_pet">반려동물 삭제 확인</string>
+    <string name="dep_confirm_delete_pet">이 반려동물은 영구적으로 삭제됩니다.</string>
+    <string name="delete_pet">이 반려동물 삭제</string>
+    <string name="delete_pet_success">반려동물이 성공적으로 삭제되었습니다</string>
+    <string name="deleting_pet">반려동물 삭제 중...</string>
+    <string name="delete_pet_error">반려동물 삭제 중 오류가 발생했습니다</string>
 
 
     <string-array name="media_types">

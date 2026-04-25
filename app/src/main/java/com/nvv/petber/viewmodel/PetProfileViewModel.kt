@@ -16,12 +16,20 @@ import com.nvv.petber.utils.FilterPostUtils
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
+sealed class PetProfileEvent {
+    object PetDeleted : PetProfileEvent()
+    object PetDeleteError: PetProfileEvent()
+}
 
 @HiltViewModel
 class PetProfileViewModel @Inject constructor(
@@ -57,6 +65,12 @@ class PetProfileViewModel @Inject constructor(
     val isLoadMore: StateFlow<Boolean> = _isLoadMore.asStateFlow()
     private val _diaryPosts = MutableStateFlow<List<DiaryMonth>>(emptyList())
     val diaryPosts: StateFlow<List<DiaryMonth>> = _diaryPosts.asStateFlow()
+
+    private val _event = MutableSharedFlow<PetProfileEvent>()
+    val event: SharedFlow<PetProfileEvent> = _event.asSharedFlow()
+
+    private val _isDeleting = MutableStateFlow(false)
+    val isDeleting: StateFlow<Boolean> = _isDeleting.asStateFlow()
 
     private var currentOffset = 0
     private val limitPost = 10
@@ -270,6 +284,21 @@ class PetProfileViewModel @Inject constructor(
         _uiState.value = UpdatePetState.Idle
     }
 
+    fun deletePet() {
+        val petId = _petState.value?.id ?: return
+        viewModelScope.launch {
+            _isDeleting.value = true
+            val result = withContext(Dispatchers.IO) {
+                petRepo.deletePet(petId)
+            }
+            _isDeleting.value = false
+            result.onSuccess {
+                _event.emit(PetProfileEvent.PetDeleted)
+            }.onFailure { e ->
+                _event.emit(PetProfileEvent.PetDeleteError)
+            }
+        }
+    }
 }
 
 sealed class UpdatePetState {

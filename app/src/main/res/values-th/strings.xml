@@ -347,6 +347,12 @@
     <string name="most_recent">ล่าสุด</string>
     <string name="featured_many_likes">แนะนำ (ถูกใจจำนวนมาก)</string>
     <string name="select_or_enter_a_species">เลือกหรือกรอกสายพันธุ์...</string>
+    <string name="confirm_delete_pet">ยืนยันการลบสัตว์เลี้ยง</string>
+    <string name="dep_confirm_delete_pet">สัตว์เลี้ยงนี้จะถูกลบอย่างถาวร</string>
+    <string name="delete_pet">ลบสัตว์เลี้ยงนี้</string>
+    <string name="delete_pet_success">ลบสัตว์เลี้ยงสำเร็จ</string>
+    <string name="deleting_pet">กำลังลบสัตว์เลี้ยง...</string>
+    <string name="delete_pet_error">เกิดข้อผิดพลาดในการลบสัตว์เลี้ยง</string>
 
     <string-array name="media_types">
         <item>@string/all</item>
