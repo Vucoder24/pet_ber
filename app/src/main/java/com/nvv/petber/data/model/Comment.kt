@@ -30,12 +30,6 @@ data class Comment(
     @SerialName("like_count")
     val likeCount: Int = 0,
 
-    @SerialName("is_edited")
-    val isEdited: Boolean = false,
-
-    @SerialName("is_deleted")
-    val isDeleted: Boolean = false,
-
     @SerialName("created_at")
     val createdAt: String? = null,
 
