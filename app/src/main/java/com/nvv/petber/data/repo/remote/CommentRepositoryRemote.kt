@@ -35,7 +35,6 @@ class CommentRepositoryRemote @Inject constructor(
                 ) {
                     filter {
                         eq("post_id", postId)
-                        eq("is_deleted", false)
                     }
                     order("created_at", Order.ASCENDING)
                 }
