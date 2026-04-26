@@ -1,5 +1,6 @@
 package com.nvv.petber.ui.dialog
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.nvv.petber.data.model.SearchFilter
 import com.nvv.petber.databinding.LayoutSearchFilterBinding
 import com.nvv.petber.viewmodel.SearchViewModel
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class SearchFilterBottomSheet(
     private val initialFilter: SearchFilter,
@@ -25,6 +27,8 @@ class SearchFilterBottomSheet(
     private var _binding: LayoutSearchFilterBinding? = null
     private val viewModel: SearchViewModel by viewModels({ requireParentFragment() })
     private val binding get() = _binding!!
+    private var selectedDateFrom: String? = initialFilter.postDateFrom
+    private var selectedDateTo: String? = initialFilter.postDateTo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,16 +89,91 @@ class SearchFilterBottomSheet(
         when (initialFilter.type) {
             FilterType.USER -> {
                 binding.etFilterPhone.setText(initialFilter.userPhoneNumber)
-                if (initialFilter.userGender == getString(R.string.male)) binding.rbUserMale.isChecked = true
-                else if (initialFilter.userGender == getString(R.string.female)) binding.rbUserFemale.isChecked = true
+                if (initialFilter.userGender == getString(R.string.male)) binding.rbUserMale.isChecked =
+                    true
+                else if (initialFilter.userGender == getString(R.string.female)) binding.rbUserFemale.isChecked =
+                    true
             }
 
             FilterType.POST -> {
-                binding.rbPostRecent.isChecked = true
+                binding.cbPostRecent.isChecked = initialFilter.postSortBy != null
+                updateDateFromDisplay()
+                updateDateToDisplay()
+
+                // Date picker listeners
+                binding.btnPickDateFrom.setOnClickListener { showDatePicker(isFrom = true) }
+                binding.tvDateFrom.setOnClickListener { showDatePicker(isFrom = true) }
+
+                binding.btnPickDateTo.setOnClickListener { showDatePicker(isFrom = false) }
+                binding.tvDateTo.setOnClickListener { showDatePicker(isFrom = false) }
+
+                binding.tvClearDates.setOnClickListener {
+                    selectedDateFrom = null
+                    selectedDateTo = null
+                    updateDateFromDisplay()
+                    updateDateToDisplay()
+                }
             }
 
             else -> {}
         }
+    }
+
+    private fun showDatePicker(isFrom: Boolean) {
+        val calendar = Calendar.getInstance()
+
+        val existing = if (isFrom) selectedDateFrom else selectedDateTo
+        existing?.let {
+            try {
+                val parts = it.split("-")
+                calendar.set(parts[0].toInt(), parts[1].toInt() - 1, parts[2].toInt())
+            } catch (_: Exception) {
+            }
+        }
+
+        DatePickerDialog(
+            requireContext(),
+            { _, year, month, day ->
+                // Format: yyyy-MM-dd
+                val formatted = "%04d-%02d-%02d".format(year, month + 1, day)
+                if (isFrom) {
+                    selectedDateFrom = formatted
+                    updateDateFromDisplay()
+                } else {
+                    selectedDateTo = formatted
+                    updateDateToDisplay()
+                }
+                updateClearButtonVisibility()
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun String.toDisplayDate(): String {
+        return try {
+            val parts = this.split("-")
+            "${parts[2]}/${parts[1]}/${parts[0]}"
+        } catch (_: Exception) {
+            this
+        }
+    }
+
+    private fun updateDateFromDisplay() {
+        binding.tvDateFrom.text = selectedDateFrom?.toDisplayDate() ?: ""
+        binding.tvDateFrom.hint =
+            if (selectedDateFrom == null) getString(R.string.select_date) else ""
+    }
+
+    private fun updateDateToDisplay() {
+        binding.tvDateTo.text = selectedDateTo?.toDisplayDate() ?: ""
+        binding.tvDateTo.hint = if (selectedDateTo == null) getString(R.string.select_date) else ""
+    }
+
+    private fun updateClearButtonVisibility() {
+        binding.tvClearDates.visibility =
+            if (selectedDateFrom != null || selectedDateTo != null) View.VISIBLE else View.GONE
     }
 
     private fun collectFilterData(): SearchFilter {
@@ -112,6 +191,8 @@ class SearchFilterBottomSheet(
 
                 FilterType.POST -> {
                     postSortBy = "created_at"
+                    postDateFrom = selectedDateFrom
+                    postDateTo = selectedDateTo
                 }
 
                 FilterType.PET -> {

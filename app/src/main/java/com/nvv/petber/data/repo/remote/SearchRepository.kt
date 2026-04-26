@@ -51,7 +51,6 @@ class SearchRepository @Inject constructor(
                     filter?.userGender?.let { eq("gender", it) }
                     filter?.userPhoneNumber?.let { ilike("phone", "%$it%") }
                 }
-                limit(15)
             }.decodeList<User>()
 
             val followingIds = db["follows"].select {
@@ -111,7 +110,6 @@ class SearchRepository @Inject constructor(
                         filter?.isNeutered?.let { eq("is_neutered", it) }
                     }
                 }
-                limit(15)
             }.decodeList<Pet>()
 
             val followingPetIds = db["pet_follows"].select {
@@ -166,10 +164,17 @@ class SearchRepository @Inject constructor(
                         }
                     }
                     eq("post_likes.user_id", currentUserId)
+                    filter?.postDateFrom?.let {
+                        gte("created_at", "${it}T00:00:00")
+                    }
+                    filter?.postDateTo?.let {
+                        lte("created_at", "${it}T23:59:59")
+                    }
                 }
-                val sortCol = filter?.postSortBy ?: "created_at"
-                order(column = sortCol, order = Order.DESCENDING)
-                limit(15)
+                val sortCol = filter?.postSortBy
+                if (sortCol != null) {
+                    order(column = sortCol, order = Order.DESCENDING)
+                }
             }.decodeList<Post>()
 
             val allPetIds = posts.flatMap { it.petIds ?: emptyList() }.distinct()

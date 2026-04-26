@@ -39,7 +39,7 @@
     <string name="story">Story</string>
     <string name="create_a_new_story">Create a new Story</string>
     <string name="create_content">Create content</string>
-    <string name="dep_item_create_post">Post photos or videos of your pets</string>
+    <string name="dep_item_create_post">Post a post with photos or videos of your pet</string>
     <string name="preview_story">Preview Story</string>
     <string name="post_story">Post Story</string>
     <string name="choose_media">Choose media</string>
@@ -352,6 +352,11 @@
     <string name="delete_pet_success">Successful pet removal</string>
     <string name="deleting_pet">Deleting pets…</string>
     <string name="delete_pet_error">There was an error when deleting a pet</string>
+    <string name="date_from">From date</string>
+    <string name="date_to">To date</string>
+    <string name="select_date">Select date</string>
+    <string name="clear_dates">Clear dates</string>
+    <string name="pick_date">Pick date</string>
 
 
     <string-array name="media_types">

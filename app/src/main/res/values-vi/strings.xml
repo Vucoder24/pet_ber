@@ -39,7 +39,7 @@
     <string name="story">Khoảnh khắc</string>
     <string name="create_a_new_story">Tạo một khoảnh khắc mới</string>
     <string name="create_content">Tạo nội dung</string>
-    <string name="dep_item_create_post">Đăng ảnh hoặc video về thú cưng của bạn</string>
+    <string name="dep_item_create_post">Đăng bài viết với ảnh hoặc video về thú cưng của bạn</string>
     <string name="preview_story">Xem trước khoảnh khắc</string>
     <string name="post_story">Đăng khoảnh khắc</string>
     <string name="choose_media">Chọn phương tiện</string>
@@ -342,8 +342,8 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="no_diary_yet">Chưa có nhật ký nào</string>
     <string name="no_results_found">Không tìm thấy kết quả</string>
     <string name="search_filters">Bộ lọc tìm kiếm</string>
-    <string name="male">Đực</string>
-    <string name="female">Cái</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
     <string name="sort_by">Sắp xếp theo</string>
     <string name="most_recent">Mới nhất</string>
     <string name="featured_many_likes">Nổi bật (Nhiều lượt thích)</string>
@@ -354,6 +354,11 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="delete_pet_success">Xóa thú cưng thành công</string>
     <string name="deleting_pet">Đang xóa thú cưng...</string>
     <string name="delete_pet_error">Đã xảy ra lỗi khi xóa thú cưng</string>
+    <string name="date_from">Từ ngày</string>
+    <string name="date_to">Đến ngày</string>
+    <string name="select_date">Chọn ngày</string>
+    <string name="clear_dates">Xóa ngày</string>
+    <string name="pick_date">Chọn ngày</string>
 
 
     <string-array name="media_types">

@@ -353,6 +353,11 @@ Seja o primeiro a comentar!</string>
     <string name="delete_pet_success">Animal removido com sucesso</string>
     <string name="deleting_pet">Excluindo animal...</string>
     <string name="delete_pet_error">Ocorreu um erro ao excluir o animal</string>
+    <string name="date_from">Data inicial</string>
+    <string name="date_to">Data final</string>
+    <string name="select_date">Selecionar data</string>
+    <string name="clear_dates">Limpar datas</string>
+    <string name="pick_date">Escolher data</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

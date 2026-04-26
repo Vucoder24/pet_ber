@@ -84,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -131,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -139,18 +139,90 @@
             android:layout_height="wrap_content"
             android:text="@string/sort_by" />
 
-        <RadioGroup
-            android:id="@+id/rgPostSort"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <CheckBox
+            android:id="@+id/cbPostRecent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/most_recent"/>
+        <!-- Date range -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/date_from" />
 
-            <RadioButton
-                android:id="@+id/rbPostRecent"
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_search_input"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <TextView
+                android:id="@+id/tvDateFrom"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="@font/baloo2"
-                android:text="@string/most_recent" />
-        </RadioGroup>
+                android:hint="@string/select_date"
+                android:text=""
+                tools:ignore="TextContrastCheck" />
+
+            <ImageView
+                android:id="@+id/btnPickDateFrom"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_calendar"
+                android:contentDescription="@string/pick_date" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/date_to" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_search_input"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <TextView
+                android:id="@+id/tvDateTo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/baloo2"
+                android:hint="@string/select_date"
+                android:text=""
+                tools:ignore="TextContrastCheck" />
+
+            <ImageView
+                android:id="@+id/btnPickDateTo"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_calendar"
+                android:contentDescription="@string/pick_date" />
+        </LinearLayout>
+
+        <!-- Clear date button -->
+        <TextView
+            android:id="@+id/tvClearDates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/baloo2"
+            android:text="@string/clear_dates"
+            android:textColor="@color/text_orange"
+            android:visibility="gone" />
     </LinearLayout>
 
     <Button

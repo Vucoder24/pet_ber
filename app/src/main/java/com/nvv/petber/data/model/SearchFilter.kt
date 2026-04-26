@@ -16,6 +16,8 @@ data class SearchFilter(
     var isNeutered: Boolean? = null,
     // Post filters
     var postSortBy: String = "created_at",
+    var postDateFrom: String? = null,
+    var postDateTo: String? = null,
 ) : Parcelable
 
 enum class FilterType { USER, PET, POST }

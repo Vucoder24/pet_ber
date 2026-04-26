@@ -353,6 +353,11 @@
     <string name="delete_pet_success">ลบสัตว์เลี้ยงสำเร็จ</string>
     <string name="deleting_pet">กำลังลบสัตว์เลี้ยง...</string>
     <string name="delete_pet_error">เกิดข้อผิดพลาดในการลบสัตว์เลี้ยง</string>
+    <string name="date_from">จากวันที่</string>
+    <string name="date_to">ถึงวันที่</string>
+    <string name="select_date">เลือกวันที่</string>
+    <string name="clear_dates">ล้างวันที่</string>
+    <string name="pick_date">เลือกวันที่</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

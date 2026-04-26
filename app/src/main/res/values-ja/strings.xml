@@ -353,6 +353,11 @@
     <string name="delete_pet_success">ペットの削除に成功しました</string>
     <string name="deleting_pet">ペットを削除中...</string>
     <string name="delete_pet_error">ペットの削除中にエラーが発生しました</string>
+    <string name="date_from">開始日</string>
+    <string name="date_to">終了日</string>
+    <string name="select_date">日付を選択</string>
+    <string name="clear_dates">日付をクリア</string>
+    <string name="pick_date">日付を選ぶ</string>
 
 
     <string-array name="media_types">
