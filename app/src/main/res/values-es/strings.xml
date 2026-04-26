@@ -353,6 +353,11 @@
     <string name="photo">Foto</string>
     <string name="grant_permission">Otorgar permiso</string>
     <string name="no_diary_yet">No hay diarios aún</string>
+    <string name="date_from">Fecha desde</string>
+    <string name="date_to">Fecha hasta</string>
+    <string name="select_date">Seleccionar fecha</string>
+    <string name="clear_dates">Borrar fechas</string>
+    <string name="pick_date">Elegir fecha</string>
 
 
     <string-array name="media_types">

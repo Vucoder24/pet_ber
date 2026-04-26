@@ -353,6 +353,11 @@ Soyez le premier à commenter !</string>
     <string name="photo">Photo</string>
     <string name="grant_permission">Accorder l\'autorisation</string>
     <string name="no_diary_yet">Pas encore de journal</string>
+    <string name="date_from">Date de début</string>
+    <string name="date_to">Date de fin</string>
+    <string name="select_date">Sélectionner une date</string>
+    <string name="clear_dates">Effacer les dates</string>
+    <string name="pick_date">Choisir une date</string>
 
 
     <string-array name="media_types">

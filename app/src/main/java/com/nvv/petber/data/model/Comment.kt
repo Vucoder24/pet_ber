@@ -23,6 +23,11 @@ data class Comment(
 
     @SerialName("parent_comment_id")
     val parentCommentId: String? = null,
+    @SerialName("is_edited")
+    val isEdited: Boolean = false,
+
+    @SerialName("is_deleted")
+    val isDeleted: Boolean = false,
 
     @SerialName("media_url")
     val mediaUrl: String? = null,

@@ -59,7 +59,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun refreshData() {
-        loadStories()
+        loadStories(refresh = true)
         loadPosts(refresh = true)
     }
 
@@ -155,7 +155,7 @@ class HomeViewModel @Inject constructor(
             try {
                 homeRepository.getStoriesFlow()
                     .collect {
-                        loadStories()
+                        loadStories(refresh = true)
                     }
             } catch (_: Exception) {
             }

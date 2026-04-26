@@ -8,7 +8,7 @@ import java.util.Locale
 object FilterPostUtils {
     fun groupPostsByMonth(posts: List<Post>): List<DiaryMonth> {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("MMMM yyyy", Locale.US)
+        val outputFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
 
         val groupedMap = posts.groupBy { post ->
             try {

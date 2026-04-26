@@ -353,6 +353,11 @@ Sei der Erste, der kommentiert!</string>
     <string name="delete_pet_success">Haustier erfolgreich gelöscht</string>
     <string name="deleting_pet">Haustier wird gelöscht...</string>
     <string name="delete_pet_error">Beim Löschen des Haustiers ist ein Fehler aufgetreten</string>
+    <string name="date_from">Von Datum</string>
+    <string name="date_to">Bis Datum</string>
+    <string name="select_date">Datum auswählen</string>
+    <string name="clear_dates">Daten löschen</string>
+    <string name="pick_date">Datum wählen</string>
 
 
     <string-array name="media_types">
