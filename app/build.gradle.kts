@@ -151,4 +151,6 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$camerax_version")
     implementation("androidx.camera:camera-video:$camerax_version")
     implementation("androidx.camera:camera-view:$camerax_version")
+    // ML Kit Translation
+    implementation("com.google.mlkit:translate:17.0.3")
 }

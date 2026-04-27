@@ -358,6 +358,10 @@
     <string name="select_date">날짜 선택</string>
     <string name="clear_dates">날짜 지우기</string>
     <string name="pick_date">날짜 선택</string>
+    <string name="health_this_month">🐾 이번 달 건강 상태</string>
+    <string name="see_details">자세히 보기 →</string>
+    <string name="health_detail_title">건강 %1$s</string>
+    <string name="recorded_at">기록됨: %1$s</string>
 
 
     <string-array name="media_types">

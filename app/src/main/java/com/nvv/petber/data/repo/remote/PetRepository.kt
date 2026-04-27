@@ -6,7 +6,9 @@ import android.util.Log
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.PetFollowRecord
 import com.nvv.petber.data.model.PetFollowWithUser
+import com.nvv.petber.data.model.PetHealthLog
 import com.nvv.petber.data.model.Post
+import com.nvv.petber.utils.TranslationUtils
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
@@ -232,5 +234,48 @@ class PetRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun getLatestHealthLogInMonth(
+        petId: String,
+        yearMonth: String
+    ): PetHealthLog? {
+        return try {
+            val log = supabase.from("pet_health_logs")
+                .select {
+                    filter {
+                        eq("pet_id", petId)
+                        gte("recorded_at", "$yearMonth-01")
+                        lt("recorded_at", nextMonth(yearMonth))
+                    }
+                    order("recorded_at", order = Order.DESCENDING)
+                    limit(1)
+                }
+                .decodeSingleOrNull<PetHealthLog>()
+            log?.let { translateHealthLog(it) }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private suspend fun translateHealthLog(log: PetHealthLog): PetHealthLog {
+        val translated = TranslationUtils.translateAll(
+            log.bodyCondition,
+            log.clinicalStatus,
+            log.activityAndMentalState,
+            log.preventiveStatus
+        )
+        return log.copy(
+            bodyCondition = translated[0],
+            clinicalStatus = translated[1],
+            activityAndMentalState = translated[2],
+            preventiveStatus = translated[3]
+        )
+    }
+
+    private fun nextMonth(yearMonth: String): String {
+        val (year, month) = yearMonth.split("-").map { it.toInt() }
+        return if (month == 12) "${year + 1}-01"
+        else "$year-${(month + 1).toString().padStart(2, '0')}"
     }
 }
