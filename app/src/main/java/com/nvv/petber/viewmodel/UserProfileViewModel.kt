@@ -12,6 +12,7 @@ import com.nvv.petber.data.model.User
 import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.data.repo.remote.ProfileRepositoryRemote
 import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.utils.TranslationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -74,12 +75,20 @@ class UserProfileViewModel @Inject constructor(
                 val remoteUser = userDeferred.await()
                 val stats = statsDeferred.await()
 
-                val finalUser = remoteUser?.copy(
+                var finalUser = remoteUser?.copy(
                     friendsCount = stats.friendsCount,
                     petFollowingCount = stats.petFollowingCount,
                     followerCount = stats.followerCount,
                     followingCount = stats.followingCount
                 )
+                finalUser = finalUser?.let { user ->
+                    val translatedFields = TranslationUtils.translateAll(
+                        user.gender,
+                    )
+                    user.copy(
+                        gender = translatedFields[0],
+                    )
+                }
 
                 _user.postValue(finalUser)
                 _pets.postValue(petsDeferred.await())

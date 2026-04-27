@@ -15,6 +15,7 @@ import com.nvv.petber.data.repo.remote.PetRepository
 import com.nvv.petber.data.repo.remote.ProfileRepositoryRemote
 import com.nvv.petber.utils.FilterPostUtils
 import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.utils.TranslationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -97,6 +98,28 @@ class PetProfileViewModel @Inject constructor(
         }
     }
 
+    private suspend fun translatePet(pet: Pet): Pet {
+        val translated = TranslationUtils.translateAll(
+            pet.gender,
+            pet.species,
+            pet.breed,
+            pet.bodyCondition,
+            pet.clinicalStatus,
+            pet.activityAndMentalState,
+            pet.medicalHistoryAndTreatment,
+            pet.preventiveStatus
+        )
+        return pet.copy(
+            gender = translated[0],
+            species = translated[1],
+            breed = translated[2],
+            bodyCondition = translated[3],
+            clinicalStatus = translated[4],
+            activityAndMentalState = translated[5],
+            medicalHistoryAndTreatment = translated[6],
+            preventiveStatus = translated[7]
+        )
+    }
 
     fun fetchPetById(petId: String) {
         viewModelScope.launch {
@@ -106,7 +129,10 @@ class PetProfileViewModel @Inject constructor(
                     repository.getPetById(petId)
                 }
                 if (pet != null) {
-                    _petState.value = pet
+                    val translatedPet = withContext(Dispatchers.IO){
+                        translatePet(pet)
+                    }
+                    _petState.value = translatedPet
                     checkOwnershipAndFollowStatus(pet)
                     loadPetPosts(petId, isRefresh = true)
                     loadDiaryPosts(petId)

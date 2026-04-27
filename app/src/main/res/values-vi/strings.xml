@@ -372,14 +372,14 @@ Hãy là người đầu tiên bình luận!</string>
     </string-array>
 
     <string-array name="gender_options">
-        <item>Nam giới</item>
+        <item>Nam</item>
         <item>Nữ</item>
         <item>Khác</item>
     </string-array>
 
     <string-array name="preventive_status_options">
-        <item>Cập nhật</item>
-        <item>Đang tiến hành</item>
+        <item>Đã hoàn thành</item>
+        <item>Đang thực hiện</item>
         <item>Quá hạn / Có rủi ro</item>
     </string-array>
 
@@ -391,12 +391,12 @@ Hãy là người đầu tiên bình luận!</string>
 
     <string-array name="clinical_status_options">
         <item>Ổn định</item>
-        <item>Dưới sự quan sát</item>
-        <item>Nghiêm trọng / Khẩn cấp</item>
+        <item>Cần theo dõi</item>
+        <item>Nghiêm trọng</item>
     </string-array>
 
     <string-array name="activity_mental_options">
-        <item>Hoạt động / Cảnh báo</item>
+        <item>Năng động / Thân thiện</item>
         <item>Bình thường</item>
         <item>Lờ đờ</item>
     </string-array>

@@ -8,6 +8,7 @@ import com.nvv.petber.data.model.PetFollowRecord
 import com.nvv.petber.data.model.PetFollowWithUser
 import com.nvv.petber.data.model.PetHealthLog
 import com.nvv.petber.data.model.Post
+import com.nvv.petber.utils.TranslationUtils
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
@@ -240,7 +241,7 @@ class PetRepository @Inject constructor(
         yearMonth: String
     ): PetHealthLog? {
         return try {
-            supabase.from("pet_health_logs")
+            val log = supabase.from("pet_health_logs")
                 .select {
                     filter {
                         eq("pet_id", petId)
@@ -251,9 +252,25 @@ class PetRepository @Inject constructor(
                     limit(1)
                 }
                 .decodeSingleOrNull<PetHealthLog>()
+            log?.let { translateHealthLog(it) }
         } catch (_: Exception) {
             null
         }
+    }
+
+    private suspend fun translateHealthLog(log: PetHealthLog): PetHealthLog {
+        val translated = TranslationUtils.translateAll(
+            log.bodyCondition,
+            log.clinicalStatus,
+            log.activityAndMentalState,
+            log.preventiveStatus
+        )
+        return log.copy(
+            bodyCondition = translated[0],
+            clinicalStatus = translated[1],
+            activityAndMentalState = translated[2],
+            preventiveStatus = translated[3]
+        )
     }
 
     private fun nextMonth(yearMonth: String): String {

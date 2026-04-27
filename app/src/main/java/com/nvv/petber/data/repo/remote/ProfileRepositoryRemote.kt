@@ -9,6 +9,7 @@ import com.nvv.petber.data.model.FollowUserUI
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.User
+import com.nvv.petber.utils.TranslationUtils
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
@@ -31,23 +32,19 @@ class ProfileRepositoryRemote @Inject constructor(
 ) {
 
     suspend fun getUser(userId: String): User? {
-        return supabase.from("users")
-            .select {
-                filter {
-                    eq("id", userId)
-                }
-            }
-            .decodeSingleOrNull()
+        val user = supabase.from("users")
+            .select { filter { eq("id", userId) } }
+            .decodeSingleOrNull<User>()
+
+        return user?.let { translateUser(it) }
     }
 
     suspend fun getPets(userId: String): List<Pet> {
-        return supabase.from("pets")
-            .select {
-                filter {
-                    eq("owner_id", userId)
-                }
-            }
-            .decodeList()
+        val pets = supabase.from("pets")
+            .select { filter { eq("owner_id", userId) } }
+            .decodeList<Pet>()
+
+        return pets.map { translatePet(it) }
     }
 
     suspend fun getPosts(userId: String): List<Post> {
@@ -326,16 +323,12 @@ class ProfileRepositoryRemote @Inject constructor(
 
     suspend fun getPetById(petId: String): Pet? {
         return try {
-            supabase.from("pets")
-                .select {
-                    filter {
-                        eq("id", petId)
-                    }
-                }
+            val pet = supabase.from("pets")
+                .select { filter { eq("id", petId) } }
                 .decodeSingleOrNull<Pet>()
-        } catch (_: Exception) {
-            null
-        }
+
+            pet?.let { translatePet(it) }
+        } catch (_: Exception) { null }
     }
 
     suspend fun getPetPosts(
@@ -409,6 +402,38 @@ class ProfileRepositoryRemote @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    private suspend fun translateUser(user: User): User {
+        val translated = TranslationUtils.translateAll(
+            user.gender,
+        )
+        return user.copy(
+            gender = translated[0],
+        )
+    }
+
+    private suspend fun translatePet(pet: Pet): Pet {
+        val translated = TranslationUtils.translateAll(
+            pet.gender,
+            pet.species,
+            pet.breed,
+            pet.bodyCondition,
+            pet.clinicalStatus,
+            pet.activityAndMentalState,
+            pet.medicalHistoryAndTreatment,
+            pet.preventiveStatus
+        )
+        return pet.copy(
+            gender = translated[0],
+            species = translated[1],
+            breed = translated[2],
+            bodyCondition = translated[3],
+            clinicalStatus = translated[4],
+            activityAndMentalState = translated[5],
+            medicalHistoryAndTreatment = translated[6],
+            preventiveStatus = translated[7]
+        )
     }
 }
 
