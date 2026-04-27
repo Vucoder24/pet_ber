@@ -2,18 +2,25 @@ package com.nvv.petber.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.nvv.petber.R
 import com.nvv.petber.data.model.DiaryMonth
+import com.nvv.petber.data.model.PetHealthLog
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.databinding.ItemDiaryCreateBinding
 import com.nvv.petber.databinding.ItemDiaryMonthBinding
+import com.nvv.petber.ui.dialog.PetHealthDetailBottomSheet
+import com.nvv.petber.utils.ext.gone
+import com.nvv.petber.utils.ext.visible
 
 class PetDiaryAdapter(
     private val onViewPostClick: (Post) -> Unit,
-    private val onCreatePostClick:() -> Unit
+    private val onCreatePostClick: () -> Unit
 ) :
     ListAdapter<PetDiaryAdapter.DiaryItem, RecyclerView.ViewHolder>(DiaryDiffCallback()) {
 
@@ -22,6 +29,7 @@ class PetDiaryAdapter(
         private const val TYPE_CREATE = 0
         private const val TYPE_MONTH = 1
     }
+
     sealed class DiaryItem {
         data class Month(val data: DiaryMonth) : DiaryItem()
         object CreatePost : DiaryItem()
@@ -30,7 +38,7 @@ class PetDiaryAdapter(
     fun submitData(list: List<DiaryMonth>?, showCreatePost: Boolean = true) {
         val items = mutableListOf<DiaryItem>()
 
-        if (showCreatePost){
+        if (showCreatePost) {
             items.add(DiaryItem.CreatePost)
         }
 
@@ -58,6 +66,7 @@ class PetDiaryAdapter(
             }
         }
     }
+
     inner class CreatePostViewHolder(
         val binding: ItemDiaryCreateBinding
     ) : RecyclerView.ViewHolder(binding.root)
@@ -114,7 +123,34 @@ class PetDiaryAdapter(
                 innerAdapter.submitList(emptyList())
             } else {
                 innerAdapter.submitList(item.posts)
+                val log = item.healthLog
+                if (log != null) {
+                    binding.cardHealth.visible()
+                    binding.tvWeight.text = binding.root.context.getString(
+                        R.string.label_weight,
+                        log.weight?.let { "$it kg" }
+                            ?: binding.root.context.getString(R.string.value_na)
+                    )
+
+                    binding.tvClinicalStatus.text = binding.root.context.getString(
+                        R.string.label_clinical_status,
+                        log.clinicalStatus ?:
+                        binding.root.context.getString(R.string.value_na)
+                    )
+                    binding.btnDetail.setOnClickListener {
+                        showHealthDetailDialog(log)
+                    }
+                } else {
+                    binding.cardHealth.gone()
+                }
             }
+        }
+
+        private fun showHealthDetailDialog(log: PetHealthLog) {
+            val fragment = binding.root.findFragment<Fragment>()
+            PetHealthDetailBottomSheet
+                .newInstance(log)
+                .show(fragment.childFragmentManager, PetHealthDetailBottomSheet.TAG)
         }
     }
 

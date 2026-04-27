@@ -6,6 +6,7 @@ import android.util.Log
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.PetFollowRecord
 import com.nvv.petber.data.model.PetFollowWithUser
+import com.nvv.petber.data.model.PetHealthLog
 import com.nvv.petber.data.model.Post
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
@@ -232,5 +233,32 @@ class PetRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun getLatestHealthLogInMonth(
+        petId: String,
+        yearMonth: String
+    ): PetHealthLog? {
+        return try {
+            supabase.from("pet_health_logs")
+                .select {
+                    filter {
+                        eq("pet_id", petId)
+                        gte("recorded_at", "$yearMonth-01")
+                        lt("recorded_at", nextMonth(yearMonth))
+                    }
+                    order("recorded_at", order = Order.DESCENDING)
+                    limit(1)
+                }
+                .decodeSingleOrNull<PetHealthLog>()
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun nextMonth(yearMonth: String): String {
+        val (year, month) = yearMonth.split("-").map { it.toInt() }
+        return if (month == 12) "${year + 1}-01"
+        else "$year-${(month + 1).toString().padStart(2, '0')}"
     }
 }

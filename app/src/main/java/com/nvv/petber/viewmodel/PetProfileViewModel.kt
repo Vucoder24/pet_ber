@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
 import com.nvv.petber.data.model.DiaryMonth
 import com.nvv.petber.data.model.Pet
+import com.nvv.petber.data.model.PetHealthLog
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.data.repo.remote.PetRepository
@@ -137,8 +138,20 @@ class PetProfileViewModel @Inject constructor(
                 val allPosts = withContext(Dispatchers.IO) {
                     petRepo.getAllPetDiaryPosts(petId)
                 }
+                val uniqueMonths = allPosts
+                    .map { it.createdAt!!.substring(0, 7) }
+                    .distinct()
 
-                val groupedData = FilterPostUtils.groupPostsByMonth(allPosts)
+                val healthLogs = mutableMapOf<String, PetHealthLog>()
+                uniqueMonths.forEach { yearMonth ->
+                    val log = withContext(Dispatchers.IO) {
+                        petRepo.getLatestHealthLogInMonth(petId, yearMonth)
+                    }
+                    if (log != null) healthLogs[yearMonth] = log
+                }
+
+
+                val groupedData = FilterPostUtils.groupPostsByMonth(allPosts, healthLogs)
                 _diaryPosts.value = groupedData
             } catch (_: Exception) {
                 // Handle error

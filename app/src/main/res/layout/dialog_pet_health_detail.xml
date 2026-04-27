@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:paddingHorizontal="20dp"
+    android:paddingBottom="32dp">
+
+    <!-- Handle bar -->
+    <View
+        android:id="@+id/handleBar"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_handle_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Title + close -->
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/baloo2"
+        android:textColor="@color/title_color"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/btnClose"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/handleBar"
+        tools:text="@string/health_detail_title" />
+
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/bg_circle_gray"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_close"
+        app:layout_constraintBottom_toBottomOf="@id/tvDialogTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvDialogTitle"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <!-- Metric cards: cân nặng + triệt sản -->
+    <LinearLayout
+        android:id="@+id/layoutMetrics"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDialogTitle">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/amber_50"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/weight_kg"
+                    android:textAllCaps="true"
+                    android:textColor="@color/amber_800"
+                    android:textSize="11sp" />
+                <TextView
+                    android:id="@+id/tvDetailWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:textColor="@color/amber_900"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="4.2 kg" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/amber_50"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/has_been_neutered"
+                    android:textAllCaps="true"
+                    android:textColor="@color/amber_800"
+                    android:textSize="11sp" />
+                <TextView
+                    android:id="@+id/tvDetailNeutered"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:textColor="@color/amber_900"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Đã triệt" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <!-- Detail rows trong 1 card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardDetailRows"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardBackgroundColor="@color/background_card"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutMetrics">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Tình trạng cơ thể -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="12dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/body_condition"
+                    android:textColor="@color/pet_text_secondary"
+                    android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/tvDetailBodyCondition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:textColor="@color/title_color"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="Bình thường" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginHorizontal="14dp"
+                android:background="@color/divider_color" />
+
+            <!-- Tình trạng lâm sàng -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="12dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/clinical_status"
+                    android:textColor="@color/pet_text_secondary"
+                    android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/tvDetailClinicalStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:textColor="@color/title_color"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="Khỏe mạnh" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginHorizontal="14dp"
+                android:background="@color/divider_color" />
+
+            <!-- Hoạt động & tinh thần -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="12dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/activity_amp_mental_state"
+                    android:textColor="@color/pet_text_secondary"
+                    android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/tvDetailActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:textColor="@color/title_color"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="Năng động" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginHorizontal="14dp"
+                android:background="@color/divider_color" />
+
+            <!-- Tình trạng phòng ngừa -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="12dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/baloo2"
+                    android:text="@string/preventive_status"
+                    android:textColor="@color/pet_text_secondary"
+                    android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/tvDetailPreventive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo2"
+                    android:textColor="@color/title_color"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="Đầy đủ" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Ngày ghi nhận -->
+    <TextView
+        android:id="@+id/tvRecordedAt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/baloo2"
+        android:gravity="center"
+        android:textColor="@color/pet_text_secondary"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardDetailRows"
+        tools:text="@string/recorded_at" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

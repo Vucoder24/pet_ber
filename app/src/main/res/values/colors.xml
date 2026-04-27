@@ -25,4 +25,15 @@
     <color name="gray_400">#888888</color>
     <color name="unread_notification_bg">#FBF3E6</color>
     <color name="selected_bg">#f7f0e9</color>
+    <!-- Amber scale -->
+    <color name="amber_50">#FAEEDA</color>
+    <color name="amber_600">#BA7517</color>
+    <color name="amber_700">#854F0B</color>
+    <color name="amber_800">#633806</color>
+    <color name="amber_900">#412402</color>
+
+    <!-- UI general -->
+    <color name="background_card">#FFFFFF</color>
+    <color name="divider_color">#E0DDD5</color>
+    <color name="bg_icon_gray">#F1EFE8</color>
 </resources>

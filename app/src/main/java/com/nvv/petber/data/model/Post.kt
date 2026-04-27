@@ -59,5 +59,6 @@ data class Post(
 
 data class DiaryMonth(
     val monthYear: String,
-    val posts: List<Post>
+    val posts: List<Post>,
+    val healthLog: PetHealthLog? = null
 )

@@ -357,6 +357,10 @@
     <string name="select_date">Select date</string>
     <string name="clear_dates">Clear dates</string>
     <string name="pick_date">Pick date</string>
+    <string name="health_this_month">🐾 Health this month</string>
+    <string name="see_details">See details →</string>
+    <string name="health_detail_title">Health %1$s</string>
+    <string name="recorded_at">Recorded: %1$s</string>
 
 
     <string-array name="media_types">
