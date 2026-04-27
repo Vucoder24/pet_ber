@@ -359,6 +359,10 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="select_date">Chọn ngày</string>
     <string name="clear_dates">Xóa ngày</string>
     <string name="pick_date">Chọn ngày</string>
+    <string name="health_this_month">🐾 Sức khỏe tháng này</string>
+    <string name="see_details">Xem chi tiết →</string>
+    <string name="health_detail_title">Sức khỏe %1$s</string>
+    <string name="recorded_at">Đã ghi nhận: %1$s</string>
 
 
     <string-array name="media_types">

@@ -358,6 +358,10 @@
     <string name="select_date">日付を選択</string>
     <string name="clear_dates">日付をクリア</string>
     <string name="pick_date">日付を選ぶ</string>
+    <string name="health_this_month">🐾 今月の健康状態</string>
+    <string name="see_details">詳細を見る →</string>
+    <string name="health_detail_title">健康 %1$s</string>
+    <string name="recorded_at">記録日時：%1$s</string>
 
 
     <string-array name="media_types">

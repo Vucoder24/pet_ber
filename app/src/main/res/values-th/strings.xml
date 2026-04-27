@@ -358,6 +358,10 @@
     <string name="select_date">เลือกวันที่</string>
     <string name="clear_dates">ล้างวันที่</string>
     <string name="pick_date">เลือกวันที่</string>
+    <string name="health_this_month">🐾 สุขภาพเดือนนี้</string>
+    <string name="see_details">ดูรายละเอียด →</string>
+    <string name="health_detail_title">สุขภาพ %1$s</string>
+    <string name="recorded_at">บันทึกเมื่อ: %1$s</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

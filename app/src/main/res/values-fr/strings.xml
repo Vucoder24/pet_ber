@@ -358,6 +358,10 @@ Soyez le premier à commenter !</string>
     <string name="select_date">Sélectionner une date</string>
     <string name="clear_dates">Effacer les dates</string>
     <string name="pick_date">Choisir une date</string>
+    <string name="health_this_month">🐾 Santé ce mois-ci</string>
+    <string name="see_details">Voir les détails →</string>
+    <string name="health_detail_title">Santé %1$s</string>
+    <string name="recorded_at">Enregistré : %1$s</string>
 
 
     <string-array name="media_types">

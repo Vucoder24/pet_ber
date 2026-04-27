@@ -358,6 +358,10 @@
     <string name="select_date">Seleccionar fecha</string>
     <string name="clear_dates">Borrar fechas</string>
     <string name="pick_date">Elegir fecha</string>
+    <string name="health_this_month">🐾 Salud este mes</string>
+    <string name="see_details">Ver detalles →</string>
+    <string name="health_detail_title">Salud %1$s</string>
+    <string name="recorded_at">Registrado: %1$s</string>
 
 
     <string-array name="media_types">
