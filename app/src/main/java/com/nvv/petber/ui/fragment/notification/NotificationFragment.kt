@@ -145,9 +145,7 @@ class NotificationFragment : Fragment() {
                         notificationAdapter.submitList(list)
                         updateUiState()
                         binding.root.isRefreshing = false
-                        if (!mainViewModel.isLoading.value && list.isNotEmpty()) {
-                            hideNotificationsBadge()
-                        }
+                        hideNotificationsBadge()
                     }
                 }
 
