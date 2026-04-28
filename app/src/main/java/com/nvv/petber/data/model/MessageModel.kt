@@ -47,6 +47,7 @@ data class ConversationEntity(
     val lastMessageContent: String?,
     val lastMessageMediaType: String?,
     val lastMessageAt: String?,
+    val lastMessageSenderId: String?
 )
 
 @Entity(tableName = "messages")

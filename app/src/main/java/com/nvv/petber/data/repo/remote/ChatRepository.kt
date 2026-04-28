@@ -94,6 +94,7 @@ class ChatRepository @Inject constructor(
                 lastMessageContent   = conv.lastMessageContent,
                 lastMessageMediaType = conv.lastMessageMediaType,
                 lastMessageAt        = conv.lastMessageAt,
+                lastMessageSenderId = conv.lastMessageSenderId
             )
         }
     }

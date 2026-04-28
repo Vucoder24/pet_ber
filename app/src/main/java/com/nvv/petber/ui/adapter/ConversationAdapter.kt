@@ -21,7 +21,7 @@ class ConversationAdapter(
     inner class ViewHolder(private val binding: ItemConversationBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ConversationEntity) {
-            binding.tvFullName.text = if (item.otherUserName.isNullOrEmpty()){
+            binding.tvFullName.text = if (item.otherUserName.isNullOrEmpty()) {
                 itemView.context.getString(R.string.petber_user)
             } else item.otherUserName
 
@@ -29,14 +29,22 @@ class ConversationAdapter(
             binding.tvLastMessage.text = when (item.lastMessageMediaType) {
                 "image" -> context.getString(R.string.msg_sent_image)
                 "video" -> context.getString(R.string.msg_sent_video)
-                else -> item.lastMessageContent ?: ""
+                else -> {
+                    if (item.lastMessageContent?.contains("DELETED_MSG_PETBER") == true) {
+                        if (item.lastMessageSenderId == item.otherUserId){
+                            binding.root.context.getString(R.string.other_user_deleted_msg)
+                        } else binding.root.context.getString(R.string.you_deleted_msg)
+                    } else {
+                        item.lastMessageContent ?: ""
+                    }
+                }
             }
 
             binding.ivAvatar.loadAvatar(item.otherUserAvatar)
             item.lastMessageAt?.let {
                 binding.tvTime.visible()
                 binding.tvTime.text = TimeUtils.formatMessageTime(it)
-            }?: {
+            } ?: {
                 binding.tvTime.gone()
             }
 

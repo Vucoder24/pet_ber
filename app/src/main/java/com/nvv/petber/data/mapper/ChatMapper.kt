@@ -13,6 +13,7 @@ fun ConversationModel.toEntity(currentUserId: String) = ConversationEntity(
     lastMessageContent   = lastMessageContent,
     lastMessageMediaType = lastMessageMediaType,
     lastMessageAt        = lastMessageAt,
+    lastMessageSenderId = lastMessageSenderId
 )
 
 fun ConversationEntity.toModel() = ConversationModel(

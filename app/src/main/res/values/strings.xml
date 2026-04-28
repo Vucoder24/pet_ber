@@ -384,6 +384,8 @@
     <string name="cannot_read_file">Cannot read file.</string>
     <string name="cannot_send_message">Cannot send message!</string>
     <string name="add_new">Add new</string>
+    <string name="other_user_deleted_msg">The other person deleted a message.</string>
+    <string name="you_deleted_msg">You deleted a message.</string>
 
 
     <string-array name="media_types">
