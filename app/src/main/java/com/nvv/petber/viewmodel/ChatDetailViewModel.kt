@@ -1,6 +1,7 @@
 package com.nvv.petber.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
@@ -145,6 +146,7 @@ class ChatDetailViewModel @Inject constructor(
                 repository.sendMessage(tempMessage)
 
             } catch (e: Exception) {
+                Log.d("ERRR", "${e.message}")
                 _error.value = ctx.getString(R.string.cannot_send_message)
             }
         }

@@ -446,8 +446,8 @@ class ProfileRepositoryRemote @Inject constructor(
         return supabase.postgrest.rpc(
             function = "get_or_create_conversation",
             parameters = mapOf(
-                "user1_id" to currentUserId,
-                "user2_id" to targetUserId
+                "p_user1_id" to currentUserId,
+                "p_user2_id" to targetUserId
             )
         ).decodeSingle<ConversationModel>()
     }

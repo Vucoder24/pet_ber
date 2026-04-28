@@ -362,7 +362,7 @@
     <string name="health_detail_title">Health %1$s</string>
     <string name="recorded_at">Recorded: %1$s</string>
     <string name="chat">Chat</string>
-    <string name="connecting">Connecting...</string>
+    <string name="connecting">Connecting...</string>0
     <string name="search_chat_hint">Search for a chat...</string>
     <string name="msg_sent_image">Photo sent</string>
     <string name="msg_sent_video">Video sent</string>
@@ -383,6 +383,7 @@
     <string name="image_video">[Image/Video]</string>
     <string name="cannot_read_file">Cannot read file.</string>
     <string name="cannot_send_message">Cannot send message!</string>
+    <string name="add_new">Add new</string>
 
 
     <string-array name="media_types">

@@ -148,6 +148,13 @@ class ChatDetailActivity : AppCompatActivity() {
         binding.rvMessages.layoutManager = layoutManager
         binding.rvMessages.adapter = adapter
 
+        binding.edtMessage.setOnClickListener {
+            if (adapter.itemCount > 0) {
+                binding.rvMessages.postDelayed({
+                    binding.rvMessages.scrollToPosition(adapter.itemCount - 1)
+                }, 100)
+            }
+        }
         binding.rvMessages.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy < 0 && !recyclerView.canScrollVertically(-1)) {

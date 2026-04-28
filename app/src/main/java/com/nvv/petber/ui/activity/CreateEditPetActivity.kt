@@ -287,6 +287,12 @@ class CreateEditPetActivity : BaseActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, items)
         view.setAdapter(adapter)
         if (items.isNotEmpty()) view.setText(items.first(), false)
+
+        view.setOnClickListener {
+            view.showDropDown()
+        }
+
+        view.threshold = 1
     }
 
     private fun submitForm() {

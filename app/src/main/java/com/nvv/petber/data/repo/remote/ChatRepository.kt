@@ -1,8 +1,9 @@
 package com.nvv.petber.data.repo.remote
 
 import com.nvv.petber.data.dao.ChatDao
-import com.nvv.petber.data.mapper.toEntity
+import com.nvv.petber.data.model.ConversationEntity
 import com.nvv.petber.data.model.ConversationModel
+import com.nvv.petber.data.model.User
 import com.nvv.petber.service.ChatRealtimeService
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
@@ -25,25 +26,33 @@ class ChatRepository @Inject constructor(
 
     fun observeLocalConversations() = chatDao.observeConversations()
 
-    suspend fun refreshConversations(page: Int, limit: Int = 20): List<ConversationModel> = withContext(
+    suspend fun refreshConversations(page: Int, limit: Int = 20, currentUserId: String): List<ConversationEntity> = withContext(
         Dispatchers.IO) {
-        val remoteData = supabaseClient.postgrest["conversation_list_view"]
+        val list = supabaseClient.postgrest["conversations"]
             .select {
-                order("last_message_time", Order.DESCENDING)
+                filter {
+                    or {
+                        eq("user1_id", currentUserId)
+                        eq("user2_id", currentUserId)
+                    }
+                }
+                order("last_message_at", Order.DESCENDING)
                 range((page * limit).toLong(), ((page + 1) * limit - 1).toLong())
             }
             .decodeList<ConversationModel>()
 
-        if (remoteData.isNotEmpty()) {
-            chatDao.upsertConversations(remoteData.map { it.toEntity() })
+        if (list.isNotEmpty()) {
+            val enriched = enrichWithUserInfo(list, currentUserId)
+            chatDao.upsertConversations(enriched)
+            return@withContext enriched
+        }else{
+            return@withContext emptyList()
         }
-
-        return@withContext remoteData
     }
 
     fun syncConversationsRealtime(userId: String): Flow<Unit> =
         realtimeService.subscribeToConversations(userId).onEach {
-            refreshConversations(0, 20)
+            refreshConversations(0, 20, userId)
         }.map { }
 
 
@@ -61,6 +70,33 @@ class ChatRepository @Inject constructor(
             .decodeList<ConversationModel>()
     }
 
+    private suspend fun enrichWithUserInfo(
+        conversations: List<ConversationModel>,
+        currentUserId: String
+    ): List<ConversationEntity> {
+        val otherUserIds = conversations.map { it.otherUserId(currentUserId) }.distinct()
+
+        val users = supabaseClient.postgrest["users"]
+            .select {
+                filter { isIn("id", otherUserIds) }
+            }
+            .decodeList<User>()
+            .associateBy { it.id }
+
+        return conversations.map { conv ->
+            val otherId = conv.otherUserId(currentUserId)
+            val user = users[otherId]
+            ConversationEntity(
+                conversationId       = conv.conversationId,
+                otherUserId          = otherId,
+                otherUserName        = user?.username,
+                otherUserAvatar      = user?.avatarUrl,
+                lastMessageContent   = conv.lastMessageContent,
+                lastMessageMediaType = conv.lastMessageMediaType,
+                lastMessageAt        = conv.lastMessageAt,
+            )
+        }
+    }
 
     suspend fun deleteConversationRpc(conversationId: String) = withContext(Dispatchers.IO) {
         supabaseClient.postgrest.rpc(

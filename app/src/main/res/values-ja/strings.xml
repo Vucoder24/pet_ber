@@ -384,6 +384,7 @@
     <string name="image_video">[画像/動画]</string>
     <string name="cannot_read_file">ファイルを読み取れません。</string>
     <string name="cannot_send_message">メッセージを送信できません！</string>
+    <string name="add_new">新規追加</string>
 
 
     <string-array name="media_types">

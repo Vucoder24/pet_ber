@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
-import com.nvv.petber.data.model.ConversationModel
+import com.nvv.petber.data.model.ConversationEntity
 import com.nvv.petber.utils.ext.loadAvatar
 
-class SearchUserChatAdapter(private val onClick: (ConversationModel) -> Unit) :
-    ListAdapter<ConversationModel, SearchUserChatAdapter.ViewHolder>(DiffCallback) {
+class SearchUserChatAdapter(private val onClick: (ConversationEntity) -> Unit) :
+    ListAdapter<ConversationEntity, SearchUserChatAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val ivAvatar: ImageView = view.findViewById(R.id.ivAvatar)
@@ -33,8 +33,8 @@ class SearchUserChatAdapter(private val onClick: (ConversationModel) -> Unit) :
         holder.itemView.setOnClickListener { onClick(item) }
     }
 
-    object DiffCallback : DiffUtil.ItemCallback<ConversationModel>() {
-        override fun areItemsTheSame(old: ConversationModel, new: ConversationModel) = old.otherUserId == new.otherUserId
-        override fun areContentsTheSame(old: ConversationModel, new: ConversationModel) = old == new
+    object DiffCallback : DiffUtil.ItemCallback<ConversationEntity>() {
+        override fun areItemsTheSame(old: ConversationEntity, new: ConversationEntity) = old.otherUserId == new.otherUserId
+        override fun areContentsTheSame(old: ConversationEntity, new: ConversationEntity) = old == new
     }
 }

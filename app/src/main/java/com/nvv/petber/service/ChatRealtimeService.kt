@@ -1,9 +1,11 @@
 package com.nvv.petber.service
 
+import com.nvv.petber.data.model.ConversationModel
 import com.nvv.petber.data.model.MessageModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.realtime.PostgresAction
+import io.github.jan.supabase.realtime.RealtimeChannel
 import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.decodeRecord
 import io.github.jan.supabase.realtime.postgresChangeFlow
@@ -45,18 +47,37 @@ class ChatRealtimeService @Inject constructor(
         }
     }
 
-    fun subscribeToConversations(userId: String): Flow<PostgresAction> = callbackFlow {
-        val channel = supabaseClient.channel("conv_list:$userId")
+    fun subscribeToConversations(userId: String): Flow<ConversationModel> = callbackFlow {
+        val ch1 = supabaseClient.channel("conv_user1:$userId")
+        val ch2 = supabaseClient.channel("conv_user2:$userId")
 
-        val subscription = channel.postgresChangeFlow<PostgresAction>(
-            schema = "public"
-        ) {
-            table = "conversations"
-        }.onEach { action ->
-            trySend(action)
-        }.launchIn(CoroutineScope(Dispatchers.IO))
+        fun listenChannel(channel: RealtimeChannel, field: String) =
+            channel.postgresChangeFlow<PostgresAction>(schema = "public") {
+                table = "conversations"
+                filter(field, FilterOperator.EQ, userId)
+            }.onEach { action ->
+                when (action) {
+                    is PostgresAction.Insert, is PostgresAction.Update ->
+                        trySend(action.decodeRecord<ConversationModel>())
+                    else -> Unit
+                }
+            }.launchIn(CoroutineScope(Dispatchers.IO))
 
-        launch { channel.subscribe() }
-        awaitClose { subscription.cancel() }
+        val sub1 = listenChannel(ch1, "user1_id")
+        val sub2 = listenChannel(ch2, "user2_id")
+
+        launch {
+            ch1.subscribe()
+            ch2.subscribe()
+        }
+
+        awaitClose {
+            sub1.cancel()
+            sub2.cancel()
+            launch {
+                ch1.unsubscribe()
+                ch2.unsubscribe()
+            }
+        }
     }
 }

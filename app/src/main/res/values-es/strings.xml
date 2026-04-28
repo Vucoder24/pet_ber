@@ -384,6 +384,7 @@
     <string name="image_video">[Imagen/Video]</string>
     <string name="cannot_read_file">No se puede leer el archivo.</string>
     <string name="cannot_send_message">¡No se puede enviar el mensaje!</string>
+    <string name="add_new">Agregar nuevo</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

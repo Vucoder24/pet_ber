@@ -5,19 +5,23 @@ import com.nvv.petber.data.model.ConversationModel
 import com.nvv.petber.data.model.MessageEntity
 import com.nvv.petber.data.model.MessageModel
 
-fun ConversationModel.toEntity() = ConversationEntity(
-    conversationId, otherUserId, otherUserName, otherUserAvatar,
-    lastMessageContent, lastMessageMediaType, lastMessageTime
+fun ConversationModel.toEntity(currentUserId: String) = ConversationEntity(
+    conversationId       = conversationId,
+    otherUserId          = if (user1Id == currentUserId) user2Id else user1Id,
+    otherUserName        = null,
+    otherUserAvatar      = null,
+    lastMessageContent   = lastMessageContent,
+    lastMessageMediaType = lastMessageMediaType,
+    lastMessageAt        = lastMessageAt,
 )
 
 fun ConversationEntity.toModel() = ConversationModel(
-    conversationId = conversationId,
-    otherUserId = otherUserId,
-    otherUserName = otherUserName,
-    otherUserAvatar = otherUserAvatar,
-    lastMessageContent = lastMessageContent,
+    conversationId       = conversationId,
+    user1Id              = otherUserId,
+    user2Id              = otherUserId,
+    lastMessageContent   = lastMessageContent,
     lastMessageMediaType = lastMessageMediaType,
-    lastMessageTime = lastMessageTime
+    lastMessageAt        = lastMessageAt,
 )
 
 fun MessageModel.toEntity() = MessageEntity(

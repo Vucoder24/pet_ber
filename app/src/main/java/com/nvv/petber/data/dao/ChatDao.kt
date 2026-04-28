@@ -14,7 +14,7 @@ interface ChatDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertConversations(conversations: List<ConversationEntity>)
 
-    @Query("SELECT * FROM conversations ORDER BY lastMessageTime DESC")
+    @Query("SELECT * FROM conversations ORDER BY lastMessageAt DESC")
     fun observeConversations(): Flow<List<ConversationEntity>>
 
     @Query("DELETE FROM conversations WHERE conversationId = :id")

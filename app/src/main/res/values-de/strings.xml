@@ -384,6 +384,7 @@ Sei der Erste, der kommentiert!</string>
     <string name="image_video">[Bild/Video]</string>
     <string name="cannot_read_file">Datei kann nicht gelesen werden.</string>
     <string name="cannot_send_message">Nachricht kann nicht gesendet werden!</string>
+    <string name="add_new">Neu hinzufügen</string>
 
 
     <string-array name="media_types">

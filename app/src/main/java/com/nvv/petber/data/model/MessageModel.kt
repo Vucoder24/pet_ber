@@ -19,21 +19,24 @@ data class MessageModel(
 
 @Serializable
 data class ConversationModel(
-    @SerialName("conversation_id")
+    @SerialName("id")
     val conversationId: String,
-    @SerialName("other_user_id")
-    val otherUserId: String,
-    @SerialName("other_user_name")
-    val otherUserName: String? = null,
-    @SerialName("other_user_avatar")
-    val otherUserAvatar: String? = null,
+    @SerialName("user1_id")
+    val user1Id: String,
+    @SerialName("user2_id")
+    val user2Id: String,
     @SerialName("last_message_content")
     val lastMessageContent: String? = null,
     @SerialName("last_message_media_type")
     val lastMessageMediaType: String? = null,
-    @SerialName("last_message_time")
-    val lastMessageTime: String? = null,
-)
+    @SerialName("last_message_at")
+    val lastMessageAt: String? = null,
+    @SerialName("last_message_sender_id")
+    val lastMessageSenderId: String? = null,
+) {
+    fun otherUserId(currentUserId: String) =
+        if (user1Id == currentUserId) user2Id else user1Id
+}
 
 @Entity(tableName = "conversations")
 data class ConversationEntity(
@@ -43,7 +46,7 @@ data class ConversationEntity(
     val otherUserAvatar: String?,
     val lastMessageContent: String?,
     val lastMessageMediaType: String?,
-    val lastMessageTime: String?
+    val lastMessageAt: String?,
 )
 
 @Entity(tableName = "messages")

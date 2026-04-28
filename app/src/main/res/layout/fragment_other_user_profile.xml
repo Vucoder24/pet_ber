@@ -300,7 +300,6 @@
                                         android:backgroundTint="@color/bg_btn"
                                         android:fontFamily="@font/baloo2"
                                         android:text="@string/follow"
-                                        android:layout_marginHorizontal="24dp"
                                         app:iconGravity="start"
                                         app:icon="@drawable/ic_follow"
                                         app:iconTint="@color/white"

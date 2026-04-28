@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
-import com.nvv.petber.data.model.ConversationModel
+import com.nvv.petber.data.model.ConversationEntity
 import com.nvv.petber.databinding.ItemConversationBinding
 import com.nvv.petber.utils.TimeUtils
 import com.nvv.petber.utils.ext.gone
@@ -14,13 +14,13 @@ import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.visible
 
 class ConversationAdapter(
-    private val onClick: (ConversationModel) -> Unit,
-    private val onLongClick: (ConversationModel) -> Unit
-) : ListAdapter<ConversationModel, ConversationAdapter.ViewHolder>(DiffCallback) {
+    private val onClick: (ConversationEntity) -> Unit,
+    private val onLongClick: (ConversationEntity) -> Unit
+) : ListAdapter<ConversationEntity, ConversationAdapter.ViewHolder>(DiffCallback) {
 
     inner class ViewHolder(private val binding: ItemConversationBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ConversationModel) {
+        fun bind(item: ConversationEntity) {
             binding.tvFullName.text = if (item.otherUserName.isNullOrEmpty()){
                 itemView.context.getString(R.string.petber_user)
             } else item.otherUserName
@@ -33,7 +33,7 @@ class ConversationAdapter(
             }
 
             binding.ivAvatar.loadAvatar(item.otherUserAvatar)
-            item.lastMessageTime?.let {
+            item.lastMessageAt?.let {
                 binding.tvTime.visible()
                 binding.tvTime.text = TimeUtils.formatMessageTime(it)
             }?: {
@@ -57,13 +57,13 @@ class ConversationAdapter(
         holder.bind(getItem(position))
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<ConversationModel>() {
-            override fun areItemsTheSame(oldItem: ConversationModel, newItem: ConversationModel) =
+        private val DiffCallback = object : DiffUtil.ItemCallback<ConversationEntity>() {
+            override fun areItemsTheSame(oldItem: ConversationEntity, newItem: ConversationEntity) =
                 oldItem.conversationId == newItem.conversationId
 
             override fun areContentsTheSame(
-                oldItem: ConversationModel,
-                newItem: ConversationModel
+                oldItem: ConversationEntity,
+                newItem: ConversationEntity
             ) = oldItem == newItem
         }
     }

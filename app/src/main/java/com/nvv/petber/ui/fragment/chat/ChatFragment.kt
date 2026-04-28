@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.nvv.petber.R
-import com.nvv.petber.data.model.ConversationModel
+import com.nvv.petber.data.model.ConversationEntity
 import com.nvv.petber.databinding.FragmentChatBinding
 import com.nvv.petber.ui.activity.ChatDetailActivity
 import com.nvv.petber.ui.adapter.ConversationAdapter
@@ -105,7 +105,7 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun showDeleteBottomSheet(conversation: ConversationModel) {
+    private fun showDeleteBottomSheet(conversation: ConversationEntity) {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.bottom_sheet_chat_option, null)
         bottomSheetDialog.setContentView(view)
