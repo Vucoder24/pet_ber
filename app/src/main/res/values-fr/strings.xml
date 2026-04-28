@@ -362,7 +362,28 @@ Soyez le premier à commenter !</string>
     <string name="see_details">Voir les détails →</string>
     <string name="health_detail_title">Santé %1$s</string>
     <string name="recorded_at">Enregistré : %1$s</string>
-
+    <string name="chat">Discussion</string>
+    <string name="connecting">Connexion...</string>
+    <string name="search_chat_hint">Rechercher une discussion...</string>
+    <string name="msg_sent_image">Photo envoyée</string>
+    <string name="msg_sent_video">Vidéo envoyée</string>
+    <string name="action_delete_conversation">Supprimer la discussion</string>
+    <string name="dialog_delete_title">Confirmer la suppression</string>
+    <string name="dialog_delete_message">Voulez-vous vraiment supprimer cette discussion ? Tous les messages seront supprimés définitivement.</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="hint_type_message">Écrire un message…</string>
+    <string name="action_reply">Répondre</string>
+    <string name="action_delete_message">Supprimer le message</string>
+    <string name="dialog_delete_msg_title">Supprimer le message</string>
+    <string name="dialog_delete_msg_content">Vous ne pourrez pas récupérer les messages. Continuer ?</string>
+    <string name="msg_deleted_placeholder">Message supprimé</string>
+    <string name="title_media_picker">Choisir une photo ou vidéo</string>
+    <string name="error_permission_media">Accès au stockage requis pour envoyer des photos/vidéos</string>
+    <string name="you">Vous</string>
+    <string name="image_video">[Image/Vidéo]</string>
+    <string name="cannot_read_file">Impossible de lire le fichier.</string>
+    <string name="cannot_send_message">Impossible d’envoyer le message !</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

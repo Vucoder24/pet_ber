@@ -362,6 +362,28 @@
     <string name="see_details">ดูรายละเอียด →</string>
     <string name="health_detail_title">สุขภาพ %1$s</string>
     <string name="recorded_at">บันทึกเมื่อ: %1$s</string>
+    <string name="chat">แชท</string>
+    <string name="connecting">กำลังเชื่อมต่อ...</string>
+    <string name="search_chat_hint">ค้นหาแชท...</string>
+    <string name="msg_sent_image">ส่งรูปแล้ว</string>
+    <string name="msg_sent_video">ส่งวิดีโอแล้ว</string>
+    <string name="action_delete_conversation">ลบแชท</string>
+    <string name="dialog_delete_title">ยืนยันการลบ</string>
+    <string name="dialog_delete_message">คุณแน่ใจหรือไม่ว่าต้องการลบแชทนี้? ข้อความทั้งหมดจะถูกลบอย่างถาวร</string>
+    <string name="action_cancel">ยกเลิก</string>
+    <string name="action_delete">ลบ</string>
+    <string name="hint_type_message">พิมพ์ข้อความ…</string>
+    <string name="action_reply">ตอบกลับ</string>
+    <string name="action_delete_message">ลบข้อความ</string>
+    <string name="dialog_delete_msg_title">ลบข้อความ</string>
+    <string name="dialog_delete_msg_content">คุณจะไม่สามารถกู้คืนข้อความได้ ต้องการดำเนินการต่อหรือไม่?</string>
+    <string name="msg_deleted_placeholder">ข้อความถูกลบแล้ว</string>
+    <string name="title_media_picker">เลือกรูปภาพหรือวิดีโอ</string>
+    <string name="error_permission_media">ต้องอนุญาตการเข้าถึงพื้นที่เก็บข้อมูลเพื่อส่งรูป/วิดีโอ</string>
+    <string name="you">คุณ</string>
+    <string name="image_video">[รูปภาพ/วิดีโอ]</string>
+    <string name="cannot_read_file">ไม่สามารถอ่านไฟล์ได้</string>
+    <string name="cannot_send_message">ไม่สามารถส่งข้อความได้!</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

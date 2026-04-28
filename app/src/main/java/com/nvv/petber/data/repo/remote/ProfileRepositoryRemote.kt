@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.webkit.MimeTypeMap
+import com.nvv.petber.data.model.ConversationModel
 import com.nvv.petber.data.model.Follow
 import com.nvv.petber.data.model.FollowUserUI
 import com.nvv.petber.data.model.Pet
@@ -328,7 +329,9 @@ class ProfileRepositoryRemote @Inject constructor(
                 .decodeSingleOrNull<Pet>()
 
             pet?.let { translatePet(it) }
-        } catch (_: Exception) { null }
+        } catch (_: Exception) {
+            null
+        }
     }
 
     suspend fun getPetPosts(
@@ -434,6 +437,19 @@ class ProfileRepositoryRemote @Inject constructor(
             medicalHistoryAndTreatment = translated[6],
             preventiveStatus = translated[7]
         )
+    }
+
+    suspend fun getOrCreateConversation(
+        currentUserId: String,
+        targetUserId: String
+    ): ConversationModel {
+        return supabase.postgrest.rpc(
+            function = "get_or_create_conversation",
+            parameters = mapOf(
+                "user1_id" to currentUserId,
+                "user2_id" to targetUserId
+            )
+        ).decodeSingle<ConversationModel>()
     }
 }
 

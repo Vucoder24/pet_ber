@@ -362,7 +362,28 @@
     <string name="see_details">Ver detalles →</string>
     <string name="health_detail_title">Salud %1$s</string>
     <string name="recorded_at">Registrado: %1$s</string>
-
+    <string name="chat">Chat</string>
+    <string name="connecting">Conectando...</string>
+    <string name="search_chat_hint">Buscar un chat...</string>
+    <string name="msg_sent_image">Foto enviada</string>
+    <string name="msg_sent_video">Video enviado</string>
+    <string name="action_delete_conversation">Eliminar chat</string>
+    <string name="dialog_delete_title">Confirmar eliminación</string>
+    <string name="dialog_delete_message">¿Seguro que quieres eliminar este chat? Todos los mensajes se eliminarán permanentemente.</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="hint_type_message">Escribe un mensaje…</string>
+    <string name="action_reply">Responder</string>
+    <string name="action_delete_message">Eliminar mensaje</string>
+    <string name="dialog_delete_msg_title">Eliminar mensaje</string>
+    <string name="dialog_delete_msg_content">No podrás recuperar los mensajes. ¿Continuar?</string>
+    <string name="msg_deleted_placeholder">Mensaje eliminado</string>
+    <string name="title_media_picker">Seleccionar foto o video</string>
+    <string name="error_permission_media">Se requiere acceso al almacenamiento para enviar fotos/videos</string>
+    <string name="you">Tú</string>
+    <string name="image_video">[Imagen/Video]</string>
+    <string name="cannot_read_file">No se puede leer el archivo.</string>
+    <string name="cannot_send_message">¡No se puede enviar el mensaje!</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

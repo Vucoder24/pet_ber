@@ -362,6 +362,28 @@
     <string name="see_details">자세히 보기 →</string>
     <string name="health_detail_title">건강 %1$s</string>
     <string name="recorded_at">기록됨: %1$s</string>
+    <string name="chat">채팅</string>
+    <string name="connecting">연결 중...</string>
+    <string name="search_chat_hint">채팅 검색...</string>
+    <string name="msg_sent_image">사진 전송됨</string>
+    <string name="msg_sent_video">동영상 전송됨</string>
+    <string name="action_delete_conversation">채팅 삭제</string>
+    <string name="dialog_delete_title">삭제 확인</string>
+    <string name="dialog_delete_message">이 채팅을 삭제하시겠습니까? 모든 메시지가 영구적으로 삭제됩니다.</string>
+    <string name="action_cancel">취소</string>
+    <string name="action_delete">삭제</string>
+    <string name="hint_type_message">메시지 입력…</string>
+    <string name="action_reply">답장</string>
+    <string name="action_delete_message">메시지 삭제</string>
+    <string name="dialog_delete_msg_title">메시지 삭제</string>
+    <string name="dialog_delete_msg_content">삭제 후 복구할 수 없습니다. 계속하시겠습니까?</string>
+    <string name="msg_deleted_placeholder">메시지가 삭제됨</string>
+    <string name="title_media_picker">사진 또는 동영상 선택</string>
+    <string name="error_permission_media">사진/동영상 전송을 위해 저장소 권한이 필요합니다</string>
+    <string name="you">나</string>
+    <string name="image_video">[이미지/동영상]</string>
+    <string name="cannot_read_file">파일을 읽을 수 없습니다.</string>
+    <string name="cannot_send_message">메시지를 보낼 수 없습니다!</string>
 
 
     <string-array name="media_types">

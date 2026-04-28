@@ -362,7 +362,28 @@
     <string name="see_details">查看详情 →</string>
     <string name="health_detail_title">健康 %1$s</string>
     <string name="recorded_at">记录时间：%1$s</string>
-
+    <string name="chat">聊天</string>
+    <string name="connecting">连接中...</string>
+    <string name="search_chat_hint">搜索聊天...</string>
+    <string name="msg_sent_image">已发送图片</string>
+    <string name="msg_sent_video">已发送视频</string>
+    <string name="action_delete_conversation">删除聊天</string>
+    <string name="dialog_delete_title">确认删除</string>
+    <string name="dialog_delete_message">确定要删除此聊天吗？所有消息将被永久删除。</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_delete">删除</string>
+    <string name="hint_type_message">输入消息…</string>
+    <string name="action_reply">回复</string>
+    <string name="action_delete_message">删除消息</string>
+    <string name="dialog_delete_msg_title">删除消息</string>
+    <string name="dialog_delete_msg_content">删除后无法恢复，是否继续？</string>
+    <string name="msg_deleted_placeholder">消息已撤回</string>
+    <string name="title_media_picker">选择图片或视频</string>
+    <string name="error_permission_media">需要存储权限才能发送图片/视频</string>
+    <string name="you">你</string>
+    <string name="image_video">[图片/视频]</string>
+    <string name="cannot_read_file">无法读取文件。</string>
+    <string name="cannot_send_message">无法发送消息！</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

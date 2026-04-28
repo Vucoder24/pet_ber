@@ -5,10 +5,13 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nvv.petber.data.converter.DataConverters
 import com.nvv.petber.data.converter.StringListConverter
+import com.nvv.petber.data.dao.ChatDao
 import com.nvv.petber.data.dao.ProfileDao
 import com.nvv.petber.data.model.Comment
+import com.nvv.petber.data.model.ConversationEntity
 import com.nvv.petber.data.model.Follow
 import com.nvv.petber.data.model.Hashtag
+import com.nvv.petber.data.model.MessageEntity
 import com.nvv.petber.data.model.Notification
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.PetFollow
@@ -22,12 +25,13 @@ import com.nvv.petber.data.model.User
 
 @Database(
     entities = [User::class, Pet::class, Post::class, Story::class, Follow::class,
-        Comment::class, Hashtag::class, Notification::class, PetFollow::class,
-        PetImage::class, PostHashtag::class, PostLike::class, PostMedia::class],
-    version = 17,
+        Comment::class, Hashtag::class, Notification::class, PetFollow::class, MessageEntity::class,
+        PetImage::class, PostHashtag::class, PostLike::class, PostMedia::class, ConversationEntity::class],
+    version = 18,
     exportSchema = false
 )
 @TypeConverters(DataConverters::class, StringListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
+    abstract fun chatDao(): ChatDao
 }

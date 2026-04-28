@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nvv.petber.R
+import com.nvv.petber.data.model.ConversationModel
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.User
@@ -14,8 +16,11 @@ import com.nvv.petber.data.repo.remote.ProfileRepositoryRemote
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.TranslationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,10 +28,10 @@ import javax.inject.Inject
 class UserProfileViewModel @Inject constructor(
     private val profileRepoRemote: ProfileRepositoryRemote,
     private val homeRepository: HomeRepository,
-    context: Context
+    @ApplicationContext val ctx: Context
 ) : ViewModel() {
 
-    private val currentUserId = SharePrefUtils.getCurrentUserId(context)
+    private val currentUserId = SharePrefUtils.getCurrentUserId(ctx)
     private var targetUserId: String = ""
 
     private val _user = MutableLiveData<User?>()
@@ -46,9 +51,17 @@ class UserProfileViewModel @Inject constructor(
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+    private val _isLoadingSendMessage = MutableLiveData<Boolean>()
+    val isLoadingSendMessage: LiveData<Boolean> = _isLoadingSendMessage
 
     private val _isLoadMore = MutableLiveData(false)
     val isLoadMore: LiveData<Boolean> = _isLoadMore
+
+    private val _navigateToChat = MutableLiveData<ConversationModel?>()
+    val navigateToChat: LiveData<ConversationModel?> = _navigateToChat
+
+    private val _errorMsg = MutableSharedFlow<String>()
+    val errorMsg = _errorMsg.asSharedFlow()
 
     private var currentOffset = 0
     private val limit = 10
@@ -177,6 +190,28 @@ class UserProfileViewModel @Inject constructor(
                     _posts.postValue(revertedPosts)
                 }
         }
+    }
+
+    fun startConversation() {
+        if (targetUserId.isEmpty() || currentUserId.isEmpty()) return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _isLoadingSendMessage.postValue(true)
+                val conversation = profileRepoRemote.getOrCreateConversation(currentUserId, targetUserId)
+                _isLoadingSendMessage.postValue(false)
+                _navigateToChat.postValue(conversation)
+            }catch (e: Exception){
+                Log.d("ERR", "${e.message}")
+                _isLoadingSendMessage.postValue(false)
+                _errorMsg.emit(ctx.getString(R.string.error_action))
+            }
+
+        }
+    }
+
+    fun onChatNavigated() {
+        _navigateToChat.value = null
     }
 
     fun incrementShareCount(postId: String) {

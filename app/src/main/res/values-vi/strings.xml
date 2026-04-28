@@ -363,7 +363,26 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="see_details">Xem chi tiết →</string>
     <string name="health_detail_title">Sức khỏe %1$s</string>
     <string name="recorded_at">Đã ghi nhận: %1$s</string>
-
+    <string name="search_chat_hint">Tìm kiếm cuộc trò chuyện...</string>
+    <string name="msg_sent_image">Đã gửi ảnh</string>
+    <string name="msg_sent_video">Đã gửi video</string>
+    <string name="action_delete_conversation">Xóa cuộc trò chuyện</string>
+    <string name="dialog_delete_title">Xác nhận xóa</string>
+    <string name="dialog_delete_message">Bạn có chắc chắn muốn xóa cuộc trò chuyện này? Toàn bộ tin nhắn sẽ bị xóa vĩnh viễn.</string>
+    <string name="action_cancel">Hủy</string>
+    <string name="action_delete">Xóa</string>
+    <string name="hint_type_message">Nhập tin nhắn...</string>
+    <string name="action_reply">Trả lời</string>
+    <string name="action_delete_message">Xóa tin nhắn</string>
+    <string name="dialog_delete_msg_title">Xóa tin nhắn</string>
+    <string name="dialog_delete_msg_content">Bạn không thể khôi phục tin nhắn sau khi xóa. Tiếp tục?</string>
+    <string name="msg_deleted_placeholder">Tin nhắn đã bị thu hồi</string>
+    <string name="title_media_picker">Chọn ảnh hoặc video</string>
+    <string name="error_permission_media">Cần cấp quyền truy cập bộ nhớ để gửi ảnh/video</string>
+    <string name="you">Bạn</string>
+    <string name="image_video">[Ảnh/Video]</string>
+    <string name="cannot_read_file">Không đọc được file.</string>
+    <string name="cannot_send_message">Không gửi được tin nhắn!</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

@@ -10,12 +10,16 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.User
 import com.nvv.petber.databinding.FragmentOtherUserProfileBinding
+import com.nvv.petber.ui.activity.ChatDetailActivity
 import com.nvv.petber.ui.activity.MediaPreviewActivity
 import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.activity.ViewFollowsActivity
@@ -29,9 +33,11 @@ import com.nvv.petber.utils.ext.formatSocialCount
 import com.nvv.petber.utils.ext.gone
 import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.loadImage
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.utils.ext.visible
 import com.nvv.petber.viewmodel.UserProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -226,6 +232,35 @@ class OtherUserProfileFragment : Fragment() {
         viewModel.isRefreshing.observe(viewLifecycleOwner) { refreshing ->
             binding.root.isRefreshing = refreshing
         }
+
+        viewModel.navigateToChat.observe(viewLifecycleOwner) { conversation ->
+            conversation?.let {
+                val intent = Intent(requireContext(), ChatDetailActivity::class.java).apply {
+                    putExtra(ChatDetailActivity.CONVERSATION_ID, it.conversationId)
+                    putExtra("other_name", it.otherUserName)
+                    putExtra("other_avatar", it.otherUserAvatar)
+                }
+                startActivity(intent)
+
+                viewModel.onChatNavigated()
+            }
+        }
+        viewModel.isLoadingSendMessage.observe(viewLifecycleOwner) { loading ->
+            binding.btnMessage.isEnabled = !loading
+            binding.btnMessage.alpha = if (loading) 0.5f else 1.0f
+            binding.btnMessage.text = if (loading) getString(R.string.connecting)
+                else getString(R.string.message)
+            binding.btnMessage.setIconResource(
+                if (loading) R.drawable.ic_time else R.drawable.ic_chat
+            )
+        }
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.errorMsg.collect {
+                    requireContext().toast(it)
+                }
+            }
+        }
     }
 
     private fun updateFollowButtonUI(isFollowing: Boolean) {
@@ -301,6 +336,15 @@ class OtherUserProfileFragment : Fragment() {
 
     private fun setupListener() {
         binding.apply {
+            btnMessage.setOnClickListener {
+                val intent = Intent(requireContext(), ChatDetailActivity::class.java).apply {
+                    putExtra("other_user_id", userData?.id)
+                    putExtra("other_name", userData?.fullName)
+                    putExtra("other_avatar", userData?.avatarUrl)
+                }
+                startActivity(intent)
+            }
+
             root.setOnRefreshListener {
                 viewModel.refreshProfile()
             }

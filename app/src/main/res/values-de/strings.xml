@@ -362,6 +362,28 @@ Sei der Erste, der kommentiert!</string>
     <string name="see_details">Details ansehen →</string>
     <string name="health_detail_title">Gesundheit %1$s</string>
     <string name="recorded_at">Aufgezeichnet: %1$s</string>
+    <string name="chat">Chat</string>
+    <string name="connecting">Verbinde...</string>
+    <string name="search_chat_hint">Chat suchen...</string>
+    <string name="msg_sent_image">Foto gesendet</string>
+    <string name="msg_sent_video">Video gesendet</string>
+    <string name="action_delete_conversation">Chat löschen</string>
+    <string name="dialog_delete_title">Löschen bestätigen</string>
+    <string name="dialog_delete_message">Möchten Sie diesen Chat wirklich löschen? Alle Nachrichten werden dauerhaft gelöscht.</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_delete">Löschen</string>
+    <string name="hint_type_message">Nachricht eingeben…</string>
+    <string name="action_reply">Antworten</string>
+    <string name="action_delete_message">Nachricht löschen</string>
+    <string name="dialog_delete_msg_title">Nachricht löschen</string>
+    <string name="dialog_delete_msg_content">Nachrichten können nach dem Löschen nicht wiederhergestellt werden. Fortfahren?</string>
+    <string name="msg_deleted_placeholder">Nachricht wurde zurückgezogen</string>
+    <string name="title_media_picker">Foto oder Video auswählen</string>
+    <string name="error_permission_media">Speicherzugriff erforderlich zum Senden von Fotos/Videos</string>
+    <string name="you">Du</string>
+    <string name="image_video">[Bild/Video]</string>
+    <string name="cannot_read_file">Datei kann nicht gelesen werden.</string>
+    <string name="cannot_send_message">Nachricht kann nicht gesendet werden!</string>
 
 
     <string-array name="media_types">
