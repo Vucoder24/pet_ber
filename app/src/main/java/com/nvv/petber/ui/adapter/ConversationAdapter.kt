@@ -1,5 +1,6 @@
 package com.nvv.petber.ui.adapter
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -14,13 +15,22 @@ import com.nvv.petber.utils.ext.loadAvatar
 import com.nvv.petber.utils.ext.visible
 
 class ConversationAdapter(
+    private val currentUserId: String,
     private val onClick: (ConversationEntity) -> Unit,
-    private val onLongClick: (ConversationEntity) -> Unit
+    private val onLongClick: (ConversationEntity) -> Unit,
+    private val updateIsSeen: (String) -> Unit
 ) : ListAdapter<ConversationEntity, ConversationAdapter.ViewHolder>(DiffCallback) {
 
     inner class ViewHolder(private val binding: ItemConversationBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ConversationEntity) {
+            val isUnread = !item.isSeen && item.lastMessageSenderId != currentUserId
+            val typeface = if (isUnread) Typeface.BOLD else Typeface.NORMAL
+
+            binding.tvLastMessage.setTypeface(null, typeface)
+            binding.tvTime.setTypeface(null, typeface)
+            binding.tvFullName.setTypeface(null, typeface)
+
             binding.tvFullName.text = if (item.otherUserName.isNullOrEmpty()) {
                 itemView.context.getString(R.string.petber_user)
             } else item.otherUserName
@@ -49,7 +59,10 @@ class ConversationAdapter(
             }
 
 
-            binding.root.setOnClickListener { onClick(item) }
+            binding.root.setOnClickListener {
+                if (isUnread) updateIsSeen(item.conversationId)
+                onClick(item)
+            }
             binding.root.setOnLongClickListener {
                 onLongClick(item)
                 true

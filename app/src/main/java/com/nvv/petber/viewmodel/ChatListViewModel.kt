@@ -3,6 +3,7 @@ package com.nvv.petber.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nvv.petber.R
 import com.nvv.petber.data.mapper.toEntity
 import com.nvv.petber.data.model.ConversationEntity
 import com.nvv.petber.data.repo.remote.ChatRepository
@@ -30,6 +31,9 @@ class ChatListViewModel @Inject constructor(
         .stateIn(
             viewModelScope, SharingStarted.Lazily, emptyList()
         )
+
+    private val _error = MutableStateFlow<String?>(null)
+    val error = _error.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
@@ -64,7 +68,8 @@ class ChatListViewModel @Inject constructor(
                 } else {
                     currentPage++
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
+                _error.emit(ctx.getString(R.string.error_fetch_data))
             } finally {
                 _isLoading.value = false
             }
@@ -83,9 +88,15 @@ class ChatListViewModel @Inject constructor(
                     repository.searchConversations(query)
                 }
                 _searchResults.value = results.map { it.toEntity(currentUserId) }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _searchResults.value = emptyList()
             }
+        }
+    }
+
+    fun markAsRead(conversationId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.markAsReadLocal(conversationId)
         }
     }
 
@@ -99,7 +110,8 @@ class ChatListViewModel @Inject constructor(
                 withContext(Dispatchers.IO) {
                     repository.deleteConversationRpc(conversationId)
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
+                _error.emit(ctx.getString(R.string.error_delete_conversation))
                 // Handle error
             }
         }

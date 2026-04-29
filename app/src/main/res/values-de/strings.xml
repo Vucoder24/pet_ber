@@ -351,7 +351,7 @@ Sei der Erste, der kommentiert!</string>
     <string name="dep_confirm_delete_pet">Dieses Haustier wird dauerhaft gelöscht.</string>
     <string name="delete_pet">Dieses Haustier löschen</string>
     <string name="delete_pet_success">Haustier erfolgreich gelöscht</string>
-    <string name="deleting_pet">Haustier wird gelöscht...</string>
+    <string name="deleting_pet">Haustier wird gelöscht…</string>
     <string name="delete_pet_error">Beim Löschen des Haustiers ist ein Fehler aufgetreten</string>
     <string name="date_from">Von Datum</string>
     <string name="date_to">Bis Datum</string>
@@ -363,8 +363,8 @@ Sei der Erste, der kommentiert!</string>
     <string name="health_detail_title">Gesundheit %1$s</string>
     <string name="recorded_at">Aufgezeichnet: %1$s</string>
     <string name="chat">Chat</string>
-    <string name="connecting">Verbinde...</string>
-    <string name="search_chat_hint">Chat suchen...</string>
+    <string name="connecting">Verbinde…</string>
+    <string name="search_chat_hint">Chat suchen…</string>
     <string name="msg_sent_image">Foto gesendet</string>
     <string name="msg_sent_video">Video gesendet</string>
     <string name="action_delete_conversation">Chat löschen</string>
@@ -385,6 +385,12 @@ Sei der Erste, der kommentiert!</string>
     <string name="cannot_read_file">Datei kann nicht gelesen werden.</string>
     <string name="cannot_send_message">Nachricht kann nicht gesendet werden!</string>
     <string name="add_new">Neu hinzufügen</string>
+    <string name="other_user_deleted_msg">Die andere Person hat eine Nachricht gelöscht.</string>
+    <string name="you_deleted_msg">Du hast eine Nachricht gelöscht.</string>
+    <string name="cannot_delete_message">Nachricht kann nicht gelöscht werden, bitte versuche es erneut.</string>
+    <string name="error_delete_conversation">Beim Löschen dieser Unterhaltung ist ein Fehler aufgetreten, bitte versuche es erneut.</string>
+    <string name="new_message_alert">Du hast eine neue Nachricht, die auf eine Antwort wartet</string>
+    <string name="new_message">Neue Nachricht</string>
 
 
     <string-array name="media_types">

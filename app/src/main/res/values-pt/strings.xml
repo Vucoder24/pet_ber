@@ -385,6 +385,12 @@ Seja o primeiro a comentar!</string>
     <string name="cannot_read_file">Não foi possível ler o arquivo.</string>
     <string name="cannot_send_message">Não foi possível enviar a mensagem!</string>
     <string name="add_new">Adicionar novo</string>
+    <string name="other_user_deleted_msg">A outra pessoa excluiu uma mensagem.</string>
+    <string name="you_deleted_msg">Você excluiu uma mensagem.</string>
+    <string name="cannot_delete_message">Não foi possível excluir a mensagem, tente novamente.</string>
+    <string name="error_delete_conversation">Ocorreu um erro ao excluir esta conversa, tente novamente.</string>
+    <string name="new_message_alert">Você tem uma nova mensagem aguardando resposta</string>
+    <string name="new_message">Nova mensagem</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

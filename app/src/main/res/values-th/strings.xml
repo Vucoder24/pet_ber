@@ -385,6 +385,12 @@
     <string name="cannot_read_file">ไม่สามารถอ่านไฟล์ได้</string>
     <string name="cannot_send_message">ไม่สามารถส่งข้อความได้!</string>
     <string name="add_new">เพิ่มใหม่</string>
+    <string name="other_user_deleted_msg">อีกฝ่ายได้ลบข้อความแล้ว</string>
+    <string name="you_deleted_msg">คุณได้ลบข้อความแล้ว</string>
+    <string name="cannot_delete_message">ไม่สามารถลบข้อความได้ กรุณาลองใหม่อีกครั้ง</string>
+    <string name="error_delete_conversation">เกิดข้อผิดพลาดขณะลบการสนทนา กรุณาลองใหม่อีกครั้ง</string>
+    <string name="new_message_alert">คุณมีข้อความใหม่รอการตอบกลับ</string>
+    <string name="new_message">ข้อความใหม่</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

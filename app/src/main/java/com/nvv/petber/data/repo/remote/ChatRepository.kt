@@ -55,6 +55,11 @@ class ChatRepository @Inject constructor(
             refreshConversations(0, 20, userId)
         }.map { }
 
+    suspend fun markAsReadLocal(conversationId: String){
+        try {
+            chatDao.markAsRead(conversationId)
+        }catch (_: Exception){}
+    }
 
     suspend fun searchConversations(query: String): List<ConversationModel> = withContext(Dispatchers.IO) {
         return@withContext supabaseClient.postgrest["conversation_list_view"]

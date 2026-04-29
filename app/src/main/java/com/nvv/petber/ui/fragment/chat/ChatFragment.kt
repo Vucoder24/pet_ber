@@ -1,5 +1,6 @@
 package com.nvv.petber.ui.fragment.chat
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -19,6 +20,7 @@ import com.nvv.petber.R
 import com.nvv.petber.data.model.ConversationEntity
 import com.nvv.petber.databinding.FragmentChatBinding
 import com.nvv.petber.ui.activity.ChatDetailActivity
+import com.nvv.petber.ui.activity.MainActivity
 import com.nvv.petber.ui.adapter.ConversationAdapter
 import com.nvv.petber.ui.dialog.SearchChatDialogFragment
 import com.nvv.petber.viewmodel.ChatListViewModel
@@ -44,7 +46,6 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
         setupListeners()
         observeData()
@@ -52,6 +53,7 @@ class ChatFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = ConversationAdapter(
+            currentUserId = viewModel.currentUserId,
             onClick = {
                 val intent = Intent(requireContext(), ChatDetailActivity::class.java).apply {
                     putExtra(ChatDetailActivity.CONVERSATION_ID, it.conversationId)
@@ -61,7 +63,10 @@ class ChatFragment : Fragment() {
                 }
                 startActivity(intent)
             },
-            onLongClick = { showDeleteBottomSheet(it) }
+            onLongClick = { showDeleteBottomSheet(it) },
+            updateIsSeen = {conversationId ->
+                viewModel.markAsRead(conversationId)
+            }
         )
         binding.rvConversations.adapter = adapter
         binding.rvConversations.layoutManager = LinearLayoutManager(requireContext())
@@ -74,6 +79,8 @@ class ChatFragment : Fragment() {
                 }
             }
         })
+        // hide badge
+        (activity as MainActivity?)?.hideBadge(R.id.navigation_chat)
     }
 
     private fun setupListeners() {
@@ -105,6 +112,7 @@ class ChatFragment : Fragment() {
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun showDeleteBottomSheet(conversation: ConversationEntity) {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.bottom_sheet_chat_option, null)

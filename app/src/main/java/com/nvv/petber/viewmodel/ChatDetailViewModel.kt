@@ -1,7 +1,6 @@
 package com.nvv.petber.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
@@ -91,8 +90,8 @@ class ChatDetailViewModel @Inject constructor(
                 } else {
                     currentPage++
                 }
-            } catch (e: Exception) {
-                _error.value = e.message
+            } catch (_: Exception) {
+                _error.emit(ctx.getString(R.string.error_fetch_data))
             } finally {
                 isLoadingMore = false
             }
@@ -106,7 +105,7 @@ class ChatDetailViewModel @Inject constructor(
             .onEach {newMessage ->
                 repository.syncNewMessage(newMessage)
             }
-            .catch { e -> _error.value = "Realtime error: ${e.message}" }
+            .catch { e -> _error.emit(ctx.getString(R.string.error_connection_internet)) }
             .launchIn(viewModelScope)
     }
 
@@ -145,9 +144,8 @@ class ChatDetailViewModel @Inject constructor(
                 repository.saveMessageToLocal(tempMessage)
                 repository.sendMessage(tempMessage)
 
-            } catch (e: Exception) {
-                Log.d("ERRR", "${e.message}")
-                _error.value = ctx.getString(R.string.cannot_send_message)
+            } catch (_: Exception) {
+                _error.emit(ctx.getString(R.string.cannot_send_message))
             }
         }
     }
@@ -181,8 +179,8 @@ class ChatDetailViewModel @Inject constructor(
                 repository.sendMessage(finalMessage)
                 repository.saveMessageToLocal(finalMessage)
 
-            } catch (e: Exception) {
-                _error.value = ctx.getString(R.string.cannot_send_message)
+            } catch (_: Exception) {
+                _error.emit(ctx.getString(R.string.cannot_send_message))
             }
         }
     }
@@ -198,7 +196,7 @@ class ChatDetailViewModel @Inject constructor(
                 repository.deleteMessagePermanently(messageId)
                 repository.deleteMessageLocally(messageId)
             } catch (_: Exception) {
-                _error.value = "Cannot delete message"
+                _error.emit(ctx.getString(R.string.cannot_delete_message))
             }
         }
     }

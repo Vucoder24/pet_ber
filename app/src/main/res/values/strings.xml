@@ -362,8 +362,8 @@
     <string name="health_detail_title">Health %1$s</string>
     <string name="recorded_at">Recorded: %1$s</string>
     <string name="chat">Chat</string>
-    <string name="connecting">Connecting...</string>0
-    <string name="search_chat_hint">Search for a chat...</string>
+    <string name="connecting">Connecting…</string>
+    <string name="search_chat_hint">Search for a chat…</string>
     <string name="msg_sent_image">Photo sent</string>
     <string name="msg_sent_video">Video sent</string>
     <string name="action_delete_conversation">Delete this chat</string>
@@ -386,6 +386,10 @@
     <string name="add_new">Add new</string>
     <string name="other_user_deleted_msg">The other person deleted a message.</string>
     <string name="you_deleted_msg">You deleted a message.</string>
+    <string name="cannot_delete_message">Cannot delete message, please try again.</string>
+    <string name="error_delete_conversation">There was an error when deleting this conversation, please try again.</string>
+    <string name="new_message_alert">You have a new message waiting to respond</string>
+    <string name="new_message">New message</string>
 
 
     <string-array name="media_types">

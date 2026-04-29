@@ -385,6 +385,12 @@ Soyez le premier à commenter !</string>
     <string name="cannot_read_file">Impossible de lire le fichier.</string>
     <string name="cannot_send_message">Impossible d’envoyer le message !</string>
     <string name="add_new">Ajouter nouveau</string>
+    <string name="other_user_deleted_msg">L\'autre personne a supprimé un message.</string>
+    <string name="you_deleted_msg">Vous avez supprimé un message.</string>
+    <string name="cannot_delete_message">Impossible de supprimer le message, veuillez réessayer.</string>
+    <string name="error_delete_conversation">Une erreur s\'est produite lors de la suppression de cette conversation, veuillez réessayer.</string>
+    <string name="new_message_alert">Vous avez un nouveau message en attente de réponse</string>
+    <string name="new_message">Nouveau message</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

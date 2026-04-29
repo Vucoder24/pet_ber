@@ -23,6 +23,7 @@ import com.nvv.petber.ui.auth.login.LoginActivity
 import com.nvv.petber.ui.base.BaseActivity
 import com.nvv.petber.utils.NotificationHelper
 import com.nvv.petber.utils.SharePrefUtils
+import com.nvv.petber.viewmodel.ChatListViewModel
 import com.nvv.petber.viewmodel.MainViewModel
 import com.tapadoo.alerter.Alerter
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,11 +37,13 @@ import javax.inject.Inject
 class MainActivity : BaseActivity(), BottomNavController {
     lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
+    private val chatViewModel: ChatListViewModel by viewModels()
     @Inject
     lateinit var supabaseClient: SupabaseClient
     @Inject
     lateinit var exoPlayer: ExoPlayer
     private lateinit var currentUserId: String
+    private var lastAlertConversationId: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +67,49 @@ class MainActivity : BaseActivity(), BottomNavController {
         val lastSeen = SharePrefUtils.getLastSeenNotificationTime(this)
         mainViewModel.fetchNewCount(currentUserId, lastSeen)
         observeNotifications()
+        observeChatMessages()
     }
+
+    private fun observeChatMessages() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                chatViewModel.conversations.collect { list ->
+                    val unreadConv = list.firstOrNull {
+                        !it.isSeen && it.lastMessageSenderId != currentUserId
+                    }
+
+                    if (unreadConv != null && !isOnChatTab()) {
+                        val alertKey = "${unreadConv.conversationId}_${unreadConv.lastMessageAt}"
+                        if (alertKey != lastAlertConversationId) {
+                            lastAlertConversationId = alertKey
+                            showNewMessageAlert()
+                        }
+                        showDotBadge(R.id.navigation_chat)
+                    } else if (unreadConv == null) {
+                        lastAlertConversationId = null
+                        hideBadge(R.id.navigation_chat)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showNewMessageAlert() {
+        Alerter.hide()
+
+        Alerter.create(this)
+            .setTitle(getString(R.string.new_message))
+            .setText(getString(R.string.new_message_alert))
+            .setBackgroundColorRes(R.color.pet_accent)
+            .setIcon(R.drawable.ic_notification)
+            .setDuration(3000)
+            .setIconColorFilter(ContextCompat.getColor(this, R.color.white))
+            .setOnClickListener {
+                binding.bottomNavigation.selectedItemId = R.id.navigation_chat
+            }
+            .show()
+    }
+
     private fun observeNotifications() {
         mainViewModel.startListeningRealtime(currentUserId)
 
@@ -182,6 +227,10 @@ class MainActivity : BaseActivity(), BottomNavController {
 
     fun isOnNotificationTab(): Boolean {
         return binding.bottomNavigation.selectedItemId == R.id.navigation_notifications
+    }
+
+    fun isOnChatTab(): Boolean {
+        return binding.bottomNavigation.selectedItemId == R.id.navigation_chat
     }
 
     private fun getBadge(menuItemId: Int): BadgeDrawable {

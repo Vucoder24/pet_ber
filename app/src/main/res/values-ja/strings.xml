@@ -385,6 +385,12 @@
     <string name="cannot_read_file">ファイルを読み取れません。</string>
     <string name="cannot_send_message">メッセージを送信できません！</string>
     <string name="add_new">新規追加</string>
+    <string name="other_user_deleted_msg">相手がメッセージを削除しました。</string>
+    <string name="you_deleted_msg">メッセージを削除しました。</string>
+    <string name="cannot_delete_message">メッセージを削除できません。もう一度お試しください。</string>
+    <string name="error_delete_conversation">この会話の削除中にエラーが発生しました。もう一度お試しください。</string>
+    <string name="new_message_alert">返信待ちの新しいメッセージがあります</string>
+    <string name="new_message">新しいメッセージ</string>
 
 
     <string-array name="media_types">

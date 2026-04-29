@@ -317,7 +317,7 @@
                                         android:backgroundTint="#EEEEEE"
                                         android:textColor="@color/black"
                                         android:fontFamily="@font/baloo2"
-                                        android:text="@string/message"
+                                        android:text="@string/chat"
                                         app:icon="@drawable/ic_chat"
                                         app:iconGravity="textStart"
                                         app:iconPadding="8dp"
