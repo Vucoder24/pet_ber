@@ -11,6 +11,8 @@ import com.nvv.petber.data.repo.remote.ProfileRepositoryRemote
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.github.jan.supabase.realtime.PostgresAction
+import io.github.jan.supabase.realtime.decodeRecord
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -25,6 +27,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.jsonPrimitive
 import java.util.UUID
 import javax.inject.Inject
 
@@ -102,8 +105,27 @@ class ChatDetailViewModel @Inject constructor(
         realtimeJob?.cancel()
 
         realtimeJob = repository.observeNewMessages(id)
-            .onEach {newMessage ->
-                repository.syncNewMessage(newMessage)
+            .onEach { action ->
+                when (action) {
+                    is PostgresAction.Insert -> {
+                        val newMessage = action.decodeRecord<MessageModel>()
+                        repository.syncNewMessage(newMessage)
+                    }
+
+                    is PostgresAction.Delete -> {
+                        val deletedId = action.oldRecord["id"]?.jsonPrimitive?.content
+                        deletedId?.let {
+                            repository.deleteMessageLocally(it)
+                        }
+                    }
+
+                    is PostgresAction.Update -> {
+                        val updatedMessage = action.decodeRecord<MessageModel>()
+                        repository.syncNewMessage(updatedMessage)
+                    }
+
+                    is PostgresAction.Select ->{}
+                }
             }
             .catch { e -> _error.emit(ctx.getString(R.string.error_connection_internet)) }
             .launchIn(viewModelScope)
@@ -119,7 +141,17 @@ class ChatDetailViewModel @Inject constructor(
         isLastPage = false
 
         subscribeToRealtime(id)
-        loadHistoryMessages()
+        viewModelScope.launch {
+            isLoadingMore = true
+            try {
+                repository.syncMessagesWithServer(id)
+                currentPage = 1
+            } catch (_: Exception) {
+                _error.emit(ctx.getString(R.string.error_fetch_data))
+            } finally {
+                isLoadingMore = false
+            }
+        }
     }
 
 
@@ -190,11 +222,11 @@ class ChatDetailViewModel @Inject constructor(
         _currentConvId.value = ""
     }
 
-    fun deleteMessage(messageId: String) {
+    fun deleteMessage(message: MessageModel) {
         viewModelScope.launch {
             try {
-                repository.deleteMessagePermanently(messageId)
-                repository.deleteMessageLocally(messageId)
+                repository.deleteMessagePermanently(message)
+                repository.deleteMessageLocally(message.id)
             } catch (_: Exception) {
                 _error.emit(ctx.getString(R.string.cannot_delete_message))
             }

@@ -392,6 +392,14 @@
     <string name="new_message_alert">คุณมีข้อความใหม่รอการตอบกลับ</string>
     <string name="new_message">ข้อความใหม่</string>
     <string name="you_prefix">คุณ: %1$s</string>
+    <string name="label_select_media">เลือกสื่อ</string>
+    <string name="action_preview">ดูตัวอย่าง</string>
+    <string name="msg_permission_media_required">จำเป็นต้องเข้าถึงแกลเลอรีเพื่อเลือกภาพหรือวิดีโอ</string>
+    <string name="action_grant_permission">อนุญาตสิทธิ์</string>
+    <string name="you_sent_an_image">คุณได้ส่งรูปภาพ</string>
+    <string name="other_user_sent_an_image">อีกฝ่ายได้ส่งรูปภาพ</string>
+    <string name="you_sent_a_video">คุณได้ส่งวิดีโอ</string>
+    <string name="other_user_sent_a_video">อีกฝ่ายได้ส่งวิดีโอ</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

@@ -392,6 +392,14 @@ Sei der Erste, der kommentiert!</string>
     <string name="new_message_alert">Du hast eine neue Nachricht, die auf eine Antwort wartet</string>
     <string name="new_message">Neue Nachricht</string>
     <string name="you_prefix">Du: %1$s</string>
+    <string name="label_select_media">Medien auswählen</string>
+    <string name="action_preview">Vorschau</string>
+    <string name="msg_permission_media_required">Zugriff auf die Galerie ist erforderlich, um Fotos oder Videos auszuwählen.</string>
+    <string name="action_grant_permission">Berechtigung erteilen</string>
+    <string name="you_sent_an_image">Du hast ein Foto gesendet</string>
+    <string name="other_user_sent_an_image">Die andere Person hat ein Foto gesendet</string>
+    <string name="you_sent_a_video">Du hast ein Video gesendet</string>
+    <string name="other_user_sent_a_video">Die andere Person hat ein Video gesendet</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

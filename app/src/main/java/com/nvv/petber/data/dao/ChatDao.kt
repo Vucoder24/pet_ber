@@ -21,6 +21,7 @@ interface ChatDao {
                 lastMessageAt = :at, 
                 lastMessageSenderId = :senderId,
                 otherUserName = :name,
+                lastMessageMediaType = :mediaType,
                 otherUserAvatar = :avatar,
                 isSeen = 0
             WHERE conversationId = :id 
@@ -32,7 +33,7 @@ interface ChatDao {
         """)
     suspend fun updateIfChanged(
         id: String, content: String?, at: String?,
-        senderId: String?, name: String?, avatar: String?
+        senderId: String?, mediaType: String?, name: String?, avatar: String?
     )
 
     @Transaction
@@ -43,6 +44,7 @@ interface ChatDao {
                 updateIfChanged(
                     item.conversationId, item.lastMessageContent,
                     item.lastMessageAt, item.lastMessageSenderId,
+                    item.lastMessageMediaType,
                     item.otherUserName, item.otherUserAvatar
                 )
             }
@@ -73,4 +75,7 @@ interface ChatDao {
 
     @Query("DELETE FROM messages WHERE conversationId = :convId")
     suspend fun deleteMessagesByConversation(convId: String)
+
+    @Query("DELETE FROM messages WHERE conversationId = :convId AND id NOT IN (:serverIds)")
+    suspend fun deleteRemovedMessages(convId: String, serverIds: List<String>)
 }

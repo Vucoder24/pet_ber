@@ -393,6 +393,14 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="new_message_alert">Bạn có một tin nhắn mới đang chờ phản hồi</string>
     <string name="new_message">Tin nhắn mới</string>
     <string name="you_prefix">Bạn:%1$s</string>
+    <string name="msg_permission_media_required">Cần quyền truy cập thư viện để chọn ảnh hoặc video.</string>
+    <string name="action_grant_permission">Cấp quyền</string>
+    <string name="label_select_media">Chọn phương tiện</string>
+    <string name="action_preview">Xem trước</string>
+    <string name="you_sent_an_image">Bạn đã gửi một ảnh</string>
+    <string name="other_user_sent_an_image">Đối phương đã gửi một ảnh</string>
+    <string name="you_sent_a_video">Bạn đã gửi một video</string>
+    <string name="other_user_sent_a_video">Đối phương đã gửi một video</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

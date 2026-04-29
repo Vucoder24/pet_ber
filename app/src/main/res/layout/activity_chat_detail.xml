@@ -71,9 +71,8 @@
         android:id="@+id/rvMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
         android:clipToPadding="false"
-        android:paddingVertical="8dp"
+        android:paddingVertical="12dp"
         app:layout_constraintBottom_toTopOf="@id/layoutBottomContainer"
         app:layout_constraintTop_toBottomOf="@id/line" />
 

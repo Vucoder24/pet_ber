@@ -392,6 +392,14 @@
     <string name="new_message_alert">답장을 기다리는 새 메시지가 있습니다</string>
     <string name="new_message">새 메시지</string>
     <string name="you_prefix">나: %1$s</string>
+    <string name="label_select_media">미디어 선택</string>
+    <string name="action_preview">미리보기</string>
+    <string name="msg_permission_media_required">사진 또는 동영상을 선택하려면 갤러리 접근 권한이 필요합니다.</string>
+    <string name="action_grant_permission">권한 허용</string>
+    <string name="you_sent_an_image">사진을 보냈습니다</string>
+    <string name="other_user_sent_an_image">상대방이 사진을 보냈습니다</string>
+    <string name="you_sent_a_video">동영상을 보냈습니다</string>
+    <string name="other_user_sent_a_video">상대방이 동영상을 보냈습니다</string>
 
 
     <string-array name="media_types">

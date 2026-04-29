@@ -392,6 +392,14 @@
     <string name="new_message_alert">返信待ちの新しいメッセージがあります</string>
     <string name="new_message">新しいメッセージ</string>
     <string name="you_prefix">あなた: %1$s</string>
+    <string name="label_select_media">メディアを選択</string>
+    <string name="action_preview">プレビュー</string>
+    <string name="msg_permission_media_required">写真や動画を選択するにはギャラリーへのアクセスが必要です。</string>
+    <string name="action_grant_permission">権限を許可</string>
+    <string name="you_sent_an_image">あなたは写真を送信しました</string>
+    <string name="other_user_sent_an_image">相手が写真を送信しました</string>
+    <string name="you_sent_a_video">あなたは動画を送信しました</string>
+    <string name="other_user_sent_a_video">相手が動画を送信しました</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

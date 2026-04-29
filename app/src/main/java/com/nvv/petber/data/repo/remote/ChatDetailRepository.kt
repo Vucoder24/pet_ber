@@ -8,6 +8,7 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.realtime.PostgresAction
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -50,13 +51,36 @@ class ChatDetailRepository @Inject constructor(
         supabaseClient.postgrest["messages"].insert(message)
     }
 
-    fun observeNewMessages(conversationId: String): Flow<MessageModel> {
+    fun observeNewMessages(conversationId: String): Flow<PostgresAction> {
         return realtimeService.subscribeToNewMessages(conversationId)
     }
 
-    suspend fun deleteMessagePermanently(messageId: String) {
+    suspend fun syncMessagesWithServer(conversationId: String): Boolean {
+        val remoteMessages = fetchMessages(conversationId, 0, 50)
+
+        if (remoteMessages.isNotEmpty()) {
+            val remoteIds = remoteMessages.map { it.id }
+
+            chatDao.upsertMessages(remoteMessages.map { it.toEntity() })
+
+            chatDao.deleteRemovedMessages(conversationId, remoteIds)
+            return true
+        }
+        return false
+    }
+
+    suspend fun deleteMessagePermanently(message: MessageModel) {
+        if (!message.mediaUrl.isNullOrEmpty()) {
+                val oldUrl = message.mediaUrl
+                val bucket = "chat_media"
+            val pathIdentifier = "/object/public/$bucket/"
+            if (oldUrl.contains(pathIdentifier)) {
+                val filePath = oldUrl.substringAfter(pathIdentifier)
+                supabaseClient.storage[bucket].delete(filePath)
+            }
+        }
         supabaseClient.postgrest["messages"].delete {
-            filter { eq("id", messageId) }
+            filter { eq("id", message.id) }
         }
     }
 
@@ -65,6 +89,7 @@ class ChatDetailRepository @Inject constructor(
         bucket.upload(fileName, byteArray)
         return bucket.publicUrl(fileName)
     }
+
 
     suspend fun syncNewMessage(message: MessageModel) {
         chatDao.upsertMessages(listOf(message.toEntity()))

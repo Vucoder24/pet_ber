@@ -1,7 +1,6 @@
 package com.nvv.petber.service
 
 import com.nvv.petber.data.model.Conversation
-import com.nvv.petber.data.model.MessageModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.realtime.PostgresAction
@@ -21,17 +20,16 @@ import javax.inject.Inject
 class ChatRealtimeService @Inject constructor(
     private val supabaseClient: SupabaseClient
 ) {
-    fun subscribeToNewMessages(conversationId: String): Flow<MessageModel> = callbackFlow {
+    fun subscribeToNewMessages(conversationId: String): Flow<PostgresAction> = callbackFlow {
         val channel = supabaseClient.channel("messages:$conversationId")
 
-        val subscription = channel.postgresChangeFlow<PostgresAction.Insert>(
+        val subscription = channel.postgresChangeFlow<PostgresAction>(
             schema = "public"
         ) {
             table = "messages"
             filter("conversation_id", FilterOperator.EQ, conversationId)
         }.onEach { action ->
-            val newMessage = action.decodeRecord<MessageModel>()
-            trySend(newMessage)
+            trySend(action)
         }.launchIn(CoroutineScope(Dispatchers.IO))
 
         launch {

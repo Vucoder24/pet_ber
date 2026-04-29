@@ -392,6 +392,14 @@
     <string name="new_message_alert">你有一条新消息等待回复</string>
     <string name="new_message">新消息</string>
     <string name="you_prefix">你: %1$s</string>
+    <string name="label_select_media">选择媒体</string>
+    <string name="action_preview">预览</string>
+    <string name="msg_permission_media_required">需要访问相册权限以选择照片或视频。</string>
+    <string name="action_grant_permission">授予权限</string>
+    <string name="you_sent_an_image">你发送了一张图片</string>
+    <string name="other_user_sent_an_image">对方发送了一张图片</string>
+    <string name="you_sent_a_video">你发送了一个视频</string>
+    <string name="other_user_sent_a_video">对方发送了一个视频</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

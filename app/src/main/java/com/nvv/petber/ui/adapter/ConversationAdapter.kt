@@ -36,11 +36,24 @@ class ConversationAdapter(
             } else item.otherUserName
 
             val context = binding.root.context
+
             val isMe = item.lastMessageSenderId == currentUserId
 
             val message = when (item.lastMessageMediaType) {
-                "image" -> context.getString(R.string.msg_sent_image)
-                "video" -> context.getString(R.string.msg_sent_video)
+                "image" -> {
+                    if (isMe)
+                        binding.root.context.getString(R.string.you_sent_an_image)
+                    else
+                        binding.root.context.getString(R.string.other_user_sent_an_image)
+                }
+
+                "video" -> {
+                    if (isMe)
+                        binding.root.context.getString(R.string.you_sent_a_video)
+                    else
+                        binding.root.context.getString(R.string.other_user_sent_a_video)
+                }
+
                 else -> {
                     if (item.lastMessageContent?.contains("DELETED_MSG_PETBER") == true) {
                         if (isMe) {
@@ -54,10 +67,7 @@ class ConversationAdapter(
                 }
             }
 
-            binding.tvLastMessage.text =
-                if (isMe && message.isNotEmpty())
-                    context.getString(R.string.you_prefix, message)
-                else message
+            binding.tvLastMessage.text =message
 
             binding.ivAvatar.loadAvatar(item.otherUserAvatar)
             item.lastMessageAt?.let {
