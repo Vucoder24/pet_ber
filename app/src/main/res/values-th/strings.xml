@@ -391,6 +391,7 @@
     <string name="error_delete_conversation">เกิดข้อผิดพลาดขณะลบการสนทนา กรุณาลองใหม่อีกครั้ง</string>
     <string name="new_message_alert">คุณมีข้อความใหม่รอการตอบกลับ</string>
     <string name="new_message">ข้อความใหม่</string>
+    <string name="you_prefix">คุณ: %1$s</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

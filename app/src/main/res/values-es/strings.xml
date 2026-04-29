@@ -391,6 +391,7 @@
     <string name="error_delete_conversation">Hubo un error al eliminar esta conversación, inténtalo de nuevo.</string>
     <string name="new_message_alert">Tienes un nuevo mensaje esperando respuesta</string>
     <string name="new_message">Nuevo mensaje</string>
+    <string name="you_prefix">Tú: %1$s</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

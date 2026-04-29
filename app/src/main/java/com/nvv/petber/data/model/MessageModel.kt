@@ -17,40 +17,6 @@ data class MessageModel(
     @SerialName("created_at") val createdAt: String
 )
 
-@Serializable
-data class ConversationModel(
-    @SerialName("id")
-    val conversationId: String,
-    @SerialName("user1_id")
-    val user1Id: String,
-    @SerialName("user2_id")
-    val user2Id: String,
-    @SerialName("last_message_content")
-    val lastMessageContent: String? = null,
-    @SerialName("last_message_media_type")
-    val lastMessageMediaType: String? = null,
-    @SerialName("last_message_at")
-    val lastMessageAt: String? = null,
-    @SerialName("last_message_sender_id")
-    val lastMessageSenderId: String? = null,
-) {
-    fun otherUserId(currentUserId: String) =
-        if (user1Id == currentUserId) user2Id else user1Id
-}
-
-@Entity(tableName = "conversations")
-data class ConversationEntity(
-    @PrimaryKey val conversationId: String,
-    val otherUserId: String,
-    val otherUserName: String?,
-    val otherUserAvatar: String?,
-    val lastMessageContent: String?,
-    val lastMessageMediaType: String?,
-    val lastMessageAt: String?,
-    val lastMessageSenderId: String?,
-    val isSeen: Boolean = false
-)
-
 @Entity(tableName = "messages")
 data class MessageEntity(
     @PrimaryKey val id: String,

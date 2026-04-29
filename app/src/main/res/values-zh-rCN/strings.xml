@@ -391,6 +391,7 @@
     <string name="error_delete_conversation">删除会话时发生错误，请重试。</string>
     <string name="new_message_alert">你有一条新消息等待回复</string>
     <string name="new_message">新消息</string>
+    <string name="you_prefix">你: %1$s</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

@@ -8,7 +8,7 @@ import com.nvv.petber.data.converter.StringListConverter
 import com.nvv.petber.data.dao.ChatDao
 import com.nvv.petber.data.dao.ProfileDao
 import com.nvv.petber.data.model.Comment
-import com.nvv.petber.data.model.ConversationEntity
+import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.data.model.Follow
 import com.nvv.petber.data.model.Hashtag
 import com.nvv.petber.data.model.MessageEntity
@@ -26,8 +26,8 @@ import com.nvv.petber.data.model.User
 @Database(
     entities = [User::class, Pet::class, Post::class, Story::class, Follow::class,
         Comment::class, Hashtag::class, Notification::class, PetFollow::class, MessageEntity::class,
-        PetImage::class, PostHashtag::class, PostLike::class, PostMedia::class, ConversationEntity::class],
-    version = 21,
+        PetImage::class, PostHashtag::class, PostLike::class, PostMedia::class, Conversation::class],
+    version = 25,
     exportSchema = false
 )
 @TypeConverters(DataConverters::class, StringListConverter::class)

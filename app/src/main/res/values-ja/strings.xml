@@ -391,7 +391,7 @@
     <string name="error_delete_conversation">この会話の削除中にエラーが発生しました。もう一度お試しください。</string>
     <string name="new_message_alert">返信待ちの新しいメッセージがあります</string>
     <string name="new_message">新しいメッセージ</string>
-
+    <string name="you_prefix">あなた: %1$s</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

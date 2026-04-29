@@ -5,18 +5,15 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.nvv.petber.data.model.ConversationEntity
+import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.data.model.MessageEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ChatDao {
-    // Conversation
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun upsertConversations(conversations: List<ConversationEntity>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertIgnore(conversations: List<ConversationEntity>): List<Long>
+    suspend fun insertIgnore(conversations: List<Conversation>): List<Long>
 
     @Query("""
             UPDATE conversations 
@@ -39,7 +36,7 @@ interface ChatDao {
     )
 
     @Transaction
-    suspend fun upsertConversations(conversations: List<ConversationEntity>) {
+    suspend fun upsertConversations(conversations: List<Conversation>) {
         val results = insertIgnore(conversations)
         conversations.forEachIndexed { index, item ->
             if (results[index] == -1L) {
@@ -56,7 +53,7 @@ interface ChatDao {
     suspend fun markAsRead(id: String)
 
     @Query("SELECT * FROM conversations ORDER BY lastMessageAt DESC")
-    fun observeConversations(): Flow<List<ConversationEntity>>
+    fun observeConversations(): Flow<List<Conversation>>
 
     @Query("DELETE FROM conversations WHERE conversationId = :id")
     suspend fun deleteConversation(id: String)

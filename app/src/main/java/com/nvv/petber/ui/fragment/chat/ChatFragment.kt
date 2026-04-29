@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -17,12 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.nvv.petber.R
-import com.nvv.petber.data.model.ConversationEntity
+import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.databinding.FragmentChatBinding
 import com.nvv.petber.ui.activity.ChatDetailActivity
 import com.nvv.petber.ui.activity.MainActivity
 import com.nvv.petber.ui.adapter.ConversationAdapter
 import com.nvv.petber.ui.dialog.SearchChatDialogFragment
+import com.nvv.petber.utils.ext.toast
 import com.nvv.petber.viewmodel.ChatListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
 
-    private val viewModel: ChatListViewModel by viewModels()
+    private val viewModel: ChatListViewModel by activityViewModels()
     private lateinit var adapter: ConversationAdapter
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
@@ -108,12 +109,18 @@ class ChatFragment : Fragment() {
                         binding.swipeRefresh.isRefreshing = isLoading
                     }
                 }
+                launch {
+                    viewModel.error.collect { message ->
+                        message ?: return@collect
+                        requireContext().toast(message)
+                    }
+                }
             }
         }
     }
 
     @SuppressLint("InflateParams")
-    private fun showDeleteBottomSheet(conversation: ConversationEntity) {
+    private fun showDeleteBottomSheet(conversation: Conversation) {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.bottom_sheet_chat_option, null)
         bottomSheetDialog.setContentView(view)

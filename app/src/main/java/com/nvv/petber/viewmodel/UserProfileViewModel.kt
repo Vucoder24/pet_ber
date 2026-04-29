@@ -7,8 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
-import com.nvv.petber.data.mapper.toEntity
-import com.nvv.petber.data.model.ConversationEntity
+import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.User
@@ -58,8 +57,8 @@ class UserProfileViewModel @Inject constructor(
     private val _isLoadMore = MutableLiveData(false)
     val isLoadMore: LiveData<Boolean> = _isLoadMore
 
-    private val _navigateToChat = MutableLiveData<ConversationEntity?>()
-    val navigateToChat: LiveData<ConversationEntity?> = _navigateToChat
+    private val _navigateToChat = MutableLiveData<Conversation?>()
+    val navigateToChat: LiveData<Conversation?> = _navigateToChat
 
     private val _errorMsg = MutableSharedFlow<String>()
     val errorMsg = _errorMsg.asSharedFlow()
@@ -201,7 +200,7 @@ class UserProfileViewModel @Inject constructor(
                 _isLoadingSendMessage.postValue(true)
                 val conversation = profileRepoRemote.getOrCreateConversation(currentUserId, targetUserId)
                 _isLoadingSendMessage.postValue(false)
-                _navigateToChat.postValue(conversation.toEntity(currentUserId))
+                _navigateToChat.postValue(conversation)
             }catch (e: Exception){
                 Log.d("ERR", "${e.message}")
                 _isLoadingSendMessage.postValue(false)

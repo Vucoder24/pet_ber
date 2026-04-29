@@ -391,6 +391,8 @@ Seja o primeiro a comentar!</string>
     <string name="error_delete_conversation">Ocorreu um erro ao excluir esta conversa, tente novamente.</string>
     <string name="new_message_alert">Você tem uma nova mensagem aguardando resposta</string>
     <string name="new_message">Nova mensagem</string>
+    <string name="you_prefix">Você: %1$s</string>
+
 
     <string-array name="media_types">
         <item>@string/all</item>

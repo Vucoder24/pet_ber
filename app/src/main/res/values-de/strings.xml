@@ -391,7 +391,7 @@ Sei der Erste, der kommentiert!</string>
     <string name="error_delete_conversation">Beim Löschen dieser Unterhaltung ist ein Fehler aufgetreten, bitte versuche es erneut.</string>
     <string name="new_message_alert">Du hast eine neue Nachricht, die auf eine Antwort wartet</string>
     <string name="new_message">Neue Nachricht</string>
-
+    <string name="you_prefix">Du: %1$s</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

@@ -4,8 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
-import com.nvv.petber.data.mapper.toEntity
-import com.nvv.petber.data.model.ConversationEntity
+import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.data.repo.remote.ChatRepository
 import com.nvv.petber.utils.SharePrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,7 +37,7 @@ class ChatListViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    private val _searchResults = MutableStateFlow<List<ConversationEntity>>(emptyList())
+    private val _searchResults = MutableStateFlow<List<Conversation>>(emptyList())
     val searchResults = _searchResults.asStateFlow()
 
     private var currentPage = 0
@@ -87,7 +86,7 @@ class ChatListViewModel @Inject constructor(
                 val results = withContext(Dispatchers.IO) {
                     repository.searchConversations(query)
                 }
-                _searchResults.value = results.map { it.toEntity(currentUserId) }
+                _searchResults.value = results
             } catch (_: Exception) {
                 _searchResults.value = emptyList()
             }

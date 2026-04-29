@@ -1,11 +1,10 @@
 package com.nvv.petber.service
 
-import com.nvv.petber.data.model.ConversationModel
+import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.data.model.MessageModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.realtime.PostgresAction
-import io.github.jan.supabase.realtime.RealtimeChannel
 import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.decodeRecord
 import io.github.jan.supabase.realtime.postgresChangeFlow
@@ -47,36 +46,33 @@ class ChatRealtimeService @Inject constructor(
         }
     }
 
-    fun subscribeToConversations(userId: String): Flow<ConversationModel> = callbackFlow {
-        val ch1 = supabaseClient.channel("conv_user1:$userId")
-        val ch2 = supabaseClient.channel("conv_user2:$userId")
+    fun subscribeToConversations(userId: String): Flow<Conversation> = callbackFlow {
 
-        fun listenChannel(channel: RealtimeChannel, field: String) =
-            channel.postgresChangeFlow<PostgresAction>(schema = "public") {
-                table = "conversations"
-                filter(field, FilterOperator.EQ, userId)
-            }.onEach { action ->
-                when (action) {
-                    is PostgresAction.Insert, is PostgresAction.Update ->
-                        trySend(action.decodeRecord<ConversationModel>())
-                    else -> Unit
+        val channel = supabaseClient.channel("conversations_channel:$userId")
+
+        val subscription = channel.postgresChangeFlow<PostgresAction>(schema = "public") {
+            table = "conversations"
+        }.onEach { action ->
+
+            when (action) {
+                is PostgresAction.Insert, is PostgresAction.Update -> {
+                    val conversation = action.decodeRecord<Conversation>()
+                    if (conversation.user1Id == userId || conversation.user2Id == userId) {
+                        trySend(conversation)
+                    }
                 }
-            }.launchIn(CoroutineScope(Dispatchers.IO))
-
-        val sub1 = listenChannel(ch1, "user1_id")
-        val sub2 = listenChannel(ch2, "user2_id")
+                else -> Unit
+            }
+        }.launchIn(CoroutineScope(Dispatchers.IO))
 
         launch {
-            ch1.subscribe()
-            ch2.subscribe()
+            channel.subscribe()
         }
 
         awaitClose {
-            sub1.cancel()
-            sub2.cancel()
+            subscription.cancel()
             launch {
-                ch1.unsubscribe()
-                ch2.unsubscribe()
+                channel.unsubscribe()
             }
         }
     }

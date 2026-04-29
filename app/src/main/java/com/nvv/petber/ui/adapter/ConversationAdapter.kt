@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
-import com.nvv.petber.data.model.ConversationEntity
+import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.databinding.ItemConversationBinding
 import com.nvv.petber.utils.TimeUtils
 import com.nvv.petber.utils.ext.gone
@@ -16,14 +16,14 @@ import com.nvv.petber.utils.ext.visible
 
 class ConversationAdapter(
     private val currentUserId: String,
-    private val onClick: (ConversationEntity) -> Unit,
-    private val onLongClick: (ConversationEntity) -> Unit,
+    private val onClick: (Conversation) -> Unit,
+    private val onLongClick: (Conversation) -> Unit,
     private val updateIsSeen: (String) -> Unit
-) : ListAdapter<ConversationEntity, ConversationAdapter.ViewHolder>(DiffCallback) {
+) : ListAdapter<Conversation, ConversationAdapter.ViewHolder>(DiffCallback) {
 
     inner class ViewHolder(private val binding: ItemConversationBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ConversationEntity) {
+        fun bind(item: Conversation) {
             val isUnread = !item.isSeen && item.lastMessageSenderId != currentUserId
             val typeface = if (isUnread) Typeface.BOLD else Typeface.NORMAL
 
@@ -36,19 +36,28 @@ class ConversationAdapter(
             } else item.otherUserName
 
             val context = binding.root.context
-            binding.tvLastMessage.text = when (item.lastMessageMediaType) {
+            val isMe = item.lastMessageSenderId == currentUserId
+
+            val message = when (item.lastMessageMediaType) {
                 "image" -> context.getString(R.string.msg_sent_image)
                 "video" -> context.getString(R.string.msg_sent_video)
                 else -> {
                     if (item.lastMessageContent?.contains("DELETED_MSG_PETBER") == true) {
-                        if (item.lastMessageSenderId == item.otherUserId){
-                            binding.root.context.getString(R.string.other_user_deleted_msg)
-                        } else binding.root.context.getString(R.string.you_deleted_msg)
+                        if (isMe) {
+                            context.getString(R.string.you_deleted_msg)
+                        } else {
+                            context.getString(R.string.other_user_deleted_msg)
+                        }
                     } else {
                         item.lastMessageContent ?: ""
                     }
                 }
             }
+
+            binding.tvLastMessage.text =
+                if (isMe && message.isNotEmpty())
+                    context.getString(R.string.you_prefix, message)
+                else message
 
             binding.ivAvatar.loadAvatar(item.otherUserAvatar)
             item.lastMessageAt?.let {
@@ -78,13 +87,13 @@ class ConversationAdapter(
         holder.bind(getItem(position))
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<ConversationEntity>() {
-            override fun areItemsTheSame(oldItem: ConversationEntity, newItem: ConversationEntity) =
+        private val DiffCallback = object : DiffUtil.ItemCallback<Conversation>() {
+            override fun areItemsTheSame(oldItem: Conversation, newItem: Conversation) =
                 oldItem.conversationId == newItem.conversationId
 
             override fun areContentsTheSame(
-                oldItem: ConversationEntity,
-                newItem: ConversationEntity
+                oldItem: Conversation,
+                newItem: Conversation
             ) = oldItem == newItem
         }
     }

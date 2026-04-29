@@ -390,7 +390,7 @@
     <string name="error_delete_conversation">There was an error when deleting this conversation, please try again.</string>
     <string name="new_message_alert">You have a new message waiting to respond</string>
     <string name="new_message">New message</string>
-
+    <string name="you_prefix">You:%1$s</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

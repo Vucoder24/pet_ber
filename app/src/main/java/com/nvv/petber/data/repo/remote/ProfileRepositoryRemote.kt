@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.webkit.MimeTypeMap
-import com.nvv.petber.data.model.ConversationModel
+import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.data.model.Follow
 import com.nvv.petber.data.model.FollowUserUI
 import com.nvv.petber.data.model.Pet
@@ -442,14 +442,14 @@ class ProfileRepositoryRemote @Inject constructor(
     suspend fun getOrCreateConversation(
         currentUserId: String,
         targetUserId: String
-    ): ConversationModel {
+    ): Conversation {
         return supabase.postgrest.rpc(
             function = "get_or_create_conversation",
             parameters = mapOf(
                 "p_user1_id" to currentUserId,
                 "p_user2_id" to targetUserId
             )
-        ).decodeSingle<ConversationModel>()
+        ).decodeSingle<Conversation>()
     }
 }
 

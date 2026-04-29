@@ -391,6 +391,7 @@ Soyez le premier à commenter !</string>
     <string name="error_delete_conversation">Une erreur s\'est produite lors de la suppression de cette conversation, veuillez réessayer.</string>
     <string name="new_message_alert">Vous avez un nouveau message en attente de réponse</string>
     <string name="new_message">Nouveau message</string>
+    <string name="you_prefix">Vous : %1$s</string>
 
     <string-array name="media_types">
         <item>@string/all</item>
