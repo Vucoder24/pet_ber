@@ -362,6 +362,45 @@ Seja o primeiro a comentar!</string>
     <string name="see_details">Ver detalhes →</string>
     <string name="health_detail_title">Saúde %1$s</string>
     <string name="recorded_at">Registrado em: %1$s</string>
+    <string name="chat">Chat</string>
+    <string name="connecting">Conectando...</string>
+    <string name="search_chat_hint">Pesquisar chat...</string>
+    <string name="msg_sent_image">Foto enviada</string>
+    <string name="msg_sent_video">Vídeo enviado</string>
+    <string name="action_delete_conversation">Excluir conversa</string>
+    <string name="dialog_delete_title">Confirmar exclusão</string>
+    <string name="dialog_delete_message">Tem certeza de que deseja excluir este chat? Todas as mensagens serão apagadas permanentemente.</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_delete">Excluir</string>
+    <string name="hint_type_message">Digite uma mensagem…</string>
+    <string name="action_reply">Responder</string>
+    <string name="action_delete_message">Excluir mensagem</string>
+    <string name="dialog_delete_msg_title">Excluir mensagem</string>
+    <string name="dialog_delete_msg_content">Você não poderá recuperar as mensagens. Continuar?</string>
+    <string name="msg_deleted_placeholder">Mensagem excluída</string>
+    <string name="title_media_picker">Selecionar foto ou vídeo</string>
+    <string name="error_permission_media">Acesso ao armazenamento necessário para enviar fotos/vídeos</string>
+    <string name="you">Você</string>
+    <string name="image_video">[Imagem/Vídeo]</string>
+    <string name="cannot_read_file">Não foi possível ler o arquivo.</string>
+    <string name="cannot_send_message">Não foi possível enviar a mensagem!</string>
+    <string name="add_new">Adicionar novo</string>
+    <string name="other_user_deleted_msg">A outra pessoa excluiu uma mensagem.</string>
+    <string name="you_deleted_msg">Você excluiu uma mensagem.</string>
+    <string name="cannot_delete_message">Não foi possível excluir a mensagem, tente novamente.</string>
+    <string name="error_delete_conversation">Ocorreu um erro ao excluir esta conversa, tente novamente.</string>
+    <string name="new_message_alert">Você tem uma nova mensagem aguardando resposta</string>
+    <string name="new_message">Nova mensagem</string>
+    <string name="you_prefix">Você: %1$s</string>
+    <string name="label_select_media">Selecionar mídia</string>
+    <string name="action_preview">Visualizar</string>
+    <string name="msg_permission_media_required">É necessário acesso à galeria para selecionar fotos ou vídeos.</string>
+    <string name="action_grant_permission">Conceder permissão</string>
+    <string name="you_sent_an_image">Você enviou uma foto</string>
+    <string name="other_user_sent_an_image">A outra pessoa enviou uma foto</string>
+    <string name="you_sent_a_video">Você enviou um vídeo</string>
+    <string name="other_user_sent_a_video">A outra pessoa enviou um vídeo</string>
+
 
     <string-array name="media_types">
         <item>@string/all</item>

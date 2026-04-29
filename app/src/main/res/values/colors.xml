@@ -36,4 +36,13 @@
     <color name="background_card">#FFFFFF</color>
     <color name="divider_color">#E0DDD5</color>
     <color name="bg_icon_gray">#F1EFE8</color>
+    <color name="theme_orange">#FF8C00</color>
+    <color name="theme_yellow">#FFD700</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="bg_light_orange">#FFF3E0</color>
+    <color name="bubble_sent">#FF8C00</color>
+    <color name="bubble_received">#FFF3E0</color>
+    <color name="text_sent">#FFFFFF</color>
+    <color name="text_received">#212121</color>
 </resources>

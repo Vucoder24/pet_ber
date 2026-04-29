@@ -17,10 +17,10 @@
         tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/navigation_create_post"
-        android:name="com.nvv.petber.ui.fragment.create_content.CreateContentFragment"
-        android:label="Create Post"
-        tools:layout="@layout/fragment_create_content" />
+        android:id="@+id/navigation_chat"
+        android:name="com.nvv.petber.ui.fragment.chat.ChatFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat" />
 
     <fragment
         android:id="@+id/navigation_notifications"

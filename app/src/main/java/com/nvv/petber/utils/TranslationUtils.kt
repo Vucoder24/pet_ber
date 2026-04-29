@@ -28,9 +28,7 @@ object TranslationUtils {
 
     suspend fun translate(text: String?): String? {
         if (text.isNullOrBlank()) return text
-
         val targetLang = getTargetLanguage()
-
         if (targetLang == TranslateLanguage.ENGLISH) return text
 
         val options = TranslatorOptions.Builder()
@@ -39,26 +37,35 @@ object TranslationUtils {
             .build()
 
         val translator = Translation.getClient(options)
+        var isClosed = false
+
+        fun safeClose() {
+            if (!isClosed) {
+                isClosed = true
+                translator.close()
+            }
+        }
 
         return suspendCancellableCoroutine { cont ->
             translator.downloadModelIfNeeded()
                 .addOnSuccessListener {
+                    if (isClosed) return@addOnSuccessListener  // ← guard
                     translator.translate(text)
                         .addOnSuccessListener { translated ->
-                            translator.close()
-                            cont.resume(translated)
+                            safeClose()
+                            if (cont.isActive) cont.resume(translated)
                         }
                         .addOnFailureListener {
-                            translator.close()
-                            cont.resume(text)
+                            safeClose()
+                            if (cont.isActive) cont.resume(text)
                         }
                 }
                 .addOnFailureListener {
-                    translator.close()
-                    cont.resume(text)
+                    safeClose()
+                    if (cont.isActive) cont.resume(text)
                 }
 
-            cont.invokeOnCancellation { translator.close() }
+            cont.invokeOnCancellation { safeClose() }
         }
     }
 
@@ -74,6 +81,15 @@ object TranslationUtils {
 
         val translator = Translation.getClient(options)
 
+        var isClosed = false
+
+        fun safeClose() {
+            if (!isClosed) {
+                isClosed = true
+                translator.close()
+            }
+        }
+
         return suspendCancellableCoroutine { cont ->
             translator.downloadModelIfNeeded()
                 .addOnSuccessListener {
@@ -81,46 +97,50 @@ object TranslationUtils {
                     var remaining = texts.size
 
                     if (remaining == 0) {
-                        translator.close()
+                        safeClose()
                         cont.resume(emptyList())
                         return@addOnSuccessListener
                     }
 
                     texts.forEachIndexed { index, text ->
+                        if (isClosed) return@forEachIndexed
+
                         if (text.isNullOrBlank()) {
                             results[index] = text
                             remaining--
                             if (remaining == 0) {
-                                translator.close()
-                                cont.resume(results.toList())
+                                safeClose()
+                                if (cont.isActive) cont.resume(results.toList())
                             }
                         } else {
                             translator.translate(text)
                                 .addOnSuccessListener { translated ->
+                                    if (isClosed) return@addOnSuccessListener
                                     results[index] = translated
                                     remaining--
                                     if (remaining == 0) {
-                                        translator.close()
-                                        cont.resume(results.toList())
+                                        safeClose()
+                                        if (cont.isActive) cont.resume(results.toList())
                                     }
                                 }
                                 .addOnFailureListener {
+                                    if (isClosed) return@addOnFailureListener
                                     results[index] = text
                                     remaining--
                                     if (remaining == 0) {
-                                        translator.close()
-                                        cont.resume(results.toList())
+                                        safeClose()
+                                        if (cont.isActive) cont.resume(results.toList())
                                     }
                                 }
                         }
                     }
                 }
                 .addOnFailureListener {
-                    translator.close()
-                    cont.resume(texts.toList())
+                    safeClose()
+                    if (cont.isActive) cont.resume(texts.toList())
                 }
 
-            cont.invokeOnCancellation { translator.close() }
+            cont.invokeOnCancellation { safeClose() }
         }
     }
 }

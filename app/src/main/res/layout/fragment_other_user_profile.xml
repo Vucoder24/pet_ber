@@ -300,7 +300,6 @@
                                         android:backgroundTint="@color/bg_btn"
                                         android:fontFamily="@font/baloo2"
                                         android:text="@string/follow"
-                                        android:layout_marginHorizontal="24dp"
                                         app:iconGravity="start"
                                         app:icon="@drawable/ic_follow"
                                         app:iconTint="@color/white"
@@ -309,6 +308,23 @@
                                         android:textStyle="bold"
                                         tools:ignore="ButtonStyle,TouchTargetSizeCheck,TextContrastCheck,VisualLintButtonSize" />
 
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btnMessage"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:layout_marginStart="8dp"
+                                        android:backgroundTint="#EEEEEE"
+                                        android:textColor="@color/black"
+                                        android:fontFamily="@font/baloo2"
+                                        android:text="@string/chat"
+                                        app:icon="@drawable/ic_chat"
+                                        app:iconGravity="textStart"
+                                        app:iconPadding="8dp"
+                                        app:iconTint="@color/black"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        tools:ignore="VisualLintButtonSize" />
 
                                 </LinearLayout>
 

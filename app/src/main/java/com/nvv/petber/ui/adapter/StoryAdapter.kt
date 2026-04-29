@@ -14,14 +14,17 @@ import com.nvv.petber.data.model.Story
 import com.nvv.petber.utils.ext.loadAvatar
 
 class StoryAdapter(
-    private val onStoryClick: (Story) -> Unit
+    private val onStoryClick: (Story) -> Unit,
+    private val onAddStoryClick: () -> Unit
 ) : ListAdapter<StoryAdapter.StoryItem, RecyclerView.ViewHolder>(StoryDiffCallback()) {
     companion object {
         private const val TYPE_ITEM = 0
         private const val TYPE_LOADING = 1
+        private const val TYPE_ADD_STORY = 2
     }
 
     sealed class StoryItem {
+        object AddStory : StoryItem()
         data class Data(val story: Story) : StoryItem()
         object Loading : StoryItem()
     }
@@ -34,6 +37,7 @@ class StoryAdapter(
         val distinctList = list?.distinctBy { it.userId } ?: emptyList()
 
         val items = mutableListOf<StoryItem>()
+        items.add(StoryItem.AddStory)
         items.addAll(distinctList.map { StoryItem.Data(it) })
 
         if (isLoadingMore) {
@@ -47,6 +51,7 @@ class StoryAdapter(
         return when (getItem(position)) {
             is StoryItem.Data -> TYPE_ITEM
             is StoryItem.Loading -> TYPE_LOADING
+            is StoryItem.AddStory -> TYPE_ADD_STORY
         }
     }
 
@@ -57,6 +62,10 @@ class StoryAdapter(
                 val view = inflater.inflate(R.layout.item_story, parent, false)
                 StoryViewHolder(view)
             }
+            TYPE_ADD_STORY -> {
+                val view = inflater.inflate(R.layout.item_new_story, parent, false)
+                AddStoryViewHolder(view)
+            }
             else -> {
                 val view = inflater.inflate(R.layout.item_story_load_more_shimmer, parent, false)
                 LoadingViewHolder(view)
@@ -66,10 +75,10 @@ class StoryAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        if (holder is StoryViewHolder && item is StoryItem.Data) {
-            holder.bind(item.story)
-        } else if (holder is LoadingViewHolder) {
-            holder.binding.startShimmer()
+        when {
+            holder is AddStoryViewHolder -> holder.bind()
+            holder is StoryViewHolder && item is StoryItem.Data -> holder.bind(item.story)
+            holder is LoadingViewHolder -> holder.binding.startShimmer()
         }
     }
 
@@ -84,6 +93,12 @@ class StoryAdapter(
             ivStoryAvatar.loadAvatar(story.users?.avatarUrl?.ifEmpty { null })
 
             itemView.setOnClickListener { onStoryClick(story) }
+        }
+    }
+
+    inner class AddStoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind() {
+            itemView.setOnClickListener { onAddStoryClick() }
         }
     }
     inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

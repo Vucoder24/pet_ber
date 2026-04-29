@@ -3,6 +3,7 @@ package com.nvv.petber.di
 import android.content.Context
 import androidx.room.Room
 import com.nvv.petber.data.AppDatabase
+import com.nvv.petber.data.dao.ChatDao
 import com.nvv.petber.data.dao.ProfileDao
 import dagger.Module
 import dagger.Provides
@@ -22,4 +23,6 @@ object DatabaseModule {
 
     @Provides
     fun provideProfileDao(db: AppDatabase): ProfileDao = db.profileDao()
+    @Provides
+    fun provideChatDao(db: AppDatabase): ChatDao = db.chatDao()
 }

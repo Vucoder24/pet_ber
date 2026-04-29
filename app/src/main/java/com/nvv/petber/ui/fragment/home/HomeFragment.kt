@@ -1,10 +1,13 @@
 package com.nvv.petber.ui.fragment.home
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,9 +20,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nvv.petber.R
 import com.nvv.petber.data.model.UserStoryGroup
 import com.nvv.petber.databinding.FragmentHomeBinding
+import com.nvv.petber.ui.activity.CreateStoryActivity
 import com.nvv.petber.ui.activity.MainActivity
+import com.nvv.petber.ui.activity.MediaPickerActivity
 import com.nvv.petber.ui.activity.PetProfileActivity
 import com.nvv.petber.ui.activity.UserProfileActivity
+import com.nvv.petber.ui.adapter.MediaItem
 import com.nvv.petber.ui.adapter.PostAdapter
 import com.nvv.petber.ui.adapter.StoryAdapter
 import com.nvv.petber.ui.adapter.StoryRowAdapter
@@ -27,6 +33,7 @@ import com.nvv.petber.ui.dialog.CommentBottomSheetFragment
 import com.nvv.petber.ui.dialog.PostOptionsBottomSheetFragment
 import com.nvv.petber.ui.view_story.ViewStoryActivity
 import com.nvv.petber.utils.AppEventManager
+import com.nvv.petber.utils.PermissionUtils
 import com.nvv.petber.utils.SharePrefUtils
 import com.nvv.petber.utils.ext.addFeedScrollListener
 import com.nvv.petber.utils.ext.gone
@@ -52,6 +59,28 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var exoPlayer: ExoPlayer
+
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            val granted = result.all { it.value }
+            if (granted) {
+                openMediaPickerForStory()
+            } else {
+                requireContext().toast(getString(R.string.permission_question))
+            }
+        }
+
+    private val storyPickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                @Suppress("DEPRECATION")
+                val medias = result.data?.getParcelableArrayListExtra<MediaItem>(
+                    MediaPickerActivity.EXTRA_RESULT_MEDIAS
+                )
+                val uri = medias?.firstOrNull()?.uri ?: return@registerForActivityResult
+                openCreateStory(uri)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -136,6 +165,9 @@ class HomeFragment : Fragment() {
                     Json.encodeToString(groupedStories),
                     initialPosition
                 )
+            },
+            onAddStoryClick = {
+                handleAddStoryClick()
             }
         )
 
@@ -268,6 +300,29 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun handleAddStoryClick() {
+        if (PermissionUtils.hasMediaPermissions(requireContext())) {
+            openMediaPickerForStory()
+        } else {
+            val denied = PermissionUtils.getDeniedPermissions(requireContext())
+            permissionLauncher.launch(denied)
+        }
+    }
+
+    private fun openMediaPickerForStory() {
+        val intent = Intent(requireContext(), MediaPickerActivity::class.java).apply {
+            putExtra(MediaPickerActivity.EXTRA_MODE, MediaPickerActivity.MODE_SINGLE)
+            putExtra(MediaPickerActivity.EXTRA_MEDIA_KIND, MediaPickerActivity.MEDIA_KIND_ALL)
+        }
+        storyPickerLauncher.launch(intent)
+    }
+
+    private fun openCreateStory(uri: Uri) {
+        val intent = Intent(requireContext(), CreateStoryActivity::class.java)
+        intent.putExtra("media_uri", uri)
+        startActivity(intent)
     }
 
     override fun onPause() {
