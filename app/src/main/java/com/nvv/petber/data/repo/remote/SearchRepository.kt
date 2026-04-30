@@ -49,7 +49,7 @@ class SearchRepository @Inject constructor(
                         }
                     }
                     filter?.userGender?.let { eq("gender", it) }
-                    filter?.userPhoneNumber?.let { ilike("phone", "%$it%") }
+                    filter?.userAddress?.let { ilike("address", "%$it%") }
                 }
             }.decodeList<User>()
 

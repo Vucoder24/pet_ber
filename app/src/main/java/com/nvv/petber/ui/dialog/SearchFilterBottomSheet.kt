@@ -88,7 +88,7 @@ class SearchFilterBottomSheet(
 
         when (initialFilter.type) {
             FilterType.USER -> {
-                binding.etFilterPhone.setText(initialFilter.userPhoneNumber)
+                binding.etFilterAddress.setText(initialFilter.userAddress)
                 if (initialFilter.userGender == getString(R.string.male)) binding.rbUserMale.isChecked =
                     true
                 else if (initialFilter.userGender == getString(R.string.female)) binding.rbUserFemale.isChecked =
@@ -180,8 +180,8 @@ class SearchFilterBottomSheet(
         return initialFilter.copy().apply {
             when (type) {
                 FilterType.USER -> {
-                    userPhoneNumber =
-                        binding.etFilterPhone.text.toString().trim().takeIf { it.isNotEmpty() }
+                    userAddress =
+                        binding.etFilterAddress.text.toString().trim().takeIf { it.isNotEmpty() }
                     userGender = when {
                         binding.rbUserMale.isChecked -> requireContext().getString(R.string.male)
                         binding.rbUserFemale.isChecked -> requireContext().getString(R.string.female)

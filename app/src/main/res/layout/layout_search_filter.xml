@@ -36,24 +36,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
             android:fontFamily="@font/baloo2"
-            android:text="@string/phone_number" />
+            android:text="@string/address" />
 
         <EditText
-            android:id="@+id/etFilterPhone"
+            android:id="@+id/etFilterAddress"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:fontFamily="@font/baloo2"
             android:background="@drawable/bg_search_input"
-            android:hint="@string/add_phone_number"
+            android:fontFamily="@font/baloo2"
+            android:hint="@string/add_address"
             android:importantForAutofill="no"
-            android:inputType="phone"
-            android:paddingHorizontal="12dp" />
+            android:inputType="text"
+            android:paddingHorizontal="12dp"
+            android:textSize="14sp"
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
             android:fontFamily="@font/baloo2"
             android:text="@string/gender" />
 
@@ -90,6 +96,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/baloo2"
+            android:textStyle="bold"
+            android:textSize="18sp"
             android:text="@string/species" />
 
         <FrameLayout
@@ -137,6 +145,8 @@
             android:layout_width="wrap_content"
             android:fontFamily="@font/baloo2"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
             android:text="@string/sort_by" />
 
         <CheckBox
@@ -150,6 +160,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/baloo2"
+            android:textStyle="bold"
+            android:textSize="18sp"
             android:text="@string/date_from" />
 
         <LinearLayout
@@ -183,6 +195,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
             android:fontFamily="@font/baloo2"
             android:text="@string/date_to" />
 

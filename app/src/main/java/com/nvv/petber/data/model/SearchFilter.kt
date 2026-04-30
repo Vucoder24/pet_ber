@@ -9,7 +9,6 @@ data class SearchFilter(
     // User filters
     var userGender: String? = null,
     var userAddress: String? = null,
-    var userPhoneNumber: String? = null,
     // Pet filters
     var petSpecies: String? = null,
     var petGender: String? = null,
