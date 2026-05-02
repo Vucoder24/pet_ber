@@ -3,6 +3,8 @@ package com.nvv.petber.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.nvv.petber.BuildConfig
+import com.nvv.petber.data.dao.PostDao
+import com.nvv.petber.data.dao.StoryDao
 import com.nvv.petber.data.repo.remote.AuthRepository
 import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.utils.NetworkErrorPlugin
@@ -58,8 +60,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHomeRepository(supabaseClient: SupabaseClient): HomeRepository {
-        return HomeRepository(supabaseClient)
+    fun provideHomeRepository(
+        supabaseClient: SupabaseClient,
+        postDao: PostDao,
+        storyDao: StoryDao
+    ): HomeRepository {
+        return HomeRepository(supabaseClient, postDao, storyDao)
     }
 
     @Provides

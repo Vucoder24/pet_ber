@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -42,12 +43,32 @@ class HomeViewModel @Inject constructor(
     private val currentUserId = SharePrefUtils.getCurrentUserId(context)
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-    val limitPost = 4
-    val limitStory = 10
+    val limitPost = 15
+    val limitStory = 15
 
     init {
+        observeLocalData()
         observeStoriesRealtime()
         loadInitialData()
+    }
+
+    private fun observeLocalData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            homeRepository.observeOfflinePosts().collectLatest { localPosts ->
+                _uiState.value = _uiState.value.copy(
+                    posts = localPosts,
+                    isInitialLoading = false
+                )
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            homeRepository.observeOfflineStories().collectLatest { localStories ->
+                _uiState.value = _uiState.value.copy(
+                    stories = localStories
+                )
+            }
+        }
     }
 
     fun loadInitialData() {
@@ -79,22 +100,18 @@ class HomeViewModel @Inject constructor(
             val result = withContext(Dispatchers.IO) {
                 homeRepository.fetchStories(page = page, userLimit = limitStory)
             }
-            result.onSuccess { newStories ->
-                val updatedStories =
-                    if (refresh) newStories else _uiState.value.stories + newStories
 
+            result.onSuccess { newStories ->
                 val newUniqueUsersCount = newStories.distinctBy { it.userId }.size
 
                 _uiState.value = _uiState.value.copy(
-                    stories = updatedStories,
                     isLoadingStories = false,
                     isLoadingMoreStories = false,
                     currentStoryPage = page + 1,
                     hasMoreStories = newUniqueUsersCount >= limitStory
                 )
-            }.onFailure { e ->
-                _uiState.value =
-                    _uiState.value.copy(isLoadingStories = false, isLoadingMoreStories = false)
+            }.onFailure {
+                _uiState.value = _uiState.value.copy(isLoadingStories = false, isLoadingMoreStories = false)
             }
         }
     }
@@ -102,6 +119,7 @@ class HomeViewModel @Inject constructor(
     fun loadPosts(refresh: Boolean = false) {
         if (_uiState.value.isLoadingPosts || _uiState.value.isLoadingMore || _uiState.value.isRefreshing) return
         if (!refresh && !_uiState.value.hasMorePost) return
+
         viewModelScope.launch {
             val page = if (refresh) 0 else _uiState.value.currentPage
 
@@ -117,17 +135,14 @@ class HomeViewModel @Inject constructor(
 
             try {
                 val result = withContext(Dispatchers.IO) {
-                    homeRepository.fetchPosts(currentUserId, page)
+                    homeRepository.fetchPosts(currentUserId, page, limitPost)
                 }
+
                 result.onSuccess { newPosts ->
-                    val updatedPosts =
-                        if (refresh) newPosts else _uiState.value.posts + newPosts
                     _uiState.value = _uiState.value.copy(
-                        posts = updatedPosts,
                         isLoadingPosts = false,
                         isRefreshing = false,
                         isLoadingMore = false,
-                        isInitialLoading = false,
                         currentPage = page + 1,
                         hasMorePost = newPosts.size >= limitPost
                     )
@@ -136,7 +151,6 @@ class HomeViewModel @Inject constructor(
                         isLoadingPosts = false,
                         isRefreshing = false,
                         isLoadingMore = false,
-                        isInitialLoading = false,
                         error = e.message
                     )
                 }
@@ -165,32 +179,17 @@ class HomeViewModel @Inject constructor(
     fun toggleLike(post: Post) {
         viewModelScope.launch {
             try {
-                // Optimistic update
-                val updatedPosts = _uiState.value.posts.map { p ->
-                    if (p.id == post.id) {
-                        p.copy(
-                            isLiked = !p.isLiked,
-                            likeCount = if (p.isLiked) p.likeCount - 1 else p.likeCount + 1
-                        )
-                    } else p
-                }
-                _uiState.value = _uiState.value.copy(posts = updatedPosts)
-
                 val result = withContext(Dispatchers.IO) {
-                    homeRepository.toggleLike(post.id, currentUserId, post.isLiked)
+                    homeRepository.toggleLike(
+                        postId = post.id,
+                        userId = currentUserId,
+                        isCurrentlyLiked = post.isLiked,
+                        currentLikeCount = post.likeCount
+                    )
                 }
+
                 result.onFailure {
-                    // Revert on error
-                    val revertedPosts = _uiState.value.posts.map { p ->
-                        if (p.id == post.id) {
-                            p.copy(
-                                isLiked = post.isLiked,
-                                likeCount = post.likeCount
-                            )
-                        } else p
-                    }
-                    _uiState.value =
-                        _uiState.value.copy(posts = revertedPosts, error = it.message)
+                    _uiState.value = _uiState.value.copy(error = it.message)
                 }
 
             } catch (_: Exception) {

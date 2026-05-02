@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
@@ -146,16 +145,16 @@ class MediaPickerActivity : BaseActivity(), ActivityWithResult {
             filterByType(options[pos])
         }
 
-        // multi select toggle button (switch mode at runtime)
-        binding.btnMultiSelect.setOnClickListener {
-
-            mode = MODE_MULTI
-            adapter.setMultiSelect(true)
-
-            updateModeUi()
-            updateDoneButton(adapter.getSelectedUris().size)
-
-        }
+//        // multi select toggle button (switch mode at runtime)
+//        binding.btnMultiSelect.setOnClickListener {
+//
+//            mode = MODE_MULTI
+//            adapter.setMultiSelect(true)
+//
+//            updateModeUi()
+//            updateDoneButton(adapter.getSelectedUris().size)
+//
+//        }
 
         updateDoneButton(0)
     }
@@ -321,17 +320,17 @@ class MediaPickerActivity : BaseActivity(), ActivityWithResult {
 
     private fun updateModeUi() {
 
-        if (mode == MODE_SINGLE) {
-
-            binding.btnMultiSelect.visibility = View.GONE
-            binding.btnDone.visibility = View.GONE
-
-        } else {
-
-            binding.btnMultiSelect.visibility = View.VISIBLE
-            binding.btnDone.visibility = View.VISIBLE
-
-        }
+//        if (mode == MODE_SINGLE) {
+//
+//            binding.btnMultiSelect.visibility = View.GONE
+//            binding.btnDone.visibility = View.GONE
+//
+//        } else {
+//
+//            binding.btnMultiSelect.visibility = View.VISIBLE
+//            binding.btnDone.visibility = View.VISIBLE
+//
+//        }
     }
 
 

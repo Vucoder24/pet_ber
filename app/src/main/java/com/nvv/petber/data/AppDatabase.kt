@@ -6,7 +6,9 @@ import androidx.room.TypeConverters
 import com.nvv.petber.data.converter.DataConverters
 import com.nvv.petber.data.converter.StringListConverter
 import com.nvv.petber.data.dao.ChatDao
+import com.nvv.petber.data.dao.PostDao
 import com.nvv.petber.data.dao.ProfileDao
+import com.nvv.petber.data.dao.StoryDao
 import com.nvv.petber.data.model.Comment
 import com.nvv.petber.data.model.Conversation
 import com.nvv.petber.data.model.Follow
@@ -34,4 +36,6 @@ import com.nvv.petber.data.model.User
 abstract class AppDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
     abstract fun chatDao(): ChatDao
+    abstract fun postDao(): PostDao
+    abstract fun storyDao(): StoryDao
 }
