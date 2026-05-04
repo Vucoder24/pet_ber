@@ -38,12 +38,12 @@ class DataConverters {
 
     @TypeConverter
     fun fromCommentLikeList(value: List<CommentLike>?): String? {
-        return value?.let { Json.encodeToString(it) }
+        return value?.let { json.encodeToString(it) }
     }
 
     @TypeConverter
     fun toCommentLikeList(value: String?): List<CommentLike>? {
-        return value?.let { Json.decodeFromString(it) }
+        return value?.let { json.decodeFromString(it) }
     }
 
     @TypeConverter

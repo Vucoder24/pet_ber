@@ -1,6 +1,8 @@
 package com.nvv.petber.data.repo.remote
 
 import android.util.Log
+import com.nvv.petber.data.dao.PostDao
+import com.nvv.petber.data.dao.StoryDao
 import com.nvv.petber.data.model.Pet
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.model.Story
@@ -22,10 +24,16 @@ import javax.inject.Inject
 data class UserIdResponse(val user_id: String)
 
 class HomeRepository @Inject constructor(
-    val supabaseClient: SupabaseClient
+    val supabaseClient: SupabaseClient,
+    private val postDao: PostDao,
+    private val storyDao: StoryDao
 ) {
 
     private val db = supabaseClient.postgrest
+
+    fun observeOfflinePosts(): Flow<List<Post>> = postDao.getPostsFlow()
+
+    fun observeOfflineStories(): Flow<List<Story>> = storyDao.getStoriesFlow()
 
     // Fetch active stories (not expired), limited to followed users + self
     suspend fun fetchStories(page: Int = 0, userLimit: Int = 10): Result<List<Story>> {
@@ -61,6 +69,11 @@ class HomeRepository @Inject constructor(
                     ?.sortedByDescending { it.createdAt }
                     ?: emptyList()
             }
+
+            if (page == 0) {
+                storyDao.clearAllStories()
+            }
+            storyDao.insertStories(sortedStories)
 
             Result.success(sortedStories)
         } catch (e: Exception) {
@@ -110,6 +123,11 @@ class HomeRepository @Inject constructor(
                 post.taggedPets = petsList.filter { pet -> post.petIds?.contains(pet.id) == true }
             }
 
+            if (page == 0) {
+                postDao.clearAllPosts()
+            }
+            postDao.insertPosts(posts)
+
             Result.success(posts)
         } catch (e: Exception) {
             Log.e("HomeRepository", "fetchPosts error: ${e.message}")
@@ -142,6 +160,42 @@ class HomeRepository @Inject constructor(
             Result.success(!isCurrentlyLiked)
         } catch (e: Exception) {
             Log.e("HomeRepository", "toggleLike error: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+    suspend fun toggleLike(
+        postId: String,
+        userId: String,
+        isCurrentlyLiked: Boolean,
+        currentLikeCount: Int
+    ): Result<Boolean> {
+        val newIsLiked = !isCurrentlyLiked
+        val newLikeCount = if (newIsLiked) currentLikeCount + 1 else currentLikeCount - 1
+
+        postDao.updatePostLike(postId, newIsLiked, newLikeCount)
+
+        return try {
+            if (isCurrentlyLiked) {
+                // Unlike: delete the row
+                db["post_likes"].delete {
+                    filter {
+                        eq("post_id", postId)
+                        eq("user_id", userId)
+                    }
+                }
+                // Decrement like_count using RPC or manual update
+                db.rpc("decrement_like_count", mapOf("p_post_id" to postId))
+            } else {
+                // Like: insert row
+                db["post_likes"].insert(mapOf("post_id" to postId, "user_id" to userId))
+                // Increment like_count
+                db.rpc("increment_like_count", mapOf("p_post_id" to postId))
+            }
+            Result.success(!isCurrentlyLiked)
+        } catch (e: Exception) {
+            Log.e("HomeRepository", "toggleLike error: ${e.message}")
+            postDao.updatePostLike(postId, isCurrentlyLiked, currentLikeCount)
             Result.failure(e)
         }
     }

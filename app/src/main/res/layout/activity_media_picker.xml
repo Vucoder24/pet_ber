@@ -70,22 +70,22 @@
             android:layout_weight="1"/>
 
         <!-- MULTI SELECT BUTTON -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_multi_select"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:backgroundTint="@color/bg_btn"
-            android:fontFamily="@font/baloo2"
-            android:layout_gravity="center_vertical"
-            app:icon="@drawable/ic_multi_select"
-            app:iconSize="16dp"
-            android:visibility="gone"
-            android:paddingBottom="5dp"
-            android:text="@string/choose"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:iconGravity="textStart"
-            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btn_multi_select"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="36dp"-->
+<!--            android:backgroundTint="@color/bg_btn"-->
+<!--            android:fontFamily="@font/baloo2"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            app:icon="@drawable/ic_multi_select"-->
+<!--            app:iconSize="16dp"-->
+<!--            android:visibility="gone"-->
+<!--            android:paddingBottom="5dp"-->
+<!--            android:text="@string/choose"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="12sp"-->
+<!--            app:iconGravity="textStart"-->
+<!--            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />-->
 
 
         <com.google.android.material.button.MaterialButton
