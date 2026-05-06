@@ -386,7 +386,7 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="chat">Trò chuyện</string>
     <string name="connecting">Đang kết nối...</string>
     <string name="add_new">Thêm mới</string>
-    <string name="other_user_deleted_msg">Người kia đã xóa một tin nhắn.</string>
+    <string name="other_user_deleted_msg">Đối phương đã xóa một tin nhắn.</string>
     <string name="you_deleted_msg">Bạn đã xóa một tin nhắn.</string>
     <string name="cannot_delete_message">Không thể xóa tin nhắn, vui lòng thử lại.</string>
     <string name="error_delete_conversation">Có lỗi xảy ra khi xóa cuộc trò chuyện, vui lòng thử lại.</string>
