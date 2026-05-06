@@ -4,6 +4,7 @@
     <string name="text_password">รหัสผ่าน</string>
     <string name="text_login">เข้าสู่ระบบ</string>
     <string name="txt_forgot_password">ลืมรหัสผ่าน?</string>
+    <string name="text_email_or_username">อีเมลหรือชื่อผู้ใช้</string>
     <string name="action_navigate_register">ลงทะเบียนบัญชีใหม่</string>
     <string name="blank_email">อีเมลไม่สามารถเว้นว่างไว้ได้!</string>
     <string name="invalid_email">ที่อยู่อีเมลไม่ถูกต้อง!</string>

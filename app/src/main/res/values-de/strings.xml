@@ -4,6 +4,7 @@
     <string name="text_password">Passwort</string>
     <string name="text_login">Login</string>
     <string name="txt_forgot_password">Passwort vergessen?</string>
+    <string name="text_email_or_username">E-Mail oder Benutzername</string>
     <string name="action_navigate_register">Registrieren Sie ein neues Konto</string>
     <string name="blank_email">Die E-Mail darf nicht leer bleiben!</string>
     <string name="invalid_email">Ungültige E-Mail-Adresse!</string>

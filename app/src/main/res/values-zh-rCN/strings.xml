@@ -400,6 +400,7 @@
     <string name="other_user_sent_an_image">对方发送了一张图片</string>
     <string name="you_sent_a_video">你发送了一个视频</string>
     <string name="other_user_sent_a_video">对方发送了一个视频</string>
+    <string name="text_email_or_username">邮箱或用户名</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

@@ -400,6 +400,7 @@
     <string name="other_user_sent_an_image">相手が写真を送信しました</string>
     <string name="you_sent_a_video">あなたは動画を送信しました</string>
     <string name="other_user_sent_a_video">相手が動画を送信しました</string>
+    <string name="text_email_or_username">メールアドレスまたはユーザー名</string>
 
     <string-array name="media_types">
         <item>@string/all</item>
