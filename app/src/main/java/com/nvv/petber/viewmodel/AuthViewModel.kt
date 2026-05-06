@@ -20,11 +20,11 @@ class AuthViewModel @Inject constructor(
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
 
-    fun login(email: String, password: String) {
+    fun login(input: String, password: String) {
         _authState.value = AuthState.Loading
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
-                authRepository.loginWithPassword(email, password)
+                authRepository.loginWithPassword(input, password)
             }
             if (result.isSuccess) {
                 _authState.value = AuthState.Success

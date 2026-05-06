@@ -57,7 +57,7 @@
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/text_email"
+                android:hint="@string/text_email_or_username"
                 android:fontFamily="@font/baloo2"
                 android:inputType="textEmailAddress"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />

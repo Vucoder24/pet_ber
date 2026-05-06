@@ -1,12 +1,14 @@
 package com.nvv.petber.data.repo.remote
 
 import android.content.Context
+import com.nvv.petber.data.model.User
 import com.nvv.petber.utils.SharePrefUtils
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.auth.user.UserInfo
+import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.buildJsonObject
@@ -17,9 +19,27 @@ class AuthRepository @Inject constructor(
     private val supabaseClient: SupabaseClient,
     private val context: Context
 ) {
-    suspend fun loginWithPassword(email: String, password: String): Result<Unit> =
+    suspend fun loginWithPassword(input: String, password: String): Result<Unit> =
         withContext(Dispatchers.IO) {
             try {
+                val email = if (input.contains("@")) {
+                    input
+                } else {
+                    val result = supabaseClient
+                        .from("users")
+                        .select {
+                            filter {
+                                eq("username", input)
+                            }
+                        }
+                        .decodeSingle<User>()
+
+                    result.email
+                }
+                if (email.isNullOrEmpty()) {
+                    return@withContext Result.failure(Exception("User not found"))
+                }
+
                 supabaseClient.auth.signInWith(Email) {
                     this.email = email
                     this.password = password

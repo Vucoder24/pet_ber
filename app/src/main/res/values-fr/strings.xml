@@ -3,6 +3,7 @@
     <string name="text_email">Email</string>
     <string name="text_password">Mot de passe</string>
     <string name="text_login">Connexion</string>
+    <string name="text_email_or_username">Email ou nom d\'utilisateur</string>
     <string name="txt_forgot_password">Tu as oublié le mot de passe ?</string>
     <string name="action_navigate_register">Créer un nouveau compte</string>
     <string name="blank_email">L’e-mail ne peut pas être laissé vide !</string>

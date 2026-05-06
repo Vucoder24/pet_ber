@@ -42,12 +42,22 @@ android {
     }
 
     buildTypes {
+        debug {
+            // giữ nguyên để dev
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("staging") {
+            initWith(getByName("release"))   // copy config release
+            isDebuggable = true              // vẫn debug được
+            signingConfig = signingConfigs.getByName("debug") // dùng key debug cho nhanh
+            matchingFallbacks += listOf("release")
         }
     }
     compileOptions {

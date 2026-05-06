@@ -4,6 +4,7 @@
     <string name="text_password">Senha</string>
     <string name="text_login">Logar</string>
     <string name="txt_forgot_password">Esqueceu a senha?</string>
+    <string name="text_email_or_username">E-mail ou nome de usuário</string>
     <string name="action_navigate_register">Registre uma nova conta</string>
     <string name="blank_email">O e-mail não pode ficar em branco!</string>
     <string name="invalid_email">Endereço de e-mail inválido!</string>

@@ -3,6 +3,7 @@
     <string name="text_email">Correo electrónico</string>
     <string name="text_password">Contraseña</string>
     <string name="text_login">Iniciar sesión</string>
+    <string name="text_email_or_username">Correo electrónico o nombre de usuario</string>
     <string name="txt_forgot_password">¿Olvidaste la contraseña?</string>
     <string name="action_navigate_register">Crea una nueva cuenta</string>
     <string name="blank_email">¡El correo electrónico no puede quedarse en blanco!</string>

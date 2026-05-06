@@ -401,6 +401,7 @@ Hãy là người đầu tiên bình luận!</string>
     <string name="other_user_sent_an_image">Đối phương đã gửi một ảnh</string>
     <string name="you_sent_a_video">Bạn đã gửi một video</string>
     <string name="other_user_sent_a_video">Đối phương đã gửi một video</string>
+    <string name="text_email_or_username">Email hoặc tên đăng nhập</string>
 
     <string-array name="media_types">
         <item>@string/all</item>

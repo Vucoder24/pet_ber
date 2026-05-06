@@ -399,6 +399,7 @@
     <string name="other_user_sent_an_image">The other party has sent a photo</string>
     <string name="you_sent_a_video">You\'ve submitted a video</string>
     <string name="other_user_sent_a_video">The other party has sent a video</string>
+    <string name="text_email_or_username">Email or username</string>
 
 
     <string-array name="media_types">

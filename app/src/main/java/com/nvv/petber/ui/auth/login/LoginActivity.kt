@@ -80,13 +80,28 @@ class LoginActivity : BaseActivity() {
     private fun onEvent() {
         binding.apply {
             btnLogin.setOnClickListener {
-                val email = edtEmail.text.toString()
+                val input = edtEmail.text.toString()
                 val password = edtPw.text.toString()
-                val emailError = ValidationUtils.validateEmail(this@LoginActivity, email)
-                if (emailError != null) {
-                    edtEmail.error = emailError
+                if (input.isBlank()) {
+                    edtEmail.error = getString(R.string.blank_email)
                     edtEmail.requestFocus()
                     return@setOnClickListener
+                }
+
+                if (input.contains("@")) {
+                    val emailError = ValidationUtils.validateEmail(this@LoginActivity, input)
+                    if (emailError != null) {
+                        edtEmail.error = emailError
+                        edtEmail.requestFocus()
+                        return@setOnClickListener
+                    }
+                } else {
+                    val usernameError = ValidationUtils.validateUserName(this@LoginActivity, input)
+                    if (usernameError != null) {
+                        edtEmail.error = usernameError
+                        edtEmail.requestFocus()
+                        return@setOnClickListener
+                    }
                 }
 
                 val passwordError = ValidationUtils.validatePassword(this@LoginActivity, password)
@@ -96,7 +111,7 @@ class LoginActivity : BaseActivity() {
                     return@setOnClickListener
                 }
 
-                authViewModel.login(email, password)
+                authViewModel.login(input, password)
             }
 
             btnForgotPw.setOnClickListener {
