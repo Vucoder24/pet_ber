@@ -415,6 +415,12 @@
         <item>기타</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>알 수 없음</item>
+        <item>수컷</item>
+        <item>암컷</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>최신 정보</item>
         <item>진행 중</item>

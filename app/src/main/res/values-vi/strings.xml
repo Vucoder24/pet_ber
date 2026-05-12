@@ -415,6 +415,12 @@ Hãy là người đầu tiên bình luận!</string>
         <item>Khác</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>Đực</item>
+        <item>Cái</item>
+        <item>Khác</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>Đã hoàn thành</item>
         <item>Đang thực hiện</item>

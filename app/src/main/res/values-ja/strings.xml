@@ -414,6 +414,12 @@
         <item>その他</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>オス</item>
+        <item>メス</item>
+        <item>不明</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>最新情報</item>
         <item>進行中</item>

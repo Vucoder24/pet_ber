@@ -3,12 +3,12 @@ package com.nvv.petber.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvv.petber.R
 import com.nvv.petber.data.model.DiaryMonth
 import com.nvv.petber.data.model.Pet
-import com.nvv.petber.data.model.PetHealthLog
 import com.nvv.petber.data.model.Post
 import com.nvv.petber.data.repo.remote.HomeRepository
 import com.nvv.petber.data.repo.remote.PetRepository
@@ -100,7 +100,6 @@ class PetProfileViewModel @Inject constructor(
 
     private suspend fun translatePet(pet: Pet): Pet {
         val translated = TranslationUtils.translateAll(
-            pet.gender,
             pet.species,
             pet.breed,
             pet.bodyCondition,
@@ -110,14 +109,13 @@ class PetProfileViewModel @Inject constructor(
             pet.preventiveStatus
         )
         return pet.copy(
-            gender = translated[0],
-            species = translated[1],
-            breed = translated[2],
-            bodyCondition = translated[3],
-            clinicalStatus = translated[4],
-            activityAndMentalState = translated[5],
-            medicalHistoryAndTreatment = translated[6],
-            preventiveStatus = translated[7]
+            species = translated[0],
+            breed = translated[1],
+            bodyCondition = translated[2],
+            clinicalStatus = translated[3],
+            activityAndMentalState = translated[4],
+            medicalHistoryAndTreatment = translated[5],
+            preventiveStatus = translated[6]
         )
     }
 
@@ -164,23 +162,21 @@ class PetProfileViewModel @Inject constructor(
                 val allPosts = withContext(Dispatchers.IO) {
                     petRepo.getAllPetDiaryPosts(petId)
                 }
-                val uniqueMonths = allPosts
-                    .map { it.createdAt!!.substring(0, 7) }
-                    .distinct()
 
-                val healthLogs = mutableMapOf<String, PetHealthLog>()
-                uniqueMonths.forEach { yearMonth ->
-                    val log = withContext(Dispatchers.IO) {
-                        petRepo.getLatestHealthLogInMonth(petId, yearMonth)
-                    }
-                    if (log != null) healthLogs[yearMonth] = log
+                val allHealthLogs = withContext(Dispatchers.IO) {
+                    petRepo.getAllHealthLogs(petId)  // hàm mới
                 }
 
+                val healthLogs = allHealthLogs
+                    .groupBy { it.recordedAt.substring(0, 7) }
+                    .mapValues { (_, logs) ->
+                        logs.maxByOrNull { it.recordedAt }!!
+                    }
 
                 val groupedData = FilterPostUtils.groupPostsByMonth(allPosts, healthLogs)
                 _diaryPosts.value = groupedData
-            } catch (_: Exception) {
-                // Handle error
+            } catch (e: Exception) {
+                Log.e("DiaryDebug", "Error: ${e.message}")
             }
         }
     }

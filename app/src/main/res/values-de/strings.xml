@@ -414,6 +414,12 @@ Sei der Erste, der kommentiert!</string>
         <item>Sonstiges</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>Männlich</item>
+        <item>Weiblich</item>
+        <item>Unbekannt</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>Aktuell</item>
         <item>In Arbeit</item>
