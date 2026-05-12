@@ -275,7 +275,7 @@ class CreateEditPetActivity : BaseActivity() {
     }
 
     private fun setupHealthDropdown() {
-        setupAdapter(binding.actGender, R.array.gender_options)
+        setupAdapter(binding.actGender, R.array.gender_pet_options)
         setupAdapter(binding.actPreventiveStatus, R.array.preventive_status_options)
         setupAdapter(binding.actBodyCondition, R.array.body_condition_options)
         setupAdapter(binding.actClinicalStatus, R.array.clinical_status_options)

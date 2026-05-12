@@ -71,6 +71,20 @@ class PetRepository @Inject constructor(
         }
     }
 
+    suspend fun getAllHealthLogs(petId: String): List<PetHealthLog> {
+        return try {
+            supabase.from("pet_health_logs")
+                .select {
+                    filter { eq("pet_id", petId) }
+                    order("recorded_at", order = Order.DESCENDING)
+                }
+                .decodeList<PetHealthLog>()
+                .map { translateHealthLog(it) }
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
     suspend fun getAllPetDiaryPosts(petId: String): List<Post> {
         return try {
             supabase.from("posts").select(columns = Columns.raw("*, post_media(*)")) {
@@ -236,27 +250,6 @@ class PetRepository @Inject constructor(
         }
     }
 
-    suspend fun getLatestHealthLogInMonth(
-        petId: String,
-        yearMonth: String
-    ): PetHealthLog? {
-        return try {
-            val log = supabase.from("pet_health_logs")
-                .select {
-                    filter {
-                        eq("pet_id", petId)
-                        gte("recorded_at", "$yearMonth-01")
-                        lt("recorded_at", nextMonth(yearMonth))
-                    }
-                    order("recorded_at", order = Order.DESCENDING)
-                    limit(1)
-                }
-                .decodeSingleOrNull<PetHealthLog>()
-            log?.let { translateHealthLog(it) }
-        } catch (_: Exception) {
-            null
-        }
-    }
 
     private suspend fun translateHealthLog(log: PetHealthLog): PetHealthLog {
         val translated = TranslationUtils.translateAll(
@@ -271,11 +264,5 @@ class PetRepository @Inject constructor(
             activityAndMentalState = translated[2],
             preventiveStatus = translated[3]
         )
-    }
-
-    private fun nextMonth(yearMonth: String): String {
-        val (year, month) = yearMonth.split("-").map { it.toInt() }
-        return if (month == 12) "${year + 1}-01"
-        else "$year-${(month + 1).toString().padStart(2, '0')}"
     }
 }

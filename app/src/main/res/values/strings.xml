@@ -414,6 +414,11 @@
         <item>Other</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>Up-to-date</item>
         <item>In Progress</item>

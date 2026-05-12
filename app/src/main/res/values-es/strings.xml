@@ -414,6 +414,12 @@
         <item>Otros</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>Desconocido</item>
+        <item>Macho</item>
+        <item>Hembra</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>Actualizado</item>
         <item>En Progreso</item>

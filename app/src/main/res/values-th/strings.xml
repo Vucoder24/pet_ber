@@ -414,6 +414,12 @@
         <item>อื่น ๆ</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>ตัวผู้</item>
+        <item>ตัวเมีย</item>
+        <item>ไม่ทราบ</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>ทันสมัย</item>
         <item>กําลังดําเนินการ</item>

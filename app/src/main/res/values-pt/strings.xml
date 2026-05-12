@@ -415,6 +415,12 @@ Seja o primeiro a comentar!</string>
         <item>Outros</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>Macho</item>
+        <item>Fêmea</item>
+        <item>Desconhecido</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>Atualizado</item>
         <item>Em andamento</item>

@@ -414,6 +414,12 @@
         <item>其他</item>
     </string-array>
 
+    <string-array name="gender_pet_options">
+        <item>雄性</item>
+        <item>雌性</item>
+        <item>未知</item>
+    </string-array>
+
     <string-array name="preventive_status_options">
         <item>最新情况</item>
         <item>进行中</item>
